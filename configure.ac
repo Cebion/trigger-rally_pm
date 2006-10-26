@@ -109,7 +109,7 @@ esac
 
 AX_FINDLIB([PHYSFS], [PhysFS], [PhysFS],
 	AX_LANG_PROGRAM([#include <physfs.h>], [PHYSFS_init(0);]),
-	[], [-lphysfs -lz],
+	[], [-lphysfs],
 	[],
 	[AC_MSG_ERROR([Please install PhysFS])])
 
