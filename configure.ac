@@ -4,7 +4,7 @@
 #----------------------------------------------------------------------------
 AC_PREREQ([2.54])
 
-AC_INIT([trigger], [0.5.2], [jaz@positro.net])
+AC_INIT([trigger], [0.5.3], [jas@jareiko.net])
 AC_CONFIG_SRCDIR([src/trigger/main.cpp])
 AC_CONFIG_AUX_DIR([mk/autoconf])
 
