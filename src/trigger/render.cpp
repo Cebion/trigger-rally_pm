@@ -215,7 +215,7 @@ void MainApp::renderStateLoading(float eyetranslation)
 	glMatrixMode(GL_MODELVIEW);
 }
 
-char *creditstext[] = {
+const char *creditstext[] = {
 	"Trigger " PACKAGE_VERSION,
 	"",
 	"Copyright (C) 2004-2006",

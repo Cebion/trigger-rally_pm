@@ -491,7 +491,7 @@ void PTexture::loadCubeMap(const std::string &filenamePrefix, const std::string 
 	};
 #endif
 
-	char *middlename[6] = { "px", "nx", "py", "ny", "pz", "nz" };
+	const char *middlename[6] = { "px", "nx", "py", "ny", "pz", "nz" };
 
 	for (int side=0; side<6; side++) {
 		std::string filename = filenamePrefix + middlename[side] + filenameSuffix;

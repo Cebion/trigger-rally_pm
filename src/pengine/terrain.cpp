@@ -108,7 +108,7 @@ PTerrain::PTerrain (TiXmlElement *element, const std::string &filepath, PSSTextu
 		throw MakePException ("Load failed: terrain has no colormap");
 	}
 	
-	if (tilesize != tilesize & (-tilesize) ||
+	if (tilesize != (tilesize & (-tilesize)) ||
 		tilesize < 4) {
 		throw MakePException ("Load failed: tile size not power of two dimension, or too small");
 	}
@@ -134,7 +134,7 @@ PTerrain::PTerrain (TiXmlElement *element, const std::string &filepath, PSSTextu
 	
 	totsize = img.getcx();
 	if (totsize != img.getcy() ||
-		totsize != totsize & (-totsize) ||
+		totsize != (totsize & (-totsize)) ||
 		totsize < 16) {
 		throw MakePException ("Load failed: heightmap not square, or not power of two dimension, or too small");
 	}
@@ -212,7 +212,7 @@ PTerrain::PTerrain (TiXmlElement *element, const std::string &filepath, PSSTextu
 	
 	cmaptotsize = cmap.getcx();
 	if (cmaptotsize != cmap.getcy() ||
-		cmaptotsize != cmaptotsize & (-cmaptotsize) ||
+		cmaptotsize != (cmaptotsize & (-cmaptotsize)) ||
 		cmaptotsize < tilecount) {
 		throw MakePException ("Load failed: colormap not square, or not power of two dimension, or too small");
 	}
