@@ -39,7 +39,7 @@ void MainApp::load()
 	
 	loadscreencount = 3;
 	
-	splashtimeout = 2.0f;
+	splashtimeout = 0.0f;
 	
 	// Check that controls are available where requested
 	// (can't be done in config because joy info not available)
