@@ -128,6 +128,10 @@ promise to be able to fix the bug however :|
 /////////////////////
 
 
+4/07/2010 - Trigger 0.5.3
+  - Removed splash screen delay
+  - Updated contact email address
+
 20/10/2006 - Trigger 0.5.2.1
   - gcc 4 fixes
   - PhysFS/OpenAL interaction fix
@@ -144,7 +148,7 @@ promise to be able to fix the bug however :|
   - Switch to ARB multitex from core GL to support older cards
   - Added some code to take screenshots
 
-05/10/2004 - Trigger 0.4.5 (bumped up to 0.5.0)
+05/10/2004 - Trigger 0.5.0 (was 0.4.5)
   - Chuck Sites has contributed a stereo patch, so now we have
     quadbuffer and anaglyph stereo!
 
