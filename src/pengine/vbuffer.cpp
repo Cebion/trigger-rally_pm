@@ -1,7 +1,7 @@
 
 // vbuffer.cpp [pengine]
 
-// Copyright 2004-2006 Jasmine Langridge, jaz at positro.net
+// Copyright 2004-2006 Jasmine Langridge, jas@jareiko.net
 // License: GPL version 2 (see included gpl.txt)
 
 

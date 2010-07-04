@@ -1,7 +1,7 @@
 
 // render.cpp
 
-// Copyright 2004-2006 Jasmine Langridge, jaz at positro.net
+// Copyright 2004-2006 Jasmine Langridge, jas@jareiko.net
 // License: GPL version 2 (see included gpl.txt)
 
 
@@ -33,7 +33,7 @@ void MainApp::resize()
 	float white[] = { 1.0,1.0,1.0,1.0 };
 	//float black[] = { 0.0,0.0,0.0,1.0 };
 	glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE,white);
-	
+
 	float spec[] = { 0.3f, 0.5f, 0.5f, 1.0f };
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, spec);
 	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 6.0f);
@@ -155,61 +155,61 @@ void MainApp::render(float eyetranslation)
 	case AS_LOAD_1:
 		renderStateLoading(eyetranslation);
 		break;
-	
+
 	case AS_LOAD_2:
 	case AS_LOAD_3:
 		break;
-	
+
 	case AS_LEVEL_SCREEN:
 		renderStateLevel(eyetranslation);
 		break;
-	
+
 	case AS_CHOOSE_VEHICLE:
 		renderStateChoose(eyetranslation);
 		break;
-	
+
 	case AS_IN_GAME:
 		renderStateGame(eyetranslation);
 		break;
-	
+
 	case AS_END_SCREEN:
 		renderStateEnd(eyetranslation);
 		break;
 	}
-	
+
 	glFinish();
 }
 
 void MainApp::renderStateLoading(float eyetranslation)
 {
 	eyetranslation = eyetranslation;
-	
+
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 	glLoadIdentity();
 	glOrtho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f);
 	glMatrixMode(GL_MODELVIEW);
-	
+
 	tex_splash_screen->bind();
-	
+
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_FOG);
 	glDisable(GL_LIGHTING);
 	glBlendFunc(GL_ONE, GL_ZERO);
-	
+
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-	
+
 	glBegin(GL_QUADS);
 	glTexCoord2f(1.0f,1.0f); glVertex2f(1.0f,1.0f);
 	glTexCoord2f(0.0f,1.0f); glVertex2f(-1.0f,1.0f);
 	glTexCoord2f(0.0f,0.0f); glVertex2f(-1.0f,-1.0f);
 	glTexCoord2f(1.0f,0.0f); glVertex2f(1.0f,-1.0f);
 	glEnd();
-	
+
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_FOG);
 	glEnable(GL_LIGHTING);
-	
+
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
 	glMatrixMode(GL_MODELVIEW);

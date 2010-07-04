@@ -117,7 +117,7 @@ workaround.)
 
 If it still doesn't work, please send me an email at:
 
-jaz@positro.net
+jas@jareiko.net
 
 and I'll get back to you as soon as I can. I can't
 promise to be able to fix the bug however :|
@@ -196,7 +196,7 @@ promise to be able to fix the bug however :|
 /////////////
 
 
-Code                Jasmine Langridge <jaz@positro.net>
+Code                Jasmine Langridge <jas@jareiko.net>
 Art & sfx           Richard Langridge <r_langridge@wincoll.ac.uk>
 
 Build system
@@ -226,5 +226,5 @@ Many thanks to all contributors!
 I haven't been keeping strict records of who has
 contributed what. If you've been left out, or if
 you'd like your email to be listed, please email
-me. (jaz@positro.net)
+me. (jas@jareiko.net)
 
