@@ -218,6 +218,10 @@ New levels          Tim Wintle
                     Ivan
                     Viktor Radnai
                     Pierre-Alexis
+                    Bruno "Fuddl" Kleinert
+                    Agnius Vasiliauskas
+                    Matthias Keysermann
+                    Márcio Bremm
 Splash screens      Alex <rep65@tlen.pl>
                     Roberto D�z Gonz�ez
 
