@@ -14,28 +14,35 @@ the game. Ick.
 */
 
 // menus
-#define AM_TOP				21
-#define AM_TOP_EVT			22
-#define AM_TOP_EVT_PREP		23
-#define AM_TOP_LVL			24
-#define AM_TOP_LVL_PREP		25
-#define AM_TOP_QUIT			26
-#define AM_TOP_EVT_ABANDON	27
+#define AM_TOP					21  // Event / Practice / Single race / Quit
+#define AM_TOP_EVT				22  // Choose event to race
+#define AM_TOP_EVT_PREP			23  // Shows event progress
+#define AM_TOP_EVT_ABANDON		24  // Really leave event?
+#define AM_TOP_PRAC				25  // Choose event to practice
+#define AM_TOP_PRAC_SEL			26  // Choose level to practice
+#define AM_TOP_PRAC_SEL_PREP	27  // Show track info (practice)
+#define AM_TOP_LVL				28  // Choose single race
+#define AM_TOP_LVL_PREP			29  // Show track info (single race)
+#define AM_TOP_QUIT				30  // Are you sure you want to quit?
 
 // actions
-#define AA_INIT				1
-#define AA_RESUME			2
-#define AA_GO_TOP			11
-#define AA_GO_EVT			21
-#define AA_PICK_EVT			22
-#define AA_START_EVT		23
-#define AA_RESUME_EVT		24
-#define AA_RESTART_EVT		25
-#define AA_GO_LVL			31
-#define AA_PICK_LVL			32
-#define AA_START_LVL		33
-#define AA_GO_QUIT			41
-#define AA_QUIT_CONFIRM		42
+#define AA_INIT					1
+#define AA_RESUME				2
+#define AA_GO_TOP				11
+#define AA_GO_EVT				21
+#define AA_PICK_EVT				22
+#define AA_START_EVT			23
+#define AA_RESUME_EVT			24
+#define AA_RESTART_EVT			25
+#define AA_GO_PRAC				31
+#define AA_PICK_PRAC			32
+#define AA_PICK_PRAC_LVL		33
+#define AA_START_PRAC			34
+#define AA_GO_LVL				41
+#define AA_PICK_LVL				42
+#define AA_START_LVL			43
+#define AA_GO_QUIT				51
+#define AA_QUIT_CONFIRM			52
 
 
 struct LevelState {
