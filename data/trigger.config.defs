@@ -17,6 +17,14 @@
 		stereoeyeseparation="0.07"
 		stereoswapeyes="no"
 		/>
+		<!-- Possible values for stereo:
+			none
+			quadbuffer - use hardware stereo support
+			red-blue - anaglyph
+			red-green - anaglyph
+			red-cyan - anaglyph
+			yellow-blue - anaglyph
+		-->
 	
 	<parameters
 		drivingassist="0.15"
