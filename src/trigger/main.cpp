@@ -33,7 +33,7 @@ void MainApp::load()
 	//std::string buff = boost::str(boost::format("textures/splash/splash%u.jpg") % ((rand() % 3) + 1));
 	//if (!(tex_splash_screen = getSSTexture().loadTexture(buff))) return false;
 	
-	if (!(tex_splash_screen = getSSTexture().loadTexture("textures/splash/splash.jpg"))) throw MakePException ("boink!");
+	if (!(tex_splash_screen = getSSTexture().loadTexture("textures/splash/splash.jpg"))) throw MakePException ("Failed to load splash screen");
 	
 	appstate = AS_LOAD_1;
 	
