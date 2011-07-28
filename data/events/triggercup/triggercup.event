@@ -6,9 +6,9 @@
 	
 	<level file="warmup/warmup.level" />
 	
-	<level file="/maps/desertstorm/storm.level" />
+	<level file="desertstorm/storm.level" />
 	
-	<level file="/maps/lunar/lunar.level" />
+	<level file="lunar/lunar.level" />
 	
 	<level file="bigjump/jump.level" />
 	
