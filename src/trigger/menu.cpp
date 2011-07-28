@@ -297,9 +297,8 @@ void MainApp::finishRace(int gamestate, float coursetime)
 		levelScreenAction(AA_GO_LVL, 0);
 		break;
 	default:
-		PUtil::outLog() << "ERROR: race finished in invalid state " << lss.state << std::endl;
-		requestExit();
-		return;
+		PUtil::outLog() << "Race finished in invalid state " << lss.state << std::endl;
+		break;
 	}
 }
 
