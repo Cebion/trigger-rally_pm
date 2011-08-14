@@ -4,12 +4,13 @@
 // Copyright 2004-2006 Jasmine Langridge, jas@jareiko.net
 // License: GPL version 2 (see included gpl.txt)
 
-
+#include <sstream>
 #include "main.h"
 
 
 void MainApp::levelScreenAction(int action, int index)
 {
+    const int MAX_RACES_ON_SCREEN = 10;
 	appstate = AS_LEVEL_SCREEN;
 	
 	switch (action) {
@@ -224,16 +225,34 @@ void MainApp::levelScreenAction(int action, int index)
 				AA_START_PRAC, 0));
 		break;
 	case AM_TOP_LVL:
-		gui.makeClickable(
-			gui.addLabel(400.0f,590.0f, "(back)", PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 30.0f),
-			AA_GO_TOP, 0);
-		gui.addLabel(790.0f,590.0f, "Single Race", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 30.0f);
-		gui.addLabel(100.0f,470.0f, "Choose Race:", PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 30.0f);
-		for (unsigned int i = 0; i < levels.size(); i++) {
+		{
 			gui.makeClickable(
-				gui.addLabel(100.0f,420.0f - (float)i * 30.0f,
-				levels[i].name, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 25.0f),
-				AA_PICK_LVL, i);
+				gui.addLabel(400.0f,590.0f, "(back)", PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 30.0f),
+				AA_GO_TOP, 0);
+			gui.addLabel(790.0f,590.0f, "Single Race", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 30.0f);
+			gui.addLabel(100.0f,470.0f, "Choose Race:", PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 30.0f);
+
+			int firstraceindex = index;
+			int prevlabel = gui.addLabel(100.0f, 90.0f, "(prev)", PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 30.0f);
+			if (firstraceindex > 0) {
+				gui.makeClickable(prevlabel, AA_GO_LVL, firstraceindex - MAX_RACES_ON_SCREEN);
+			}
+			int racesonscreencount = levels.size() - firstraceindex;
+			int nextlabel = gui.addLabel(380.0f, 90.0f, "(next)", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 30.0f);
+			if (racesonscreencount > MAX_RACES_ON_SCREEN) {
+				racesonscreencount = MAX_RACES_ON_SCREEN;
+				gui.makeClickable( nextlabel, AA_GO_LVL, firstraceindex + MAX_RACES_ON_SCREEN);
+			}
+			std::stringstream racecountmsg;
+			racecountmsg << "Races " << firstraceindex + 1 << "-" << firstraceindex + racesonscreencount << " of " << levels.size();
+			gui.addLabel(790.0f, 10.0f, racecountmsg.str(), PTEXT_HZA_RIGHT | PTEXT_VTA_BOTTOM, 20.0f);
+
+			for (int i = firstraceindex; i < firstraceindex + racesonscreencount; i++) {
+				gui.makeClickable(
+					gui.addLabel(100.0f, 420.0f - (float)(i - firstraceindex) * 30.0f,
+					levels[i].name, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 25.0f),
+					AA_PICK_LVL, i);
+			}
 		}
 		break;
 	case AM_TOP_LVL_PREP:
