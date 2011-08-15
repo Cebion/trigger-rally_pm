@@ -1023,6 +1023,7 @@ void MainApp::renderStateGame(float eyetranslation)
 			getSSRender().drawText("TIME EXCEEDED", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
 		}
 	} else if (game->coursetime < 1.0f) {
+		glColor4f(0.5f, 1.0f, 0.5f, 1.0f);
 		getSSRender().drawText("GO!", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
 	}
 	glPopMatrix(); // 2
@@ -1030,7 +1031,7 @@ void MainApp::renderStateGame(float eyetranslation)
 	if (game->gamestate == GS_COUNTDOWN) {
 		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 		glPushMatrix(); // 2
-		glTranslatef(0.0f, 0.5f, 0.0f);
+		glTranslatef(0.0f, 0.6f, 0.0f);
 		glScalef(0.08f, 0.08f, 1.0f);
 		getSSRender().drawText(game->comment, PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
 		glPopMatrix(); // 2
