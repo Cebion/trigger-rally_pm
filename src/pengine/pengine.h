@@ -87,37 +87,37 @@ class   PParseException;
 
 class PUtil {
 private:
-	PUtil() { } // cannot be constructed
-	
-	static int deblev;
-	
+  PUtil() { } // cannot be constructed
+  
+  static int deblev;
+  
 public:
-	// Output streams
-	static std::ostream &outLog() { return std::cout; }
-	
-	// Debug level
-	static bool isDebugLevel(int debugLevel) { return deblev >= debugLevel; }
-	static void setDebugLevel(int debugLevel) { deblev = debugLevel; }
-	
-	
-	// Given "data/blah/pic.jpg" will return "data/blah/"
-	static std::string extractPathFromFilename(const std::string &filename);
-	
-	static std::string assemblePath(const std::string &relativefile, const std::string &parentfile);
-	
-	// Load XML file and return the root element of given name (failure: null)
-	static TiXmlElement *loadRootElement(TiXmlDocument &doc, const char *rootName);
-	
-	static bool copyFile(const std::string &fileFrom, const std::string &fileTo);
-	static std::list<std::string> findFiles(const std::string &basedir, const std::string &extension);
-	
-	static std::string formatInt(int value, int width);
-	static std::string formatInt(int value);
-	
-	static std::string formatTime(float seconds);
-	
-	// RWops created must be freed by using SDL freesrc on load
-	static SDL_RWops *allocPhysFSops(PHYSFS_file *pfile);
+  // Output streams
+  static std::ostream &outLog() { return std::cout; }
+  
+  // Debug level
+  static bool isDebugLevel(int debugLevel) { return deblev >= debugLevel; }
+  static void setDebugLevel(int debugLevel) { deblev = debugLevel; }
+  
+  
+  // Given "data/blah/pic.jpg" will return "data/blah/"
+  static std::string extractPathFromFilename(const std::string &filename);
+  
+  static std::string assemblePath(const std::string &relativefile, const std::string &parentfile);
+  
+  // Load XML file and return the root element of given name (failure: null)
+  static TiXmlElement *loadRootElement(TiXmlDocument &doc, const char *rootName);
+  
+  static bool copyFile(const std::string &fileFrom, const std::string &fileTo);
+  static std::list<std::string> findFiles(const std::string &basedir, const std::string &extension);
+  
+  static std::string formatInt(int value, int width);
+  static std::string formatInt(int value);
+  
+  static std::string formatTime(float seconds);
+  
+  // RWops created must be freed by using SDL freesrc on load
+  static SDL_RWops *allocPhysFSops(PHYSFS_file *pfile);
 };
 
 

@@ -9,17 +9,17 @@
 class PException : public std::exception
 {
 public:
-	PException (const std::string &text) : text_ (text) { }
-	
-	~PException () throw () { }
-	
-	const char *what () const throw ()
-	{
-		return text_.c_str ();
-	}
-	
+  PException (const std::string &text) : text_ (text) { }
+  
+  ~PException () throw () { }
+  
+  const char *what () const throw ()
+  {
+    return text_.c_str ();
+  }
+  
 private:
-	std::string text_;
+  std::string text_;
 };
 
 

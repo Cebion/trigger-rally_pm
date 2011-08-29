@@ -172,12 +172,12 @@ static GLboolean _glewStrSame1 (GLubyte** a, GLuint* na, const GLubyte* b, GLuin
   {
     GLuint i=0;
     while (i < nb && (*a)+i != NULL && b+i != NULL && (*a)[i] == b[i]) i++;
-	if(i == nb)
-	{
-		*a = *a + nb;
-		*na = *na - nb;
-		return GL_TRUE;
-	}
+  if(i == nb)
+  {
+    *a = *a + nb;
+    *na = *na - nb;
+    return GL_TRUE;
+  }
   }
   return GL_FALSE;
 }
@@ -188,12 +188,12 @@ static GLboolean _glewStrSame2 (GLubyte** a, GLuint* na, const GLubyte* b, GLuin
   {
     GLuint i=0;
     while (i < nb && (*a)+i != NULL && b+i != NULL && (*a)[i] == b[i]) i++;
-	if(i == nb)
-	{
-		*a = *a + nb;
-		*na = *na - nb;
-		return GL_TRUE;
-	}
+  if(i == nb)
+  {
+    *a = *a + nb;
+    *na = *na - nb;
+    return GL_TRUE;
+  }
   }
   return GL_FALSE;
 }
@@ -4732,67 +4732,67 @@ GLenum glewContextInit (GLEW_CONTEXT_ARG_DEF_LIST)
     return GLEW_ERROR_NO_GL_VERSION;
   if (s[major] == '1' && s[minor] == '0')
   {
-	return GLEW_ERROR_GL_VERSION_10_ONLY;
+  return GLEW_ERROR_GL_VERSION_10_ONLY;
   }
   else
   {
-	if (s[major] >= '2')
-	{
-	  GLEW_VERSION_1_1 = GL_TRUE;
-	  GLEW_VERSION_1_2 = GL_TRUE;
+  if (s[major] >= '2')
+  {
+    GLEW_VERSION_1_1 = GL_TRUE;
+    GLEW_VERSION_1_2 = GL_TRUE;
       GLEW_VERSION_1_3 = GL_TRUE;
       GLEW_VERSION_1_4 = GL_TRUE;
-	  GLEW_VERSION_1_5 = GL_TRUE;
-	  GLEW_VERSION_2_0 = GL_TRUE;
-	}
-	else
-	{
-	  if (s[minor] >= '5')
-	  {
-		GLEW_VERSION_1_1 = GL_TRUE;
-		GLEW_VERSION_1_2 = GL_TRUE;
-		GLEW_VERSION_1_3 = GL_TRUE;
-		GLEW_VERSION_1_4 = GL_TRUE;
-		GLEW_VERSION_1_5 = GL_TRUE;
-		GLEW_VERSION_2_0 = GL_FALSE;
-	  }
-	  if (s[minor] == '4')
-	  {
-		GLEW_VERSION_1_1 = GL_TRUE;
-		GLEW_VERSION_1_2 = GL_TRUE;
-		GLEW_VERSION_1_3 = GL_TRUE;
-		GLEW_VERSION_1_4 = GL_TRUE;
-		GLEW_VERSION_1_5 = GL_FALSE;
-		GLEW_VERSION_2_0 = GL_FALSE;
-	  }
-	  if (s[minor] == '3')
-	  {
-		GLEW_VERSION_1_1 = GL_TRUE;
-		GLEW_VERSION_1_2 = GL_TRUE;
-		GLEW_VERSION_1_3 = GL_TRUE;
-		GLEW_VERSION_1_4 = GL_FALSE;
-		GLEW_VERSION_1_5 = GL_FALSE;
-		GLEW_VERSION_2_0 = GL_FALSE;
-	  }
-	  if (s[minor] == '2')
-	  {
-		GLEW_VERSION_1_1 = GL_TRUE;
-		GLEW_VERSION_1_2 = GL_TRUE;
-		GLEW_VERSION_1_3 = GL_FALSE;
-		GLEW_VERSION_1_4 = GL_FALSE;
-		GLEW_VERSION_1_5 = GL_FALSE;
-		GLEW_VERSION_2_0 = GL_FALSE;
-	  }
-	  if (s[minor] < '2')
-	  {
-		GLEW_VERSION_1_1 = GL_TRUE;
-		GLEW_VERSION_1_2 = GL_FALSE;
-		GLEW_VERSION_1_3 = GL_FALSE;
-		GLEW_VERSION_1_4 = GL_FALSE;
-		GLEW_VERSION_1_5 = GL_FALSE;
-		GLEW_VERSION_2_0 = GL_FALSE;
-	  }
-	}
+    GLEW_VERSION_1_5 = GL_TRUE;
+    GLEW_VERSION_2_0 = GL_TRUE;
+  }
+  else
+  {
+    if (s[minor] >= '5')
+    {
+    GLEW_VERSION_1_1 = GL_TRUE;
+    GLEW_VERSION_1_2 = GL_TRUE;
+    GLEW_VERSION_1_3 = GL_TRUE;
+    GLEW_VERSION_1_4 = GL_TRUE;
+    GLEW_VERSION_1_5 = GL_TRUE;
+    GLEW_VERSION_2_0 = GL_FALSE;
+    }
+    if (s[minor] == '4')
+    {
+    GLEW_VERSION_1_1 = GL_TRUE;
+    GLEW_VERSION_1_2 = GL_TRUE;
+    GLEW_VERSION_1_3 = GL_TRUE;
+    GLEW_VERSION_1_4 = GL_TRUE;
+    GLEW_VERSION_1_5 = GL_FALSE;
+    GLEW_VERSION_2_0 = GL_FALSE;
+    }
+    if (s[minor] == '3')
+    {
+    GLEW_VERSION_1_1 = GL_TRUE;
+    GLEW_VERSION_1_2 = GL_TRUE;
+    GLEW_VERSION_1_3 = GL_TRUE;
+    GLEW_VERSION_1_4 = GL_FALSE;
+    GLEW_VERSION_1_5 = GL_FALSE;
+    GLEW_VERSION_2_0 = GL_FALSE;
+    }
+    if (s[minor] == '2')
+    {
+    GLEW_VERSION_1_1 = GL_TRUE;
+    GLEW_VERSION_1_2 = GL_TRUE;
+    GLEW_VERSION_1_3 = GL_FALSE;
+    GLEW_VERSION_1_4 = GL_FALSE;
+    GLEW_VERSION_1_5 = GL_FALSE;
+    GLEW_VERSION_2_0 = GL_FALSE;
+    }
+    if (s[minor] < '2')
+    {
+    GLEW_VERSION_1_1 = GL_TRUE;
+    GLEW_VERSION_1_2 = GL_FALSE;
+    GLEW_VERSION_1_3 = GL_FALSE;
+    GLEW_VERSION_1_4 = GL_FALSE;
+    GLEW_VERSION_1_5 = GL_FALSE;
+    GLEW_VERSION_2_0 = GL_FALSE;
+    }
+  }
   }
   /* initialize extensions */
 #ifdef GL_VERSION_1_2

@@ -86,21 +86,21 @@ class TiXmlString
     TiXmlString& operator += (const char * suffix)
     {
         append (suffix);
-		return *this;
+    return *this;
     }
 
     // += operator. Maps to append
     TiXmlString& operator += (char single)
     {
         append (single);
-		return *this;
+    return *this;
     }
 
     // += operator. Maps to append
     TiXmlString& operator += (TiXmlString & suffix)
     {
         append (suffix);
-		return *this;
+    return *this;
     }
     bool operator == (const TiXmlString & compare) const;
     bool operator < (const TiXmlString & compare) const;
@@ -113,8 +113,8 @@ class TiXmlString
     }
 
     // Checks if a TiXmlString contains only whitespace (same rules as isspace)
-	// Not actually used in tinyxml. Conflicts with a C macro, "isblank",
-	// which is a problem. Commenting out. -lee
+  // Not actually used in tinyxml. Conflicts with a C macro, "isblank",
+  // which is a problem. Commenting out. -lee
 //    bool isblank () const;
 
     // single char extraction
@@ -133,8 +133,8 @@ class TiXmlString
     // find a char in a string from an offset. Return TiXmlString::notfound if not found
     unsigned find (char tofind, unsigned offset) const;
 
-    /*	Function to reserve a big amount of data when we know we'll need it. Be aware that this
-		function clears the content of the TiXmlString if any exists.
+    /*  Function to reserve a big amount of data when we know we'll need it. Be aware that this
+    function clears the content of the TiXmlString if any exists.
     */
     void reserve (unsigned size)
     {
@@ -155,7 +155,7 @@ class TiXmlString
     }
 
     // Error value for find primitive 
-    enum {	notfound = 0xffffffff,
+    enum {  notfound = 0xffffffff,
             npos = notfound };
 
     void append (const char *str, int len );
@@ -226,7 +226,7 @@ public :
     }
 } ;
 
-#endif	// TIXML_STRING_INCLUDED
-#endif	// TIXML_USE_STL
+#endif  // TIXML_STRING_INCLUDED
+#endif  // TIXML_USE_STL
 
 
