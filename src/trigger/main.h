@@ -63,6 +63,7 @@ private:
 	
 	float coursetime;
 	float othertime; // used pre and post race
+	float cptime; // checkpoint time
 	float targettime; // the time needed to win
 	
 	std::string comment; // level comment string

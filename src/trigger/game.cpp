@@ -204,6 +204,8 @@ bool TriggerGame::loadLevel(const std::string &filename)
 	
 	othertime = 3.0f;
 	
+	cptime = -4.0f;
+	
 	gamestate = GS_COUNTDOWN;
 	
 	return true;
@@ -267,6 +269,7 @@ void TriggerGame::tick(float delta)
 		vec2f diff = makevec2f(checkpt[vehicle[i]->nextcp].pt) - makevec2f(vehicle[i]->body->getPosition());
 		if (diff.lengthsq() < 30.0f * 30.0f) {
 			//vehicle[i]->nextcp = (vehicle[i]->nextcp + 1) % checkpt.size();
+				cptime = coursetime;
 			if (++vehicle[i]->nextcp >= (int)checkpt.size()) {
 				vehicle[i]->nextcp = 0;
 				if (i == 0) gamestate = GS_FINISHED;

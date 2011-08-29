@@ -977,9 +977,25 @@ void MainApp::renderStateGame(float eyetranslation)
 	glPushMatrix(); // 2
 	glTranslatef(-1.2f, 0.9f, 0.0f);
 	glScalef(0.1f, 0.1f, 1.0f);
-	getSSRender().drawText(
-		PUtil::formatTime(game->coursetime),
-		PTEXT_HZA_LEFT | PTEXT_VTA_TOP);
+	if (game->gamestate == GS_FINISHED){
+		getSSRender().drawText(
+			PUtil::formatTime(game->coursetime),
+			PTEXT_HZA_LEFT | PTEXT_VTA_TOP);
+	} else if (game->coursetime < game->cptime + 1.50f) {
+		getSSRender().drawText(
+			PUtil::formatTime(game->cptime),
+			PTEXT_HZA_LEFT | PTEXT_VTA_TOP);
+	} else if (game->coursetime < game->cptime + 3.50f) {
+		float a = (((game->cptime + 3.50f) - game->coursetime) / 2);
+		glColor4f(1.0f, 1.0f, 1.0f, a);
+		getSSRender().drawText(
+			PUtil::formatTime(game->cptime),
+			PTEXT_HZA_LEFT | PTEXT_VTA_TOP);
+	} else {
+		getSSRender().drawText(
+			PUtil::formatTime(game->coursetime),
+			PTEXT_HZA_LEFT | PTEXT_VTA_TOP);
+	}
 	glPopMatrix(); // 2
 	
 	glColor4f(0.5f, 1.0f, 0.5f, 1.0f);
@@ -1025,15 +1041,24 @@ void MainApp::renderStateGame(float eyetranslation)
 	} else if (game->coursetime < 1.0f) {
 		glColor4f(0.5f, 1.0f, 0.5f, 1.0f);
 		getSSRender().drawText("GO!", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
+	} else if (game->coursetime < 2.0f) {
+		float a = 1.0f - (game->coursetime - 1.0f);
+		glColor4f(0.5f, 1.0f, 0.5f, a);
+		getSSRender().drawText("GO!", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
 	}
 	glPopMatrix(); // 2
 	
 	if (game->gamestate == GS_COUNTDOWN) {
-		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 		glPushMatrix(); // 2
 		glTranslatef(0.0f, 0.6f, 0.0f);
 		glScalef(0.08f, 0.08f, 1.0f);
-		getSSRender().drawText(game->comment, PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
+		if (game->othertime < 1.0f) {
+			glColor4f(1.0f, 1.0f, 1.0f, game->othertime);
+			getSSRender().drawText(game->comment, PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
+		} else {
+			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+			getSSRender().drawText(game->comment, PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
+		}
 		glPopMatrix(); // 2
 	}
 	
