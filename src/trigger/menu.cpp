@@ -7,10 +7,11 @@
 #include <sstream>
 #include "main.h"
 
+const int MAX_RACES_ON_SCREEN = 10;
+
 
 void MainApp::levelScreenAction(int action, int index)
 {
-    const int MAX_RACES_ON_SCREEN = 10;
   appstate = AS_LEVEL_SCREEN;
   
   switch (action) {
@@ -258,7 +259,7 @@ void MainApp::levelScreenAction(int action, int index)
   case AM_TOP_LVL_PREP:
     gui.makeClickable(
       gui.addLabel(400.0f,590.0f, "(back)", PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 30.0f),
-      AA_GO_LVL, 0);
+      AA_GO_LVL, (lss.currentlevel / MAX_RACES_ON_SCREEN) * MAX_RACES_ON_SCREEN);
     gui.addLabel(790.0f,590.0f, "Single Race", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 30.0f);
     gui.addLabel(200.0f,450.0f, "Name", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 30.0f);
     gui.addLabel(250.0f,450.0f, levels[lss.currentlevel].name, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 30.0f);
@@ -313,7 +314,8 @@ void MainApp::finishRace(int gamestate, float coursetime)
     levelScreenAction(AA_PICK_PRAC_LVL, lss.currentlevel);
     break;
   case AM_TOP_LVL_PREP:
-    levelScreenAction(AA_GO_LVL, 0);
+    // Calculate the index of first level in the page by truncating the current level index to the nearest 10
+    levelScreenAction(AA_GO_LVL, (lss.currentlevel / MAX_RACES_ON_SCREEN) * MAX_RACES_ON_SCREEN );
     break;
   default:
     PUtil::outLog() << "Race finished in invalid state " << lss.state << std::endl;
@@ -379,7 +381,7 @@ void MainApp::handleLevelScreenKey(const SDL_KeyboardEvent &ke)
       levelScreenAction(AA_PICK_PRAC, lss.currentevent);
       break;
     case AM_TOP_LVL_PREP:
-      levelScreenAction(AA_GO_LVL, 0);
+      levelScreenAction(AA_GO_LVL, (lss.currentlevel / MAX_RACES_ON_SCREEN) * MAX_RACES_ON_SCREEN);
       break;
     case AM_TOP_QUIT:
       quitGame();
