@@ -194,6 +194,15 @@ private:
   float cfg_drivingassist;
   bool cfg_enable_sound;
   
+  enum Speedunit {
+    mph,
+    kph
+  };
+  Speedunit cfg_speed_unit;
+  float hud_speedo_start_deg;
+  float hud_speedo_mps_mult;
+
+
   enum Action {
     ActionForward,
     ActionBack,

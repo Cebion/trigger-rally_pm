@@ -27,10 +27,14 @@
 		-->
 	
 	<parameters
-		drivingassist="0.15"
-		
+		drivingassist="0.15"		
 		enablesound="yes"
+        speedunit="mph"
 		/>
+      <!-- Possible values for speedunit 
+           Kilometres per hour - kph
+           Miles per hour - mph
+      -->
 	
 	<controls>
 		

@@ -816,8 +816,8 @@ void MainApp::renderStateGame(float eyetranslation)
   
   glDisable(GL_TEXTURE_2D);
   
-  glRotatef(210.0f - MPS_TO_MPH(fabsf(vehic->getWheelSpeed())) * 15.0f / 10.0f, 0.0f, 0.0f, 1.0f);
-  
+  glRotatef(hud_speedo_start_deg - fabsf(vehic->getWheelSpeed()) * hud_speedo_mps_mult, 0.0f, 0.0f, 1.0f);  
+
   glColor3f(1.0f, 0.0f, 0.0f);
   glBegin(GL_TRIANGLES);
   glVertex2f(0.9f, 0.0f); glVertex2f(-0.2f, 0.05f); glVertex2f(-0.2f, -0.05f);

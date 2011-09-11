@@ -33,8 +33,19 @@
 // KPH = kilometres per hour
 // MPH = miles per hour
 
-#define MPS_TO_KPH(x) ((x) * 3.6f)
 #define MPS_TO_MPH(x) ((x) * 2.23693629f) // thanks Google!
+#define MPS_TO_KPH(x) ((x) * 3.6f)
+
+// Starting position in degrees, measured counter-clockwise from the x-axis.
+#define MPH_ZERO_DEG 210
+#define KPH_ZERO_DEG 220
+
+// Degrees to rotate the speedo needle for each unit of speed
+#define DEG_PER_MPH 1.5f
+#define DEG_PER_KPH 1.0f
+
+const float MPS_MPH_DEG_MULT = 2.23693629f * DEG_PER_MPH;
+const float MPS_KPH_DEG_MULT = 3.6f * DEG_PER_KPH;
 
 
 struct v_control_s {

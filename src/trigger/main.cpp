@@ -80,7 +80,10 @@ void MainApp::loadConfig()
   
   cfg_drivingassist = 1.0f;
   cfg_enable_sound = true;
-  
+  cfg_speed_unit = mph;
+  hud_speedo_start_deg = MPH_ZERO_DEG;
+  hud_speedo_mps_mult = MPS_MPH_DEG_MULT;
+
   ctrl.action_name[ActionForward] = std::string("forward");
   ctrl.action_name[ActionBack] = std::string("back");
   ctrl.action_name[ActionLeft] = std::string("left");
@@ -218,7 +221,21 @@ void MainApp::loadConfig()
         else if (!strcmp(val, "no"))
           cfg_enable_sound = false;
       }
-      
+
+      val = walk->Attribute("speedunit");
+      if (val) {
+        if (!strcmp(val, "mph")) {
+            cfg_speed_unit = mph;
+            hud_speedo_start_deg = MPH_ZERO_DEG;
+            hud_speedo_mps_mult = MPS_MPH_DEG_MULT;
+          }
+        else if (!strcmp(val, "kph")) {
+           cfg_speed_unit = kph;
+           hud_speedo_start_deg = KPH_ZERO_DEG;
+           hud_speedo_mps_mult = MPS_KPH_DEG_MULT;
+         }
+      }
+ 
     } else if (!strcmp(walk->Value(), "controls")) {
       
       for (TiXmlElement *walk2 = walk->FirstChildElement();
@@ -467,7 +484,12 @@ bool MainApp::loadAll()
   if (!(tex_shadow = getSSTexture().loadTexture("/textures/shadow.png", true, true))) return false;
   
   if (!(tex_hud_revs = getSSTexture().loadTexture("/textures/dial_rev.png"))) return false;
-  if (!(tex_hud_speedo = getSSTexture().loadTexture("/textures/dial_speed.png"))) return false;
+  if (cfg_speed_unit == mph) {
+    if (!(tex_hud_speedo = getSSTexture().loadTexture("/textures/dial_speed_mph.png"))) return false;
+  }
+  else if (cfg_speed_unit == kph) {
+    if (!(tex_hud_speedo = getSSTexture().loadTexture("/textures/dial_speed_kph.png"))) return false;
+  }
   if (!(tex_hud_gear = getSSTexture().loadTexture("/textures/dial_gear.png"))) return false;
   
   if (cfg_enable_sound) {
