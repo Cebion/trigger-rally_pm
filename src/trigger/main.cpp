@@ -81,8 +81,11 @@ void MainApp::loadConfig()
   cfg_drivingassist = 1.0f;
   cfg_enable_sound = true;
   cfg_speed_unit = mph;
+  cfg_speed_style = analogue;
+  
   hud_speedo_start_deg = MPH_ZERO_DEG;
-  hud_speedo_mps_mult = MPS_MPH_DEG_MULT;
+  hud_speedo_mps_deg_mult = MPS_MPH_DEG_MULT;
+  hud_speedo_mps_speed_mult = MPS_MPH_SPEED_MULT;
 
   ctrl.action_name[ActionForward] = std::string("forward");
   ctrl.action_name[ActionBack] = std::string("back");
@@ -227,15 +230,26 @@ void MainApp::loadConfig()
         if (!strcmp(val, "mph")) {
             cfg_speed_unit = mph;
             hud_speedo_start_deg = MPH_ZERO_DEG;
-            hud_speedo_mps_mult = MPS_MPH_DEG_MULT;
+            hud_speedo_mps_deg_mult = MPS_MPH_DEG_MULT;
+            hud_speedo_mps_speed_mult = MPS_MPH_SPEED_MULT;
           }
         else if (!strcmp(val, "kph")) {
            cfg_speed_unit = kph;
            hud_speedo_start_deg = KPH_ZERO_DEG;
-           hud_speedo_mps_mult = MPS_KPH_DEG_MULT;
+           hud_speedo_mps_deg_mult = MPS_KPH_DEG_MULT;
+           hud_speedo_mps_speed_mult = MPS_KPH_SPEED_MULT;
          }
       }
- 
+      val = walk->Attribute("speedstyle");
+      if (val) {
+        if (!strcmp(val, "analogue")) {
+          cfg_speed_style = analogue;
+        }
+        else if (!strcmp(val, "hybrid")) {
+          cfg_speed_style = hybrid;
+        }
+      }
+
     } else if (!strcmp(walk->Value(), "controls")) {
       
       for (TiXmlElement *walk2 = walk->FirstChildElement();
@@ -485,10 +499,17 @@ bool MainApp::loadAll()
   
   if (!(tex_hud_revs = getSSTexture().loadTexture("/textures/dial_rev.png"))) return false;
   if (cfg_speed_unit == mph) {
-    if (!(tex_hud_speedo = getSSTexture().loadTexture("/textures/dial_speed_mph.png"))) return false;
-  }
-  else if (cfg_speed_unit == kph) {
-    if (!(tex_hud_speedo = getSSTexture().loadTexture("/textures/dial_speed_kph.png"))) return false;
+    if (cfg_speed_style) {
+      if (!(tex_hud_speedo = getSSTexture().loadTexture("/textures/dial_speed_hybrid_mph.png"))) return false;
+    } else {
+      if (!(tex_hud_speedo = getSSTexture().loadTexture("/textures/dial_speed_mph.png"))) return false;
+    }
+  } else if (cfg_speed_unit == kph) {
+    if (cfg_speed_style) {
+      if (!(tex_hud_speedo = getSSTexture().loadTexture("/textures/dial_speed_hybrid_kph.png"))) return false;
+    } else {
+      if (!(tex_hud_speedo = getSSTexture().loadTexture("/textures/dial_speed_kph.png"))) return false;
+    }
   }
   if (!(tex_hud_gear = getSSTexture().loadTexture("/textures/dial_gear.png"))) return false;
   

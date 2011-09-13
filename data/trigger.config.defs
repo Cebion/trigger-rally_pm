@@ -30,10 +30,16 @@
 		drivingassist="0.15"		
 		enablesound="yes"
         speedunit="mph"
+        speedstyle="analogue"
 		/>
-      <!-- Possible values for speedunit 
-           Kilometres per hour - kph
-           Miles per hour - mph
+      <!-- Possible values for speedunit:
+           kph - Kilometres per hour
+           mph - Miles per hour
+
+           Possible values for speedstyle:
+           analogue - A dial showing speed
+           hybrid - The analogue dial with digital speed as well
+
       -->
 	
 	<controls>

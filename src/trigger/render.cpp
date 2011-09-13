@@ -816,7 +816,7 @@ void MainApp::renderStateGame(float eyetranslation)
   
   glDisable(GL_TEXTURE_2D);
   
-  glRotatef(hud_speedo_start_deg - fabsf(vehic->getWheelSpeed()) * hud_speedo_mps_mult, 0.0f, 0.0f, 1.0f);  
+  glRotatef(hud_speedo_start_deg - fabsf(vehic->getWheelSpeed()) * hud_speedo_mps_deg_mult, 0.0f, 0.0f, 1.0f);  
 
   glColor3f(1.0f, 0.0f, 0.0f);
   glBegin(GL_TRIANGLES);
@@ -1018,7 +1018,18 @@ void MainApp::renderStateGame(float eyetranslation)
     getSSRender().drawText(buff, PTEXT_HZA_RIGHT | PTEXT_VTA_TOP);
   }
   glPopMatrix(); // 2
-  
+
+  if (cfg_speed_style == MainApp::hybrid ) {
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glPushMatrix(); // 2
+    glTranslatef(1.0725f, -0.298f, 0.0f);
+    glScalef(0.08f, 0.08f, 1.0f);
+    int speed = fabsf(vehic->getWheelSpeed()) * hud_speedo_mps_speed_mult;
+    std::string speedstr = PUtil::formatInt(speed);
+    getSSRender().drawText(speedstr, PTEXT_HZA_RIGHT | PTEXT_VTA_TOP);      
+    glPopMatrix(); // 2
+  }
+
   glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
   glPushMatrix(); // 2
   glTranslatef(0.0f, 0.2f, 0.0f);

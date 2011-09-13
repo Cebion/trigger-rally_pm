@@ -180,8 +180,18 @@ struct UserControl {
   float value; // from 0.0 to 1.0 depending on activation level
 };
 
-
 class MainApp : public PApp {
+public:
+  enum Speedunit {
+    mph,
+    kph
+  };
+
+  enum Speedstyle {
+    analogue,
+    hybrid
+  };
+
 private:
   
   int appstate;
@@ -194,14 +204,11 @@ private:
   float cfg_drivingassist;
   bool cfg_enable_sound;
   
-  enum Speedunit {
-    mph,
-    kph
-  };
   Speedunit cfg_speed_unit;
+  Speedstyle cfg_speed_style;
   float hud_speedo_start_deg;
-  float hud_speedo_mps_mult;
-
+  float hud_speedo_mps_deg_mult;
+  float hud_speedo_mps_speed_mult;
 
   enum Action {
     ActionForward,

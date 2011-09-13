@@ -44,8 +44,13 @@
 #define DEG_PER_MPH 1.5f
 #define DEG_PER_KPH 1.0f
 
-const float MPS_MPH_DEG_MULT = 2.23693629f * DEG_PER_MPH;
-const float MPS_KPH_DEG_MULT = 3.6f * DEG_PER_KPH;
+// Multiplier for mps to speed in some unit
+const float MPS_MPH_SPEED_MULT = 2.23693629f;
+const float MPS_KPH_SPEED_MULT = 3.6f;
+
+// Multiplier for mps to degs on the speedo dial
+const float MPS_MPH_DEG_MULT = MPS_MPH_SPEED_MULT * DEG_PER_MPH;
+const float MPS_KPH_DEG_MULT = MPS_KPH_SPEED_MULT * DEG_PER_KPH;
 
 
 struct v_control_s {
