@@ -518,11 +518,11 @@ void Gui::render()
     case GWT_LABEL: {
       vec4f colc;
       if (widget[i].clickable) {
-        vec4f cola = vec4f(1.0f, 0.8f, 0.7f, 0.6f);
-        vec4f colb = vec4f(0.6f, 0.8f, 1.0f, 1.0f);
+        vec4f cola = vec4f(1.0f, 0.6f, 0.6f, 0.7f);
+        vec4f colb = vec4f(0.4f, 0.8f, 1.0f, 0.85f);
         colc = INTERP(cola, colb, widget[i].glow);
       } else {
-        colc = vec4f(1.0f, 1.0f, 1.0f, 0.6f);
+        colc = vec4f(1.0f, 1.0f, 1.0f, 0.8f);
       }
       
       if ((int)i == defwidget)
