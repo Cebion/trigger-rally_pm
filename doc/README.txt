@@ -1,14 +1,14 @@
 
 
 ///////////////////////////
-// Trigger v0.5.x README //
+// Trigger v0.6.x README //
 ///////////////////////////
 
 
 Thanks for downloading Trigger! I hope you enjoy
 the game. For updates, please visit:
 
-  http://www.positro.net/trigger/
+  http://trigger-rally.sourceforge.net/
 
 
 Before playing, building, or copying, please read
@@ -90,17 +90,61 @@ Source dependencies:
 		(http://www.fmod.org/)
 		(i386-mingw32msvc is the only tested build)
 
-To build trigger:
+To build trigger open a terminal and, in the top level of
+the trigger source directory, do:
 
 ./configure
 jam
 
-You'll probably want to check ./configure --help for
-available options, although the defaults are usually
-fine. Those interested in packaging trigger will want
-to specify --datadir=...
+Thanks to Matze Braun for this excellent build system.
 
-Thanks to Matze Braun for this excellent new build system.
+To run trigger without installing, copy the trigger
+executable to the data sub-directory and run it from
+there. That is:
+
+cp ./trigger data
+./data/trigger
+
+If you are hacking on trigger and rebuilding often, you may
+find it convenient to specify the --datadir option to
+configure, then you will not need to copy the executable
+after each build. The --datadir option expects a full path.
+
+./configure --datadir=/home/$USER/projects/trigger-rally/data
+jam
+./trigger
+
+Adjust the path to suit your system. Every time the options
+to configure are changed run:
+
+jam clean
+
+before running 'jam' again. This ensures that trigger uses
+the new configure settings.
+
+
+//////////////////
+// Installation //
+//////////////////
+
+
+If you wish to install trigger you'll need to specify the
+--prefix and --datadir options to configure. The prefix
+directory controls where trigger will be installed.
+
+Here is a full example, adjust the paths to suit:
+
+./configure --prefix=/home/$USER/local/trigger-rally \
+            --datadir=/home/$USER/local/trigger-rally/data
+jam
+jam install
+rsync -av --exclude='.svn' data/ /home/$USER/local/trigger-rally/data
+
+Now you can run trigger, for example:
+
+./local/trigger-rally/bin/trigger
+
+will start trigger.
 
 
 /////////////////////
@@ -108,25 +152,30 @@ Thanks to Matze Braun for this excellent new build system.
 /////////////////////
 
 
-If something goes wrong, the first thing to check is
-your settings in data/trigger.conf.
+If something goes wrong, the you should check
+your settings in ~/.trigger/trigger.config. You can
+delete that file to reset everything to default. (It
+will be recreated next time you run Trigger.)
 
-Failing that, check back to the game website to see
-if the bug has been discovered (I may have posted a
-workaround.)
+Failing that, please visit Sourceforge to ask for help
+on the forums or file a bug on the tracker:
 
-If it still doesn't work, please send me an email at:
-
-jas@jareiko.net
-
-and I'll get back to you as soon as I can. I can't
-promise to be able to fix the bug however :|
+http://sourceforge.net/projects/trigger-rally/support
 
 
 /////////////////////
 // Version history //
 /////////////////////
 
+X/10/2011 - Trigger 0.6.0
+  - New (and old) contributed tracks and events
+  - New Practice Mode
+  - Paging on the Single Races screen to show all the available tracks
+  - Option to show speedometer in KPH or MPH
+  - Option to show digital speed on the speed dial ('hybrid' style)
+  - Fading track comment and GO at race start
+  - Freezing course time when passing through a checkpoint
+  - Tweak menu colours for more contrast
 
 4/07/2010 - Trigger 0.5.3
   - Removed splash screen delay
@@ -200,8 +249,8 @@ promise to be able to fix the bug however :|
 /////////////
 
 
-Code                Jasmine Langridge <jas@jareiko.net>
-Art & sfx           Richard Langridge <r_langridge@wincoll.ac.uk>
+Code                Jasmine Langridge <ja-reiko@users.sourceforge.net>
+Art & sfx           Richard Langridge
 
 Build system
 and Jamrules        Matze Braun <matze@braunis.de>
@@ -211,6 +260,8 @@ Mac OS X porting    Tim Douglas
 Fixes & distro      LavaPunk <lavapunk@gmail.com>
 support             Bernhard Kaindl
                     Stefan Potyra
+                    Liviu Andronic
+                    Ishmael Turner
 New levels          Tim Wintle
                     David Pagnier
                     Jared Buckner
@@ -234,5 +285,5 @@ Many thanks to all contributors!
 I haven't been keeping strict records of who has
 contributed what. If you've been left out, or if
 you'd like your email to be listed, please email
-me. (jas@jareiko.net)
+me. (ja-reiko@users.sourceforge.net)
 
