@@ -167,7 +167,7 @@ http://sourceforge.net/projects/trigger-rally/support
 // Version history //
 /////////////////////
 
-X/10/2011 - Trigger 0.6.0
+08/10/2011 - Trigger 0.6.0
   - New (and old) contributed tracks and events
   - New Practice Mode
   - Paging on the Single Races screen to show all the available tracks

@@ -246,6 +246,8 @@ const char *creditstext[] = {
   "Fixes",
   "LavaPunk",
   "Bernhard Kaindl",
+  "Liviu Andronic",
+  "Ishmael Turner",
   "",
   "New levels",
   "Tim Wintle",
