@@ -1,0 +1,125 @@
+
+Author and licence info for files under data/ directory.
+
+Files marked "***" are of uncertain copyright and/or trademark status, and
+should be replaced.
+
+
+Richard Langridge / GPL
+  data/events/triggercup/bigjump/colormap.jpg
+  data/events/triggercup/bigjump/foliagemap.png
+  data/events/triggercup/bigjump/heightmap.png
+  data/events/triggercup/bigjump/jump.level
+  data/events/triggercup/desertstorm/colormap.jpg
+  data/events/triggercup/desertstorm/foliagemap.png
+  data/events/triggercup/desertstorm/heightmap.png
+  data/events/triggercup/desertstorm/storm.level
+  data/events/triggercup/lunar/colormap.jpg
+  data/events/triggercup/lunar/foliagemap.png
+  data/events/triggercup/lunar/heightmap.png
+  data/events/triggercup/lunar/lunar.level
+  data/events/triggercup/monkeybusiness/colormap.jpg
+  data/events/triggercup/monkeybusiness/foliagemap.png
+  data/events/triggercup/monkeybusiness/heightmap.png
+  data/events/triggercup/monkeybusiness/monkey.level
+  data/events/triggercup/oldmacdonald/colormap.jpg
+  data/events/triggercup/oldmacdonald/farm.level
+  data/events/triggercup/oldmacdonald/foliagemap.png
+  data/events/triggercup/oldmacdonald/heightmap.png
+  data/events/triggercup/triggercup.event
+  data/events/triggercup/warmup/colormap.jpg
+  data/events/triggercup/warmup/foliagemap.png
+  data/events/triggercup/warmup/heightmap.png
+  data/events/triggercup/warmup/warmup.level
+
+TODO(ja-reiko): Fill in author / licence for these.
+  data/maps/greengrounds/colormap.jpg
+  data/maps/greengrounds/foliagemap.png
+  data/maps/greengrounds/greengrounds.level
+  data/maps/greengrounds/heightmap.png
+  data/maps/mountainpass/colormap.jpg
+  data/maps/mountainpass/foliagemap.png
+  data/maps/mountainpass/heightmap.png
+  data/maps/mountainpass/mountainpass.level
+  data/maps/roundhouse/roundhouse-c.jpg
+  data/maps/roundhouse/roundhouse-f.jpg
+  data/maps/roundhouse/roundhouse-h.jpg
+  data/maps/roundhouse/roundhouse.level
+  data/maps/saharatea/level7-c.jpg
+  data/maps/saharatea/level7-f.png
+  data/maps/saharatea/level7-h.png
+  data/maps/saharatea/level7.level
+  data/plugins/banana_island.zip
+  data/plugins/cross_mountain.zip
+  data/plugins/crosspulp.zip
+  data/plugins/delta.zip
+  data/plugins/desert_rush.zip
+  data/plugins/ghats.zip
+  data/plugins/helicoil.zip
+  data/plugins/icypeak.zip
+  data/plugins/illa.zip
+  data/plugins/monza.zip
+  data/plugins/muntaya.zip
+  data/plugins/oldmacdonald-bis.zip
+  data/plugins/oldmacdonald-quinquies.zip
+  data/plugins/oldmacdonald-sex.zip
+  data/plugins/rscup.zip
+  data/plugins/santa.zip
+  data/plugins/serpentine.zip
+  data/plugins/snowlevel.zip
+  data/plugins/snowyhills.zip
+  data/plugins/tobago.zip
+  data/plugins/westernchallenge.zip
+
+Richard Langridge / GPL
+  data/sounds/engine1.wav ***
+  data/sounds/evo_sound/clank1.wav ***
+  data/sounds/evo_sound/clank3.wav ***
+  data/sounds/gravel2.wav ***
+  data/sounds/wind.wav ***
+
+Richard Langridge / GPL
+  data/textures/arrow.png ***
+  data/textures/consolefont.png ***
+  data/textures/cursor.png ***
+  data/textures/detail.jpg ***
+  data/textures/dial_gear.png ***
+  data/textures/dial_rev.png
+Ishmael Turner / GPL
+  data/textures/dial_speed_hybrid_kph.png
+  data/textures/dial_speed_hybrid_mph.png
+  data/textures/dial_speed_kph.png
+  data/textures/dial_speed_mph.png
+Richard Langridge / GPL
+  data/textures/dust.png
+  data/textures/life_helmet.png ***
+  data/textures/shadow.png
+  data/textures/sky/blue.jpg
+  data/textures/sky/overcast.jpg
+  data/textures/sky/stars.jpg
+  data/textures/splash/endgame.jpg ***
+  data/textures/splash/splash.jpg ***
+  data/textures/veg/cactus1.png ***
+  data/textures/veg/grass-sprite.png ***
+  data/textures/veg/palmy.png ***
+
+Richard Langridge / GPL
+  data/vehicles/evo/evo.ase
+  data/vehicles/evo/evo.vehicle
+  data/vehicles/evo/evo_complete.fx
+  data/vehicles/evo/evo_complete.jpg ***
+  data/vehicles/evo/evo_wheel.ase
+  data/vehicles/evo/glass.fx
+  data/vehicles/evo/glass.png
+  data/vehicles/focus/focus.ase
+  data/vehicles/focus/focus.vehicle
+  data/vehicles/focus/focus_complete.fx
+  data/vehicles/focus/focus_complete.jpg ***
+  data/vehicles/focus/focus_wheel.ase
+  data/vehicles/seat/seat.ase
+  data/vehicles/seat/seat.vehicle
+  data/vehicles/seat/seat.vehicle.contrib
+  data/vehicles/seat/seat_complete.fx
+  data/vehicles/seat/seat_complete.jpg ***
+  data/vehicles/seat/seat_wheel.ase
+
