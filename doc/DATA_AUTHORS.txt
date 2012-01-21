@@ -83,7 +83,6 @@ Richard Langridge / GPL
   data/textures/consolefont.png ***
   data/textures/cursor.png ***
   data/textures/detail.jpg ***
-  data/textures/dial_gear.png ***
   data/textures/dial_rev.png
 Ishmael Turner / GPL
   data/textures/dial_speed_hybrid_kph.png
@@ -92,7 +91,6 @@ Ishmael Turner / GPL
   data/textures/dial_speed_mph.png
 Richard Langridge / GPL
   data/textures/dust.png
-  data/textures/life_helmet.png ***
   data/textures/shadow.png
   data/textures/sky/blue.jpg
   data/textures/sky/overcast.jpg
@@ -123,3 +121,6 @@ Richard Langridge / GPL
   data/vehicles/seat/seat_complete.jpg ***
   data/vehicles/seat/seat_wheel.ase
 
+Iwan 'qubodup' Gabovitch / PD
+  data/textures/life_helmet.png
+  data/textures/dial_gear.png
