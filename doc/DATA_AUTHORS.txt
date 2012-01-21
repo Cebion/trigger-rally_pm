@@ -124,3 +124,10 @@ Richard Langridge / GPL
 Iwan 'qubodup' Gabovitch / PD
   data/textures/life_helmet.png
   data/textures/dial_gear.png
+
+Iwan 'qubodup' Gabovitch / GPL
+  data/maps/alignster/alignster-c.jpg
+  data/maps/alignster/alignster-h.jpg
+  data/maps/alignster/alignster-f.jpg
+  data/maps/alignster/alignster.level
+
