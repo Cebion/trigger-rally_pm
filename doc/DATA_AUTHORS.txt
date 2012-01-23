@@ -131,3 +131,5 @@ Iwan 'qubodup' Gabovitch / GPL
   data/maps/alignster/alignster-f.jpg
   data/maps/alignster/alignster.level
 
+Stefan Potyra / GPL
+  data/icon.png
