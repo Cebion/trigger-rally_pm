@@ -491,7 +491,6 @@ bool MainApp::loadAll()
   if (!(tex_end_screen = getSSTexture().loadTexture("/textures/splash/endgame.jpg"))) return false;
   
   if (!(tex_hud_life = getSSTexture().loadTexture("/textures/life_helmet.png"))) return false;
-  if (!(tex_hud_arrow = getSSTexture().loadTexture("/textures/arrow.png"))) return false;
   
   if (!(tex_detail = getSSTexture().loadTexture("/textures/detail.jpg"))) return false;
   if (!(tex_dirt = getSSTexture().loadTexture("/textures/dust.png"))) return false;

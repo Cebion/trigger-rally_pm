@@ -79,9 +79,7 @@ Richard Langridge / GPL
   data/sounds/wind.wav ***
 
 Richard Langridge / GPL
-  data/textures/arrow.png ***
   data/textures/consolefont.png ***
-  data/textures/cursor.png ***
   data/textures/detail.jpg ***
   data/textures/dial_rev.png
 Ishmael Turner / GPL

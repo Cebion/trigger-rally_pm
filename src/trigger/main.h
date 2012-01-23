@@ -258,7 +258,6 @@ private:
            *tex_hud_speedo,
            *tex_hud_gear,
            *tex_hud_life,
-           *tex_hud_arrow,
            *tex_splash_screen,
            *tex_end_screen;
   
