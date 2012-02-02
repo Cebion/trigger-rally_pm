@@ -128,6 +128,14 @@ Iwan 'qubodup' Gabovitch / GPL
   data/maps/alignster/alignster-h.jpg
   data/maps/alignster/alignster-f.jpg
   data/maps/alignster/alignster.level
+  data/maps/eversnake/eversnake-c.jpg
+  data/maps/eversnake/eversnake-h.png
+  data/maps/eversnake/eversnake-f.jpg
+  data/maps/eversnake/eversnake.level
+  data/maps/smallswirl/smallswirl-c.jpg
+  data/maps/smallswirl/smallswirl-h.jpg
+  data/maps/smallswirl/smallswirl-f.jpg
+  data/maps/smallswirl/smallswirl.level
 
 Miriam Ruiz / GPL
-  data/icon.png
+  data/icon.png ***
