@@ -72,7 +72,7 @@ TODO(ja-reiko): Fill in author / licence for these.
   data/plugins/westernchallenge.zip
 
 Richard Langridge / GPL
-  data/sounds/engine1.wav ***
+  data/sounds/engine1.wav
   data/sounds/evo_sound/clank1.wav ***
   data/sounds/evo_sound/clank3.wav ***
   data/sounds/gravel2.wav ***
