@@ -72,7 +72,6 @@ TODO(ja-reiko): Fill in author / licence for these.
   data/plugins/westernchallenge.zip
 
 Richard Langridge / GPL
-  data/sounds/engine1.wav
   data/sounds/evo_sound/clank1.wav ***
   data/sounds/evo_sound/clank3.wav ***
   data/sounds/gravel2.wav ***
@@ -136,6 +135,7 @@ Iwan 'qubodup' Gabovitch / GPL
   data/maps/smallswirl/smallswirl-h.jpg
   data/maps/smallswirl/smallswirl-f.jpg
   data/maps/smallswirl/smallswirl.level
+  data/sounds/engine1.wav
 
 Miriam Ruiz / GPL
   data/icon.png ***
