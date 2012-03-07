@@ -130,6 +130,10 @@ Iwan 'qubodup' Gabovitch / GPL
   data/maps/eversnake/eversnake-h.png
   data/maps/eversnake/eversnake-f.jpg
   data/maps/eversnake/eversnake.level
+  labrally/labrally.level
+  labrally/labrally-f.png
+  labrally/labrally-h.png
+  labrally/labrally-c.png
   data/maps/smallswirl/smallswirl-c.jpg
   data/maps/smallswirl/smallswirl-h.jpg
   data/maps/smallswirl/smallswirl-f.jpg
@@ -141,3 +145,6 @@ Miriam Ruiz / GPL
 
 URW++ / GPL
   data/textures/consolefont.png (Nimbus Mono L)
+
+Liviu Andronic / GPL
+  labrally/labrally-bis.level
