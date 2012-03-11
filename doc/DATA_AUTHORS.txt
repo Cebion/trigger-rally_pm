@@ -95,7 +95,6 @@ Richard Langridge / GPL
   data/textures/splash/splash.jpg ***
   data/textures/veg/cactus1.png ***
   data/textures/veg/grass-sprite.png ***
-  data/textures/veg/palmy.png ***
 
 Richard Langridge / GPL
   data/vehicles/evo/evo.ase
@@ -120,6 +119,7 @@ Richard Langridge / GPL
 Iwan 'qubodup' Gabovitch / PD
   data/textures/life_helmet.png
   data/textures/dial_gear.png
+  data/textures/veg/palmy.png ( http://opengameart.org/content/palm-plant-sprite-1024x1024 )
 
 Iwan 'qubodup' Gabovitch / GPL
   data/maps/alignster/alignster-c.jpg
