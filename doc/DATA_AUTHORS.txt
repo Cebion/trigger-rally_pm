@@ -60,9 +60,6 @@ TODO(ja-reiko): Fill in author / licence for these.
   data/plugins/illa.zip
   data/plugins/monza.zip
   data/plugins/muntaya.zip
-  data/plugins/oldmacdonald-bis.zip
-  data/plugins/oldmacdonald-quinquies.zip
-  data/plugins/oldmacdonald-sex.zip
   data/plugins/rscup.zip
   data/plugins/santa.zip
   data/plugins/serpentine.zip
@@ -70,6 +67,14 @@ TODO(ja-reiko): Fill in author / licence for these.
   data/plugins/snowyhills.zip
   data/plugins/tobago.zip
   data/plugins/westernchallenge.zip
+
+Richard Langridge / GPL
+  data/maps/oldmacdonald/colormap.jpg
+  data/maps/oldmacdonald/foliagemap.png
+  data/maps/oldmacdonald/farm-bis.level
+  data/maps/oldmacdonald/farm-quinquies.level
+  data/maps/oldmacdonald/farm-sex.level
+  data/maps/oldmacdonald/heightmap.png
 
 Richard Langridge / GPL
   data/sounds/evo_sound/clank1.wav ***
