@@ -126,7 +126,6 @@ Richard Langridge / GPL
 Iwan 'qubodup' Gabovitch / CC0 (PD)
   data/textures/life_helmet.png ( http://openclipart.org/detail/167195 )
   data/textures/dial_gear.png ( http://openclipart.org/detail/167196 )
-  data/textures/veg/cactus1.png ( http://opengameart.org/content/cactus-sprite-texture-0 )
   data/textures/veg/palmy.png ( http://opengameart.org/content/palm-plant-sprite-1024x1024 )
 
 Iwan 'qubodup' Gabovitch / GPL
@@ -147,6 +146,7 @@ Iwan 'qubodup' Gabovitch / GPL
   data/maps/smallswirl/smallswirl-f.jpg
   data/maps/smallswirl/smallswirl.level
   data/sounds/engine1.wav ( http://opengameart.org/content/car-engine-loop-96khz-4s )
+  data/textures/veg/cactus1.png ( http://opengameart.org/content/cactus-sprite-texture-0 )
 
 Miriam Ruiz / GPL
   data/icon.png ***
