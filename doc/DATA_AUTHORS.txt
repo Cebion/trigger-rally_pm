@@ -1,6 +1,9 @@
 
 Author and licence info for files under data/ directory.
 
+GPL = GNU General Public License v2 or later ( http://www.gnu.org/licenses/gpl.txt )
+CC0 (PD) = Creative Commons Zero 1.0 Universal Public Domain Dedication ( http://creativecommons.org/publicdomain/zero/1.0/ )
+
 Files marked "***" are of uncertain copyright and/or trademark status, and
 should be replaced.
 
@@ -84,11 +87,13 @@ Richard Langridge / GPL
 
 Richard Langridge / GPL
   data/textures/dial_rev.png
+
 Ishmael Turner / GPL
   data/textures/dial_speed_hybrid_kph.png
   data/textures/dial_speed_hybrid_mph.png
   data/textures/dial_speed_kph.png
   data/textures/dial_speed_mph.png
+
 Richard Langridge / GPL
   data/textures/dust.png
   data/textures/shadow.png
@@ -97,8 +102,6 @@ Richard Langridge / GPL
   data/textures/sky/stars.jpg
   data/textures/splash/endgame.jpg ***
   data/textures/splash/splash.jpg ***
-  data/textures/veg/cactus1.png ***
-  data/textures/veg/grass-sprite.png ***
 
 Richard Langridge / GPL
   data/vehicles/evo/evo.ase
@@ -120,9 +123,10 @@ Richard Langridge / GPL
   data/vehicles/seat/seat_complete.jpg ***
   data/vehicles/seat/seat_wheel.ase
 
-Iwan 'qubodup' Gabovitch / PD
-  data/textures/life_helmet.png
-  data/textures/dial_gear.png
+Iwan 'qubodup' Gabovitch / CC0 (PD)
+  data/textures/life_helmet.png ( http://openclipart.org/detail/167195 )
+  data/textures/dial_gear.png ( http://openclipart.org/detail/167196 )
+  data/textures/veg/cactus1.png ( http://opengameart.org/content/cactus-sprite-texture-0 )
   data/textures/veg/palmy.png ( http://opengameart.org/content/palm-plant-sprite-1024x1024 )
 
 Iwan 'qubodup' Gabovitch / GPL
@@ -142,7 +146,7 @@ Iwan 'qubodup' Gabovitch / GPL
   data/maps/smallswirl/smallswirl-h.jpg
   data/maps/smallswirl/smallswirl-f.jpg
   data/maps/smallswirl/smallswirl.level
-  data/sounds/engine1.wav
+  data/sounds/engine1.wav ( http://opengameart.org/content/car-engine-loop-96khz-4s )
 
 Miriam Ruiz / GPL
   data/icon.png ***
@@ -155,3 +159,6 @@ Liviu Andronic / GPL
 
 Mysteryem / GPL
   data/textures/detail.jpg ( http://opengameart.org/content/29-grounds-and-walls-and-water-1024x1024 )
+
+yughues / CC0 (PD)
+  data/textures/veg/grass-sprite.png ( http://opengameart.org/content/grass-pack-02 )
