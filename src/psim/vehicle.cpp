@@ -68,7 +68,7 @@ void PDriveSystemInstance::tick(float delta, float throttle, float wheel_rps)
       if (nexttorque > out_torque)
         newtarget_rel = 1;
     }
-    
+
     // don't test for down if already decided to go up
     if (currentgear > 0 && newtarget_rel == 0) {
       float nextrate = rps / dsys->gear[currentgear].y * dsys->gear[currentgear-1].y;
