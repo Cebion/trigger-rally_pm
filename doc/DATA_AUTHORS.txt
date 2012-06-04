@@ -81,9 +81,6 @@ Richard Langridge / GPL
 
 Richard Langridge / GPL
   data/sounds/evo_sound/clank1.wav ***
-  data/sounds/evo_sound/clank3.wav ***
-  data/sounds/gravel2.wav ***
-  data/sounds/wind.wav ***
 
 Richard Langridge / GPL
   data/textures/dial_rev.png
@@ -124,6 +121,7 @@ Richard Langridge / GPL
   data/vehicles/seat/seat_wheel.ase
 
 Iwan 'qubodup' Gabovitch / CC0 (PD)
+  data/sounds/evo_sound/clank3.wav ( http://www.freesound.org/people/qubodup/sounds/151624/ )
   data/textures/life_helmet.png ( http://openclipart.org/detail/167195 )
   data/textures/dial_gear.png ( http://openclipart.org/detail/167196 )
   data/textures/veg/palmy.png ( http://opengameart.org/content/palm-plant-sprite-1024x1024 )
@@ -162,3 +160,9 @@ Mysteryem / GPL
 
 yughues / CC0 (PD)
   data/textures/veg/grass-sprite.png ( http://opengameart.org/content/grass-pack-02 )
+
+Quargzon / CC0 (PD)
+  data/sounds/wind.wav ( http://www.freesound.org/people/Quargzon/sounds/103289/ )
+
+cognito perceptu / CC0 (PD)
+  data/sounds/gravel2.wav ( http://www.freesound.org/people/cognito%20perceptu/sounds/97605/ )
