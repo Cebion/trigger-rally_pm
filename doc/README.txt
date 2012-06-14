@@ -280,6 +280,8 @@ Mirroring           Washu (irc.afternet.org #gamedev)
                     daaw.org
                     sh.nu
 
+obj model support   Farrer <farpro@users.sourceforge.net>
+
 Many thanks to all contributors!
 
 I haven't been keeping strict records of who has
