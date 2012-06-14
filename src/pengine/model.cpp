@@ -90,27 +90,6 @@ char *strtok2(char *input)
 }
 
 
-char *fgets2 (char *s, int size, PHYSFS_file *pfile)
-{
-  int i;
-  for (i = 0; i < size-1; i++) {
-    
-    // check for EOF
-    if (PHYSFS_eof(pfile)) return null;
-    
-    int ret = PHYSFS_read(pfile, s + i, 1, 1);
-    
-    if (s[i] == '\n') break;
-    
-    if (ret == -1) return null; // major error
-    if (ret == 0) { i--; break; } // er, must be end of file anyway
-  }
-  
-  s[i+1] = '\0';
-  
-  return s;
-}
-
 // PModel
 
 
@@ -148,13 +127,177 @@ struct matl_s {
 
 PModel::PModel (const std::string &filename, float globalScale)
 {
-  loadASE (filename, globalScale);
+   /* Let's check each model type will load (ASE or OBJ) */
+   if(filename.find(".ase") != std::string::npos)
+   {
+      loadASE(filename, globalScale);
+   }
+   else
+   {
+      loadOBJ(filename, globalScale);
+   }
 }
+
+/*! Load an .obj model from file to the pengine structures.
+ * \note: All model faces must be triangles;
+ * \note: Not setting the pengine per face normal (mesh.facenormal) as the 
+ *        renderer is ignoring it (only setting vertex normals)
+ * FIXME: Restriction: Model must have only a single material. 
+ *                     See comment bellow on how to fix it.  */
+void PModel::loadOBJ(const std::string &filename, float globalScale)
+{
+   std::vector<vec3f> normals;  /**< Vector with all normals readed from file */
+   char buff[1000];             /**< File buffer */
+   PHYSFS_file* pfile;          /**< The real .obj file */
+   std::string tok;             /**< Readed token from line */
+   std::string value;           /**< Readed value from line */
+   int curVert=-1;              /**< Current readed vertex */
+   int curFace=-1;              /**< Current readed face */
+   int curNormal=-1;            /**< Current readed normal */
+   int curUV=-1;                /**< Current readed uvmap */
+   PMesh* curMesh;              /**< Current loading mesh */
+   vec3f v3;                    /**< Vector to parse from lines */
+   vec2f v2;                    /**< Vector to parse from lines */
+   
+   /* Initing debug message */
+   if(PUtil::isDebugLevel(DEBUGLEVEL_TEST))
+   {
+      PUtil::outLog() << "Loading OBJ model \"" << filename 
+         << "\"" << std::endl;
+   }
+
+   /* Open the .obj file */
+   pfile = PHYSFS_openRead(filename.c_str());
+   if(pfile == NULL)
+   {
+      throw MakePException(filename + ", PhysFS: " + PHYSFS_getLastError());
+   }
+
+   /* Create the single mesh (.obj isn't a multimesh file) */
+   mesh.push_back(PMesh());
+   curMesh = &mesh.back();
+
+   /* Loop throught all file */
+   while(PUtil::fgets2(buff,1000,pfile))
+   {
+      if(PUtil::getToken(buff, tok, value))
+      {
+         if(tok[0] == '#')
+         {
+            /* Comment. Just ignore. */
+         }
+         else if(tok == "v")
+         {
+            /* Vertex declaration */
+            curVert++;
+            curMesh->vert.resize(curVert+1);
+            if(sscanf(value.c_str(), "%f %f %f", 
+                     &v3.x, &v3.y, &v3.z) == 3)
+            { 
+               curMesh->vert[curVert] = v3 * globalScale;
+            }
+         }
+         else if(tok == "vn")
+         {
+            /* Vertex Normal declaraction */
+            curNormal++;
+            curMesh->norm.resize(curNormal+1);
+            if(sscanf(value.c_str(), "%f %f %f",
+                     &v3.x, &v3.y, &v3.z) == 3)
+            {
+               curMesh->norm[curNormal] = v3;
+               curMesh->norm[curNormal].normalize();
+            }
+         }
+         else if(tok == "vt")
+         {
+            /* Vertex st texture coordinate */
+            curUV++;
+            curMesh->texco.resize(curUV+1);
+            if(sscanf(value.c_str(), "%f %f", &v2.x, &v2.y) == 2)
+            {
+               curMesh->texco[curUV] = v2;
+            }
+         }
+         else if(tok == "f")
+         {
+            /* Face (triangle) declaration */
+            int v[3],uv[3],vn[3];
+            curFace++;
+            curMesh->face.resize(curFace+1);
+            if(sscanf(value.c_str(), "%d/%d/%d %d/%d/%d %d/%d/%d", 
+                &v[0], &uv[0], &vn[0], 
+                &v[1], &uv[1], &vn[1],
+                &v[2], &uv[2], &vn[2]) == 9)
+            {
+               /* NOTE: all index are dec by 1, as .obj range is
+                * [1,total] and pengine vector is [0,total) */
+
+               /* Set Vertex Index */
+               curMesh->face[curFace].vt[0] = v[0]-1;
+               curMesh->face[curFace].vt[1] = v[1]-1;
+               curMesh->face[curFace].vt[2] = v[2]-1;
+               /* Set UV Index  */
+               curMesh->face[curFace].tc[0] = uv[0]-1;
+               curMesh->face[curFace].tc[1] = uv[1]-1;
+               curMesh->face[curFace].tc[2] = uv[2]-1;
+               /* Set Normal Index  */
+               curMesh->face[curFace].nr[0] = vn[0]-1;
+               curMesh->face[curFace].nr[1] = vn[1]-1;
+               curMesh->face[curFace].nr[2] = vn[2]-1;
+            
+            }
+         }
+         else if(tok == "mtllib")
+         {
+            /* Material Library declaration (mtllib) */
+            curMesh->fxname = PUtil::assemblePath(value/*"focus_tex.fx"*/, 
+                  filename);
+         }
+         else if(tok == "o")
+         {
+            /* Object name. Just ignore. */
+         }
+         else if(tok == "usemtl")
+         {
+            /* Face material usage. (usemtl). 
+             * FIXME: Ignoring, as the pengine renderer is 
+             * using only a single "fx" per mesh.
+             *
+             * A bad fix should just duplicate each distinct material faces
+             * as different meshes.
+             *
+             * A good fix should rewrite the renderer (at ./app.cpp) to 
+             * change materials on a single mesh as needed, allowing multiple 
+             * material meshes. 
+             *
+             * I'm do either of them, but just mark it as a restriction to
+             * .obj files on trigger. Someone must remove this restriction 
+             * latter */
+         }
+         else if(tok == "s")
+         {
+            /* Smooth toggle. Ignoring. */
+         }
+         else
+         {
+            PUtil::outLog () << "warning: unknow token \"" << tok
+               << "\" in file \"" << filename << "\"" << std::endl;
+         }
+      }
+   }
+
+   /* Finally, close file and done. */
+   PHYSFS_close(pfile);
+   name = filename;
+}
+
+
 
 void PModel::loadASE (const std::string &filename, float globalScale)
 {
   if (PUtil::isDebugLevel(DEBUGLEVEL_TEST))
-    PUtil::outLog() << "Loading model \"" << filename << "\"" << std::endl;
+    PUtil::outLog() << "Loading ASE model \"" << filename << "\"" << std::endl;
 
   PHYSFS_file *pfile = PHYSFS_openRead(filename.c_str());
   if (pfile == null) {
@@ -185,13 +328,13 @@ void PModel::loadASE (const std::string &filename, float globalScale)
       continue; \
     }
 
-  while (fgets2(buff,1000,pfile)) {
+  while (PUtil::fgets2(buff,1000,pfile)) {
     dcon_printf("\"%s\"<br>\n",buff);
     TOKENIZE_LINE_AND_CHECK
     if (tok.size() == 2 && !strcmp(tok[1],"{")) {
       if (!strcmp(tok[0],"*MATERIAL_LIST")) {
         dcon_printf("*MATERIAL_LIST<br>\n");
-        while (fgets2(buff,1000,pfile)) {
+        while (PUtil::fgets2(buff,1000,pfile)) {
           strcpy(buff2,buff);
           TOKENIZE_LINE_AND_CHECK
           if (!strcmp(tok[0],"}")) break;
@@ -239,7 +382,7 @@ void PModel::loadASE (const std::string &filename, float globalScale)
         tm[2] = vec3f(0,0,1);
         tm[3] = vec3f::zero();
 #define DO_TM2(v) (vec3f((v)*tm[0],(v)*tm[1],(v)*tm[2]))
-        while (fgets2(buff,1000,pfile)) {
+        while (PUtil::fgets2(buff,1000,pfile)) {
           strcpy(buff2,buff);
           TOKENIZE_LINE_AND_CHECK
           if (!strcmp(tok[0],"}")) break;
@@ -249,14 +392,14 @@ void PModel::loadASE (const std::string &filename, float globalScale)
               mesh.push_back(PMesh());
               curmesh = &mesh.back();
               curmesh->effect = null;
-              while (fgets2(buff,1000,pfile)) {
+              while (PUtil::fgets2(buff,1000,pfile)) {
                 TOKENIZE_LINE_AND_CHECK
                 if (!strcmp(tok[0],"}")) break;
                 if (tok.size() == 2 && !strcmp(tok[1],"{")) {
                   if (!strcmp(tok[0],"*MESH_VERTEX_LIST")) {
                     unsigned int vnum;
                     vec3f vpos;
-                    while (fgets2(buff,1000,pfile)) {
+                    while (PUtil::fgets2(buff,1000,pfile)) {
                       strcpy(buff2,buff);
                       TOKENIZE_LINE_AND_CHECK
                       if (!strcmp(tok[0],"}")) break;
@@ -268,7 +411,7 @@ void PModel::loadASE (const std::string &filename, float globalScale)
                   } else if (!strcmp(tok[0],"*MESH_TVERTLIST")) {
                     unsigned int vnum;
                     vec2f vco;
-                    while (fgets2(buff,1000,pfile)) {
+                    while (PUtil::fgets2(buff,1000,pfile)) {
                       strcpy(buff2,buff);
                       TOKENIZE_LINE_AND_CHECK
                       if (!strcmp(tok[0],"}")) break;
@@ -282,7 +425,7 @@ void PModel::loadASE (const std::string &filename, float globalScale)
                   } else if (!strcmp(tok[0],"*MESH_FACE_LIST")) {
                     unsigned int fnum;
                     int fvt[3];
-                    while (fgets2(buff,1000,pfile)) {
+                    while (PUtil::fgets2(buff,1000,pfile)) {
                       strcpy(buff2,buff);
                       TOKENIZE_LINE_AND_CHECK
                       if (!strcmp(tok[0],"}")) break;
@@ -297,7 +440,7 @@ void PModel::loadASE (const std::string &filename, float globalScale)
                   } else if (!strcmp(tok[0],"*MESH_TFACELIST")) {
                     unsigned int fnum;
                     int fvt[3];
-                    while (fgets2(buff,1000,pfile)) {
+                    while (PUtil::fgets2(buff,1000,pfile)) {
                       strcpy(buff2,buff);
                       TOKENIZE_LINE_AND_CHECK
                       if (!strcmp(tok[0],"}")) break;
@@ -312,7 +455,7 @@ void PModel::loadASE (const std::string &filename, float globalScale)
                   } else if (!strcmp(tok[0],"*MESH_NORMALS")) {
                     unsigned int fnum, vnum;
                     vec3f nrm;
-                    while (fgets2(buff,1000,pfile)) {
+                    while (PUtil::fgets2(buff,1000,pfile)) {
                       strcpy(buff2,buff);
                       TOKENIZE_LINE_AND_CHECK
                       if (!strcmp(tok[0],"}")) break;
@@ -351,7 +494,7 @@ void PModel::loadASE (const std::string &filename, float globalScale)
               }
             } else if (!strcmp(tok[0],"*NODE_TM")) {
               dcon_printf("*NODE_TM<br>\n");
-              while (fgets2(buff,1000,pfile)) {
+              while (PUtil::fgets2(buff,1000,pfile)) {
                 strcpy(buff2,buff);
                 TOKENIZE_LINE_AND_CHECK
                 if (!strcmp(tok[0],"}")) {

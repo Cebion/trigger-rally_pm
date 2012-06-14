@@ -98,7 +98,13 @@ public:
   // Debug level
   static bool isDebugLevel(int debugLevel) { return deblev >= debugLevel; }
   static void setDebugLevel(int debugLevel) { deblev = debugLevel; }
-  
+ 
+  /*! Get token and value from a string line. The token is the string
+   * before first space. The value, is the remaining string
+   * \return true if could extract token and value */
+  static bool getToken(std::string line, std::string& tok, std::string& value);
+
+  static char* fgets2(char *s, int size, PHYSFS_file *pfile);
   
   // Given "data/blah/pic.jpg" will return "data/blah/"
   static std::string extractPathFromFilename(const std::string &filename);

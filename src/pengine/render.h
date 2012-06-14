@@ -271,6 +271,9 @@ public:
 
   void unload();
 
+  void loadFX(const std::string &filename);
+  void loadMTL(const std::string &filename);
+
   int getNumTechniques();
   bool validateTechnique(int technique);
   const std::string &getTechniqueName(int technique);
@@ -339,6 +342,7 @@ public:
   
 private:
   void loadASE (const std::string &filename, float globalScale);
+  void loadOBJ (const std::string &filename, float globalScale);
 };
 
 struct PTerrainFoliageBand {

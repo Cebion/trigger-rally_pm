@@ -83,8 +83,102 @@ void PEffect::unload()
 
 PEffect::PEffect(const std::string &filename)
 {
-  cur_tech = -1;
-  
+   cur_tech = -1;
+   
+   /* Let's check each effect type will load (FX or OBJ's MTL) */
+   if(filename.find(".fx") != std::string::npos)
+   {
+      loadFX(filename);
+   }
+   else
+   {
+      loadMTL(filename);
+   }
+}
+
+/*! Load an OBJ's MTL file as the effect definition.
+ * \note: It just create a default PEffect using the material first texture,
+ *        ignoring all material real things (unused by the renderer, btw) */
+void PEffect::loadMTL(const std::string &filename)
+{
+   char buff[1000];             /**< File buffer */
+   PHYSFS_file* pfile;          /**< The real .obj file */
+   std::string tok;             /**< Readed token from line */
+   std::string value;           /**< Readed value from line */
+   int numMaterials=0;          /**< Number of materials readed */
+
+   if(PUtil::isDebugLevel(DEBUGLEVEL_TEST))
+   {
+      PUtil::outLog() << "Loading .mtl Material \"" << filename 
+         << "\"" << std::endl;
+   }
+
+   /* Unload previous loaded effect */
+   unload();
+
+   /* Let's read from file */
+   pfile = PHYSFS_openRead(filename.c_str());
+   if(pfile == null)
+   {
+      con_printf("Cannot find effect file \"%s\"\n",filename);
+      throw MakePException ("PhysFS: " + PHYSFS_getLastError());
+   }
+
+   name = filename;
+   
+   /* Loop throught all file */
+   while(PUtil::fgets2(buff,1000,pfile))
+   {
+      if(PUtil::getToken(buff, tok, value))
+      {
+         if(numMaterials > 1)
+         {
+            /* FIXME: ignoring all further materials. */
+         }
+         else if(tok == "newmtl")
+         {
+            numMaterials++;
+            /* FIXME: ignoring material name, as it's already the filename. */
+         }
+         else if(tok == "map_Kd")
+         {
+            /* Define the FX single texture */
+            tex.push_back(fx_texture_s());
+            fx_texture_s *curtex = &tex.back();
+            /* Already as 2D texture. */
+            curtex->texobject = NULL;
+            curtex->name = value;
+            curtex->type = GL_TEXTURE_2D;
+            curtex->filename = PUtil::assemblePath(value, filename);
+
+            /* Define the default Technique */
+            tech.push_back(fx_technique_s());
+            fx_technique_s *curtech = &tech.back();
+            curtech->name = "DefaultTechMTL";
+            /* And its default pass and render state */
+            curtech->pass.push_back(fx_pass_s());
+            fx_pass_s *curpass = &curtech->pass.back();
+            fx_renderstate_s *currs = &curpass->rs;
+            /* Uhm? Copyed from the loadFX bellow... Just set some defaults,
+             * and the the texture to the only one defined. */
+            *currs = def_rs;
+            currs->depthtest = true;
+            currs->cullface = CULLFACE_CW;
+            currs->texunit[0].texindex = 0;
+         }
+         else
+         {
+            /* Ignore everithing, as the FX will only use the texture. */
+         }
+      }
+   }
+
+   /* Done! */
+   PHYSFS_close(pfile);
+}
+
+void PEffect::loadFX(const std::string &filename)
+{
   if (PUtil::isDebugLevel(DEBUGLEVEL_TEST))
     PUtil::outLog() << "Loading fx shader \"" << filename << "\"" << std::endl;
 

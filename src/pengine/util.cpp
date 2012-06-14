@@ -7,7 +7,67 @@
 
 #include "pengine.h"
 
+/*! Get token and value from a string line. The token is the string
+ * before first space. The value, is the remaining string
+ * \return true if could extract token and value */
+bool PUtil::getToken(std::string line, std::string& tok, std::string& value)
+{
+   size_t ns;
+   tok = "";
+   value = "";
 
+   /* Remove initial spaces from string */
+   ns = line.find_first_not_of(" \t");
+   if(ns != std::string::npos)
+   {
+      line = line.substr(ns);
+   }
+
+   /* Find first space */
+   ns = line.find_first_of(" \t");
+   if(ns != std::string::npos)
+   {
+      /* Set token (before space) and value (next space) */
+      tok = line.substr(0, ns);
+
+      if(ns+1 < line.length())
+      {
+         value = line.substr(ns+1);
+         /* Remove trail \n, if any. */
+         if(value[value.length()-1] == '\n')
+         {
+            value = value.substr(0, value.length()-1);
+         }
+      }
+      else
+      {
+         value = "";
+      }
+      return(true);
+   }
+   return(false);
+}
+
+char* PUtil::fgets2(char *s, int size, PHYSFS_file *pfile)
+{
+  int i;
+  for (i = 0; i < size-1; i++) {
+    
+    // check for EOF
+    if (PHYSFS_eof(pfile)) return null;
+    
+    int ret = PHYSFS_read(pfile, s + i, 1, 1);
+    
+    if (s[i] == '\n') break;
+    
+    if (ret == -1) return null; // major error
+    if (ret == 0) { i--; break; } // er, must be end of file anyway
+  }
+  
+  s[i+1] = '\0';
+  
+  return s;
+}
 
 std::string PUtil::extractPathFromFilename(const std::string &filename)
 {
