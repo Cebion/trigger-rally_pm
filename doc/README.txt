@@ -57,7 +57,7 @@ Kudos to Chuck Sites for this patch.
 
 Trigger Copyright (C) 2004-2006 Jasmine Langridge and Richard Langridge.
 
-Trigger is released under the GPL version 2 (see gpl-2.0.txt,
+Trigger is released under the GPL version 2 (see COPYING,
 or http://www.gnu.org/licenses/gpl-2.0.html ).
 
 Some of the data files have different authors and licenses.
@@ -141,6 +141,50 @@ Now you can run trigger, for example:
 ./local/trigger-rally/bin/trigger
 
 will start trigger.
+
+
+//////////////////////
+// Content Creation //
+//////////////////////
+
+A. Car models
+-------------
+ 
+You can add completely new cars in the Wavefront .obj format with the
+following restrictions:
+ 
+  - Use only one material per .obj.
+  - All faces must be triangles.
+  - The material is ignored, only the texture defined by it gets loaded.
+  - All meshes, besides the wheels, need to be on a single object.
+  - Wheels are in their own files.
+ 
+When exporting from Blender, following settings work:
+
+  - "Apply Modifiers"
+  - "Include Normals"
+  - "Include Edges"
+  - "Write Materials"
+  - "Triangulate Faces"
+  - "Objects as OBJ Objects"
+ 
+To test the model, replace the file name in an existing .vehicle file inside
+
+data/vehicles/VEHICLENAME/
+
+ 
+B. Levels/maps/tracks
+---------------------
+ 
+Use any tool that saves .png or .jpg images, for example GIMP and Inkscape.
+
+You will need to create a heightmap, color map and need to assign coordinates.
+You can create optional foliage and hud-map image files.
+
+View existing .level files in data/maps or data/plugins/ to learn.
+
+Best use .png for heightmaps, as .jpg can cause artefacts, which will change
+the level geometry.
 
 
 /////////////////////
