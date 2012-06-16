@@ -57,15 +57,11 @@ Kudos to Chuck Sites for this patch.
 
 Trigger Copyright (C) 2004-2006 Jasmine Langridge and Richard Langridge.
 
-Trigger is released under the GPL (see gpl.txt in
-source package, or http://www.gnu.org/licenses/gpl.txt ).
+Trigger is released under the GPL version 2 (see gpl-2.0.txt,
+or http://www.gnu.org/licenses/gpl-2.0.html ).
 
-NO WARRANTY WHATSOEVER.
-
-
-Note that this differs from previous versions, in which
-the accompanying data files were released under the
-Creative Commons ShareAlike 1.0 license.
+Some of the data files have different authors and licenses.
+Please see DATA_AUTHORS.txt for this information.
 
 
 ///////////////
