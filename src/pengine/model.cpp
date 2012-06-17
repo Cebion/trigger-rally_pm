@@ -155,6 +155,7 @@ void PModel::loadOBJ(const std::string &filename, float globalScale)
    int curFace=-1;              /**< Current readed face */
    int curNormal=-1;            /**< Current readed normal */
    int curUV=-1;                /**< Current readed uvmap */
+   int objNumber=0;             /**< Number of objects declared */
    PMesh* curMesh;              /**< Current loading mesh */
    vec3f v3;                    /**< Vector to parse from lines */
    vec2f v2;                    /**< Vector to parse from lines */
@@ -257,6 +258,13 @@ void PModel::loadOBJ(const std::string &filename, float globalScale)
          else if(tok == "o")
          {
             /* Object name. Just ignore. */
+            objNumber++;
+            if(objNumber > 1)
+            {
+               PUtil::outLog() << "Warning: Object file \"" << filename 
+                  << "\" has more than one object defined!" << std::endl;
+
+            }
          }
          else if(tok == "usemtl")
          {
@@ -281,10 +289,18 @@ void PModel::loadOBJ(const std::string &filename, float globalScale)
          }
          else
          {
-            PUtil::outLog () << "warning: unknow token \"" << tok
+            PUtil::outLog () << "Warning: unknow token \"" << tok
                << "\" in file \"" << filename << "\"" << std::endl;
          }
       }
+   }
+
+   /* Verify if normals were defined */
+   if(curNormal == -1)
+   {
+      PUtil::outLog() << "Warning: Object file \"" << filename 
+         << "\" had no normals defined!" << std::endl;
+
    }
 
    /* Finally, close file and done. */
