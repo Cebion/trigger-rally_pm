@@ -79,8 +79,8 @@ Richard Langridge / GPL
   data/maps/oldmacdonald/farm-sex.level
   data/maps/oldmacdonald/heightmap.png
 
-Richard Langridge / GPL
-  data/sounds/evo_sound/clank1.wav ***
+kougloff, Iwan Gabovitch, Liviu Andronic / CC0 (PD)
+  data/sounds/evo_sound/clank1.wav ( http://www.freesound.org/people/kougloff/sounds/117558/ )
 
 Richard Langridge / GPL
   data/textures/dial_rev.png

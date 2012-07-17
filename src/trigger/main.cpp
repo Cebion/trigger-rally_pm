@@ -946,7 +946,7 @@ void MainApp::tickStateGame(float delta)
     if (vehic->getFlagGearChange()) {
       audinst.push_back(new PAudioInstance(aud_gearchange));
       audinst.back()->setPitch(1.0f + randm11*0.02f);
-      audinst.back()->setGain(0.4f);
+      audinst.back()->setGain(0.3f);
       audinst.back()->play();
     }
     
