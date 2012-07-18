@@ -220,6 +220,8 @@ void MainApp::levelScreenAction(int action, int index)
     gui.addLabel(250.0f,400.0f, events[lss.currentevent].levels[lss.currentlevel].name, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 30.0f);
     gui.addLabel(200.0f,350.0f, "Author", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 30.0f);
     gui.addLabel(250.0f,350.0f, events[lss.currentevent].levels[lss.currentlevel].author, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 30.0f);
+    gui.addLabel(200.0f,300.0f, "Time", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 30.0f);
+    gui.addLabel(250.0f,300.0f, events[lss.currentevent].levels[lss.currentlevel].targettime, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 30.0f);
     gui.makeDefault(
       gui.makeClickable(
         gui.addLabel(400.0f,100.0f, "START PRACTICE", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER, 40.0f),
@@ -265,6 +267,8 @@ void MainApp::levelScreenAction(int action, int index)
     gui.addLabel(250.0f,450.0f, levels[lss.currentlevel].name, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 30.0f);
     gui.addLabel(200.0f,400.0f, "Author", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 30.0f);
     gui.addLabel(250.0f,400.0f, levels[lss.currentlevel].author, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 30.0f);
+    gui.addLabel(200.0f,350.0f, "Time", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 30.0f);
+    gui.addLabel(250.0f,350.0f, levels[lss.currentlevel].targettime, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 30.0f);
     gui.makeDefault(
       gui.makeClickable(
         gui.addLabel(400.0f,100.0f, "START RACE", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER, 40.0f),

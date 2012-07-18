@@ -122,7 +122,7 @@ public:
 
 
 struct TriggerLevel {
-  std::string filename, name, comment, author;
+  std::string filename, name, comment, author, targettime;
 };
 
 struct TriggerEvent {

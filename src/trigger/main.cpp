@@ -382,6 +382,7 @@ bool MainApp::loadLevel(TriggerLevel &tl)
   tl.name = "Untitled";
   tl.comment = "";
   tl.author = "";
+  tl.targettime = "";
   
   TiXmlDocument xmlfile(tl.filename.c_str());
   TiXmlElement *rootelem = PUtil::loadRootElement(xmlfile, "level");
@@ -398,6 +399,15 @@ bool MainApp::loadLevel(TriggerLevel &tl)
   if (val) tl.comment = val;
   val = rootelem->Attribute("author");
   if (val) tl.author = val;
+  for (TiXmlElement *walk = rootelem->FirstChildElement();
+    walk; walk = walk->NextSiblingElement()) {
+    
+    if (!strcmp(walk->Value(), "race")) {
+      val = walk->Attribute("targettime");
+      if (val) tl.targettime = PUtil::formatTime(atof(val));
+
+    }
+  }
   
   return true;
 }
