@@ -125,6 +125,7 @@ Iwan 'qubodup' Gabovitch / CC0 (PD)
   data/textures/life_helmet.png ( http://openclipart.org/detail/167195 )
   data/textures/dial_gear.png ( http://openclipart.org/detail/167196 )
   data/textures/veg/palmy.png ( http://opengameart.org/content/palm-plant-sprite-1024x1024 )
+  data/textures/noise.png
 
 Iwan 'qubodup' Gabovitch / GPL
   data/maps/alignster/alignster-c.jpg
@@ -166,3 +167,33 @@ Quargzon / CC0 (PD)
 
 cognito perceptu / CC0 (PD)
   data/sounds/gravel2.wav ( http://www.freesound.org/people/cognito%20perceptu/sounds/97605/ )
+
+Richard Langridge, Farrer, Iwan Gabovitch / GPL
+  data/vehicles/evo/eva.blend
+  data/vehicles/evo/eva.mtl
+  data/vehicles/evo/eva.obj
+  data/vehicles/evo/eva_wheel.mtl
+  data/vehicles/evo/eva_wheel.obj
+  data/vehicles/seat/cordon.blend
+  data/vehicles/seat/cordon.mtl
+  data/vehicles/seat/cordon.obj
+  data/vehicles/seat/cordon_wheel.blend
+  data/vehicles/seat/cordon_wheel.mtl
+  data/vehicles/seat/cordon_wheel.obj
+  data/vehicles/focus/fox.blend
+  data/vehicles/focus/fox.mtl
+  data/vehicles/focus/fox.obj
+  data/vehicles/focus/fox_wheel.blend
+  data/vehicles/focus/fox_wheel.mtl
+  data/vehicles/focus/fox_wheel.obj
+
+Farrer, Iwan 'qubodup' Gabovitch / GPL
+  data/vehicles/evo/eva.png
+  data/vehicles/evo/eva_uv.png
+  data/vehicles/evo/eva.svg
+  data/vehicles/seat/cordon.png
+  data/vehicles/seat/cordon_uv.png
+  data/vehicles/seat/cordon.svg
+  data/vehicles/focus/fox.png
+  data/vehicles/focus/fox_uv.png
+  data/vehicles/focus/fox.svg

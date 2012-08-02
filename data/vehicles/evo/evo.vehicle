@@ -1,12 +1,12 @@
 <?xml version="1.0" ?>
 <vehicle
-	name="Mitsubishi Evolution VIII"
+	name="Tex Evaluate Pi"
 	type="car">
 	
 	<genparams
 		mass="1350.0"
 		dimensions="1.5, 3.0, 1.5"
-		wheelmodel="evo_wheel.ase"
+		wheelmodel="eva_wheel.obj"
 		wheelscale="0.033" />
 	
 	<ctrlparams
@@ -36,7 +36,7 @@
 		name="body"
 		pos="0.0, 0.0, 0.1"
 		orientation="1.0, 0.0, 0.0, 0.0"
-		model="evo.ase"
+		model="eva.obj"
 		scale="0.01">
 		
 		<wheel drive="0.7" steer="0.7" brake1="200.0" pos="0.65, 1.3, -0.2" radius="0.3" force="40000.0" dampening="17000.0" />

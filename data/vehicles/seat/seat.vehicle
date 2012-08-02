@@ -1,12 +1,12 @@
 <?xml version="1.0" ?>
 <vehicle
-	name="Seat Cordoba WRC"
+	name="Rotor Cordon TRI"
 	type="car">
 	
 	<genparams
 		mass="1350.0"
 		dimensions="1.6, 2.3, 1.2"
-		wheelmodel="seat_wheel.ase"
+		wheelmodel="cordon_wheel.obj"
 		wheelscale="0.033" />
 	
 	<ctrlparams
@@ -35,7 +35,7 @@
 		name="body"
 		pos="0.0, 0.2, 0.1"
 		orientation="1.0, 0.0, 0.0, 0.0"
-		model="seat.ase"
+		model="cordon.obj"
 		scale="0.01">
 		
 		<wheel drive="0.6" steer="0.6" brake1="200.0" pos="0.63, 0.87, -0.22" radius="0.3" force="40000.0" dampening="20000.0" />

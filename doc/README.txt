@@ -290,18 +290,23 @@ http://sourceforge.net/projects/trigger-rally/support
 
 
 Code                Jasmine Langridge <ja-reiko@users.sourceforge.net>
+
 Art & sfx           Richard Langridge
 
 Build system
 and Jamrules        Matze Braun <matze@braunis.de>
+
 Stereo support      Chuck Sites <chuck@cvip.uofl.edu>
+
 Mac OS X porting    Tim Douglas
                     Coleman Nitroy
+
 Fixes & distro      LavaPunk <lavapunk@gmail.com>
 support             Bernhard Kaindl
                     Stefan Potyra
                     Liviu Andronic
                     Ishmael Turner
+
 New levels          Tim Wintle
                     David Pagnier
                     Jared Buckner
@@ -313,6 +318,7 @@ New levels          Tim Wintle
                     Agnius Vasiliauskas
                     Matthias Keysermann
                     Márcio Bremm
+
 Splash screens      Alex <rep65@tlen.pl>
                     Roberto D�z Gonz�ez
 
@@ -320,7 +326,11 @@ Mirroring           Washu (irc.afternet.org #gamedev)
                     daaw.org
                     sh.nu
 
-obj model support   Farrer <farpro@users.sourceforge.net>
+obj model support
+and conversion      Farrer <farpro@users.sourceforge.net>
+
+Freely licensed
+art replacements    Iwan Gabovitch <qubodup@gmail.com>
 
 Many thanks to all contributors!
 
