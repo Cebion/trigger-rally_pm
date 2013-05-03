@@ -36,7 +36,7 @@ Space   Handbrake
 C       Change camera view
 M       Toggle map
 < >     Rotate camera when in 3rd person cam
-F12     Save a screenshot
+F12     Save a screenshot to ~/.trigger/
 
 
 Joystick support can be enabled in the
