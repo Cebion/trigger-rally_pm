@@ -147,8 +147,8 @@ Iwan 'qubodup' Gabovitch / GPL
   data/sounds/engine1.wav ( http://opengameart.org/content/car-engine-loop-96khz-4s )
   data/textures/veg/cactus1.png ( http://opengameart.org/content/cactus-sprite-texture-0 )
 
-Miriam Ruiz / GPL
-  data/icon.png ***
+Onsemeliot / GPL
+  data/icon/*
 
 URW++ / GPL
   data/textures/consolefont.png (Nimbus Mono L)
