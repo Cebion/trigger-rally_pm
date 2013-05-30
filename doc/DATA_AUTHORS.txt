@@ -147,15 +147,13 @@ Iwan 'qubodup' Gabovitch / GPL
   data/sounds/engine1.wav ( http://opengameart.org/content/car-engine-loop-96khz-4s )
   data/textures/veg/cactus1.png ( http://opengameart.org/content/cactus-sprite-texture-0 )
 
-Onsemeliot / GPL
+Onsemeliot <onsemeliot@riseup.net> / GPL
   data/icon/*
-  data/maps/ancient/
   data/maps/ancient/h.png
   data/maps/ancient/m.png
   data/maps/ancient/f.png
   data/maps/ancient/c.png
   data/maps/ancient/ancient.level
-  data/maps/dry/
   data/maps/dry/dry.level
   data/maps/dry/h.png
   data/maps/dry/f.png
@@ -165,17 +163,49 @@ Onsemeliot / GPL
   data/maps/highland/h.png
   data/maps/highland/f.png
   data/maps/highland/c.png
-  data/maps/remote/
   data/maps/remote/remote.level
   data/maps/remote/h.png
   data/maps/remote/f.png
   data/maps/remote/lightening.jpg
   data/maps/remote/c.png
-  data/maps/stoned/
   data/maps/stoned/h.png
   data/maps/stoned/stoned.level
   data/maps/stoned/f.png
   data/maps/stoned/c.png
+  data/events/alps/green/foliagemap.png
+  data/events/alps/green/colormap.jpg
+  data/events/alps/green/green.level
+  data/events/alps/green/heightmap.png
+  data/events/alps/dawn/morning.jpg
+  data/events/alps/dawn/dawn.level
+  data/events/alps/dawn/foliagemap.png
+  data/events/alps/dawn/colormap.jpg
+  data/events/alps/dawn/heightmap.png
+  data/events/alps/dawn/hud.png
+  data/events/alps/maze/maze.level
+  data/events/alps/maze/foliagemap.png
+  data/events/alps/maze/darkblue.jpg
+  data/events/alps/maze/colormap.jpg
+  data/events/alps/maze/heightmap.png
+  data/events/alps/maze/hud.png
+  data/events/alps/lake/lake.level
+  data/events/alps/lake/foliagemap.png
+  data/events/alps/lake/colormap.jpg
+  data/events/alps/lake/heightmap.png
+  data/events/alps/rocky/foliagemap.png
+  data/events/alps/rocky/rocky.level
+  data/events/alps/rocky/colormap.jpg
+  data/events/alps/rocky/heightmapx.png
+  data/events/alps/rocky/heightmap.png
+  data/events/alps/alps.event
+  data/events/alps/forest/forest.level
+  data/events/alps/forest/foliagemap.png
+  data/events/alps/forest/colormap.jpg
+  data/events/alps/forest/heightmap.png
+  data/events/alps/mountain/foliagemap.png
+  data/events/alps/mountain/colormap.jpg
+  data/events/alps/mountain/mountain.level
+  data/events/alps/mountain/heightmap.png
 
 URW++ / GPL
   data/textures/consolefont.png (Nimbus Mono L)
