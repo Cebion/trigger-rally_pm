@@ -149,6 +149,33 @@ Iwan 'qubodup' Gabovitch / GPL
 
 Onsemeliot / GPL
   data/icon/*
+  data/maps/ancient/
+  data/maps/ancient/h.png
+  data/maps/ancient/m.png
+  data/maps/ancient/f.png
+  data/maps/ancient/c.png
+  data/maps/ancient/ancient.level
+  data/maps/dry/
+  data/maps/dry/dry.level
+  data/maps/dry/h.png
+  data/maps/dry/f.png
+  data/maps/dry/c.png
+  data/maps/highland/
+  data/maps/highland/highland.level
+  data/maps/highland/h.png
+  data/maps/highland/f.png
+  data/maps/highland/c.png
+  data/maps/remote/
+  data/maps/remote/remote.level
+  data/maps/remote/h.png
+  data/maps/remote/f.png
+  data/maps/remote/lightening.jpg
+  data/maps/remote/c.png
+  data/maps/stoned/
+  data/maps/stoned/h.png
+  data/maps/stoned/stoned.level
+  data/maps/stoned/f.png
+  data/maps/stoned/c.png
 
 URW++ / GPL
   data/textures/consolefont.png (Nimbus Mono L)
