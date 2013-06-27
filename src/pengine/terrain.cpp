@@ -571,7 +571,13 @@ void PTerrain::render(const vec3f &campos, const mat44f &camorim)
 
   glDisable(GL_TEXTURE_GEN_S);
   glDisable(GL_TEXTURE_GEN_T);
-  
+
+  // Don't apply terrain detail texture to foliage.
+  // http://sourceforge.net/p/trigger-rally/discussion/527953/thread/b53361ba/
+  glActiveTextureARB(GL_TEXTURE1_ARB);
+  glDisable(GL_TEXTURE_2D);
+  glActiveTextureARB(GL_TEXTURE0_ARB);
+
   // Draw foliage
   #if 1
   glAlphaFunc(GL_GEQUAL, 0.5);
