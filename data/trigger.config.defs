@@ -6,7 +6,7 @@
 		height="600"
 		bpp="0"
 		
-		fullscreen="yes"
+		fullscreen="no"
 		
 		requirergb="no"
 		requirealpha="no"
