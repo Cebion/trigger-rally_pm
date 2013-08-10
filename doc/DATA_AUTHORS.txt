@@ -97,8 +97,10 @@ Richard Langridge / GPL
   data/textures/sky/blue.jpg
   data/textures/sky/overcast.jpg
   data/textures/sky/stars.jpg
-  data/textures/splash/endgame.jpg ***
-  data/textures/splash/splash.jpg ***
+
+Iwan Gabovitch / Not copyrightable (temporary black images)
+  data/textures/splash/endgame.jpg
+  data/textures/splash/splash.jpg
 
 Richard Langridge / GPL
   data/vehicles/evo/evo.ase
