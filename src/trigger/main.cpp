@@ -523,11 +523,11 @@ bool MainApp::loadAll()
   if (!(tex_hud_gear = getSSTexture().loadTexture("/textures/dial_gear.png"))) return false;
   
   if (cfg_enable_sound) {
-    if (!(aud_engine = getSSAudio().loadSample("/sounds/engine1.wav", false))) return false;
+    if (!(aud_engine = getSSAudio().loadSample("/sounds/engine.wav", false))) return false;
     if (!(aud_wind = getSSAudio().loadSample("/sounds/wind.wav", false))) return false;
-    if (!(aud_gearchange = getSSAudio().loadSample("/sounds/evo_sound/clank1.wav", false))) return false;
-    if (!(aud_gravel = getSSAudio().loadSample("/sounds/gravel2.wav", false))) return false;
-    if (!(aud_crash1 = getSSAudio().loadSample("/sounds/evo_sound/clank3.wav", false))) return false;
+    if (!(aud_gearchange = getSSAudio().loadSample("/sounds/gear.wav", false))) return false;
+    if (!(aud_gravel = getSSAudio().loadSample("/sounds/gravel.wav", false))) return false;
+    if (!(aud_crash1 = getSSAudio().loadSample("/sounds/bang.wav", false))) return false;
   }
   
   if (!loadLevelsAndEvents()) {
