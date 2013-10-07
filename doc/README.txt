@@ -186,6 +186,17 @@ View existing .level files in data/maps or data/plugins/ to learn.
 Best use .png for heightmaps, as .jpg can cause artefacts, which will change
 the level geometry.
 
+C. Car textures
+---------------
+
+We used Inkscape to create the .svg files for the car textures.
+
+You might have to get the following freely licensed fonts from sites like http://www.google.com/fonts/ to be able to render the currently used .svg files to .png correctly, if you don't want to download the packages that contain them:
+  - TeX Gyre Heros
+  - Roboto
+  - Bowlby One
+  - URW Gothic L
+
 
 /////////////////////
 // Troubleshooting //

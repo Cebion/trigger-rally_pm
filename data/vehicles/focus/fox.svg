@@ -14,7 +14,7 @@
    height="1024"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.3.1 r9886"
+   inkscape:version="0.48.4 r9939"
    sodipodi:docname="fox.svg"
    inkscape:export-filename="./fox.png"
    inkscape:export-xdpi="90"
@@ -559,11 +559,11 @@
       <image
          sodipodi:absref="/home/qubodup/src/subversion/trigger-rally/data/vehicles/focus/../../textures/noise.png"
          xlink:href="../../textures/noise.png"
-         y="0"
-         x="0"
-         id="image9-2"
+         width="32"
          height="32"
-         width="32" />
+         id="image9-2"
+         x="0"
+         y="0" />
     </pattern>
     <pattern
        patternTransform="matrix(1.4670487,0,0,1.4670487,63.969488,-72.8871)"
@@ -985,16 +985,16 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.5"
-     inkscape:cx="533.93632"
-     inkscape:cy="448.63843"
+     inkscape:zoom="1"
+     inkscape:cx="419.1362"
+     inkscape:cy="349.55164"
      inkscape:document-units="px"
      inkscape:current-layer="layer13"
      showgrid="false"
-     inkscape:window-width="1323"
+     inkscape:window-width="1597"
      inkscape:window-height="1181"
-     inkscape:window-x="240"
-     inkscape:window-y="0"
+     inkscape:window-x="0"
+     inkscape:window-y="19"
      inkscape:window-maximized="0"
      showguides="true"
      inkscape:guide-bbox="true"
@@ -1091,14 +1091,14 @@
            sodipodi:cy="814.66687"
            sodipodi:rx="48.4375"
            sodipodi:ry="48.632812"
-           d="m 591.40625,814.66687 a 48.4375,48.632812 0 1 1 -96.875,0 48.4375,48.632812 0 1 1 96.875,0 z"
+           d="m 591.40625,814.66687 c 0,26.85916 -21.68621,48.63281 -48.4375,48.63281 -26.75129,0 -48.4375,-21.77365 -48.4375,-48.63281 0,-26.85916 21.68621,-48.63281 48.4375,-48.63281 26.75129,0 48.4375,21.77365 48.4375,48.63281 z"
            transform="matrix(1.0132245,0,0,1.0091593,-14.202049,91.511801)"
            inkscape:export-filename="/home/farrer/trigger/fox.png"
            inkscape:export-xdpi="132.03"
            inkscape:export-ydpi="132.03" />
         <path
            transform="matrix(0.79653482,0,0,0.75304483,103.45368,300.15977)"
-           d="m 591.40625,814.66687 a 48.4375,49.709736 0 1 1 -96.875,0 48.4375,49.709736 0 1 1 96.875,0 z"
+           d="m 591.40625,814.66687 c 0,27.45393 -21.68621,49.70974 -48.4375,49.70974 -26.75129,0 -48.4375,-22.25581 -48.4375,-49.70974 0,-27.45393 21.68621,-49.70974 48.4375,-49.70974 26.75129,0 48.4375,22.25581 48.4375,49.70974 z"
            sodipodi:ry="49.709736"
            sodipodi:rx="48.4375"
            sodipodi:cy="814.66687"
@@ -1111,7 +1111,7 @@
            inkscape:export-ydpi="132.03" />
         <path
            transform="matrix(0.74565754,0,0,0.7049454,131.07845,339.34478)"
-           d="m 591.40625,814.66687 a 48.4375,49.709736 0 1 1 -96.875,0 48.4375,49.709736 0 1 1 96.875,0 z"
+           d="m 591.40625,814.66687 c 0,27.45393 -21.68621,49.70974 -48.4375,49.70974 -26.75129,0 -48.4375,-22.25581 -48.4375,-49.70974 0,-27.45393 21.68621,-49.70974 48.4375,-49.70974 26.75129,0 48.4375,22.25581 48.4375,49.70974 z"
            sodipodi:ry="49.709736"
            sodipodi:rx="48.4375"
            sodipodi:cy="814.66687"
@@ -1140,10 +1140,10 @@
            sodipodi:cy="814.66687"
            sodipodi:rx="48.4375"
            sodipodi:ry="49.709736"
-           d="m 591.40625,814.66687 a 48.4375,49.709736 0 1 1 -96.875,0 48.4375,49.709736 0 1 1 96.875,0 z"
+           d="m 591.40625,814.66687 c 0,27.45393 -21.68621,49.70974 -48.4375,49.70974 -26.75129,0 -48.4375,-22.25581 -48.4375,-49.70974 0,-27.45393 21.68621,-49.70974 48.4375,-49.70974 26.75129,0 48.4375,22.25581 48.4375,49.70974 z"
            transform="matrix(0.79653482,0,0,0.75304483,103.45368,300.15977)" />
         <path
-           d="m 543.41047,814.70728 a 8.5997372,8.9483757 0 1 1 -17.19948,0 8.5997372,8.9483757 0 1 1 17.19948,0 z"
+           d="m 543.41047,814.70728 c 0,4.94205 -3.85024,8.94837 -8.59974,8.94837 -4.7495,0 -8.59974,-4.00632 -8.59974,-8.94837 0,-4.94206 3.85024,-8.94838 8.59974,-8.94838 4.7495,0 8.59974,4.00632 8.59974,8.94838 z"
            sodipodi:ry="8.9483757"
            sodipodi:rx="8.5997372"
            sodipodi:cy="814.70728"
@@ -1161,10 +1161,10 @@
            sodipodi:cy="814.70728"
            sodipodi:rx="8.5997372"
            sodipodi:ry="8.9483757"
-           d="m 543.41047,814.70728 a 8.5997372,8.9483757 0 1 1 -17.19948,0 8.5997372,8.9483757 0 1 1 17.19948,0 z" />
+           d="m 543.41047,814.70728 c 0,4.94205 -3.85024,8.94837 -8.59974,8.94837 -4.7495,0 -8.59974,-4.00632 -8.59974,-8.94837 0,-4.94206 3.85024,-8.94838 8.59974,-8.94838 4.7495,0 8.59974,4.00632 8.59974,8.94838 z" />
         <path
            transform="matrix(0.68164063,0,0,0.68164063,26.761641,165.88055)"
-           d="m 764,1084 a 4,4 0 1 1 -8,0 4,4 0 1 1 8,0 z"
+           d="m 764,1084 c 0,2.2091 -1.79086,4 -4,4 -2.20914,0 -4,-1.7909 -4,-4 0,-2.2091 1.79086,-4 4,-4 2.20914,0 4,1.7909 4,4 z"
            sodipodi:ry="4"
            sodipodi:rx="4"
            sodipodi:cy="1084"
@@ -1180,7 +1180,7 @@
            sodipodi:cy="1084"
            sodipodi:rx="4"
            sodipodi:ry="4"
-           d="m 764,1084 a 4,4 0 1 1 -8,0 4,4 0 1 1 8,0 z"
+           d="m 764,1084 c 0,2.2091 -1.79086,4 -4,4 -2.20914,0 -4,-1.7909 -4,-4 0,-2.2091 1.79086,-4 4,-4 2.20914,0 4,1.7909 4,4 z"
            transform="matrix(0.68164063,0,0,0.68164063,8.3573435,165.88055)" />
         <path
            sodipodi:type="arc"
@@ -1190,11 +1190,11 @@
            sodipodi:cy="1084"
            sodipodi:rx="4"
            sodipodi:ry="4"
-           d="m 764,1084 a 4,4 0 1 1 -8,0 4,4 0 1 1 8,0 z"
+           d="m 764,1084 c 0,2.2091 -1.79086,4 -4,4 -2.20914,0 -4,-1.7909 -4,-4 0,-2.2091 1.79086,-4 4,-4 2.20914,0 4,1.7909 4,4 z"
            transform="matrix(0.68164063,0,0,0.68164063,26.761642,183.6032)" />
         <path
            transform="matrix(0.68164063,0,0,0.68164063,8.3573424,183.6032)"
-           d="m 764,1084 a 4,4 0 1 1 -8,0 4,4 0 1 1 8,0 z"
+           d="m 764,1084 c 0,2.2091 -1.79086,4 -4,4 -2.20914,0 -4,-1.7909 -4,-4 0,-2.2091 1.79086,-4 4,-4 2.20914,0 4,1.7909 4,4 z"
            sodipodi:ry="4"
            sodipodi:rx="4"
            sodipodi:cy="1084"
@@ -1340,15 +1340,15 @@
         <text
            xml:space="preserve"
            style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#1ebcff;fill-opacity:1;fill-rule:nonzero;stroke:#434343;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline;font-family:Nimbus Sans L;-inkscape-font-specification:Nimbus Sans L Bold"
-           x="1182.8308"
+           x="1194.3041"
            y="314.97818"
            id="text5157"
            sodipodi:linespacing="100%"><tspan
              sodipodi:role="line"
              id="tspan5159"
-             x="1182.8308"
+             x="1194.3041"
              y="314.97818"
-             style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;fill:#3b3b3b;fill-opacity:1;stroke:none;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold">TRI 12</tspan></text>
+             style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;fill:#3b3b3b;fill-opacity:1;stroke:none;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold">TRI</tspan></text>
       </g>
       <path
          inkscape:connector-curvature="0"
@@ -1503,15 +1503,15 @@
       <text
          xml:space="preserve"
          style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#1ebcff;fill-opacity:1;fill-rule:nonzero;stroke:#434343;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline;font-family:Nimbus Sans L;-inkscape-font-specification:Nimbus Sans L Bold"
-         x="662.53467"
+         x="687.46484"
          y="360.41885"
          id="text7555"
          sodipodi:linespacing="100%"><tspan
            sodipodi:role="line"
            id="tspan7557"
-           x="662.53467"
+           x="687.46484"
            y="360.41885"
-           style="font-size:20px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;fill:#3b3b3b;fill-opacity:1;stroke:none;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold">TRIGGER 2012</tspan></text>
+           style="font-size:20px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;fill:#3b3b3b;fill-opacity:1;stroke:none;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold">TRIGGER</tspan></text>
     </g>
     <g
        id="g6016"
@@ -2594,18 +2594,18 @@
            id="rect5198"
            style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none" />
         <text
-           transform="scale(1.2714953,0.78647561)"
+           transform="scale(1.2714953,0.78647559)"
            sodipodi:linespacing="100%"
            id="text5200"
            y="923.44128"
-           x="231.01758"
+           x="238.18654"
            style="font-size:9.93871212px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold"
            xml:space="preserve"><tspan
              style="font-size:5.67926455px;fill:#3b3b3b;fill-opacity:1"
              y="923.44128"
-             x="231.01758"
+             x="238.18654"
              id="tspan5202"
-             sodipodi:role="line">2012 TRIGGER</tspan></text>
+             sodipodi:role="line">TRIGGER</tspan></text>
         <text
            xml:space="preserve"
            style="font-size:8.7289381px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold"
@@ -2780,16 +2780,16 @@
         <text
            xml:space="preserve"
            style="font-size:9.93871212px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold"
-           x="231.01758"
+           x="238.18654"
            y="923.44128"
            id="text5522"
            sodipodi:linespacing="100%"
-           transform="scale(1.2714953,0.78647561)"><tspan
+           transform="scale(1.2714953,0.78647558)"><tspan
              sodipodi:role="line"
              id="tspan5524"
-             x="231.01758"
+             x="238.18654"
              y="923.44128"
-             style="font-size:5.67926455px;fill:#3b3b3b;fill-opacity:1">2012 TRIGGER</tspan></text>
+             style="font-size:5.67926455px;fill:#3b3b3b;fill-opacity:1">TRIGGER</tspan></text>
         <text
            transform="scale(1.2970741,0.77096596)"
            sodipodi:linespacing="100%"
@@ -3233,10 +3233,10 @@
     <image
        sodipodi:absref="/home/qubodup/src/subversion/trigger-rally/data/vehicles/focus/./fox_uv.png"
        xlink:href="./fox_uv.png"
-       y="28.362183"
-       x="0"
-       id="image3884"
+       width="1024"
        height="1024"
-       width="1024" />
+       id="image3884"
+       x="0"
+       y="28.362183" />
   </g>
 </svg>

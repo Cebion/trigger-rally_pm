@@ -14,7 +14,7 @@
    height="1024"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.3.1 r9886"
+   inkscape:version="0.48.4 r9939"
    sodipodi:docname="eva.svg"
    inkscape:export-filename="./eva.png"
    inkscape:export-xdpi="90"
@@ -340,11 +340,11 @@
       <image
          sodipodi:absref="/home/qubodup/src/subversion/trigger-rally/data/vehicles/evo/../../textures/noise.png"
          xlink:href="../../textures/noise.png"
-         y="0"
-         x="0"
-         id="image9-3"
+         width="32"
          height="32"
-         width="32" />
+         id="image9-3"
+         x="0"
+         y="0" />
     </pattern>
     <linearGradient
        id="linearGradient3931-3">
@@ -1071,16 +1071,16 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.70710678"
-     inkscape:cx="411.06112"
-     inkscape:cy="428.95883"
+     inkscape:zoom="1"
+     inkscape:cx="496.21848"
+     inkscape:cy="551.73712"
      inkscape:document-units="px"
      inkscape:current-layer="layer15"
      showgrid="false"
-     inkscape:window-width="1227"
+     inkscape:window-width="1884"
      inkscape:window-height="1181"
-     inkscape:window-x="240"
-     inkscape:window-y="0"
+     inkscape:window-x="0"
+     inkscape:window-y="19"
      inkscape:window-maximized="0"
      showguides="true"
      inkscape:guide-bbox="true"
@@ -1587,16 +1587,16 @@
         <text
            xml:space="preserve"
            style="font-size:9.93871212px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold"
-           x="231.01758"
+           x="238.18654"
            y="923.44128"
            id="text3563"
            sodipodi:linespacing="100%"
-           transform="scale(1.2714953,0.78647561)"><tspan
+           transform="scale(1.2714953,0.78647558)"><tspan
              sodipodi:role="line"
              id="tspan3565"
-             x="231.01758"
+             x="238.18654"
              y="923.44128"
-             style="font-size:5.67926455px;fill:#3b3b3b;fill-opacity:1">2012 TRIGGER</tspan></text>
+             style="font-size:5.67926455px;fill:#3b3b3b;fill-opacity:1">TRIGGER</tspan></text>
         <text
            transform="scale(1.2970741,0.77096596)"
            sodipodi:linespacing="100%"
@@ -1615,14 +1615,14 @@
          sodipodi:linespacing="100%"
          id="text3595"
          y="-136.93495"
-         x="-430.66553"
+         x="-423.50006"
          style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#1ebcff;fill-opacity:1;fill-rule:nonzero;stroke:#434343;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Nimbus Sans L;-inkscape-font-specification:Nimbus Sans L Bold"
          xml:space="preserve"><tspan
            style="font-size:14px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;fill:#3b3b3b;fill-opacity:1;stroke:none;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold"
            y="-136.93495"
-           x="-430.66553"
+           x="-423.50006"
            id="tspan3597"
-           sodipodi:role="line">2012</tspan></text>
+           sodipodi:role="line">TRI</tspan></text>
     </g>
     <g
        transform="matrix(0.9387993,0,0,0.9387993,13.03575,1033.6876)"
@@ -2460,18 +2460,18 @@
          id="rect3705"
          style="fill:#ececec;fill-opacity:1;stroke:#434343;stroke-width:1.23150468;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline" />
       <text
-         transform="scale(1.0106371,0.98947482)"
+         transform="scale(1.0106371,0.98947484)"
          xml:space="preserve"
          style="font-size:9.85203743px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#1ebcff;fill-opacity:1;fill-rule:nonzero;stroke:#434343;stroke-width:1.23150468;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Nimbus Sans L;-inkscape-font-specification:Nimbus Sans L Bold"
-         x="175.24507"
+         x="182.30971"
          y="-634.53827"
          id="text3707"
          sodipodi:linespacing="100%"><tspan
            sodipodi:role="line"
            id="tspan3709"
-           x="175.24507"
+           x="182.30971"
            y="-634.53827"
-           style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;fill:#3b3b3b;fill-opacity:1;stroke:none;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold">TRI 12</tspan></text>
+           style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;fill:#3b3b3b;fill-opacity:1;stroke:none;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold">TRI</tspan></text>
     </g>
     <path
        sodipodi:nodetypes="ccccccc"
@@ -2881,18 +2881,18 @@
            id="rect6310"
            style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none" />
         <text
-           transform="scale(1.2714953,0.78647561)"
+           transform="scale(1.2714953,0.78647558)"
            sodipodi:linespacing="100%"
            id="text6312"
            y="923.44128"
-           x="231.01758"
+           x="238.18654"
            style="font-size:9.93871212px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold"
            xml:space="preserve"><tspan
              style="font-size:5.67926455px;fill:#3b3b3b;fill-opacity:1"
              y="923.44128"
-             x="231.01758"
+             x="238.18654"
              id="tspan6314"
-             sodipodi:role="line">2012 TRIGGER</tspan></text>
+             sodipodi:role="line">TRIGGER</tspan></text>
         <text
            xml:space="preserve"
            style="font-size:8.7289381px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold"
@@ -2910,15 +2910,15 @@
       <text
          xml:space="preserve"
          style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#1ebcff;fill-opacity:1;fill-rule:nonzero;stroke:#434343;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Nimbus Sans L;-inkscape-font-specification:Nimbus Sans L Bold"
-         x="-430.66553"
+         x="-423.50006"
          y="-136.93495"
          id="text6320"
          sodipodi:linespacing="100%"><tspan
            sodipodi:role="line"
            id="tspan6322"
-           x="-430.66553"
+           x="-423.50006"
            y="-136.93495"
-           style="font-size:14px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;fill:#3b3b3b;fill-opacity:1;stroke:none;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold">2012</tspan></text>
+           style="font-size:14px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;fill:#3b3b3b;fill-opacity:1;stroke:none;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold">TRI</tspan></text>
     </g>
     <g
        id="g6324"
@@ -3649,11 +3649,11 @@
     <image
        sodipodi:absref="/home/qubodup/src/subversion/trigger-rally/data/vehicles/evo/./eva_uv.png"
        xlink:href="./eva_uv.png"
-       style="display:inline"
-       y="0"
-       x="0"
-       id="image3446"
+       width="1024"
        height="1024"
-       width="1024" />
+       id="image3446"
+       x="0"
+       y="0"
+       style="display:inline" />
   </g>
 </svg>

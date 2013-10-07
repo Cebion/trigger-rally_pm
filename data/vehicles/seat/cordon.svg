@@ -15,7 +15,7 @@
    height="1024"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.3.1 r9886"
+   inkscape:version="0.48.4 r9939"
    sodipodi:docname="cordon.svg"
    inkscape:export-filename="./cordon.png"
    inkscape:export-xdpi="90"
@@ -675,11 +675,11 @@
       <image
          sodipodi:absref="/home/qubodup/src/subversion/trigger-rally/data/vehicles/seat/../../textures/noise.png"
          xlink:href="../../textures/noise.png"
-         width="32"
-         height="32"
-         id="image9-2-0"
+         y="0"
          x="0"
-         y="0" />
+         id="image9-2-0"
+         height="32"
+         width="32" />
     </pattern>
     <pattern
        patternTransform="translate(1341.8417,430.15866)"
@@ -982,15 +982,15 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="492.9497"
-     inkscape:cy="484.71257"
+     inkscape:cx="558.20192"
+     inkscape:cy="588.30905"
      inkscape:document-units="px"
      inkscape:current-layer="layer15"
      showgrid="false"
-     inkscape:window-width="1920"
-     inkscape:window-height="1200"
+     inkscape:window-width="1597"
+     inkscape:window-height="1181"
      inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-y="19"
      inkscape:window-maximized="0"
      fit-margin-top="0"
      fit-margin-left="0"
@@ -1013,7 +1013,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -1317,15 +1317,15 @@
       <text
          xml:space="preserve"
          style="font-size:13.4582901px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#1ebcff;fill-opacity:1;fill-rule:nonzero;stroke:#434343;stroke-width:1.68228626;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline;font-family:Nimbus Sans L;-inkscape-font-specification:Nimbus Sans L Bold"
-         x="780.85065"
+         x="801.8205"
          y="299.03592"
          id="text7555"
          sodipodi:linespacing="100%"><tspan
            sodipodi:role="line"
            id="tspan7557"
-           x="780.85065"
+           x="801.8205"
            y="299.03592"
-           style="font-size:16.82286263px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;fill:#3b3b3b;fill-opacity:1;stroke:none;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold">TRIGGER 2012</tspan></text>
+           style="font-size:16.82286263px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;fill:#3b3b3b;fill-opacity:1;stroke:none;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold">TRIGGER</tspan></text>
     </g>
     <g
        id="g7670"
@@ -1515,16 +1515,16 @@
           <text
              xml:space="preserve"
              style="font-size:9.93871212px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold"
-             x="231.01758"
+             x="238.18654"
              y="923.44128"
              id="text5200"
              sodipodi:linespacing="100%"
-             transform="scale(1.2714953,0.78647561)"><tspan
+             transform="scale(1.2714953,0.78647559)"><tspan
                sodipodi:role="line"
                id="tspan5202"
-               x="231.01758"
+               x="238.18654"
                y="923.44128"
-               style="font-size:5.67926455px;fill:#3b3b3b;fill-opacity:1">2012 TRIGGER</tspan></text>
+               style="font-size:5.67926455px;fill:#3b3b3b;fill-opacity:1">TRIGGER</tspan></text>
           <text
              transform="scale(1.2970741,0.77096596)"
              sodipodi:linespacing="100%"
@@ -1730,7 +1730,7 @@
     <text
        xml:space="preserve"
        style="font-size:12.78014565px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#1ebcff;fill-opacity:1;fill-rule:nonzero;stroke:#434343;stroke-width:1.59751821;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline;font-family:Nimbus Sans L;-inkscape-font-specification:Nimbus Sans L Bold"
-       x="166.41194"
+       x="175.57617"
        y="468.34033"
        id="text5157"
        sodipodi:linespacing="100%"
@@ -1740,9 +1740,9 @@
        inkscape:export-ydpi="90"><tspan
          sodipodi:role="line"
          id="tspan5159"
-         x="166.41194"
+         x="175.57617"
          y="468.34033"
-         style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;fill:#3b3b3b;fill-opacity:1;stroke:none;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold">TRI 12</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;fill:#3b3b3b;fill-opacity:1;stroke:none;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold">TRI</tspan></text>
     <g
        id="g5570"
        transform="matrix(1.139952,0,0,1.1706752,-413.09752,148.0523)"
@@ -3107,18 +3107,18 @@
              id="rect13794"
              style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none" />
           <text
-             transform="scale(1.2714953,0.78647561)"
+             transform="scale(1.2714953,0.78647559)"
              sodipodi:linespacing="100%"
              id="text13796"
              y="923.44128"
-             x="231.01758"
+             x="238.18654"
              style="font-size:9.93871212px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold"
              xml:space="preserve"><tspan
                style="font-size:5.67926455px;fill:#3b3b3b;fill-opacity:1"
                y="923.44128"
-               x="231.01758"
+               x="238.18654"
                id="tspan13798"
-               sodipodi:role="line">2012 TRIGGER</tspan></text>
+               sodipodi:role="line">TRIGGER</tspan></text>
           <text
              xml:space="preserve"
              style="font-size:8.7289381px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold"
@@ -3618,10 +3618,10 @@
     <image
        sodipodi:absref="/home/qubodup/src/subversion/trigger-rally/data/vehicles/seat/./cordon_uv.png"
        xlink:href="./cordon_uv.png"
-       y="0"
-       x="0"
-       id="image4026"
+       width="1024"
        height="1024"
-       width="1024" />
+       id="image4026"
+       x="0"
+       y="0" />
   </g>
 </svg>
