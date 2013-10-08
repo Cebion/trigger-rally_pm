@@ -177,6 +177,7 @@ Onsemeliot <onsemeliot@riseup.net> / GPL
   data/maps/edge/*
   data/maps/greenland/*
   data/maps/jumpy/*
+  data/maps/littleisland/*
   data/maps/mud/*
   data/maps/pathfinder/*
   data/maps/remote/*
