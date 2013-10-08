@@ -80,7 +80,7 @@ Richard Langridge / GPL
   data/maps/oldmacdonald/heightmap.png
 
 kougloff, Iwan Gabovitch, Liviu Andronic / CC0 (PD)
-  data/sounds/evo_sound/clank1.wav ( http://www.freesound.org/people/kougloff/sounds/117558/ )
+  data/sounds/gear.wav ( http://www.freesound.org/people/kougloff/sounds/117558/ )
 
 Richard Langridge / GPL
   data/textures/dial_rev.png
@@ -123,7 +123,7 @@ Richard Langridge / GPL
   data/vehicles/seat/seat_wheel.ase
 
 Iwan 'qubodup' Gabovitch / CC0 (PD)
-  data/sounds/evo_sound/clank3.wav ( http://www.freesound.org/people/qubodup/sounds/151624/ )
+  data/sounds/bang.wav ( http://www.freesound.org/people/qubodup/sounds/151624/ )
   data/textures/life_helmet.png ( http://openclipart.org/detail/167195 )
   data/textures/dial_gear.png ( http://openclipart.org/detail/167196 )
   data/textures/veg/palmy.png ( http://opengameart.org/content/palm-plant-sprite-1024x1024 )
@@ -146,7 +146,7 @@ Iwan 'qubodup' Gabovitch / GPL
   data/maps/smallswirl/smallswirl-h.jpg
   data/maps/smallswirl/smallswirl-f.jpg
   data/maps/smallswirl/smallswirl.level
-  data/sounds/engine1.wav ( http://opengameart.org/content/car-engine-loop-96khz-4s )
+  data/sounds/engine.wav ( http://opengameart.org/content/car-engine-loop-96khz-4s )
   data/textures/veg/cactus1.png ( http://opengameart.org/content/cactus-sprite-texture-0 )
 
 Onsemeliot <onsemeliot@riseup.net> / GPL
@@ -168,12 +168,19 @@ Onsemeliot <onsemeliot@riseup.net> / GPL
   data/maps/remote/remote.level
   data/maps/remote/h.png
   data/maps/remote/f.png
-  data/maps/remote/lightening.jpg
   data/maps/remote/c.png
   data/maps/stoned/h.png
   data/maps/stoned/stoned.level
   data/maps/stoned/f.png
   data/maps/stoned/c.png
+  data/maps/country/*
+  data/maps/edge/*
+  data/maps/greenland/*
+  data/maps/jumpy/*
+  data/maps/mud/*
+  data/maps/pathfinder/*
+  data/maps/remote/*
+  data/maps/tropic/*
   data/events/alps/green/foliagemap.png
   data/events/alps/green/colormap.jpg
   data/events/alps/green/green.level
@@ -208,6 +215,19 @@ Onsemeliot <onsemeliot@riseup.net> / GPL
   data/events/alps/mountain/colormap.jpg
   data/events/alps/mountain/mountain.level
   data/events/alps/mountain/heightmap.png
+  data/events/marathon/*
+  data/events/chasingshadows/*
+  data/textures/sky/overcast-blue
+  data/textures/sky/dawn.jpg
+  data/textures/sky/cloudy.png
+  data/textures/sky/dark-blue.png
+  data/textures/sky/light-clouds.jpg
+  data/textures/sky/stormy.jpg
+  data/textures/veg/post.png
+  data/textures/veg/mais.png
+  data/textures/veg/ivy.png
+  data/textures/veg/bush-dry.png
+  data/textures/veg/bush.png
 
 URW++ / GPL
   data/textures/consolefont.png (Nimbus Mono L)
@@ -221,11 +241,14 @@ Mysteryem / GPL
 yughues / CC0 (PD)
   data/textures/veg/grass-sprite.png ( http://opengameart.org/content/grass-pack-02 )
 
+yughues / CC0 (PD), Onsemeliot <onsemeliot@riseup.net> / GPL
+  data/textures/veg/grass.png
+
 Quargzon / CC0 (PD)
   data/sounds/wind.wav ( http://www.freesound.org/people/Quargzon/sounds/103289/ )
 
 cognito perceptu / CC0 (PD)
-  data/sounds/gravel2.wav ( http://www.freesound.org/people/cognito%20perceptu/sounds/97605/ )
+  data/sounds/gravel.wav ( http://www.freesound.org/people/cognito%20perceptu/sounds/97605/ )
 
 Richard Langridge, Farrer, Iwan Gabovitch / GPL
   data/vehicles/evo/eva.blend
