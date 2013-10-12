@@ -218,6 +218,7 @@ Onsemeliot <onsemeliot@riseup.net> / GPL
   data/events/alps/mountain/heightmap.png
   data/events/marathon/*
   data/events/chasingshadows/*
+  data/events/picturesque/*
   data/textures/sky/overcast-blue
   data/textures/sky/dawn.jpg
   data/textures/sky/cloudy.png
@@ -226,6 +227,7 @@ Onsemeliot <onsemeliot@riseup.net> / GPL
   data/textures/sky/stormy.jpg
   data/textures/veg/post.png
   data/textures/veg/mais.png
+  data/textures/veg/grain.png
   data/textures/veg/ivy.png
   data/textures/veg/bush-dry.png
   data/textures/veg/bush.png
