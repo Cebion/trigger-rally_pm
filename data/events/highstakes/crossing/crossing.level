@@ -1,0 +1,117 @@
+<?xml version="1.0" ?>
+<level 
+	name="Crossing"
+	comment="Not time for detours. Keep at the race!"
+	author="Onsemeliot"
+	randomseed="1000">
+	
+	<terrain
+		heightmap="h.png"
+		colormap="c.png"
+		foliagemap="f.png"
+		hudmap="m.png"
+		tilesize="64"
+		horizontalscale="3"
+		verticalscale="0.23"
+		>
+		
+		<foliageband
+			middle="0.2"
+			range="0.17"
+			density="0.0002"
+			sprite="/textures/veg/bush-dry.png"
+			spritecount="2"
+			/>
+		
+		<foliageband
+			middle="0.4"
+			range="0.35"
+			density="0.0005"
+			sprite="/textures/veg/bush.png"
+			spritecount="2"
+			/>
+		
+		<foliageband
+			middle="0.65"
+			range="0.5"
+			density="0.0004"
+			sprite="/textures/veg/ivy.png"
+			spritecount="2"
+			/>
+		
+		<foliageband
+			middle="0.75"
+			range="0.25"
+			density="0.0009"
+			sprite="/textures/veg/grain.png"
+			spritecount="2"
+			/>
+	</terrain>
+	
+	<weather
+		cloudtexture="/textures/sky/dawn.jpg"
+		cloudscrollrate="0"
+		fogcolor="0.45, 0.25, 0.1"
+		fogdensity="0.0015"
+		fogdensitysky="1"
+		/>
+	
+	<vehicleoption type="/vehicles/seat/seat.vehicle" />
+	<vehicleoption type="/vehicles/focus/focus.vehicle" />
+	<vehicleoption type="/vehicles/evo/evo.vehicle" />
+	
+	<race coordscale="3, 3" targettime="437">
+		
+		<startposition pos="480, 2" oridegrees="325" />
+		<checkpoint coords="464, 55" />
+		<checkpoint coords="411, 67" />
+		<checkpoint coords="361, 38" />
+		<checkpoint coords="275, 7" />
+		<checkpoint coords="207, 21" />
+		<checkpoint coords="122, 53" />
+		<checkpoint coords="60, 105" />
+		<checkpoint coords="194, 109" />
+		<checkpoint coords="241, 137" />
+		<checkpoint coords="219, 185" />
+		<checkpoint coords="149, 172" />
+		<checkpoint coords="96, 188" />
+		<checkpoint coords="58, 201" />
+		<checkpoint coords="81, 235" />
+		<checkpoint coords="121, 280" />
+		<checkpoint coords="262, 278" />
+		<checkpoint coords="238, 335" />
+		<checkpoint coords="272, 354" />
+		<checkpoint coords="312, 379" />
+		<checkpoint coords="392, 372" />
+		<checkpoint coords="476, 336" />
+		<checkpoint coords="434, 290" />
+		<checkpoint coords="448, 247" />
+		<checkpoint coords="442, 225" />
+		<checkpoint coords="464, 204" />
+		<checkpoint coords="437, 185" />
+		<checkpoint coords="455, 161" />
+		<checkpoint coords="455, 120" />
+		<checkpoint coords="413, 115" />
+		<checkpoint coords="390, 148" />
+		<checkpoint coords="342, 185" />
+		<checkpoint coords="284, 217" />
+		<checkpoint coords="159, 192" />
+		<checkpoint coords="159, 211" />
+		<checkpoint coords="170, 243" />
+		<checkpoint coords="77, 280" />
+		<checkpoint coords="37, 332" />
+		<checkpoint coords="58, 356" />
+		<checkpoint coords="70, 387" />
+		<checkpoint coords="34, 424" />
+		<checkpoint coords="93, 480" />
+		<checkpoint coords="143, 472" />
+		<checkpoint coords="140, 432" />
+		<checkpoint coords="173, 420" />
+		<checkpoint coords="277, 419" />
+		<checkpoint coords="434, 447" />
+		<checkpoint coords="496, 479" />
+		<checkpoint coords="492, 526" />
+		
+	</race>
+	
+</level>

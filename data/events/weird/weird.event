@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<event name="Weird Dare" author="Onsemeliot">
+
+	<level file="china/china.level" />
+	<level file="frisky/frisky.level" />
+	<level file="liquid/liquid.level" />
+	<level file="slope/slope.level" />
+	<level file="mars/mars.level" />
+	
+</event>

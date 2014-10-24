@@ -1,0 +1,79 @@
+<?xml version="1.0" ?>
+<level 
+	name="Sky climbing"
+	comment=""
+	author="Onsemeliot"
+	randomseed="1000">
+
+	<terrain
+		heightmap="h.png"
+		colormap="c.png"
+		foliagemap="f.png"
+		hudmap="m.png"
+		tilesize="64"
+		horizontalscale="4"
+		verticalscale="0.4"
+		>
+
+		<foliageband
+			middle="0.5"
+			range="0.35"
+			density="0.0004"
+			sprite="/textures/veg/bush.png"
+			spritecount="2"
+			/>
+
+		<foliageband
+			middle="0.8"
+			range="0.1"
+			density="0.0005"
+			sprite="/textures/veg/ivy.png"
+			spritecount="2"
+			/>
+
+		<foliageband
+			middle="0.3"
+			range="0.2"
+			density="0.0002"
+			sprite="/textures/veg/palmy.png"
+			spritecount="2"
+			/>
+	</terrain>
+
+	<weather
+		cloudtexture="/textures/sky/cloudy.png"
+		cloudscrollrate="0.02"
+		fogcolor="0.3, 0.3, 0.6"
+		fogdensity="0.003"
+		fogdensitysky="0.4"
+		/>
+
+	<vehicleoption type="/vehicles/seat/seat.vehicle" />
+	<vehicleoption type="/vehicles/focus/focus.vehicle" />
+	<vehicleoption type="/vehicles/evo/evo.vehicle" />
+
+	<race coordscale="4, 4" targettime="343">
+		<startposition pos="502, 478" oridegrees="103" />
+		<checkpoint coords="399, 473" />
+		<checkpoint coords="349, 397" />
+		<checkpoint coords="374, 321" />
+		<checkpoint coords="455, 313" />
+		<checkpoint coords="479, 263" />
+		<checkpoint coords="465, 198" />
+		<checkpoint coords="493, 137" />
+		<checkpoint coords="439, 81" />
+		<checkpoint coords="356, 21" />
+		<checkpoint coords="299, 59" />
+		<checkpoint coords="252, 8" />
+		<checkpoint coords="216, 58" />
+		<checkpoint coords="125, 60" />
+		<checkpoint coords="74, 140" />
+		<checkpoint coords="152, 198" />
+		<checkpoint coords="249, 234" />
+		<checkpoint coords="184, 265" />
+		<checkpoint coords="256, 290" />
+		<checkpoint coords="177, 370" />
+		<checkpoint coords="183, 404" />
+		<checkpoint coords="7, 479" />
+	</race>
+</level>

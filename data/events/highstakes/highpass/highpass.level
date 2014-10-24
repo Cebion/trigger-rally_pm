@@ -1,0 +1,78 @@
+<?xml version="1.0" ?>
+<level 
+	name="High Pass"
+	comment="Speed limits are a necessity."
+	author="Onsemeliot"
+	randomseed="1000">
+
+	<terrain
+		heightmap="h.png"
+		colormap="c.png"
+		foliagemap="f.png"
+		hudmap="c.png"
+		tilesize="64"
+		horizontalscale="5"
+		verticalscale="0.25"
+		>
+
+		<foliageband
+			middle="0.8"
+			range="0.15"
+			density="0.002"
+			sprite="/textures/veg/ivy.png"
+			spritecount="2"
+			/>
+
+		<foliageband
+			middle="0.4"
+			range="0.25"
+			density="0.0005"
+			sprite="/textures/veg/bush.png"
+			spritecount="2"
+			/>
+
+		<foliageband
+			middle="0.25"
+			range="0.22"
+			density="0.0003"
+			sprite="/textures/veg/palmy.png"
+			spritecount="2"
+			/>
+	</terrain>
+
+	<weather
+		cloudtexture="/textures/sky/dark-blue.png"
+		cloudscrollrate="0"
+		fogcolor="0.39, 0.39, 0.48"
+		fogdensity="0.002"
+		fogdensitysky="0.9"
+		/>
+
+	<vehicleoption type="/vehicles/seat/seat.vehicle" />
+	<vehicleoption type="/vehicles/focus/focus.vehicle" />
+	<vehicleoption type="/vehicles/evo/evo.vehicle" />
+
+	<race coordscale="2.5, 2.5" targettime="374">
+
+		<startposition pos="1011, 46" oridegrees="60" />
+		<checkpoint coords="964, 183" />
+		<checkpoint coords="557, 226" />
+		<checkpoint coords="705, 261" />
+		<checkpoint coords="796, 473" />
+		<checkpoint coords="977, 542" />
+		<checkpoint coords="965, 964" />
+		<checkpoint coords="679, 623" />
+		<checkpoint coords="575, 707" />
+		<checkpoint coords="644, 880" />
+		<checkpoint coords="293, 893" />
+		<checkpoint coords="122, 636" />
+		<checkpoint coords="92, 413" />
+		<checkpoint coords="216, 274" />
+		<checkpoint coords="501, 373" />
+		<checkpoint coords="321, 209" />
+		<checkpoint coords="272, 85" />
+		<checkpoint coords="191, 186" />
+
+	</race>
+
+</level>

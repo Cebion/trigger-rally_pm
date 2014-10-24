@@ -1,0 +1,72 @@
+<?xml version="1.0" ?>
+<level 
+	name="Mars"
+	comment="Is there (fast) life on Mars?"
+	author="Onsemeliot"
+	randomseed="1000">
+
+	<terrain
+		heightmap="h.png"
+		colormap="c.png"
+		foliagemap="f.png"
+		hudmap="c.png"
+		tilesize="64"
+		horizontalscale="3"
+		verticalscale="0.25"
+		>
+
+		<foliageband
+			middle="0.7"
+			range="0.22"
+			density="0.0007"
+			sprite="/textures/veg/bush-dry.png"
+			spritecount="2"
+			/>
+	</terrain>
+
+	<weather
+		cloudtexture="gas-sky.png"
+		cloudscrollrate="0.04"
+		fogcolor="0.3, 0.05, 0.02"
+		fogdensity="0.005"
+		fogdensitysky="0.6"
+		/>
+
+	<vehicleoption type="/vehicles/seat/seat.vehicle" />
+	<vehicleoption type="/vehicles/focus/focus.vehicle" />
+	<vehicleoption type="/vehicles/evo/evo.vehicle" />
+
+	<race coordscale="3, 3" targettime="318">
+		<startposition pos="219, 169" oridegrees="245" />
+		<checkpoint coords="353, 216" />
+		<checkpoint coords="334, 338" />
+		<checkpoint coords="275, 387" />
+		<checkpoint coords="305, 449" />
+		<checkpoint coords="414, 494" />
+		<checkpoint coords="488, 462" />
+		<checkpoint coords="451, 389" />
+		<checkpoint coords="463, 330" />
+		<checkpoint coords="401, 303" />
+		<checkpoint coords="464, 207" />
+		<checkpoint coords="418, 164" />
+		<checkpoint coords="451, 103" />
+		<checkpoint coords="379, 59" />
+		<checkpoint coords="332, 19" />
+		<checkpoint coords="260, 36" />
+		<checkpoint coords="243, 93" />
+		<checkpoint coords="177, 50" />
+		<checkpoint coords="132, 72" />
+		<checkpoint coords="66, 25" />
+		<checkpoint coords="50, 99" />
+		<checkpoint coords="96, 165" />
+		<checkpoint coords="56, 204" />
+		<checkpoint coords="53, 305" />
+		<checkpoint coords="12, 388" />
+		<checkpoint coords="68, 450" />
+		<checkpoint coords="139, 373" />
+		<checkpoint coords="192, 365" />
+		<checkpoint coords="121, 292" />
+		<checkpoint coords="125, 199" />
+		<checkpoint coords="177, 180" />
+	</race>
+</level>

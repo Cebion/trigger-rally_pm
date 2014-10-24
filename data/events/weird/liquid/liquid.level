@@ -1,0 +1,62 @@
+<?xml version="1.0" ?>
+<level 
+	name="Liquid Rocks"
+	comment="Don't burn the rubber wheels!"
+	author="Onsemeliot"
+	randomseed="1000">
+
+	<terrain
+		heightmap="h.png"
+		colormap="c.png"
+		foliagemap="f.png"
+		hudmap="m.png"
+		tilesize="64"
+		horizontalscale="3.5"
+		verticalscale="0.2"
+		>
+
+		<foliageband
+			middle="0.7"
+			range="0.29"
+			density="0.0002"
+			sprite="/textures/veg/bush-dry.png"
+			spritecount="2"
+			/>
+	</terrain>
+
+	<weather
+		cloudtexture="/textures/sky/stormy.jpg"
+		cloudscrollrate="0.001"
+		fogcolor="0.2, 0, 0"
+		fogdensity="0.005"
+		fogdensitysky="0.7"
+		/>
+
+	<vehicleoption type="/vehicles/seat/seat.vehicle" />
+	<vehicleoption type="/vehicles/focus/focus.vehicle" />
+	<vehicleoption type="/vehicles/evo/evo.vehicle" />
+
+	<race coordscale="3.5, 3.5" targettime="300">
+		<startposition pos="256, 0" oridegrees="0" />
+		<checkpoint coords="335, 59" />
+		<checkpoint coords="488, 85" />
+		<checkpoint coords="452, 176" />
+		<checkpoint coords="269, 152" />
+		<checkpoint coords="229, 168" />
+		<checkpoint coords="181, 137" />
+		<checkpoint coords="166, 168" />
+		<checkpoint coords="122, 190" />
+		<checkpoint coords="85, 47" />
+		<checkpoint coords="46, 226" />
+		<checkpoint coords="102, 296" />
+		<checkpoint coords="164, 294" />
+		<checkpoint coords="222, 338" />
+		<checkpoint coords="461, 263" />
+		<checkpoint coords="486, 359" />
+		<checkpoint coords="434, 443" />
+		<checkpoint coords="424, 337" />
+		<checkpoint coords="321, 402" />
+		<checkpoint coords="250, 412" />
+		<checkpoint coords="256, 512" />
+	</race>
+</level>

@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<event name="High Stakes" author="Onsemeliot">
+
+	<level file="sky/sky.level" />
+	<level file="crossing/crossing.level" />
+	<level file="tricky/tricky.level" />
+	<level file="highpass/highpass.level" />
+	<level file="endless/endless.level" />
+	
+</event>
