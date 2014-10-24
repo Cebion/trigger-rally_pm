@@ -19,7 +19,7 @@
 			middle="0.75"
 			range="0.4"
 			density="0.001"
-			sprite="/textures/veg/grass-sprite.png"
+			sprite="/textures/veg/grass.png"
 			spritecount="1"
 			/>
 	</terrain>

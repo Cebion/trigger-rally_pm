@@ -8,20 +8,11 @@
 	<terrain
 		heightmap="h.png"
 		colormap="c.png"
-		foliagemap="f.png"
 		hudmap="c.png"
 		tilesize="32"
 		horizontalscale="3.0"
 		verticalscale="0.1"
 		>
-		
-		<foliageband
-			middle="0.55"
-			range="0.45"
-			density="0.0003"
-			sprite="/textures/veg/cactus1.png"
-			spritecount="1"
-			/>
 	</terrain>
 	
 	<weather
