@@ -7,10 +7,9 @@
 	>
 	
 	<terrain
-		heightmap="heightmap.png"
-		colormap="colormap.jpg"
-		foliagemap="foliagemap.png"
-		hudmap="hud.png"
+		heightmap="h.png"
+		colormap="c.jpg"
+		hudmap="m.png"
 		tilesize="32"
 		horizontalscale="3"
 		verticalscale="0.15"
@@ -18,7 +17,7 @@
 	</terrain>
 	
 	<weather
-		cloudtexture="morning.jpg"
+		cloudtexture="/textures/sky/dawn.jpg"
 		cloudscrollrate="0.01"
 		fogcolor="0.1, 0.1, 0.4"
 		fogdensity="0.009"
