@@ -1,0 +1,57 @@
+<?xml version="1.0" ?>
+<level 
+	name="Redrock"
+	comment="Stay on the road!"
+	author="Onsemeliot"
+	randomseed="1000">
+	
+	<terrain
+		heightmap="h.png"
+		colormap="c.png"
+		foliagemap="f.png"
+		hudmap="c.png"
+		tilesize="64"
+		horizontalscale="4"
+		verticalscale="0.3"
+		>
+		
+		<foliageband
+			middle="0.6"
+			range="0.52"
+			density="0.0005"
+			sprite="/textures/veg/bush-dry.png"
+			spritecount="2"
+			/>
+	</terrain>
+	
+	<weather
+		cloudtexture="/textures/sky/blue.jpg"
+		cloudscrollrate="0.001"
+		fogcolor="0.47, 0.36, 0.32"
+		fogdensity="0.004"
+		fogdensitysky="0.8"
+		/>
+	
+	<vehicleoption type="/vehicles/focus/focus.vehicle" />
+	<vehicleoption type="/vehicles/seat/seat.vehicle" />
+	<vehicleoption type="/vehicles/evo/evo.vehicle" />
+	
+	<race coordscale="4, 4" targettime="420">
+		
+		<startposition pos="203, -93" oridegrees="-28" />
+		<checkpoint coords="275, 28" />
+		<checkpoint coords="251, 107" />
+		<checkpoint coords="183, 68" />
+		<checkpoint coords="21, 220" />
+		<checkpoint coords="101, 288" />
+		<checkpoint coords="181, 387" />
+		<checkpoint coords="71, 418" />
+		<checkpoint coords="108, 273" />
+		<checkpoint coords="279, 254" />
+		<checkpoint coords="381, 445" />
+		<checkpoint coords="442, 191" />
+		<checkpoint coords="383, 241" />
+		<checkpoint coords="275, 28" />
+	</race>
+	
+</level>

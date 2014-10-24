@@ -1,0 +1,76 @@
+<?xml version="1.0" ?>
+<level 
+	name="Banned"
+	comment="Flat, but nasty."
+	author="Onsemeliot"
+	randomseed="1000">
+
+	<terrain
+		heightmap="h.png"
+		colormap="c.png"
+		foliagemap="f.png"
+		hudmap="m.png"
+		tilesize="64"
+		horizontalscale="3.5"
+		verticalscale="0.15"
+		>
+
+		<foliageband
+			middle="0.9"
+			range="0.1"
+			density="0.0005"
+			sprite="/textures/veg/bush-dry.png"
+			spritecount="2"
+			/>
+
+		<foliageband
+			middle="0.5"
+			range="0.45"
+			density="0.000004"
+			sprite="/textures/veg/cactus1.png"
+			spritecount="2"
+			/>
+	</terrain>
+
+	<weather
+		cloudtexture="/textures/sky/light-clouds.jpg"
+		cloudscrollrate="0.001"
+		fogcolor="0.65, 0.5, 0.3"
+		fogdensity="0.004"
+		fogdensitysky="0.9"
+		/>
+
+	<vehicleoption type="/vehicles/seat/seat.vehicle" />
+	<vehicleoption type="/vehicles/focus/focus.vehicle" />
+	<vehicleoption type="/vehicles/evo/evo.vehicle" />
+
+	<race coordscale="3.5, 3.5" targettime="300">
+		<startposition pos="479, 16" oridegrees="345" />
+		<checkpoint coords="487, 85" />
+		<checkpoint coords="437, 26" />
+		<checkpoint coords="328, 57" />
+		<checkpoint coords="250, 17" />
+		<checkpoint coords="164, 25" />
+		<checkpoint coords="26, 22" />
+		<checkpoint coords="80, 132" />
+		<checkpoint coords="161, 152" />
+		<checkpoint coords="228, 164" />
+		<checkpoint coords="235, 219" />
+		<checkpoint coords="331, 215" />
+		<checkpoint coords="377, 149" />
+		<checkpoint coords="439, 190" />
+		<checkpoint coords="490, 262" />
+		<checkpoint coords="416, 364" />
+		<checkpoint coords="273, 350" />
+		<checkpoint coords="253, 400" />
+		<checkpoint coords="106, 336" />
+		<checkpoint coords="30, 283" />
+		<checkpoint coords="26, 347" />
+		<checkpoint coords="36, 486" />
+		<checkpoint coords="177, 442" />
+		<checkpoint coords="257, 497" />
+		<checkpoint coords="351, 485" />
+		<checkpoint coords="489, 485" />
+		<checkpoint coords="471, 438" />
+	</race>
+</level>

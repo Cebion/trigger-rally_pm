@@ -1,0 +1,70 @@
+<?xml version="1.0" ?>
+<level 
+	name="Iced Up"
+	comment="Do not overestimate yourself!"
+	author="Onsemeliot"
+	randomseed="1000">
+
+	<terrain
+		heightmap="h.png"
+		colormap="c.png"
+		hudmap="c.png"
+		tilesize="64"
+		horizontalscale="7"
+		verticalscale="0.4"
+		>
+	</terrain>
+
+	<weather
+		cloudtexture="/textures/sky/overcast.jpg"
+		cloudscrollrate="0.02"
+		fogcolor="0.7, 0.72, 0.93"
+		fogdensity="0.012"
+		fogdensitysky="0.9"
+		/>
+
+	<vehicleoption type="/vehicles/focus/focus.vehicle" />
+	<vehicleoption type="/vehicles/evo/evo.vehicle" />
+	<vehicleoption type="/vehicles/seat/seat.vehicle" />
+
+	<race coordscale="7, 7" targettime="866">
+		<startposition pos="319, 392" oridegrees="-120" />
+		<checkpoint coords="318, 287" />
+		<checkpoint coords="225, 304" />
+		<checkpoint coords="115, 201" />
+		<checkpoint coords="170, 91" />
+		<checkpoint coords="211, 36" />
+		<checkpoint coords="151, 10" />
+		<checkpoint coords="261, 52" />
+		<checkpoint coords="435, 171" />
+		<checkpoint coords="430, 216" />
+
+		<checkpoint coords="499, 334" />
+		<checkpoint coords="446, 425" />
+		<checkpoint coords="511, 488" />
+
+		<checkpoint coords="617, 447" />
+		<checkpoint coords="585, 336" />
+		<checkpoint coords="821, 407" />
+		<checkpoint coords="858, 454" />
+		<checkpoint coords="820, 500" />
+		<checkpoint coords="778, 450" />
+		<checkpoint coords="685, 473" />
+		<checkpoint coords="605, 475" />
+
+		<checkpoint coords="511, 488" />
+		<checkpoint coords="446, 425" />
+		<checkpoint coords="499, 334" />
+
+		<checkpoint coords="473, 317" />
+		<checkpoint coords="376, 259" />
+		<checkpoint coords="305, 223" />
+		<checkpoint coords="270, 227" />
+		<checkpoint coords="287, 194" />
+		<checkpoint coords="256, 123" />
+		<checkpoint coords="197, 59" />
+		<checkpoint coords="139, 94" />
+		<checkpoint coords="50, 168" />
+		<checkpoint coords="88, 196" />
+	</race>
+</level>

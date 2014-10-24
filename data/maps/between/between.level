@@ -1,0 +1,69 @@
+<?xml version="1.0" ?>
+<level 
+	name="Between Rocks"
+	comment="Don't hit the rocks!"
+	author="Onsemeliot"
+	randomseed="1000">
+
+	<terrain
+		heightmap="h.png"
+		colormap="c.png"
+		foliagemap="f.png"
+		hudmap="m.png"
+		tilesize="64"
+		horizontalscale="4"
+		verticalscale="0.2"
+		>
+
+		<foliageband
+			middle="0.56"
+			range="0.5"
+			density="0.0007"
+			sprite="/textures/veg/grain.png"
+			spritecount="2"
+			/>
+
+		<foliageband
+			middle="0.3"
+			range="0.25"
+			density="0.0002"
+			sprite="/textures/veg/ivy.png"
+			spritecount="2"
+			/>
+
+		<foliageband
+			middle="0.66"
+			range="0.3"
+			density="0.0003"
+			sprite="/textures/veg/bush.png"
+			spritecount="2"
+			/>
+	</terrain>
+
+	<weather
+		cloudtexture="/textures/sky/dawn.jpg"
+		cloudscrollrate="0.01"
+		fogcolor="0.27, 0.32, 0.49"
+		fogdensity="0.004"
+		fogdensitysky="0.4"
+		/>
+
+	<vehicleoption type="/vehicles/seat/seat.vehicle" />
+	<vehicleoption type="/vehicles/focus/focus.vehicle" />
+	<vehicleoption type="/vehicles/evo/evo.vehicle" />
+
+	<race coordscale="4, 4" targettime="387">
+		<startposition pos="267, 4" oridegrees="36" />
+		<checkpoint coords="166, 35" />
+		<checkpoint coords="57, 223" />
+		<checkpoint coords="154, 145" />
+		<checkpoint coords="124, 103" />
+		<checkpoint coords="131, 193" />
+		<checkpoint coords="116, 386" />
+		<checkpoint coords="179, 474" />
+		<checkpoint coords="281, 187" />
+		<checkpoint coords="455, 181" />
+		<checkpoint coords="268, 455" />
+		<checkpoint coords="272, 506" />
+	</race>
+</level>
