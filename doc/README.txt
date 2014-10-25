@@ -149,7 +149,13 @@ will start trigger.
 
 A. Car models
 -------------
- 
+
+Trigger ships car models in both .ase and .obj formats. The historic 
+.ase models are used by default. You can easily switch to the FOSS 
+.obj textures by renaming `{car}-foss.vehicle` files to `{car}.vehicle`.
+For example, (optionally) backup `focus.vehicle`, then rename 
+`focus-foss.vehicle` to `focus.vehicle`.
+
 You can add completely new cars in the Wavefront .obj format with the
 following restrictions:
  
