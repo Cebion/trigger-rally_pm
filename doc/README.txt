@@ -224,6 +224,16 @@ http://sourceforge.net/projects/trigger-rally/support
 // Version history //
 /////////////////////
 
+25/10/2014 - Trigger 0.6.1
+  - Add support for .obj textures
+  - Include new .obj textures (disabled by default)
+  - Add 6 new events and 23 new single races courtesy of Onsemeliot
+  - Add several new textures
+  - Replace most media content (textures, audio, fonts, etc.) with 
+    FOSS equivalents
+  - New FOSS Trigger Rally icon
+  - Many other changes (check SVN logs from about r48)
+
 08/10/2011 - Trigger 0.6.0
   - New (and old) contributed tracks and events
   - New Practice Mode
@@ -335,6 +345,7 @@ New levels          Tim Wintle
                     Agnius Vasiliauskas
                     Matthias Keysermann
                     Márcio Bremm
+                    Onsemeliot
 
 Splash screens      Alex <rep65@tlen.pl>
                     Roberto D�z Gonz�ez
