@@ -11,12 +11,18 @@
 // omitting it, but if you find it causes build problems, you may
 // want to re-enable it below. - jaz 20/10/2006
 
-#if 0 // defined( USE_OPENAL )
+#if defined( USE_OPENAL )
 #define INCLUDE_OPENAL_HEADER
 #endif
 
 #if defined( INCLUDE_OPENAL_HEADER )
 #include <AL/al.h>
+#endif
+
+// TODO: move audio subsystem choosing from audio.cpp to here
+#ifdef WIN32
+#define INCLUDE_FMOD_HEADER
+#include <fmod.h>
 #endif
 
 class PSSAudio : public PSubsystem {
@@ -34,15 +40,19 @@ public:
 
 class PAudioSample : public PResource {
 private:
-#if defined( INCLUDE_OPENAL_HEADER )
+#if defined (INCLUDE_OPENAL_HEADER)
     ALuint buffer;
-#else
-    unsigned int buffer;
+#elif defined (INCLUDE_FMOD_HEADER)
+    FMOD_SOUND *buffer;
 #endif
 
 public:
     PAudioSample(const std::string &filename, bool positional3D = false);
-    ~PAudioSample() { unload(); }
+
+    ~PAudioSample()
+    {
+        unload();
+    }
 
     void unload();
 
@@ -52,10 +62,12 @@ public:
 class PAudioInstance {
 private:
     PAudioSample *samp;
-    //uint32 source;
-    //uint32 reserved1;
+#if defined (INCLUDE_FMOD_HEADER)
+    FMOD_CHANNEL *source;
+    float reserved1;
+#else
     unsigned int source;
-    unsigned int reserved1;
+#endif
 
 public:
     PAudioInstance(PAudioSample *_samp, bool looping = false);
