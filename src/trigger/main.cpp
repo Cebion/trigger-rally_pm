@@ -523,11 +523,11 @@ bool MainApp::loadAll()
   if (!(tex_hud_gear = getSSTexture().loadTexture("/textures/dial_gear.png"))) return false;
   
   if (cfg_enable_sound) {
-    if (!(aud_engine = getSSAudio().loadSample("/sounds/engine.wav", false))) return false;
-    if (!(aud_wind = getSSAudio().loadSample("/sounds/wind.wav", false))) return false;
-    if (!(aud_gearchange = getSSAudio().loadSample("/sounds/gear.wav", false))) return false;
-    if (!(aud_gravel = getSSAudio().loadSample("/sounds/gravel.wav", false))) return false;
-    if (!(aud_crash1 = getSSAudio().loadSample("/sounds/bang.wav", false))) return false;
+    if (!(aud_engine = getSSAudio().loadSample("sounds/engine.wav", false))) return false;
+    if (!(aud_wind = getSSAudio().loadSample("sounds/wind.wav", false))) return false;
+    if (!(aud_gearchange = getSSAudio().loadSample("sounds/gear.wav", false))) return false;
+    if (!(aud_gravel = getSSAudio().loadSample("sounds/gravel.wav", false))) return false;
+    if (!(aud_crash1 = getSSAudio().loadSample("sounds/bang.wav", false))) return false;
   }
   
   if (!loadLevelsAndEvents()) {
@@ -1184,6 +1184,7 @@ void MainApp::joyButtonEvent(int which, int button, bool down)
   }
 }
 
+#ifndef WIN32
 
 int main(int argc, char *argv[])
 {
@@ -1196,5 +1197,26 @@ int main(int argc, char *argv[])
   return ret;
 }
 
+#else
 
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
+    UNREFERENCED_PARAMETER(hInstance);
+    UNREFERENCED_PARAMETER(hPrevInstance);
+    UNREFERENCED_PARAMETER(lpCmdLine);
+    UNREFERENCED_PARAMETER(nCmdShow);
+
+  MainApp *game = new MainApp("Trigger", ".trigger");
+
+  int ret = game->run(0, nullptr);
+
+  delete game;
+
+  return ret;
+}
+
+#endif
 
