@@ -12,11 +12,9 @@
 #include <windows.h>
 #endif
 
-
-
 #ifndef DATADIR
-#error DATADIR not defined! Use ./configure --datadir=...
-#define DATADIR ""
+//#error DATADIR not defined! Use ./configure --datadir=...
+#define DATADIR "."
 #endif
 
 #if 0
@@ -228,7 +226,7 @@ int PApp::run(int argc, char *argv[])
   
   try
   {
-    config ();
+    config();
   }
   catch (PException e)
   {
@@ -404,7 +402,7 @@ int PApp::run(int argc, char *argv[])
   }
   catch (PException e)
   {
-    PUtil::outLog () << "Subsystem failed to init: " << e.what () << std::endl;
+    PUtil::outLog () << "Subsystem failed to init: " << e.what() << std::endl;
     
     while (!sslist.empty())
     {
@@ -419,12 +417,12 @@ int PApp::run(int argc, char *argv[])
     }
     return 1;
   }
-  
+
   outLog() << "Performing app load" << std::endl;
   
   try
   {
-    load ();
+    load();
   }
   catch (PException e)
   {
