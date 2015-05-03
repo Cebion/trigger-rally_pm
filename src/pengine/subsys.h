@@ -49,13 +49,27 @@ protected:
   
 private:
   // init() is deprecated, should use RAII now
-  virtual bool init() { return true; }
+  virtual bool init()
+  {
+  	return true;
+  }
 
 public:
-  PSubsystem(PApp &parentApp) : app(parentApp) { }
-  virtual ~PSubsystem() { }
+  PSubsystem(PApp &parentApp) : app(parentApp)
+  {
+  }
+  
+  virtual ~PSubsystem()
+  {
+  }
+
   virtual void tick(float delta, const vec3f &eyepos, const mat44f &eyeori, const vec3f &eyevel)
-  { float blah = delta; blah = eyepos.x; blah = eyeori.row[0][0]; blah = eyevel.x; }
+  {
+  	(void)delta;
+  	(void)eyepos;
+  	(void)eyeori;
+  	(void)eyevel;
+  }
 };
 
 

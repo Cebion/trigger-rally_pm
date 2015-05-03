@@ -326,14 +326,14 @@ const char* TiXmlDocument::Parse( const char* p )
   if ( !p || !*p )
   {
     SetError( TIXML_ERROR_DOCUMENT_EMPTY );
-    return false;
+    return static_cast<const char *> (false);
   }
 
     p = SkipWhiteSpace( p );
   if ( !p )
   {
     SetError( TIXML_ERROR_DOCUMENT_EMPTY );
-    return false;
+    return static_cast<const char *> (false);
   }
 
   while ( p && *p )
@@ -541,7 +541,7 @@ const char* TiXmlElement::Parse( const char* p )
   if ( !p || !*p || *p != '<' )
   {
     if ( document ) document->SetError( TIXML_ERROR_PARSING_ELEMENT );
-    return false;
+    return static_cast<const char *> (false);
   }
 
   p = SkipWhiteSpace( p+1 );
@@ -551,7 +551,7 @@ const char* TiXmlElement::Parse( const char* p )
   if ( !p || !*p )
   {
     if ( document )  document->SetError( TIXML_ERROR_FAILED_TO_READ_ELEMENT_NAME );
-    return false;
+    return static_cast<const char *> (false);
   }
 
     TIXML_STRING endTag ("</");

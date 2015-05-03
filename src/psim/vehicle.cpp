@@ -588,7 +588,7 @@ void PVehicle::tick(float delta)
   PULLTOWARD(state.collective, ctrl.collective, type->ctrlrate.collective * delta);
   
   // prepare some useful data
-  vec3f pos = body->getPosition();
+  //vec3f pos = body->getPosition();
   vec3f linvel = body->getLinearVel();
   mat44f orimatt = body->getInverseOrientationMatrix();
   vec3f angvel = body->getAngularVel();
@@ -724,7 +724,7 @@ void PVehicle::tick(float delta)
   body->addLocForce(frc);
 
   vec3f forwarddir = makevec3f(body->getInverseOrientationMatrix().row[1]);
-  vec3f rightdir = makevec3f(body->getInverseOrientationMatrix().row[0]);
+  //vec3f rightdir = makevec3f(body->getInverseOrientationMatrix().row[0]);
   
   dsysi.tick(delta, state.throttle, wheel_angvel);
   

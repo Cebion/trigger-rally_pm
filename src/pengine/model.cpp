@@ -419,7 +419,8 @@ void PModel::loadASE (const std::string &filename, float globalScale)
                       strcpy(buff2,buff);
                       TOKENIZE_LINE_AND_CHECK
                       if (!strcmp(tok[0],"}")) break;
-                      if (sscanf(buff2," *MESH_VERTEX %i %f %f %f",&vnum,&vpos.x,&vpos.y,&vpos.z) == 4) {
+                      // TODO: check if intentional " *MESH_VERTEX %i %f %f %f"
+                      if (sscanf(buff2," *MESH_VERTEX %u %f %f %f",&vnum,&vpos.x,&vpos.y,&vpos.z) == 4) {
                         if (vnum < curmesh->vert.size())
                           curmesh->vert[vnum] = vpos * globalScale;
                       }
@@ -431,7 +432,8 @@ void PModel::loadASE (const std::string &filename, float globalScale)
                       strcpy(buff2,buff);
                       TOKENIZE_LINE_AND_CHECK
                       if (!strcmp(tok[0],"}")) break;
-                      if (sscanf(buff2," *MESH_TVERT %i %f %f",&vnum,&vco.x,&vco.y) == 3) {
+                      // TODO: check if intentional " *MESH_TVERT %i %f %f"
+                      if (sscanf(buff2," *MESH_TVERT %u %f %f",&vnum,&vco.x,&vco.y) == 3) {
                         if (vnum < curmesh->texco.size()) {
                           curmesh->texco[vnum] = vco;
                           //curmesh->texco[vnum].y *= -1.0;
@@ -445,7 +447,8 @@ void PModel::loadASE (const std::string &filename, float globalScale)
                       strcpy(buff2,buff);
                       TOKENIZE_LINE_AND_CHECK
                       if (!strcmp(tok[0],"}")) break;
-                      if (sscanf(buff2," *MESH_FACE %i: A: %i B: %i C: %i",&fnum,&fvt[0],&fvt[1],&fvt[2]) == 4) {
+                      // TODO: check if intentional " *MESH_FACE %i: A: %i B: %i C: %i"
+                      if (sscanf(buff2," *MESH_FACE %u: A: %i B: %i C: %i",&fnum,&fvt[0],&fvt[1],&fvt[2]) == 4) {
                         if (fnum < curmesh->face.size()) {
                           curmesh->face[fnum].vt[0] = fvt[0];
                           curmesh->face[fnum].vt[1] = fvt[1];
@@ -460,7 +463,8 @@ void PModel::loadASE (const std::string &filename, float globalScale)
                       strcpy(buff2,buff);
                       TOKENIZE_LINE_AND_CHECK
                       if (!strcmp(tok[0],"}")) break;
-                      if (sscanf(buff2," *MESH_TFACE %i %i %i %i",&fnum,&fvt[0],&fvt[1],&fvt[2]) == 4) {
+                      // TODO: check if intentional " *MESH_TFACE %i %i %i %i"
+                      if (sscanf(buff2," *MESH_TFACE %u %i %i %i",&fnum,&fvt[0],&fvt[1],&fvt[2]) == 4) {
                         if (fnum < curmesh->face.size()) {
                           curmesh->face[fnum].tc[0] = fvt[0];
                           curmesh->face[fnum].tc[1] = fvt[1];
@@ -475,7 +479,8 @@ void PModel::loadASE (const std::string &filename, float globalScale)
                       strcpy(buff2,buff);
                       TOKENIZE_LINE_AND_CHECK
                       if (!strcmp(tok[0],"}")) break;
-                      if (sscanf(buff2," *MESH_FACENORMAL %i %f %f %f",&fnum,&nrm.x,&nrm.y,&nrm.z) == 4) {
+                      // TODO: check if intentional " *MESH_FACENORMAL %i %f %f %f"
+                      if (sscanf(buff2," *MESH_FACENORMAL %u %f %f %f",&fnum,&nrm.x,&nrm.y,&nrm.z) == 4) {
                         if (fnum < curmesh->face.size()) {
                           curmesh->face[fnum].facenormal = DO_TM2(nrm);
                           curmesh->face[fnum].facenormal.normalize();
@@ -483,7 +488,8 @@ void PModel::loadASE (const std::string &filename, float globalScale)
                           curmesh->face[fnum].nr[1] = fnum*3+1;
                           curmesh->face[fnum].nr[2] = fnum*3+2;
                         }
-                      } else if (sscanf(buff2," *MESH_VERTEXNORMAL %i %f %f %f",&vnum,&nrm.x,&nrm.y,&nrm.z) == 4) {
+                        // TODO: check if intentional " *MESH_VERTEXNORMAL %i %f %f %f"
+                      } else if (sscanf(buff2," *MESH_VERTEXNORMAL %u %f %f %f",&vnum,&nrm.x,&nrm.y,&nrm.z) == 4) {
                         if (vnum == curmesh->face[fnum].vt[0]) {
                           curmesh->norm[fnum*3+0] = DO_TM2(nrm);
                           curmesh->norm[fnum*3+0].normalize();

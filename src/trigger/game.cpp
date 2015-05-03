@@ -213,9 +213,9 @@ bool TriggerGame::loadLevel(const std::string &filename)
 
 void TriggerGame::chooseVehicle(PVehicleType *type)
 {
-  vec3f pos = vec3f::zero();
+//  vec3f pos = vec3f::zero();
   
-  quatf ori = quatf::identity();
+//  quatf ori = quatf::identity();
   
   PVehicle *vh = sim->createVehicle(type, start_pos, start_ori, app->getSSModel());
   

@@ -22,7 +22,8 @@ PSSRender::~PSSRender()
 
 void PSSRender::tick(float delta, const vec3f &eyepos, const mat44f &eyeori, const vec3f &eyevel)
 {
-  float unused = delta; unused = eyevel.x;
+  (void)delta;
+  (void)eyevel;
   
   cam_pos = eyepos;
   cam_orimat = eyeori;
