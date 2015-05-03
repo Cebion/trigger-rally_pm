@@ -23,8 +23,8 @@
 
 // "SDL.h" is supposed to be the portable way, but it
 // doesn't seem to work in some circumstances...
-#include "SDL.h"
-//#include <SDL/SDL.h>
+//#include "SDL.h"
+#include <SDL/SDL.h>
 
 
 // The PhysicsFS game file system
