@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2004-2006 Jasmine Langridge, jas@jareiko.net
+// Copyright (C) 2004-2006 Jasmine Langridge, ja-reiko@users.sourceforge.net
 // Copyright (C) 2015 Andrei Bondor, ab396356@users.sourceforge.net
 //
 // This program is free software; you can redistribute it and/or
@@ -17,11 +17,6 @@
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 //
 
-// audio.cpp [pengine]
-
-// Copyright 2004-2006 Jasmine Langridge, jas@jareiko.net
-// License: GPL version 2 (see included gpl.txt)
-
 // Available:
 //
 //  USE_NULL
@@ -32,6 +27,7 @@
 // ... and they're all squashed into this one file!
 
 #include "../../config.h"
+#include "../unrefp.h"
 
 #ifdef UNIX
 //#define USE_NULL
@@ -67,8 +63,9 @@ PAudioSample *PSSAudio::loadSample(const std::string &name, bool positional3D)
         catch (PException e)
         {
             if (PUtil::isDebugLevel(DEBUGLEVEL_ENDUSER))
-                PUtil::outLog() << "Failed to load " << name << ": " << e.what () << std::endl;
-            return null;
+                PUtil::outLog() << "Failed to load " << name << ": " << e.what() << std::endl;
+
+            return nullptr;
         }
         samplist.add(samp);
     }
@@ -85,18 +82,8 @@ PSSAudio::PSSAudio(PApp &parentApp) : PSubsystem(parentApp)
 PSSAudio::~PSSAudio()
 {
     PUtil::outLog() << "Shutting down audio subsystem" << std::endl;
-
     samplist.clear();
 }
-
-/*
-PAudioSample *PSSAudio::loadSample(const std::string &name, bool positional3D)
-{
-  PAudioSample *samp = samplist.find(name);
-
-  return samp;
-}
-*/
 
 PAudioSample::PAudioSample(const std::string &filename, bool positional3D)
 {
@@ -162,27 +149,20 @@ bool PAudioInstance::isPlaying()
 //#include <AL/alu.h> // not available in newest OpenAL
 #include <AL/alut.h>
 
-
 PSSAudio::PSSAudio(PApp &parentApp) : PSubsystem(parentApp)
 {
     PUtil::outLog() << "Initialising audio subsystem [OpenAL]" << std::endl;
 
-    if (alutInit(0, null) != AL_TRUE)
-    {
-        throw MakePException("ALUT:alutInit() error: "
-                             +  alutGetErrorString(alutGetError()));
-    }
+    if (alutInit(0, nullptr) != AL_TRUE)
+        throw MakePException("ALUT:alutInit() error: " + alutGetErrorString(alutGetError()));
 }
 
 PSSAudio::~PSSAudio()
 {
     PUtil::outLog() << "Shutting down audio subsystem" << std::endl;
-
     samplist.clear();
-
     alutExit();
 }
-
 
 PAudioSample::PAudioSample(const std::string &filename, bool positional3D)
 {
@@ -306,7 +286,74 @@ bool PAudioInstance::isPlaying()
 
 namespace
 {
-FMOD_SYSTEM *fs = nullptr;
+
+FMOD_SYSTEM *fs;
+
+// callbacks to integrate PhysFS with FMOD
+FMOD_RESULT F_CALLBACK fmod_file_open(const char *name, unsigned int *filesize, void **handle, void *userdata);
+FMOD_RESULT F_CALLBACK fmod_file_close(void *handle, void *userdata);
+FMOD_RESULT F_CALLBACK fmod_file_read(void *handle, void *buffer, unsigned int sizebytes, unsigned int *bytesread, void *userdata);
+FMOD_RESULT F_CALLBACK fmod_file_seek(void *handle, unsigned int pos, void *userdata);
+
+FMOD_RESULT F_CALLBACK fmod_file_open(const char *name, unsigned int *filesize, void **handle, void *userdata)
+{
+    UNREFERENCED_PARAMETER(userdata);
+
+    if (PHYSFS_exists(name) == 0)
+    {
+        PUtil::outLog() << "PhysFS: file \"" << name << "\" was not found." << std::endl;
+        return FMOD_ERR_FILE_NOTFOUND;
+    }
+
+    *reinterpret_cast<PHYSFS_File **> (handle) = PHYSFS_openRead(name);
+
+    if (*handle == nullptr)
+    {
+        PUtil::outLog() << "PhysFS: " << PHYSFS_getLastError() << std::endl;
+        return FMOD_ERR_FILE_BAD;
+    }
+
+    *filesize = PHYSFS_fileLength(*reinterpret_cast<PHYSFS_File **> (handle));
+    return FMOD_OK;
+}
+
+FMOD_RESULT F_CALLBACK fmod_file_close(void *handle, void *userdata)
+{
+    UNREFERENCED_PARAMETER(userdata);
+
+    if (PHYSFS_close(reinterpret_cast<PHYSFS_File *> (handle)) == 0)
+        PUtil::outLog() << "PhysFS: could not close a file." << std::endl;
+
+    return FMOD_OK;
+}
+
+FMOD_RESULT F_CALLBACK fmod_file_read(void *handle, void *buffer, unsigned int sizebytes, unsigned int *bytesread, void *userdata)
+{
+    UNREFERENCED_PARAMETER(userdata);
+
+    if (PHYSFS_read(reinterpret_cast<PHYSFS_File *> (handle), buffer, sizebytes, 1) == -1)
+    {
+        PUtil::outLog() << "PhysFS: " << PHYSFS_getLastError() << std::endl;
+        return FMOD_ERR_FILE_ENDOFDATA;
+    }
+
+    *bytesread = sizebytes;
+    return FMOD_OK;
+}
+
+FMOD_RESULT F_CALLBACK fmod_file_seek(void *handle, unsigned int pos, void *userdata)
+{
+    UNREFERENCED_PARAMETER(userdata);
+
+    if (PHYSFS_seek(reinterpret_cast<PHYSFS_File *> (handle), pos) == 0)
+    {
+        PUtil::outLog() << "PhysFS: " << PHYSFS_getLastError() << std::endl;
+        return FMOD_ERR_FILE_COULDNOTSEEK;
+    }
+
+    return FMOD_OK;
+}
+
 }
 
 ///
@@ -324,6 +371,20 @@ PSSAudio::PSSAudio(PApp &parentApp):
         throw MakePException("FMOD initialisation failed: " + FMOD_ErrorString(fr));
 
     fr = FMOD_System_Init(fs, 512, FMOD_INIT_NORMAL, nullptr);
+
+    if (fr != FMOD_OK)
+        throw MakePException("FMOD initialisation failed: " + FMOD_ErrorString(fr));
+
+    fr = FMOD_System_SetFileSystem(
+        fs,
+        fmod_file_open,
+        fmod_file_close,
+        fmod_file_read,
+        fmod_file_seek,
+        nullptr,
+        nullptr,
+        -1
+        );
 
     if (fr != FMOD_OK)
         throw MakePException("FMOD initialisation failed: " + FMOD_ErrorString(fr));
@@ -353,7 +414,7 @@ PAudioSample::PAudioSample(const std::string &filename, bool positional3D):
     name = filename;
 
     FMOD_RESULT fr = FMOD_System_CreateSound(fs, filename.c_str(),
-        FMOD_UNIQUE | (positional3D ? FMOD_3D : FMOD_2D), nullptr, &buffer);
+                     FMOD_UNIQUE | (positional3D ? FMOD_3D : FMOD_2D), nullptr, &buffer);
 
     if (fr != FMOD_OK)
         throw MakePException("Sample load failed: " + FMOD_ErrorString(fr));
@@ -394,8 +455,8 @@ PAudioInstance::~PAudioInstance()
 void PAudioInstance::update(const vec3f &pos, const vec3f &vel)
 {
     // TODO
-    (void)pos;
-    (void)vel;
+    UNREFERENCED_PARAMETER(pos);
+    UNREFERENCED_PARAMETER(vel);
 }
 
 ///
@@ -412,7 +473,7 @@ void PAudioInstance::setGain(float gain)
 void PAudioInstance::setHalfDistance(float lambda)
 {
     // TODO
-    (void)lambda;
+    UNREFERENCED_PARAMETER(lambda);
 }
 
 ///
