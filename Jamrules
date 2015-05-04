@@ -17,7 +17,7 @@ if ! $(JAMCONFIG_READ)
 LINK = $(CXX) ;
 
 # do some compiler settings for the different compilation modes
-COMPILER_CFLAGS += -Wall ;
+COMPILER_CFLAGS += -Wall -Wextra -pedantic -std=c++11 ;
 COMPILER_CFLAGS_optimize += -O3 ;
 COMPILER_LFLAGS_optimize += -O3 ;
 COMPILER_CFLAGS_debug += -W -DDEBUG -g3 ;
