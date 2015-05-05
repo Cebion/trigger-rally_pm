@@ -313,7 +313,7 @@ FMOD_RESULT F_CALLBACK fmod_file_open(const char *name, unsigned int *filesize, 
         return FMOD_ERR_FILE_BAD;
     }
 
-    *filesize = PHYSFS_fileLength(*reinterpret_cast<PHYSFS_File **> (handle));
+    *filesize = PHYSFS_fileLength(reinterpret_cast<PHYSFS_File *> (*handle));
     return FMOD_OK;
 }
 
