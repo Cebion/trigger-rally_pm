@@ -305,7 +305,7 @@ FMOD_RESULT F_CALLBACK fmod_file_open(const char *name, unsigned int *filesize, 
         return FMOD_ERR_FILE_NOTFOUND;
     }
 
-    *reinterpret_cast<PHYSFS_File **> (handle) = PHYSFS_openRead(name);
+    *handle = PHYSFS_openRead(name);
 
     if (*handle == nullptr)
     {
