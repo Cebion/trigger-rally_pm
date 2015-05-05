@@ -224,6 +224,11 @@ http://sourceforge.net/projects/trigger-rally/support
 // Version history //
 /////////////////////
 
+05/05/2015 - Trigger 0.6.2
+  - Fix several Windows bugs and compilation issues
+  - Fix compilation warnings
+  - Windows binaries
+
 25/10/2014 - Trigger 0.6.1
   - Add support for .obj textures
   - Include new .obj textures (disabled by default)
@@ -333,6 +338,7 @@ support             Bernhard Kaindl
                     Stefan Potyra
                     Liviu Andronic
                     Ishmael Turner
+                    Andrei Bondor
 
 New levels          Tim Wintle
                     David Pagnier
