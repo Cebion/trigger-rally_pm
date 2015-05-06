@@ -14,7 +14,7 @@
 
 #ifndef DATADIR
 //#error DATADIR not defined! Use ./configure --datadir=...
-#define DATADIR ""
+#define DATADIR "."
 #endif
 
 #if 0
