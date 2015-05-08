@@ -84,6 +84,10 @@ class   PParseException;
 #define DEBUGLEVEL_TEST         20
 #define DEBUGLEVEL_DEVELOPER    30
 
+/// Enables an MS-style macro for use with unused function parameters.
+#ifndef UNREFERENCED_PARAMETER
+#define UNREFERENCED_PARAMETER(p)   static_cast<void> (p)
+#endif
 
 class PUtil {
 private:
