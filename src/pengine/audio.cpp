@@ -27,7 +27,6 @@
 // ... and they're all squashed into this one file!
 
 #include "../../config.h"
-#include "../unrefp.h"
 
 #ifdef UNIX
 //#define USE_NULL
@@ -376,15 +375,15 @@ PSSAudio::PSSAudio(PApp &parentApp):
         throw MakePException("FMOD initialisation failed: " + FMOD_ErrorString(fr));
 
     fr = FMOD_System_SetFileSystem(
-        fs,
-        fmod_file_open,
-        fmod_file_close,
-        fmod_file_read,
-        fmod_file_seek,
-        nullptr,
-        nullptr,
-        -1
-        );
+             fs,
+             fmod_file_open,
+             fmod_file_close,
+             fmod_file_read,
+             fmod_file_seek,
+             nullptr,
+             nullptr,
+             -1
+         );
 
     if (fr != FMOD_OK)
         throw MakePException("FMOD initialisation failed: " + FMOD_ErrorString(fr));
