@@ -4,9 +4,6 @@ Author and licence info for files under data/ directory.
 GPL = GNU General Public License v2 or later ( http://www.gnu.org/licenses/gpl.txt )
 CC0 (PD) = Creative Commons Zero 1.0 Universal Public Domain Dedication ( http://creativecommons.org/publicdomain/zero/1.0/ )
 
-Files marked "***" are of uncertain copyright and/or trademark status, and
-should be replaced.
-
 
 Richard Langridge / GPL
   data/events/triggercup/bigjump/colormap.jpg
@@ -106,20 +103,17 @@ Richard Langridge / GPL
   data/vehicles/evo/evo.ase
   data/vehicles/evo/evo.vehicle
   data/vehicles/evo/evo_complete.fx
-  data/vehicles/evo/evo_complete.jpg ***
   data/vehicles/evo/evo_wheel.ase
   data/vehicles/evo/glass.fx
   data/vehicles/evo/glass.png
   data/vehicles/focus/focus.ase
   data/vehicles/focus/focus.vehicle
   data/vehicles/focus/focus_complete.fx
-  data/vehicles/focus/focus_complete.jpg ***
   data/vehicles/focus/focus_wheel.ase
   data/vehicles/seat/seat.ase
   data/vehicles/seat/seat.vehicle
   data/vehicles/seat/seat.vehicle.contrib
   data/vehicles/seat/seat_complete.fx
-  data/vehicles/seat/seat_complete.jpg ***
   data/vehicles/seat/seat_wheel.ase
 
 Iwan 'qubodup' Gabovitch / CC0 (PD)
