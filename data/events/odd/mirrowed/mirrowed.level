@@ -1,0 +1,57 @@
+<?xml version="1.0" ?>
+<level 
+	name="Mirrowed"
+	comment="Dizzyness is no excuse."
+	author="Onsemeliot"
+	randomseed="1000">
+
+	<terrain
+		heightmap="h.png"
+		colormap="c.png"
+		foliagemap="f.png"
+		hudmap="m.png"
+		tilesize="64"
+		horizontalscale="5"
+		verticalscale="0.3"
+		>
+
+		<foliageband
+			middle="0.5"
+			range="0.45"
+			density="0.0003"
+			sprite="/textures/veg/bush-dry.png"
+			spritecount="2"
+			/>
+
+		<foliageband
+			middle="0.55"
+			range="0.45"
+			density="0.0006"
+			sprite="/textures/veg/grass.png"
+			spritecount="1"
+			/>
+	</terrain>
+
+	<weather
+		cloudtexture="/textures/sky/overcast-blue.jpg"
+		cloudscrollrate="0.01"
+		fogcolor="0.3, 0.25, 0.2"
+		fogdensity="0.005"
+		fogdensitysky="1.2"
+		/>
+
+	<vehicleoption type="/vehicles/seat/seat.vehicle" />
+	<vehicleoption type="/vehicles/focus/focus.vehicle" />
+	<vehicleoption type="/vehicles/evo/evo.vehicle" />
+
+	<race coordscale="5, 5" targettime="290">
+		<startposition pos="489, 672" oridegrees="165" />
+		<checkpoint coords="233, 535" />
+		<checkpoint coords="154, 441" />
+		<checkpoint coords="68, 344" />
+		<checkpoint coords="17, 334" />
+		<checkpoint coords="79, 248" />
+		<checkpoint coords="145, 139" />
+		<checkpoint coords="489, 160" />
+	</race>
+</level>

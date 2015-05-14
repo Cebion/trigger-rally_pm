@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<event name="Coy Goblet" author="Onsemeliot">
+
+	<level file="grasshopper/grasshopper.level" />
+	<level file="cut/cut.level" />
+	<level file="crusted/crusted.level" />
+	<level file="undergrowth/undergrowth.level" />
+	<level file="borderline/borderline.level" />
+	
+</event>

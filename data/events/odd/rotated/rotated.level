@@ -1,0 +1,58 @@
+<?xml version="1.0" ?>
+<level 
+	name="Rotated"
+	comment="Doesn't this look famillar?"
+	author="Onsemeliot"
+	randomseed="1000">
+
+	<terrain
+		heightmap="h.png"
+		colormap="c.png"
+		foliagemap="f.png"
+		hudmap="m.png"
+		tilesize="64"
+		horizontalscale="5"
+		verticalscale="0.15"
+		>
+
+		<foliageband
+			middle="0.55"
+			range="0.52"
+			density="0.0003"
+			sprite="/textures/veg/grass-sprite.png"
+			spritecount="1"
+			/>
+
+		<foliageband
+			middle="0.75"
+			range="0.3"
+			density="0.0001"
+			sprite="/textures/veg/bush-dry.png"
+			spritecount="1"
+			/>
+	</terrain>
+
+	<weather
+		cloudtexture="/textures/sky/dawn.jpg"
+		cloudscrollrate="0"
+		fogcolor="0.33, 0.2, 0.05"
+		fogdensity="0.009"
+		fogdensitysky="0.5"
+		/>
+
+	<vehicleoption type="/vehicles/seat/seat.vehicle" />
+	<vehicleoption type="/vehicles/focus/focus.vehicle" />
+	<vehicleoption type="/vehicles/evo/evo.vehicle" />
+
+	<race coordscale="5, 5" targettime="275">
+		<startposition pos="438, 698" oridegrees="140" />
+		<checkpoint coords="156, 677" />
+		<checkpoint coords="225, 783" />
+		<checkpoint coords="488, 675" />
+		<checkpoint coords="232, 536" />
+		<checkpoint coords="154, 439" />
+		<checkpoint coords="117, 324" />
+		<checkpoint coords="80, 250" />
+		<checkpoint coords="123, 131" />
+	</race>
+</level>

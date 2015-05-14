@@ -1,0 +1,91 @@
+<?xml version="1.0" ?>
+<level 
+	name="Cut"
+	comment="Some jumps are traps."
+	author="Onsemeliot"
+	randomseed="1000">
+	
+	<terrain
+		heightmap="h.png"
+		colormap="c.png"
+		foliagemap="f.png"
+		hudmap="c.png"
+		tilesize="64"
+		horizontalscale="2.5"
+		verticalscale="0.12"
+		>
+		
+		<foliageband
+			middle="0.7"
+			range="0.25"
+			density="0.0001"
+			sprite="/textures/veg/bush.png"
+			spritecount="2"
+			/>
+		<foliageband
+			middle="0.8"
+			range="0.2"
+			density="0.0002"
+			sprite="/textures/veg/bush-dry.png"
+			spritecount="2"
+			/>
+		<foliageband
+			middle="0.5"
+			range="0.42"
+			density="0.001"
+			sprite="/textures/veg/grass.png"
+			spritecount="1"
+			/>
+		<foliageband
+			middle="0.8"
+			range="0.2"
+			density="0.0003"
+			sprite="/textures/veg/grain.png"
+			spritecount="2"
+			/>
+	</terrain>
+	
+	<weather
+		cloudtexture="/textures/sky/dark-blue.png"
+		cloudscrollrate="0.002"
+		fogcolor="0.4, 0.4, 0.45"
+		fogdensity="0.001"
+		fogdensitysky="0.9"
+		/>
+	
+	<vehicleoption type="/vehicles/seat/seat.vehicle" />
+	<vehicleoption type="/vehicles/focus/focus.vehicle" />
+	<vehicleoption type="/vehicles/evo/evo.vehicle" />
+	
+	<race coordscale="2.5, 2.5" targettime="300">
+		
+		<startposition pos="49, 447" oridegrees="190" />
+		<checkpoint coords="72, 372" />
+		<checkpoint coords="32, 205" />
+		<checkpoint coords="88, 19" />
+		<checkpoint coords="246, 43" />
+		<checkpoint coords="426, 167" />
+		<checkpoint coords="360, 27" />
+		<checkpoint coords="482, 44" />
+		<checkpoint coords="461, 201" />
+		<checkpoint coords="496, 279" />
+		<checkpoint coords="465, 406" />
+		<checkpoint coords="472, 482" />
+		<checkpoint coords="388, 442" />
+		<checkpoint coords="280, 433" />
+		<checkpoint coords="308, 329" />
+		<checkpoint coords="419, 352" />
+		<checkpoint coords="258, 183" />
+		<checkpoint coords="250, 276" />
+		<checkpoint coords="173, 235" />
+		<checkpoint coords="195, 124" />
+		<checkpoint coords="105, 93" />
+		<checkpoint coords="81, 155" />
+		<checkpoint coords="107, 322" />
+		<checkpoint coords="188, 387" />
+		<checkpoint coords="218, 457" />
+		<checkpoint coords="127, 462" />
+		<checkpoint coords="49, 474" />
+	</race>
+	
+</level>

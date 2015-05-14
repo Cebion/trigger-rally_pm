@@ -1,0 +1,74 @@
+<?xml version="1.0" ?>
+<level 
+	name="Undergrowth"
+	comment="Find your way through!"
+	author="Onsemeliot"
+	randomseed="1000">
+	
+	<terrain
+		heightmap="h.png"
+		colormap="c.png"
+		foliagemap="f.png"
+		hudmap="m.png"
+		tilesize="64"
+		horizontalscale="3"
+		verticalscale="0.2"
+		>
+		
+		<foliageband
+			middle="0.7"
+			range="0.25"
+			density="0.0003"
+			sprite="/textures/veg/bush.png"
+			spritecount="2"
+			/>
+		<foliageband
+			middle="0.8"
+			range="0.2"
+			density="0.0003"
+			sprite="/textures/veg/palmy.png"
+			spritecount="2"
+			/>
+		<foliageband
+			middle="0.55"
+			range="0.4"
+			density="0.001"
+			sprite="/textures/veg/grass.png"
+			spritecount="1"
+			/>
+		<foliageband
+			middle="0.8"
+			range="0.2"
+			density="0.0003"
+			sprite="/textures/veg/ivy.png"
+			spritecount="2"
+			/>
+	</terrain>
+	
+	<weather
+		cloudtexture="/textures/sky/overcast-blue.jpg"
+		cloudscrollrate="0.025"
+		rain="50"
+		fogcolor="0.2, 0.2, 0.25"
+		fogdensity="0.008"
+		fogdensitysky="0.6"
+		/>
+	
+	<vehicleoption type="/vehicles/focus/focus.vehicle" />
+	<vehicleoption type="/vehicles/evo/evo.vehicle" />
+	<vehicleoption type="/vehicles/seat/seat.vehicle" />
+	
+	<race coordscale="3, 3" targettime="290">
+		
+		<startposition pos="-153, 954" oridegrees="270" />
+		<checkpoint coords="-16, 891" />
+		<checkpoint coords="74, 803" />
+		<checkpoint coords="332, 548" />
+		<checkpoint coords="308, 470" />
+		<checkpoint coords="29, 272" />
+		<checkpoint coords="349, 59" />
+		<checkpoint coords="471, 407" />
+		<checkpoint coords="359, 442" />
+	</race>
+	
+</level>

@@ -1,0 +1,86 @@
+<?xml version="1.0" ?>
+<level 
+	name="Borderline"
+	comment="More than rocky. Isn't it?"
+	author="Onsemeliot"
+	randomseed="1000">
+	
+	<terrain
+		heightmap="h.png"
+		colormap="c.png"
+		foliagemap="f.png"
+		hudmap="m.png"
+		tilesize="64"
+		horizontalscale="3"
+		verticalscale="0.25"
+		>
+		
+		<foliageband
+			middle="0.8"
+			range="0.10"
+			density="0.00015"
+			sprite="/textures/veg/bush.png"
+			spritecount="2"
+			/>
+		<foliageband
+			middle="0.8"
+			range="0.15"
+			density="0.0002"
+			sprite="/textures/veg/bush-dry.png"
+			spritecount="2"
+			/>
+		<foliageband
+			middle="0.5"
+			range="0.3"
+			density="0.0005"
+			sprite="/textures/veg/grass.png"
+			spritecount="1"
+			/>
+		<foliageband
+			middle="0.45"
+			range="0.1"
+			density="0.0002"
+			sprite="/textures/veg/grain.png"
+			spritecount="2"
+			/>
+	</terrain>
+	
+	<weather
+		cloudtexture="/textures/sky/overcast-blue.jpg"
+		cloudscrollrate="0.001"
+		fogcolor="0.15, 0.15, 0.22"
+		fogdensity="0.009"
+		fogdensitysky="0.8"
+		/>
+	
+	<vehicleoption type="/vehicles/seat/seat.vehicle" />
+	<vehicleoption type="/vehicles/focus/focus.vehicle" />
+	<vehicleoption type="/vehicles/evo/evo.vehicle" />
+	
+	<race coordscale="3, 3" targettime="720">
+		
+		<startposition pos="565, 195" oridegrees="170" />
+		<checkpoint coords="562, 138" />
+		<checkpoint coords="818, 149" />
+		<checkpoint coords="555, 214" />
+		<checkpoint coords="554, 270" />
+		<checkpoint coords="534, 313" />
+		<checkpoint coords="483, 334" />
+		<checkpoint coords="378, 283" />
+		<checkpoint coords="355, 288" />
+		<checkpoint coords="209, 318" />
+		<checkpoint coords="42, 270" />
+		<checkpoint coords="57, 243" />
+		<checkpoint coords="162, 226" />
+		<checkpoint coords="378, 283" />
+		<checkpoint coords="374, 314" />
+		<checkpoint coords="487, 424" />
+		<checkpoint coords="77, 392" />
+		<checkpoint coords="145, 461" />
+		<checkpoint coords="456, 656" />
+		<checkpoint coords="417, 712" />
+		<checkpoint coords="490, 662" />
+		<checkpoint coords="539, 670" />
+	</race>
+	
+</level>

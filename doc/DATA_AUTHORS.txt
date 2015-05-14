@@ -138,10 +138,10 @@ Iwan 'qubodup' Gabovitch / GPL
   data/maps/eversnake/eversnake-h.png
   data/maps/eversnake/eversnake-f.jpg
   data/maps/eversnake/eversnake.level
-  labrally/labrally.level
-  labrally/labrally-f.png
-  labrally/labrally-h.png
-  labrally/labrally-c.png
+  data/maps/labrally/labrally.level
+  data/maps/labrally/labrally-f.png
+  data/maps/labrally/labrally-h.png
+  data/maps/labrally/labrally-c.png
   data/maps/smallswirl/smallswirl-c.jpg
   data/maps/smallswirl/smallswirl-h.jpg
   data/maps/smallswirl/smallswirl-f.jpg
@@ -151,73 +151,32 @@ Iwan 'qubodup' Gabovitch / GPL
 
 Onsemeliot <onsemeliot@riseup.net> / GPL
   data/icon/*
-  data/maps/ancient/h.png
-  data/maps/ancient/m.png
-  data/maps/ancient/f.png
-  data/maps/ancient/c.png
-  data/maps/ancient/ancient.level
-  data/maps/dry/dry.level
-  data/maps/dry/h.png
-  data/maps/dry/f.png
-  data/maps/dry/c.png
-  data/maps/highland/
-  data/maps/highland/highland.level
-  data/maps/highland/h.png
-  data/maps/highland/f.png
-  data/maps/highland/c.png
-  data/maps/remote/remote.level
-  data/maps/remote/h.png
-  data/maps/remote/f.png
-  data/maps/remote/c.png
-  data/maps/stoned/h.png
-  data/maps/stoned/stoned.level
-  data/maps/stoned/f.png
-  data/maps/stoned/c.png
+  data/maps/ancient/*
+  data/maps/blunt/*
+  data/maps/coffee/*
   data/maps/country/*
+  data/maps/dry/*
   data/maps/edge/*
   data/maps/greenland/*
+  data/maps/highland/*
   data/maps/jumpy/*
+  data/maps/kraut/*
   data/maps/littleisland/*
   data/maps/mud/*
+  data/maps/northern/*
   data/maps/pathfinder/*
   data/maps/remote/*
+  data/maps/remote/*
+  data/maps/stoned/*
   data/maps/tropic/*
-  data/events/alps/green/foliagemap.png
-  data/events/alps/green/colormap.jpg
-  data/events/alps/green/green.level
-  data/events/alps/green/heightmap.png
-  data/events/alps/dawn/morning.jpg
-  data/events/alps/dawn/dawn.level
-  data/events/alps/dawn/foliagemap.png
-  data/events/alps/dawn/colormap.jpg
-  data/events/alps/dawn/heightmap.png
-  data/events/alps/dawn/hud.png
-  data/events/alps/maze/maze.level
-  data/events/alps/maze/foliagemap.png
-  data/events/alps/maze/darkblue.jpg
-  data/events/alps/maze/colormap.jpg
-  data/events/alps/maze/heightmap.png
-  data/events/alps/maze/hud.png
-  data/events/alps/lake/lake.level
-  data/events/alps/lake/foliagemap.png
-  data/events/alps/lake/colormap.jpg
-  data/events/alps/lake/heightmap.png
-  data/events/alps/rocky/foliagemap.png
-  data/events/alps/rocky/rocky.level
-  data/events/alps/rocky/colormap.jpg
-  data/events/alps/rocky/heightmapx.png
-  data/events/alps/rocky/heightmap.png
-  data/events/alps/alps.event
-  data/events/alps/forest/forest.level
-  data/events/alps/forest/foliagemap.png
-  data/events/alps/forest/colormap.jpg
-  data/events/alps/forest/heightmap.png
-  data/events/alps/mountain/foliagemap.png
-  data/events/alps/mountain/colormap.jpg
-  data/events/alps/mountain/mountain.level
-  data/events/alps/mountain/heightmap.png
-  data/events/marathon/*
+  data/maps/vital/*
+  data/maps/yearzero/*
+  data/maps/zone/*
+  data/events/alps/*
   data/events/chasingshadows/*
+  data/events/coy/*
+  data/events/marathon/*
+  data/events/odd/*
   data/events/picturesque/*
   data/textures/sky/overcast-blue
   data/textures/sky/dawn.jpg

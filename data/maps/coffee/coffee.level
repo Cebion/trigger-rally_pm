@@ -1,0 +1,83 @@
+<?xml version="1.0" ?>
+<level 
+	name="Coffee Break"
+	comment="Swallow the Dust!"
+	author="Onsemeliot"
+	randomseed="1000">
+	
+	<terrain
+		heightmap="h.png"
+		colormap="c.jpg"
+		foliagemap="f.png"
+		hudmap="m.jpg"
+		tilesize="32"
+		horizontalscale="4.4"
+		verticalscale="0.15"
+		>
+		
+		<foliageband
+			middle="0.3"
+			range="0.3"
+			density="0.000003"
+			sprite="/textures/veg/cactus1.png"
+			spritecount="2"
+			/>
+		
+		<foliageband
+			middle="0.5"
+			range="0.4"
+			density="0.00001"
+			sprite="/textures/veg/bush-dry.png"
+			spritecount="2"
+			/>
+		
+		
+	</terrain>
+	
+	<weather
+		cloudtexture="/textures/sky/blue.jpg"
+		cloudscrollrate="0.003"
+		fogcolor="0.5, 0.55, 0.4"
+		fogdensity="0.007"
+		fogdensitysky="0.8"
+		/>
+	
+	<vehicleoption type="/vehicles/seat/seat.vehicle" />
+	<vehicleoption type="/vehicles/focus/focus.vehicle" />
+	<vehicleoption type="/vehicles/evo/evo.vehicle" />
+	
+	<race coordscale="2.2, 2.2" targettime="460">
+		
+		<startposition pos="903, 1002" oridegrees="190" />
+		<checkpoint coords="920, 956" />
+		<checkpoint coords="837, 852" />
+		<checkpoint coords="814, 689" />
+		<checkpoint coords="843, 581" />
+		<checkpoint coords="751, 493" />
+		<checkpoint coords="802, 242" />
+		<checkpoint coords="606, 430" />
+		<checkpoint coords="443, 179" />
+		<checkpoint coords="367, 265" />
+		<checkpoint coords="292, 206" />
+		<checkpoint coords="208, 317" />
+		<checkpoint coords="111, 195" />
+		<checkpoint coords="116, 402" />
+		<checkpoint coords="312, 351" />
+		<checkpoint coords="567, 498" />
+		<checkpoint coords="705, 633" />
+		<checkpoint coords="240, 475" />
+		<checkpoint coords="570, 655" />
+		<checkpoint coords="723, 827" />
+		<checkpoint coords="617, 977" />
+		<checkpoint coords="552, 723" />
+		<checkpoint coords="97, 574" />
+		<checkpoint coords="529, 810" />
+		<checkpoint coords="463, 958" />
+		<checkpoint coords="436, 859" />
+		<checkpoint coords="283, 952" />
+		<checkpoint coords="298, 855" />
+		<checkpoint coords="45, 1000" />
+		
+	</race>
+	
+</level>

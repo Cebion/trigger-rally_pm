@@ -1,0 +1,58 @@
+<?xml version="1.0" ?>
+<level 
+	name="Elevated"
+	comment="Differences are relative!"
+	author="Onsemeliot"
+	randomseed="1000">
+
+	<terrain
+		heightmap="h.png"
+		colormap="c.png"
+		foliagemap="f.png"
+		hudmap="m.png"
+		tilesize="64"
+		horizontalscale="3"
+		verticalscale="0.25"
+		>
+
+		<foliageband
+			middle="0.7"
+			range="0.3"
+			density="0.0004"
+			sprite="/textures/veg/bush.png"
+			spritecount="2"
+			/>
+
+		<foliageband
+			middle="0.55"
+			range="0.45"
+			density="0.0007"
+			sprite="/textures/veg/grass.png"
+			spritecount="1"
+			/>
+	</terrain>
+
+	<weather
+		cloudtexture="/textures/sky/overcast-blue.jpg"
+		cloudscrollrate="0"
+		fogcolor="0.1, 0.1, 0.2"
+		fogdensity="0.006"
+		fogdensitysky="0.3"
+		/>
+
+	<vehicleoption type="/vehicles/evo/evo.vehicle" />
+	<vehicleoption type="/vehicles/seat/seat.vehicle" />
+	<vehicleoption type="/vehicles/focus/focus.vehicle" />
+
+	<race coordscale="3, 3" targettime="285">
+		<startposition pos="421, 114" oridegrees="100" />
+		<checkpoint coords="254, 45" />
+		<checkpoint coords="472, 134" />
+		<checkpoint coords="127, 134" />
+		<checkpoint coords="86, 284" />
+		<checkpoint coords="21, 385" />
+		<checkpoint coords="176, 455" />
+		<checkpoint coords="243, 582" />
+		<checkpoint coords="421, 626" />
+	</race>
+</level>

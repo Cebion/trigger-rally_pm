@@ -1,0 +1,48 @@
+<?xml version="1.0" ?>
+<level 
+	name="Crusted Snow"
+	comment="Don't skid!"
+	author="Onsemeliot"
+	randomseed="1000">
+	
+	<terrain
+		heightmap="h.png"
+		colormap="c.png"
+		hudmap="m.png"
+		tilesize="64"
+		horizontalscale="5"
+		verticalscale="0.3"
+		>
+	</terrain>
+	
+	<weather
+		cloudtexture="/textures/sky/dark-blue.png"
+		cloudscrollrate="0"
+		fogcolor="0.9, 0.9, 0.93"
+		fogdensity="0.008"
+		fogdensitysky="1"
+		/>
+	
+	<vehicleoption type="/vehicles/focus/focus.vehicle" />
+	<vehicleoption type="/vehicles/evo/evo.vehicle" />
+	<vehicleoption type="/vehicles/seat/seat.vehicle" />
+	
+	<race coordscale="5, 5" targettime="405">
+		
+		<startposition pos="268, 412" oridegrees="187" />
+		<checkpoint coords="191, 297" />
+		<checkpoint coords="163, 393" />
+		<checkpoint coords="114, 488" />
+		<checkpoint coords="73, 394" />
+		<checkpoint coords="80, 70" />
+		<checkpoint coords="227, 128" />
+		<checkpoint coords="227, 53" />
+		<checkpoint coords="390, 156" />
+		<checkpoint coords="356, 429" />
+		<checkpoint coords="282, 489" />
+		<checkpoint coords="244, 441" />
+		<checkpoint coords="186, 461" />
+		<checkpoint coords="203, 400" />
+	</race>
+	
+</level>
