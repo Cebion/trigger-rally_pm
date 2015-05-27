@@ -16,8 +16,23 @@ void MainApp::config()
   PUtil::setDebugLevel(DEBUGLEVEL_DEVELOPER);
   
   loadConfig();
-  
   setScreenMode(cfg_video_cx, cfg_video_cy, cfg_video_fullscreen);
+  calcScreenRatios();
+  
+  if (cfg_datadirs.empty())
+    throw MakePException("Data directory paths are empty: check your trigger-rally.config file.");
+
+  for (const std::string &datadir: cfg_datadirs)
+    if (PHYSFS_addToSearchPath(datadir.c_str(), 1) == 0)
+    {
+      outLog() << "Failed to add PhysFS search directory \"" << datadir << "\"" << std::endl
+          << "PhysFS: " << PHYSFS_getLastError() << std::endl;
+    }
+    else
+    {
+        outLog() << "Main game data directory datadir=\"" << datadir << "\"" << std::endl;
+        break;
+    }
 }
 
 void MainApp::load()
@@ -33,7 +48,8 @@ void MainApp::load()
   //std::string buff = boost::str(boost::format("textures/splash/splash%u.jpg") % ((rand() % 3) + 1));
   //if (!(tex_splash_screen = getSSTexture().loadTexture(buff))) return false;
   
-  if (!(tex_splash_screen = getSSTexture().loadTexture("textures/splash/splash.jpg"))) throw MakePException ("Failed to load splash screen");
+  if (!(tex_splash_screen = getSSTexture().loadTexture("textures/splash/splash.jpg")))
+    throw MakePException ("Failed to load splash screen");
   
   appstate = AS_LOAD_1;
   
@@ -82,7 +98,8 @@ void MainApp::loadConfig()
   cfg_enable_sound = true;
   cfg_speed_unit = mph;
   cfg_speed_style = analogue;
-  
+  cfg_datadirs.clear();
+
   hud_speedo_start_deg = MPH_ZERO_DEG;
   hud_speedo_mps_deg_mult = MPS_MPH_DEG_MULT;
   hud_speedo_mps_speed_mult = MPS_MPH_SPEED_MULT;
@@ -105,13 +122,13 @@ void MainApp::loadConfig()
   
   // Do config file management
   
-  std::string cfgfilename = "trigger.config";
+  std::string cfgfilename = "trigger-rally.config";
   
   if (!PHYSFS_exists(cfgfilename.c_str())) {
     
     PUtil::outLog() << "No user config file, copying over defaults" << std::endl;
     
-    std::string cfgdefaults = "trigger.config.defs";
+    std::string cfgdefaults = "trigger-rally.config.defs";
     
     if (!PUtil::copyFile(cfgdefaults, cfgfilename)) {
     
@@ -211,8 +228,15 @@ void MainApp::loadConfig()
       if (val) {
         setStereoEyeSeperation(atof(val) * sepMult);
       }
-      
-    } else if (!strcmp(walk->Value(), "parameters")) {
+    }
+    else
+    if (!strcmp(walk->Value(), "datadirectory"))
+    {
+        for (TiXmlElement *walk2 = walk->FirstChildElement(); walk2; walk2 = walk2->NextSiblingElement())
+            if (!strcmp(walk2->Value(), "data"))
+                cfg_datadirs.push_back(walk2->Attribute("path"));
+    }
+    else if (!strcmp(walk->Value(), "parameters")) {
       
       val = walk->Attribute("drivingassist");
       if (val) cfg_drivingassist = atof(val);
@@ -240,16 +264,6 @@ void MainApp::loadConfig()
            hud_speedo_mps_speed_mult = MPS_KPH_SPEED_MULT;
          }
       }
-      val = walk->Attribute("speedstyle");
-      if (val) {
-        if (!strcmp(val, "analogue")) {
-          cfg_speed_style = analogue;
-        }
-        else if (!strcmp(val, "hybrid")) {
-          cfg_speed_style = hybrid;
-        }
-      }
-
     } else if (!strcmp(walk->Value(), "controls")) {
       
       for (TiXmlElement *walk2 = walk->FirstChildElement();
@@ -494,9 +508,18 @@ bool MainApp::loadLevelsAndEvents()
   return true;
 }
 
+//
+// TODO: should also load all vehicles here, then if needed filter which
+//  of them should be made available to the player -- it makes no sense
+//  to reload vehicles for each race, over and over again
+//
 bool MainApp::loadAll()
 {
-  if (!(tex_font = getSSTexture().loadTexture("/textures/consolefont.png"))) return false;
+  if (!(tex_fontDsmNormal = getSSTexture().loadTexture("/textures/fontDsmNormal.png")))
+    return false;
+
+  if (!(tex_fontDsmOutlined = getSSTexture().loadTexture("/textures/fontDsmOutlined.png")))
+    return false;
   
   if (!(tex_end_screen = getSSTexture().loadTexture("/textures/splash/endgame.jpg"))) return false;
   
@@ -506,22 +529,10 @@ bool MainApp::loadAll()
   if (!(tex_dirt = getSSTexture().loadTexture("/textures/dust.png"))) return false;
   if (!(tex_shadow = getSSTexture().loadTexture("/textures/shadow.png", true, true))) return false;
   
-  if (!(tex_hud_revs = getSSTexture().loadTexture("/textures/dial_rev.png"))) return false;
-  if (cfg_speed_unit == mph) {
-    if (cfg_speed_style) {
-      if (!(tex_hud_speedo = getSSTexture().loadTexture("/textures/dial_speed_hybrid_mph.png"))) return false;
-    } else {
-      if (!(tex_hud_speedo = getSSTexture().loadTexture("/textures/dial_speed_mph.png"))) return false;
-    }
-  } else if (cfg_speed_unit == kph) {
-    if (cfg_speed_style) {
-      if (!(tex_hud_speedo = getSSTexture().loadTexture("/textures/dial_speed_hybrid_kph.png"))) return false;
-    } else {
-      if (!(tex_hud_speedo = getSSTexture().loadTexture("/textures/dial_speed_kph.png"))) return false;
-    }
-  }
-  if (!(tex_hud_gear = getSSTexture().loadTexture("/textures/dial_gear.png"))) return false;
+  if (!(tex_hud_revneedle = getSSTexture().loadTexture("/textures/rev_needle.png"))) return false;
   
+  if (!(tex_hud_revs = getSSTexture().loadTexture("/textures/dial_rev.png"))) return false;
+
   if (cfg_enable_sound) {
     if (!(aud_engine = getSSAudio().loadSample("/sounds/engine.wav", false))) return false;
     if (!(aud_wind = getSSAudio().loadSample("/sounds/wind.wav", false))) return false;
@@ -587,6 +598,12 @@ bool MainApp::startGame(const std::string &filename)
   grabMouse(true);
   
   game = new TriggerGame(this);
+  
+  if (!game->loadVehicles())
+  {
+      PUtil::outLog() << "Error: failed to load vehicles" << std::endl;
+      return false;
+  }
   
   if (!game->loadLevel(filename)) {
     PUtil::outLog() << "Error: failed to load level" << std::endl;
@@ -664,6 +681,35 @@ void MainApp::endGame(int gamestate)
   }
   
   finishRace(gamestate, coursetime);
+}
+
+///
+/// @brief Calculate screen ratios from the current screen width and height.
+/// @details Sets `hratio` and `vratio` member data in accordance to the values of
+///  `getWidth()` (screen width) and `getHeight()` (screen height).
+///  This data is important for proper scaling on widescreen monitors.
+///
+void MainApp::calcScreenRatios()
+{
+    const int cx = getWidth();
+    const int cy = getHeight();
+
+    if (cx > cy)
+    {
+        hratio = static_cast<double> (cx) / cy;
+        vratio = 1.0;
+    }
+    else
+    if (cx < cy)
+    {
+        hratio = 1.0;
+        vratio = static_cast<double> (cy) / cx;
+    }
+    else
+    {
+        hratio = 1.0;
+        vratio = 1.0;
+    }
 }
 
 void MainApp::tick(float delta)
@@ -864,13 +910,16 @@ void MainApp::tickStateGame(float delta)
   PReferenceFrame *rf = &vehic->getBody();
   
   vec3f forw = makevec3f(rf->getOrientationMatrix().row[0]);
+  vec3f nose = makevec3f(rf->getOrientationMatrix().row[1]);
   float forwangle = atan2(forw.y, forw.x);
+  float noseangle = atan2(nose.z, nose.y);
   
   mat44f cammat;
   
   switch (cameraview_mod) {
+      // Chase
     default:   
-  case 0:  {
+  case 0: {
     quatf temp2;
     temp2.fromZAngle(forwangle + camera_user_angle);
     
@@ -890,6 +939,7 @@ void MainApp::tickStateGame(float delta)
       makevec3f(cammat.row[2]) * 5.0f;
     } break;
     
+    // Bumper
   case 1: {
     quatf temp2;
     temp2.fromZAngle(camera_user_angle);
@@ -911,6 +961,7 @@ void MainApp::tickStateGame(float delta)
       makevec3f(rfmat.row[2]) * 0.4f;
     } break;
     
+    // Side (right wheel)
   case 2: {
     quatf temp2;
     temp2.fromZAngle(camera_user_angle);
@@ -933,6 +984,37 @@ void MainApp::tickStateGame(float delta)
       makevec3f(rfmat.row[1]) * 0.3f +
       makevec3f(rfmat.row[2]) * 0.1f;
     } break;
+    
+    // Piggyback (fixed chase)
+    //
+    // TODO: broken because of "world turns upside down" bug
+    //
+  case 3:{
+    quatf temp2, temp3, temp4;
+    temp2.fromZAngle(forwangle + camera_user_angle);
+    temp3.fromXAngle(noseangle);
+
+    //if (tempo.dot(temp2) < 0.0f) tempo = tempo * -1.0f;
+
+    temp4 = temp3 * temp2;
+
+    quatf target = tempo * temp4;
+    
+    if (target.dot(camori) < 0.0f) target = target * -1.0f;
+    //if (camori.dot(target) < 0.0f) camori = camori * -1.0f;
+
+    PULLTOWARD(camori, target, delta * 3.0f);
+    
+    camori.normalize();
+    
+    cammat = camori.getMatrix();
+    cammat = cammat.transpose();
+    //campos = rf->getPosition() + makevec3f(cammat.row[2]) * 100.0;
+    campos = rf->getPosition() +
+      makevec3f(cammat.row[1]) * 1.6f +
+      makevec3f(cammat.row[2]) * 6.0f;
+    }
+    break;
   }
   
   forw = makevec3f(cammat.row[0]);
@@ -1172,6 +1254,7 @@ void MainApp::joyButtonEvent(int which, int button, bool down)
       if (ctrl.map[ActionCamMode].type == UserControl::TypeJoyButton &&
         ctrl.map[ActionCamMode].joybutton.button == button) {
         cameraview = (cameraview + 1) % 3;
+        // current camera views: Chase, Bumper, Side, [Piggyback - disabled]
         camera_user_angle = 0.0f;
         return;
       }
@@ -1188,7 +1271,7 @@ void MainApp::joyButtonEvent(int which, int button, bool down)
 
 int main(int argc, char *argv[])
 {
-  MainApp *game = new MainApp("Trigger", ".trigger");
+  MainApp *game = new MainApp("Trigger Rally", ".trigger-rally");
 
   int ret = game->run(argc, argv);
 
@@ -1209,7 +1292,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     UNREFERENCED_PARAMETER(lpCmdLine);
     UNREFERENCED_PARAMETER(nCmdShow);
 
-  MainApp *game = new MainApp("Trigger", ".trigger");
+  MainApp *game = new MainApp("Trigger Rally", ".trigger-rally");
 
   int ret = game->run(0, nullptr);
 
