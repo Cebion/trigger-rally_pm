@@ -94,6 +94,8 @@ public:
   TriggerGame(MainApp *parent);
   ~TriggerGame();
   
+  bool loadVehicles();
+  
   bool loadLevel(const std::string &filename);
   
   void chooseVehicle(PVehicleType *type);
@@ -197,6 +199,11 @@ private:
   
   int appstate;
   
+  // TODO: use `aspect` instead of these?
+  // TODO: type should be GLdouble instead of double
+  double hratio; ///< Horizontal ratio.
+  double vratio; ///< Vertical ratio.
+  
   // Config settings
   
   int cfg_video_cx, cfg_video_cy;
@@ -204,6 +211,9 @@ private:
   
   float cfg_drivingassist;
   bool cfg_enable_sound;
+  
+  /// Search paths for the data directory, as read from the configuration.
+  std::list<std::string> cfg_datadirs;
   
   Speedunit cfg_speed_unit;
   Speedstyle cfg_speed_style;
@@ -248,7 +258,8 @@ private:
   
   PVehicleType *vt_tank;
   
-  PTexture *tex_font;
+  PTexture *tex_fontDsmNormal,
+           *tex_fontDsmOutlined;
   
   PTexture *tex_detail,
            *tex_sky[1],
@@ -256,8 +267,7 @@ private:
            *tex_dirt,
            *tex_shadow,
            *tex_hud_revs,
-           *tex_hud_speedo,
-           *tex_hud_gear,
+           *tex_hud_revneedle,
            *tex_hud_life,
            *tex_splash_screen,
            *tex_end_screen;
@@ -334,6 +344,8 @@ public:
   bool loadAll();
   bool loadLevelsAndEvents();
   bool loadLevel(TriggerLevel &tl);
+  
+  void calcScreenRatios();
   
   void tick(float delta);
   
