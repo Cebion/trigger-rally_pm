@@ -1,0 +1,449 @@
+﻿==========================
+How to build Trigger Rally
+==========================
+
+1. Linux users
+2. Packaging for Linux
+3. Windows users - the easy way
+4. Windows users - the hard way
+5. Packaging for Windows
+A. Appendix
+   A1. List of software used to build Trigger Rally (Windows)
+
+--------------
+1. Linux users
+--------------
+
+To build Trigger Rally, your system must satisfy the following requirements:
+
+* have a C++ compiler (preferably g++ v.4.8+) and related binutils
+* have the GNU Make utility
+* have these development libraries installed:
+
+  LIB NAME          POSSIBLE PACKAGE NAME       OFFICIAL DOWNLOAD LINK
+  --------------------------------------------------------------------
+  GL                libgl1-mesa-dev             N/A
+  GLU               libglu1-mesa-dev            N/A
+  GLEW              libglew-dev                 http://sourceforge.net/projects/glew/files/glew/
+  OpenAL            libopenal-dev               N/A
+  ALUT              libalut-dev                 N/A
+  PhysFS            libphyfs-dev                http://icculus.org/physfs/downloads/
+  SDL 1.2           libsdl1.2-dev               http://www.libsdl.org/download-1.2.php
+  SDL_image 1.2     libsdl-image1.2-dev         http://www.libsdl.org/projects/SDL_image/release-1.2.html
+  --------------------------------------------------------------------
+
+To build Trigger Rally you must run "make" in the "src" directory where
+"GNUmakefile" is located:
+
+  $ cd src/
+  $ make
+  $ cd ../bin/
+  $ ./trigger-rally
+
+To install Trigger Rally you need to get superuser privileges and run "make install".
+Note that installation is not required to play the game. The game can run as soon as
+it finished building.
+
+  $ su
+  Password: 
+  # make install
+  # exit
+  logout
+  $ trigger-rally
+
+----------------------
+2. Packaging for Linux
+----------------------
+
+If you're an old packager tasked with keeping the software repository of a major Linux
+distribution up-to-date then I really have no business telling you how to do your job.
+
+If you're a novice packager you might want to look into staged installs, which the
+provided GNUmakefile supports in accordance to the GNU guidelines (the DESTDIR variable):
+
+  $ cd src/
+  $ DESTDIR="/home/UserName/TR_staged" make install
+
+Note that the "install" target will build Trigger Rally first, if needed.
+
+Also note that you should probably set the OPTIMS variable to more conservative values,
+to ensure that users of older hardware can still run the game.
+As an example, the official binary release for Windows is built with:
+
+  $ OPTIMS="-march=i686 -mtune=generic -O2" make build
+
+See the GCC documentation for the currently supported x86 options:
+
+  https://gcc.gnu.org/onlinedocs/gcc/x86-Options.html
+
+The "dist" target is also supported, and it creates a zipped tarball of the
+Trigger Rally directory and then calculates the archive's MD5 sum.
+
+-------------------------------
+3. Windows users - the easy way
+-------------------------------
+
+The easy way to build on Windows is to download and install the following software:
+
+  SOFTWARE NAME                 OFFICIAL DOWNLOAD LINK
+  ----------------------------------------------------
+  Orwell Dev-C++                http://sourceforge.net/projects/orwelldevcpp/
+  Prebuilt libs for Win32       http://sourceforge.net/projects/trigger-rally/files/devkit/libraries-win32/
+  FMOD Studio API               http://www.fmod.org/download/#StudioAPI
+  ----------------------------------------------------
+
+It is very important that the FMOD Studio API be installed in its default location
+which, at the time of this writing, is:
+
+    "C:\Program Files\FMOD SoundSystem\FMOD Studio API Windows"
+
+Also note that the version of the prebuilt libraries package must coincide
+with the version of Trigger Rally that you have downloaded.
+
+For example, "trigger-rally-0.6.3.tar.gz" needs "libraries-win32-0.6.3.zip".
+
+You must extract the prebuild libraries inside the parent folder of Trigger Rally,
+such that "libraries-win32" and "trigger-rally-VER" are side-by-side.
+
+Then all you need to do is open the "TriggerRally.dev" file (the .DEV file
+extension should be associated with Dev-C++) and click the "Rebuild All" button.
+
+After the build is complete you must copy certain .DLL files from "libraries-win32\bin"
+and from the FMOD folder into "trigger-rally-VER\bin" where "trigger-rally.exe" should be.
+
+  .DLL FILENAME     SOURCE LOCATION
+  ---------------------------------
+  fmod.dll          "C:\Program Files\FMOD SoundSystem\FMOD Studio API Windows\api\lowlevel\lib"
+  glew32.dll        libraries-win32\bin
+  libjpeg-9.dll     libraries-win32\bin
+  libphysfs.dll     libraries-win32\bin
+  SDL.dll           libraries-win32\bin
+  SDL_image.dll     libraries-win32\bin
+  ---------------------------------
+
+You should now be able to play the game by running "trigger-rally.exe".
+
+-------------------------------
+4. Windows users - the hard way
+-------------------------------
+
+The hard way to build on Windows is to build not only Trigger Rally, but
+also all the libraries that it uses: SDL, SDL_image, PhysFS and GLEW,
+with the obvious exception of FMOD.
+
+One benefit of doing all this work is that you can enable more aggressive
+optimizations tailored to your machine: in theory your build should run faster
+on your computer than the official build which uses the prebuilt libraries.
+
+The official Trigger Rally builds and libraries-win32 addons have been optimized
+with the following flags, in an attempt to balance compatibility and performance:
+
+    -march=i686 -mtune=generic -O2
+
+If you build for your own machine only, you can use these for everything:
+
+    -march=native -mtune=native -Ofast
+
+In order to build you need to download and install the following software:
+
+  SOFTWARE NAME                 OFFICIAL DOWNLOAD LINK
+  ----------------------------------------------------
+  Orwell Dev-C++                http://sourceforge.net/projects/orwelldevcpp/
+  MinGW                         http://mingw.org/
+  CMake                         http://www.cmake.org/download/
+  FMOD Studio API               http://www.fmod.org/download/#StudioAPI
+  ----------------------------------------------------
+
+Be sure to install Dev-C++ in a way such that there are no spaces in the path
+to its "bin" folder. The buggy configuration scripts of some libraries that we
+need to build will generate broken makefiles due to spaces in compiler paths!
+
+So DO NOT install Dev-C++ in the usual "C:\Program Files\Dev-Cpp" folder.
+Recommended installation folder: "C:\Dev-Cpp".
+
+After installing Dev-C++ you must add its "bin" folder to the system path.
+In Windows XP and later this is done by right-clicking on "My Computer",
+    Properties -> Advanced -> Environment Variables
+Edit the PATH variable, adding the location of the Dev-C++ bin folder, e.g.:
+    C:\Dev-Cpp\MinGW64\bin
+
+When installing MinGW we are only interested in MSYS, so be sure to install the
+package named "mingw-developer-toolkit" and nothing else.
+
+Install the FMOD Studio API in its default location which (currently) is:
+
+    "C:\Program Files\FMOD SoundSystem\FMOD Studio API Windows"
+
+Then you need to download the source code tarballs for the libraries listed below.
+I personally prefer Linux-style archives (.TAR.GZ and .TAR.BZ2) so those are the source
+code packages that were tested to build successfully with the methods described below.
+
+  LIBRARY NAME                  OFFICIAL DOWNLOAD LINK
+  ----------------------------------------------------
+  GLEW                          http://sourceforge.net/projects/glew/files/glew/
+  PhysFS                        http://icculus.org/physfs/downloads/
+  SDL 1.2                       http://www.libsdl.org/download-1.2.php
+  SDL_image 1.2                 http://www.libsdl.org/projects/SDL_image/release-1.2.html
+  libjpeg                       http://ijg.org/
+  libpng                        http://libpng.org/pub/png/libpng.html
+  zlib                          http://zlib.net/
+  ----------------------------------------------------
+
+Extract all the archives into your MSYS home folder, which by default should be:
+
+    "C:\MinGW\msys\1.0\home\UserName\"
+
+Also extract the Trigger Rally archive in there. The end result should be a clean
+collection of folders, each named after the original archive you extracted.
+
+Now start MSYS by running its batch file, which by default should be located at:
+
+    "C:\MinGW\msys\1.0\msys.bat"
+
+Now it's time to build and install the libraries, then build Trigger Rally.
+Note that the build order is important, because of the dependencies:
+
+  1. libjpeg
+  2. zlib
+  3. libpng (depends on zlib)
+  4. GLEW
+  5. SDL
+  6. SDL_image (depends on libpng, libjpeg and SDL)
+  7. PhysFS
+  8. Trigger Rally (depends on all the above)
+
+A quick reminder about optimizations, depending on who it is you are building for:
+
+  1. "I build for myself only" = best performance on your machine
+    -march=native -mtune=native -Ofast
+
+  2. "I build for everybody" = balance compatibility and performance
+    -march=i686 -mtune=generic -O2
+
+For each of the libraries you are supposed to read their README files to figure
+out how to properly build them on your own. However, I will now provide a complete
+build walkthrough to illustrate the diversity of quirks in the build process of
+Trigger Rally 0.6.3 for Win32.
+
+Note to Win32 users: because modern versions of Dev-C++ use a "tdm64" compiler
+you also need to pass the "-m32" switch to ensure that the compiler doesn't generate
+64-bit code by default, and specify the 32-bit PE target to WINDRES by way of
+the "-F pe-i386" option.
+
+If you want to build for Win64 you can disregard the problematic options that
+force the "-m32" switch onto the compiler or the "pe-i386" target onto WINDRES.
+
+Let's start by building libjpeg.
+
+Some of the libraries require you to execute their "configure" script so that they
+generate a proper "Makefile" that you can then use to build and install.
+
+  $ #
+  $ # building libjpeg
+  $ #
+  $ cd jpeg-9a/
+  $ ./configure CFLAGS="-march=native -mtune=native -Ofast -m32"
+  $ make
+  $ make install-strip
+
+In cases where the "install-strip" target is missing, "install" is a good enough
+substitute. Stripping binaries reduces their size by removing debugging information,
+which is useless to the average user anyway.
+
+Some of the libraries will require you to use makefiles directly.
+Because of the aforementioned 64-bit issue, things can get a bit nasty.
+
+  $ #
+  $ # building zlib
+  $ #
+  $ cd zlib-1.2.8/
+  $ make \
+  > CFLAGS="-march=native -mtune=native -Ofast -m32" \
+  > LDFLAGS="-m32" \
+  > RCFLAGS="--define GCC_WINDRES -F pe-i386" \
+  > -f win32/Makefile.gcc
+  $ make \
+  > INCLUDE_PATH="/local/include" \
+  > LIBRARY_PATH="/local/lib" \
+  > BINARY_PATH="/local/bin" \
+  > -f win32/Makefile.gcc install
+
+Shared libraries and their headers are installed in "/local/lib" and "/local/include",
+respectively. So when we build libraries which depend on other libraries, we must
+tell them to search those directories.
+
+  $ #
+  $ # building libpng
+  $ #
+  $ cd libpng-1.6.17/
+  $ ./configure \
+  > CFLAGS="-march=native -mtune=native -Ofast -m32" \
+  > CPPFLAGS="-I/local/include" \
+  > LDFLAGS="-L/local/lib"
+  $ make
+  $ make install-strip
+
+Some libraries have non-standard makefiles which expect non-standard variables.
+
+  $ #
+  $ # building GLEW
+  $ #
+  $ cd glew-1.12.0/
+  $ make \
+  > POPT="-march=native -mtune=native -Ofast" \
+  > CFLAGS.EXTRA="-m32" \
+  > LDFLAFS.EXTRA="-m32"
+  $ make GLEW_DEST="" DESTDIR="/local" install
+
+Next up are the SDL and SDL_image libraries, the build process of which requires
+a minor WINDRES hack so that each library is linked for 32-bit machines.
+
+  $ #
+  $ # building SDL
+  $ #
+  $ cd SDL-1.2.15/
+  $ ./configure \
+  > CFLAGS="-march=native -mtune=native -Ofast -m32" \
+  > LDFLAGS="-m32" \
+  > WINDRES="windres -F pe-i386"
+  $ make
+  $ make install
+
+  $ #
+  $ # building SDL_image
+  $ #
+  $ cd SDL_image-1.2.12/
+  $ ./configure \
+  > CFLAGS="-march=native -mtune=native -Ofast -m32" \
+  > CPPFLAGS="-I/local/include" \
+  > LDFLAGS="-m32 -L/local/lib" \
+  > WINDRES="windres -F pe-i386"
+  $ make
+  $ make install-strip
+
+Finally there is PhysFS which is best built with CMake. 
+
+1. Start "cmake-gui" from the link found in the Start Menu
+   (or the Classic Shell, God help you).
+2. Select the PhysFS folder in MSYS /home as the source code folder,
+   and a new empty folder next to it for the binaries, to prevent any
+   filename conflicts. The name I used for the new folder was:
+    "C:/MinGW/msys/1.0/home/UserName/physfs-2.0.3-build"
+3. Click "Configure", select "Specify native compilers", click "Next",
+   and browse to the Dev-C++ TDM C and C++ compilers, which should be at:
+    "C:/Dev-Cpp/MinGW64/bin/gcc.exe"
+    "C:/Dev-Cpp/MinGW64/bin/g++.exe"
+   and click "Finish".
+4. Enable the "Advanced" mode if you haven't already.
+5. Edit the following variables to the values on the right:
+
+    CMAKE_BUILD_TYPE            Release
+    CMAKE_CXX_FLAGS             -m32 -march=native -mtune=native
+    CMAKE_C_FLAGS               -m32 -march=native -mtune=native
+    CMAKE_CXX_FLAGS_RELEASE     -Ofast -DNDEBUG
+    CMAKE_C_FLAGS_RELEASE       -Ofast -DNDEBUG
+    CMAKE_RC_FLAGS              -F pe-i386
+    CMAKE_INSTALL_PREFIX        C:/MinGW/msys/1.0/local
+
+6. Click "Generate".
+7. Back in MSYS, run the following:
+
+  $ #
+  $ # building PhysFS
+  $ #
+  $ cd physfs-2.0.3-build/
+  $ mingw32-make
+  $ mingw32-make install/strip
+
+Now we're finally ready to build Trigger Rally, and it is the easiest bit.
+If you haven't already, install the FMOD Studio API to its default location.
+
+  $ #
+  $ # building Trigger Rally
+  $ #
+  $ cd trigger-rally-0.6.3/src/
+  $ make -f GNUmakefile.MSYS
+
+Before you can play the game you need to copy the required .DLL files from "/local/bin"
+to the Trigger Rally "bin" directory, where "trigger-rally.exe" should be.
+
+  .DLL FILENAME     SOURCE LOCATION
+  ---------------------------------
+  fmod.dll          "C:\Program Files\FMOD SoundSystem\FMOD Studio API Windows\api\lowlevel\lib"
+  glew32.dll        C:\MinGW\msys\1.0\local\bin\
+  libjpeg-9.dll     C:\MinGW\msys\1.0\local\bin\
+  libphysfs.dll     C:\MinGW\msys\1.0\local\bin\
+  SDL.dll           C:\MinGW\msys\1.0\local\bin\
+  SDL_image.dll     C:\MinGW\msys\1.0\local\bin\
+  ---------------------------------
+
+------------------------
+5. Packaging for Windows
+------------------------
+
+Trigger Rally is distributed for Windows in a self-sufficient installer
+package created with the Nullsoft Scriptable Install System (NSIS).
+To rebuild that package you need to download and install the following software:
+
+  SOFTWARE NAME                 OFFICIAL DOWNLOAD LINK
+  ----------------------------------------------------
+  NSIS 2.46                     http://nsis.sourceforge.net/Download
+  Trigger Rally NSIS pack       http://sourceforge.net/projects/trigger-rally/files/devkit/TR_NSIS/
+  ----------------------------------------------------
+
+After installing NSIS, unzip the TR NSIS pack to a folder of your choice.
+The pack contains the following:
+
+  FILENAME                      PURPOSE
+  -------------------------------------
+  artwork\                      folder which contains the TR installer branding
+  dist\                         folder which contains the data to be packed
+  generate_DelFilesRmDirs.cmd   batch file to generate NSIS headers
+  gpl-2.0.txt                   the GNU GPL 2 license
+  PACKAGING.txt                 ReadMe file containing this information
+  TriggerRally.nsi              NSIS main script
+  -------------------------------------
+
+1. Copy the Trigger Rally build that you wish to distribute to the "dist" folder.
+2. Run the batch file "generate_DelFilesRmDirs.cmd" to generate the "DelFiles.nsh"
+   and "RmDirs.nsh" NSIS headers. These headers are needed by the "TriggerRally.nsi"
+   to create a proper uninstaller.
+3. Open "TriggerRally.nsi" and check that the version information is correct:
+   !define COMP_NAME "Packager Name (and Username)"
+   !define VERSION "X.X.X"
+4. Right-click on "TriggerRally.nsi" and choose "Compile NSIS Script".
+5. If the installer was compiled successfully as "trigger-rally-X.X.X-win32-setup.exe"
+   then scan it for viruses*, test it, test its uninstaller, and distribute it.
+
+ * For obvious reasons, you must scan it with a freshly downloaded virus scanner
+   instead of your resident antivirus. Such tools are freely available at the time
+   of this writing, with the following examples:
+
+   Kaspersky Virus Removal Tool
+   Microsoft Safety Scanner
+   Emsisoft Emergency Kit
+   Dr.Web CureIt!
+
+##########################################################
+A1. List of software used to build Trigger Rally (Windows)
+##########################################################
+
+-------------------------
+Trigger Rally 0.6.3 Win32
+-------------------------
+
+  SOFTWARE                      VERSION
+  -------------------------------------
+  Orwell Dev-C++                5.11
+  MinGW/MSYS                    N/A
+  CMake                         3.2.2
+  NSIS                          2.46
+  GLEW                          1.12.0
+  SDL                           1.2.15
+  SDL_image                     1.2.12
+  libjpeg                       9a
+  libpng                        1.6.17
+  PhysFS                        2.0.3
+  zlib                          1.2.8
+  FMOD Studio API Windows       1.06.02
+  -------------------------------------

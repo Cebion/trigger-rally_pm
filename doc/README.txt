@@ -68,6 +68,13 @@ Please see DATA_AUTHORS.txt for this information.
 // Compiling //
 ///////////////
 
+=====================================================
+ NOTE: this is outdated information, left here for
+       future reference. Please read BUILDING.txt
+       for up-to-date instructions on how to build
+       and install Trigger Rally.
+                                    -- Andrei
+=====================================================
 
 Source dependencies:
 	Jam
