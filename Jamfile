@@ -1,6 +1,0 @@
-SubDir TOP ;
-
-SubInclude TOP src ;
-
-InstallDoc README ;
-
