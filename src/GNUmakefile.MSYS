@@ -1,0 +1,83 @@
+#
+# Trigger Rally GNUmakefile.MSYS for Dev-C++/MSYS users
+#
+
+# custom and standard GNU variables
+DISTVER := 0.6.3
+TR_EXENAME := ../bin/trigger-rally.exe
+PROJDIRS := pengine psim trigger
+SRCFILES := $(shell find $(PROJDIRS) -type f -name "*.cpp")
+OBJFILES := $(patsubst %.cpp, %.o, $(SRCFILES))
+DEPFILES := $(patsubst %.cpp, %.d, $(SRCFILES))
+WARNINGS ?= -Wall -Wextra -pedantic
+OPTIMS ?= -march=native -mtune=native -Ofast
+MODENV ?= -m32
+DMACROS := -DNDEBUG -DWIN32 -DPACKAGE_VERSION=\"$(DISTVER)\"
+INCDIRS := -I"/local/include" -I"/c/Program Files/FMOD SoundSystem/FMOD Studio API Windows/api/lowlevel/inc"
+LIBDIRS := -L"/local/lib" -L"/c/Program Files/FMOD SoundSystem/FMOD Studio API Windows/api/lowlevel/lib"
+CXXFLAGS := -std=c++11 $(MODENV) $(WARNINGS) $(OPTIMS) $(DMACROS) $(INCDIRS)
+LDFLAGS := $(MODENV) $(LIBDIRS) -lopengl32 -lglu32 -lglew32 -lSDL -lSDL_image -lphysfs -lfmod
+
+#
+# phony targets, whose names aren't names of resulting files
+#
+# NOTE that several "standard" targets are missing; here
+# `all` is `build` because I always felt "all" was a bad name,
+# while the others I had either no time or no incentive to implement
+#
+.PHONY: build printvars clean
+
+# builds the executable
+build: printvars $(TR_EXENAME)
+
+#
+# prints the variables that the user can change;
+# if VAR is in the list, then the user can change it by running:
+#
+#   VAR="new value" make [target]
+#
+# examples:
+#   OPTIMS="-O0 -g" make
+#   prefix="/usr" exec_prefix="/usr" make install
+#
+printvars:
+	@printf "\ncurrent values of user-set variables:\n"
+	@printf "\tOPTIMS ?= %s\n" "$(OPTIMS)"
+	@printf "\tMODENV ?= %s\n" "$(MODENV)"
+	@printf "\tWARNINGS ?= %s\n" "$(WARNINGS)"
+	@printf "\n"
+
+# links the object files into the executable, which it then strips
+$(TR_EXENAME): $(OBJFILES)
+	@printf "%s" $(CXX)
+	@for file in $(OBJFILES); do \
+		printf "\t%s\n" $$file; \
+		done;
+	@printf "\t-> %s\n" $@
+	@$(CXX) -o $@ $(OBJFILES) $(LDFLAGS)
+	@printf "strip\t%s\n" $@
+	@strip $@
+
+#
+# removes object files, dependency files, executable and
+# backup files (such as "func.cpp~")
+#
+clean:
+	-@$(RM) --verbose $(OBJFILES) $(DEPFILES) $(TR_EXENAME) $(shell find -type f -name "*~")
+
+#
+# includes dependency files; these files are needed to speed up
+# the build process by excluding the compilation of object files
+# which are already up-to-date
+#
+-include $(DEPFILES)
+
+#
+# compiles source files to object files
+#
+# GNUmakefile.MSYS was added as a dependency in order to trigger a rebuild
+# if this makefile is edited
+#
+%.o: %.cpp GNUmakefile.MSYS
+	@printf "%s\t%s -> %s\n" $(CXX) $< $@
+	@$(CXX) $(CXXFLAGS) -MMD -MP -c $< -o $@
