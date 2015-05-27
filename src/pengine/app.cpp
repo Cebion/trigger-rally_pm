@@ -12,9 +12,11 @@
 #include <windows.h>
 #endif
 
+#if 0
 #ifndef DATADIR
 //#error DATADIR not defined! Use ./configure --datadir=...
-#define DATADIR "."
+//#define DATADIR "../data"
+#endif
 #endif
 
 #if 0
@@ -192,16 +194,22 @@ int PApp::run(int argc, char *argv[])
       outLog() << "Failed to add PhysFS search directory \"" << lsdbuff << "\"" << std::endl
           << "PhysFS: " << PHYSFS_getLastError() << std::endl;
     }
-    
-    std::string ddbuff = DATADIR;
-    
-    outLog() << "Main game data directory datadir=\"" << ddbuff << "\"" << std::endl;
-    
-    if (PHYSFS_addToSearchPath(ddbuff.c_str(), 1) == 0) {
-      outLog() << "Failed to add PhysFS search directory \"" << ddbuff << "\"" << std::endl
-          << "PhysFS: " << PHYSFS_getLastError() << std::endl;
+
+    // we run MainApp::config() here in order to add data dirs to PhysFS search path
+    try
+    {
+        config();
     }
-    
+    catch (PException e)
+    {
+        PUtil::outLog() << "Config failed: " << e.what() << std::endl;
+        
+        if (PHYSFS_deinit() == 0)
+            outLog() << "PhysFS: " << PHYSFS_getLastError() << std::endl;
+
+        return 1;
+    }
+
     // Find any .zip files and add them to search path
     std::list<std::string> zipfiles = PUtil::findFiles("", ".zip");
     
@@ -222,20 +230,6 @@ int PApp::run(int argc, char *argv[])
             << "PhysFS: " << PHYSFS_getLastError() << std::endl;
       }
     }
-  }
-  
-  try
-  {
-    config();
-  }
-  catch (PException e)
-  {
-    PUtil::outLog() << "Config failed: " << e.what () << std::endl;
-    
-    if (PHYSFS_deinit() == 0) {
-      outLog() << "PhysFS: " << PHYSFS_getLastError() << std::endl;
-    }
-    return 1;
   }
   
   outLog() << "Initialising SDL" << std::endl;
@@ -282,7 +276,7 @@ int PApp::run(int argc, char *argv[])
   if (!screen) {
     outLog() << "Failed to create window or set video mode" << std::endl;
     outLog() << "SDL error: " << SDL_GetError() << std::endl;
-    outLog() << "Try changing your video settings in data/trigger.config" << std::endl;
+    outLog() << "Try changing your video settings in trigger-rally.config" << std::endl;
     SDL_Quit();
     if (PHYSFS_deinit() == 0) {
       outLog() << "PhysFS: " << PHYSFS_getLastError() << std::endl;
@@ -349,23 +343,27 @@ int PApp::run(int argc, char *argv[])
   outLog() << "Graphics: " <<
     glGetString(GL_VENDOR) << " " << glGetString(GL_RENDERER) << std::endl;
   
-  outLog() << "Using OpenGL ";
-  if (false) ;
-  else if (GLEW_VERSION_2_0)
-    outLog() << "2.0" << std::endl;
-  else if (GLEW_VERSION_1_5)
-    outLog() << "1.5" << std::endl;
-  else if (GLEW_VERSION_1_4)
-    outLog() << "1.4" << std::endl;
-  else if (GLEW_VERSION_1_3)
-    outLog() << "1.3" << std::endl;
-  else if (GLEW_VERSION_1_2)
-    outLog() << "1.2" << std::endl;
-  else if (GLEW_VERSION_1_1)
-    outLog() << "1.1" << std::endl;
-  else
-    outLog() << "1.0" << std::endl;
-
+  outLog() << "Using OpenGL " << glGetString(GL_VERSION) << std::endl;
+/*
+    if (GLEW_VERSION_4_5)   outLog() << "4.5" << std::endl;     else
+    if (GLEW_VERSION_4_4)   outLog() << "4.4" << std::endl;     else
+    if (GLEW_VERSION_4_3)   outLog() << "4.3" << std::endl;     else
+    if (GLEW_VERSION_4_2)   outLog() << "4.2" << std::endl;     else
+    if (GLEW_VERSION_4_1)   outLog() << "4.1" << std::endl;     else
+    if (GLEW_VERSION_4_0)   outLog() << "4.0" << std::endl;     else
+    if (GLEW_VERSION_3_3)   outLog() << "3.3" << std::endl;     else
+    if (GLEW_VERSION_3_2)   outLog() << "3.2" << std::endl;     else
+    if (GLEW_VERSION_3_1)   outLog() << "3.1" << std::endl;     else
+    if (GLEW_VERSION_3_0)   outLog() << "3.0" << std::endl;     else
+    if (GLEW_VERSION_2_1)   outLog() << "2.1" << std::endl;     else
+    if (GLEW_VERSION_2_0)   outLog() << "2.0" << std::endl;     else
+    if (GLEW_VERSION_1_5)   outLog() << "1.5" << std::endl;     else
+    if (GLEW_VERSION_1_4)   outLog() << "1.4" << std::endl;     else
+    if (GLEW_VERSION_1_3)   outLog() << "1.3" << std::endl;     else
+    if (GLEW_VERSION_1_2_1) outLog() << "1.2.1" << std::endl;   else
+    if (GLEW_VERSION_1_2)   outLog() << "1.2" << std::endl;     else
+    if (GLEW_VERSION_1_1)   outLog() << "1.1" << std::endl;
+*/
   switch (stereo) {
   default: break;
   case StereoQuadBuffer:
