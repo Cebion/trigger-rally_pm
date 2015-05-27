@@ -25,6 +25,48 @@ TriggerGame::~TriggerGame()
   if (terrain) delete terrain;
 }
 
+///
+/// @brief Loads vehicles for the game.
+/// @details This file scans the directory "/data/vehicles".
+/// @returns Whether or not the loading was successful.
+/// @retval true            Mostly OK.
+/// @retval false           Problems loading the vehicles.
+/// @todo This shouldn't be called over and over for each game.
+/// @todo Should throw a PException if there are no vehicles?
+///
+bool TriggerGame::loadVehicles()
+{
+    if (PUtil::isDebugLevel(DEBUGLEVEL_TEST))
+        PUtil::outLog() << "Loading vehicle information from \"/vehicles\"\n";
+
+    if (sim == nullptr)
+        sim = new PSim();
+
+    const std::list<std::string> vehiclefiles = PUtil::findFiles("/vehicles", ".vehicle");
+
+    if (!vehiclefiles.empty())
+    {
+        for (const std::string &vefi: vehiclefiles)
+        {
+            PUtil::outLog() << "Found vehicle: \"" << vefi << "\"\n";
+
+            PVehicleType *vt = sim->loadVehicleType(vefi, app->getSSModel());
+
+            if (vt != nullptr)
+                vehiclechoices.push_back(vt);
+            else
+                PUtil::outLog() << "Warning: failed to load vehicle from \"" << vefi << "\"\n";
+        }
+    }
+    else
+    {
+        PUtil::outLog() << "Error: there is no vehicle information" << std::endl;
+        return false;
+    }
+
+    return true;
+}
+
 bool TriggerGame::loadLevel(const std::string &filename)
 {
   
@@ -71,15 +113,21 @@ bool TriggerGame::loadLevel(const std::string &filename)
         return false;
       }
       sim->setTerrain(terrain);
-    } else if (!strcmp(walk->Value(), "vehicle")) {
+    }
+//
+// TODO: delete this code soon
+//
+#if 0
+    else if (!strcmp(walk->Value(), "vehicle")) {
       PVehicle *vh = sim->createVehicle(walk, filename, app->getSSModel());
       if (vh) {
-        vehicle.push_back(vh);
+        //vehicle.push_back(vh);
       } else {
         PUtil::outLog() << "Warning: failed to load vehicle\n";
       }
-    } else if (!strcmp(walk->Value(), "vehicleoption")) {
-      
+    }
+    else if (!strcmp(walk->Value(), "vehicleoption")) {
+
       val = walk->Attribute("type");
       
       if (val) {
@@ -92,7 +140,9 @@ bool TriggerGame::loadLevel(const std::string &filename)
       } else {
         PUtil::outLog() << "Warning: vehicle option has no type\n";
       }
-    } else if (!strcmp(walk->Value(), "race")) {
+    }
+#endif
+    else if (!strcmp(walk->Value(), "race")) {
       
       // TODO: check race type... laps? once only?
       
