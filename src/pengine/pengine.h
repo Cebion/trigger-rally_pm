@@ -8,9 +8,6 @@
 #ifndef PENGINE_H_INCLUDED
 #define PENGINE_H_INCLUDED
 
-
-#include "../../config.h"
-
 #include <stdlib.h>
 
 #include <iostream>
