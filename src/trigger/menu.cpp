@@ -94,7 +94,7 @@ void MainApp::levelScreenAction(int action, int index)
   
   gui.setSSRender(getSSRender());
   
-  gui.setFont(tex_font);
+  gui.setFont(tex_fontDsmOutlined);
   
   grabMouse(false);
   
@@ -332,6 +332,7 @@ void MainApp::tickStateLevel(float delta)
   gui.tick(delta);
 }
 
+// TODO: fix this code
 void MainApp::cursorMoveEvent(int posx, int posy)
 {
   if (appstate != AS_LEVEL_SCREEN) return;
@@ -355,6 +356,7 @@ void MainApp::mouseButtonEvent(const SDL_MouseButtonEvent &mbe)
     return;
   }
   
+  // TODO: fix this code
   gui.setCursorPos(
     (float)mbe.x / (float)getWidth() * 800.0f,
     (1.0f - (float)mbe.y / (float)getHeight()) * 600.0f);
@@ -416,6 +418,7 @@ void MainApp::renderStateLevel(float eyetranslation)
   glPushMatrix();
   glLoadIdentity();
   glOrtho(0.0f, 800.0f, 0.0f, 600.0f, -1.0f, 1.0f);
+  //glOrtho(0.0, cfg_video_cx, 0.0, cfg_video_cy, 0 - 1.0, 1.0);
   glMatrixMode(GL_MODELVIEW);
   
   // draw background image
@@ -430,10 +433,10 @@ void MainApp::renderStateLevel(float eyetranslation)
   glColor4f(0.0f, 0.0f, 0.2f, 1.0f);
   
   glBegin(GL_QUADS);
-  glTexCoord2f(1.0f,1.0f); glVertex2f(800.0f,600.0f);
-  glTexCoord2f(0.0f,1.0f); glVertex2f(0.0f,600.0f);
-  glTexCoord2f(0.0f,0.0f); glVertex2f(0.0f,0.0f);
-  glTexCoord2f(1.0f,0.0f); glVertex2f(800.0f,0.0f);
+  glTexCoord2f(1.0f,1.0f); glVertex2f(800.0f, 600.0f);
+  glTexCoord2f(0.0f,1.0f); glVertex2f(0.0f, 600.0f);
+  glTexCoord2f(0.0f,0.0f); glVertex2f(0.0f, 0.0f);
+  glTexCoord2f(1.0f,0.0f); glVertex2f(800.0f, 0.0f);
   glEnd();
   
   // draw GUI
@@ -442,7 +445,7 @@ void MainApp::renderStateLevel(float eyetranslation)
   
   glColor4f(1.0f, 1.0f, 1.0f, 0.2f);
   
-  tex_font->bind();
+  tex_fontDsmOutlined->bind();
   
   glPushMatrix(); // 0
   
