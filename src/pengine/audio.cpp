@@ -26,8 +26,6 @@
 //
 // ... and they're all squashed into this one file!
 
-#include "../../config.h"
-
 #ifdef UNIX
 //#define USE_NULL
 #define USE_OPENAL
@@ -358,11 +356,13 @@ FMOD_RESULT F_CALLBACK fmod_file_seek(void *handle, unsigned int pos, void *user
 ///
 /// @brief Initializes the FMOD audio subsystem.
 /// @param [in,out] parentApp
+/// @todo Put FMOD credit line in documentation?
 ///
 PSSAudio::PSSAudio(PApp &parentApp):
     PSubsystem(parentApp)
 {
     PUtil::outLog() << "Initialising audio subsystem [FMOD]" << std::endl;
+//  PUtil::outLog() << "Audio Engine supplied by FMOD by Firelight Technologies." << std::endl;
 
     FMOD_RESULT fr = FMOD_System_Create(&fs);
 
