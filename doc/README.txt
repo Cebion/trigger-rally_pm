@@ -35,6 +35,7 @@ Right   Steer right
 Space   Handbrake
 C       Change camera view
 M       Toggle map
+N       Toggle user interface
 < >     Rotate camera when in 3rd person cam
 F12     Save a screenshot to ~/.trigger/
 

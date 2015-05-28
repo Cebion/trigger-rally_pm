@@ -58,6 +58,7 @@
 			<key action="camleft" code="44" />
 			<key action="camright" code="46" />
 			<key action="showmap" code="109" />
+			<key action="showui" code="110" />
 		</keyboard>
 
 		<!-- Typical joystick or wheel & pedals configuration -->

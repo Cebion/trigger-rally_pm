@@ -836,44 +836,47 @@ void MainApp::renderStateGame(float eyetranslation)
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    glPushMatrix(); // 1
-    // position of rpm dial and needle
-    glTranslatef( hratio * (1.f - (5.75f/50.f)) - 0.3f, -vratio * (40.f/50.f) + 0.22f, 0.0f);
-    glScalef(0.30f, 0.30f, 1.0f);
+    if (showui)
+    {
+      glPushMatrix(); // 1
+      // position of rpm dial and needle
+      glTranslatef( hratio * (1.f - (5.75f/50.f)) - 0.3f, -vratio * (40.f/50.f) + 0.22f, 0.0f);
+      glScalef(0.30f, 0.30f, 1.0f);
 
-    tex_hud_revs->bind();
-    glColor3f(1.0f, 1.0f, 1.0f);
-    glBegin(GL_QUADS);
-    glTexCoord2f(1.0f,1.0f);
-    glVertex2f(1.0f,1.0f);
-    glTexCoord2f(0.0f,1.0f);
-    glVertex2f(-1.0f,1.0f);
-    glTexCoord2f(0.0f,0.0f);
-    glVertex2f(-1.0f,-1.0f);
-    glTexCoord2f(1.0f,0.0f);
-    glVertex2f(1.0f,-1.0f);
-    glEnd();
+      tex_hud_revs->bind();
+      glColor3f(1.0f, 1.0f, 1.0f);
+      glBegin(GL_QUADS);
+      glTexCoord2f(1.0f,1.0f);
+      glVertex2f(1.0f,1.0f);
+      glTexCoord2f(0.0f,1.0f);
+      glVertex2f(-1.0f,1.0f);
+      glTexCoord2f(0.0f,0.0f);
+      glVertex2f(-1.0f,-1.0f);
+      glTexCoord2f(1.0f,0.0f);
+      glVertex2f(1.0f,-1.0f);
+      glEnd();
 
-    // draw the needle of the RPM dial
-    glRotatef(225.0f - vehic->getEngineRPM() * 15.0f / 1000.0f, 0.0f, 0.0f, 1.0f);
-    tex_hud_revneedle->bind();
-    glColor3f(1.0f, 1.0f, 1.0f);
-    glPushMatrix(); // 2
-    glTranslatef(0.62f, 0.0f, 0.0f);
-    glScalef(0.16f, 0.16f, 0.16f);
-    glBegin(GL_QUADS);
-    glTexCoord2f(1.0f,1.0f);
-    glVertex2f(1.0f,1.0f);
-    glTexCoord2f(0.0f,1.0f);
-    glVertex2f(-1.0f,1.0f);
-    glTexCoord2f(0.0f,0.0f);
-    glVertex2f(-1.0f,-1.0f);
-    glTexCoord2f(1.0f,0.0f);
-    glVertex2f(1.0f,-1.0f);
-    glEnd();
-    glPopMatrix(); // 2
-    glDisable(GL_TEXTURE_2D);
-    glPopMatrix(); // 1
+      // draw the needle of the RPM dial
+      glRotatef(225.0f - vehic->getEngineRPM() * 15.0f / 1000.0f, 0.0f, 0.0f, 1.0f);
+      tex_hud_revneedle->bind();
+      glColor3f(1.0f, 1.0f, 1.0f);
+      glPushMatrix(); // 2
+      glTranslatef(0.62f, 0.0f, 0.0f);
+      glScalef(0.16f, 0.16f, 0.16f);
+      glBegin(GL_QUADS);
+      glTexCoord2f(1.0f,1.0f);
+      glVertex2f(1.0f,1.0f);
+      glTexCoord2f(0.0f,1.0f);
+      glVertex2f(-1.0f,1.0f);
+      glTexCoord2f(0.0f,0.0f);
+      glVertex2f(-1.0f,-1.0f);
+      glTexCoord2f(1.0f,0.0f);
+      glVertex2f(1.0f,-1.0f);
+      glEnd();
+      glPopMatrix(); // 2
+      glDisable(GL_TEXTURE_2D);
+      glPopMatrix(); // 1
+    }
 
     // checkpoint pointing arrow thing
 #if 0
@@ -1017,211 +1020,216 @@ void MainApp::renderStateGame(float eyetranslation)
 
     glEnable(GL_TEXTURE_2D);
 
-    glPushMatrix(); // 1
-
-    /*
-    tex_hud_gear->bind();
-    glPushMatrix(); // 2
-
-    glTranslatef(1.0f, 0.35f, 0.0f);
-    glScalef(0.2f, 0.2f, 1.0f);
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-    glBegin(GL_QUADS);
-    glTexCoord2f(1.0f,1.0f); glVertex2f(1.0f,1.0f);
-    glTexCoord2f(0.0f,1.0f); glVertex2f(-1.0f,1.0f);
-    glTexCoord2f(0.0f,0.0f); glVertex2f(-1.0f,-1.0f);
-    glTexCoord2f(1.0f,0.0f); glVertex2f(1.0f,-1.0f);
-    glEnd();
-
-    glPopMatrix(); // 2
-    */
-
-    tex_fontDsmOutlined->bind();
-
-    // time counter
-
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-    glPushMatrix(); // 2
-
-    // time position (other time strings inherit this position)
-    // -hratio is left border, 0 is center, +hratio is right
-    // hratio * (1/50) gives 1% of the entire width
-    // +vratio is top border, 0 is middle, -vratio is bottom
-    glTranslatef( -hratio + hratio * (5.75f/50.f), vratio * (4.f/5.f), 0.0f);
-    glScalef(0.15f, 0.15f, 1.0f);
-    if (game->gamestate == GS_FINISHED)
-    {
-        getSSRender().drawText(
-            PUtil::formatTime(game->coursetime),
-            PTEXT_HZA_LEFT | PTEXT_VTA_TOP);
-    }
-    else if (game->coursetime < game->cptime + 1.50f)
-    {
-        getSSRender().drawText(
-            PUtil::formatTime(game->cptime),
-            PTEXT_HZA_LEFT | PTEXT_VTA_TOP);
-    }
-    else if (game->coursetime < game->cptime + 3.50f)
-    {
-        float a = (((game->cptime + 3.50f) - game->coursetime) / 2);
-        glColor4f(1.0f, 1.0f, 1.0f, a);
-        getSSRender().drawText(
-            PUtil::formatTime(game->cptime),
-            PTEXT_HZA_LEFT | PTEXT_VTA_TOP);
-    }
-    else
-    {
-        getSSRender().drawText(
-            PUtil::formatTime(game->coursetime),
-            PTEXT_HZA_LEFT | PTEXT_VTA_TOP);
-    }
-
-    // show target time
-
-    glColor4f(0.5f, 1.0f, 0.5f, 1.0f);
-    glPushMatrix(); // 2
-    glTranslatef(0.0f, -0.8f, 0.0f);
-    getSSRender().drawText(PUtil::formatTime(game->targettime), PTEXT_HZA_LEFT | PTEXT_VTA_TOP);
-
-    // time label
-
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-    glTranslatef(0.0f, .52f, 0.0f);
-    glScalef(0.65f, 0.65f, 1.0f);
-    getSSRender().drawText("TIME", PTEXT_HZA_LEFT | PTEXT_VTA_TOP);
-
-    glPopMatrix(); // 2
-
-    // show Next/Total checkpoints
+    if (showui)
     {
 
-        // checkpoint counter
+      glPushMatrix(); // 1
 
-        glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-        glPushMatrix(); // 2
-        const std::string totalcp = std::to_string(game->checkpt.size());
-        const std::string nextcp = std::to_string(vehic->nextcp);
+      /*
+      tex_hud_gear->bind();
+      glPushMatrix(); // 2
 
-        // checkpoint position
-        glTranslatef( hratio - hratio * (5.75f/50.f), vratio * (4.f/5.f), 0.0f);
-        glScalef(0.15f, 0.15f, 1.0f);
+      glTranslatef(1.0f, 0.35f, 0.0f);
+      glScalef(0.2f, 0.2f, 1.0f);
+      glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+      glBegin(GL_QUADS);
+      glTexCoord2f(1.0f,1.0f); glVertex2f(1.0f,1.0f);
+      glTexCoord2f(0.0f,1.0f); glVertex2f(-1.0f,1.0f);
+      glTexCoord2f(0.0f,0.0f); glVertex2f(-1.0f,-1.0f);
+      glTexCoord2f(1.0f,0.0f); glVertex2f(1.0f,-1.0f);
+      glEnd();
 
-        getSSRender().drawText( ((game->getFinishState() == GF_PASS) ? totalcp : nextcp) + '/' + totalcp, PTEXT_HZA_RIGHT | PTEXT_VTA_TOP);
+      glPopMatrix(); // 2
+      */
 
-        // checkpoint label
-        
-        glPushMatrix(); // 2
-        glTranslatef(0, 0.52f, 0.0f);
-        glScalef(0.65f, 0.65f, 1.0f);
-        getSSRender().drawText("CKPT", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP);
+      tex_fontDsmOutlined->bind();
 
-        glPopMatrix(); // 2
+      // time counter
+
+      glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+      glPushMatrix(); // 2
+
+      // time position (other time strings inherit this position)
+      // -hratio is left border, 0 is center, +hratio is right
+      // hratio * (1/50) gives 1% of the entire width
+      // +vratio is top border, 0 is middle, -vratio is bottom
+      glTranslatef( -hratio + hratio * (5.75f/50.f), vratio * (4.f/5.f), 0.0f);
+      glScalef(0.15f, 0.15f, 1.0f);
+      if (game->gamestate == GS_FINISHED)
+      {
+          getSSRender().drawText(
+              PUtil::formatTime(game->coursetime),
+              PTEXT_HZA_LEFT | PTEXT_VTA_TOP);
+      }
+      else if (game->coursetime < game->cptime + 1.50f)
+      {
+          getSSRender().drawText(
+              PUtil::formatTime(game->cptime),
+              PTEXT_HZA_LEFT | PTEXT_VTA_TOP);
+      }
+      else if (game->coursetime < game->cptime + 3.50f)
+      {
+          float a = (((game->cptime + 3.50f) - game->coursetime) / 2);
+          glColor4f(1.0f, 1.0f, 1.0f, a);
+          getSSRender().drawText(
+              PUtil::formatTime(game->cptime),
+              PTEXT_HZA_LEFT | PTEXT_VTA_TOP);
+      }
+      else
+      {
+          getSSRender().drawText(
+              PUtil::formatTime(game->coursetime),
+              PTEXT_HZA_LEFT | PTEXT_VTA_TOP);
+      }
+
+      // show target time
+
+      glColor4f(0.5f, 1.0f, 0.5f, 1.0f);
+      glPushMatrix(); // 2
+      glTranslatef(0.0f, -0.8f, 0.0f);
+      getSSRender().drawText(PUtil::formatTime(game->targettime), PTEXT_HZA_LEFT | PTEXT_VTA_TOP);
+
+      // time label
+
+      glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+      glTranslatef(0.0f, .52f, 0.0f);
+      glScalef(0.65f, 0.65f, 1.0f);
+      getSSRender().drawText("TIME", PTEXT_HZA_LEFT | PTEXT_VTA_TOP);
+
+      glPopMatrix(); // 2
+
+      // show Next/Total checkpoints
+      {
+
+          // checkpoint counter
+
+          glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+          glPushMatrix(); // 2
+          const std::string totalcp = std::to_string(game->checkpt.size());
+          const std::string nextcp = std::to_string(vehic->nextcp);
+
+          // checkpoint position
+          glTranslatef( hratio - hratio * (5.75f/50.f), vratio * (4.f/5.f), 0.0f);
+          glScalef(0.15f, 0.15f, 1.0f);
+
+          getSSRender().drawText( ((game->getFinishState() == GF_PASS) ? totalcp : nextcp) + '/' + totalcp, PTEXT_HZA_RIGHT | PTEXT_VTA_TOP);
+
+          // checkpoint label
+          
+          glPushMatrix(); // 2
+          glTranslatef(0, 0.52f, 0.0f);
+          glScalef(0.65f, 0.65f, 1.0f);
+          getSSRender().drawText("CKPT", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP);
+
+          glPopMatrix(); // 2
+      }
+
+      tex_fontDsmNormal->bind();
+
+      // show current gear and speed
+      {
+          // gear number
+          const int gear = vehic->getCurrentGear();
+          const std::string buff = (gear >= 0) ? PUtil::formatInt(gear + 1, 1) : "R";
+
+          glPushMatrix(); // 2
+          // position of gear & speed number & label
+          glTranslatef( hratio * (1.f - (5.75f/50.f)) - 0.3f, -vratio * (40.f/50.f) + 0.21f, 0.0f);
+          glScalef(0.20f, 0.20f, 1.0f);
+          getSSRender().drawText(buff, PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
+
+          // speed number
+          const int speed = std::fabs(vehic->getWheelSpeed()) * hud_speedo_mps_speed_mult;
+          std::string speedstr = std::to_string(speed);
+
+          //glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+          glTranslatef(1.1f, -0.625f, 0.0f);
+          glScalef(0.5f, 0.5f, 1.0f);
+          getSSRender().drawText(speedstr, PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER);
+
+          // speed label
+          glTranslatef(0.0f, -0.82f, 0.0f);
+          glScalef(0.5f, 0.5f, 1.0f);
+
+          if (cfg_speed_unit == MainApp::Speedunit::mph)
+              getSSRender().drawText("MPH", PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER);
+          else
+              getSSRender().drawText("km/h", PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER);
+
+          glPopMatrix(); // 2
+      }
+
+  #ifndef NDEBUG
+      // draw revs for debugging
+      glPushMatrix(); // 2
+      glTranslatef(1.17f, 0.52f, 0.0f);
+      glScalef(0.2f, 0.2f, 1.0f);
+      getSSRender().drawText(std::to_string(vehic->getEngineRPM()), PTEXT_HZA_RIGHT | PTEXT_VTA_TOP);
+      glPopMatrix(); // 2
+  #endif
+
+      tex_fontDsmOutlined->bind();
+
+      glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
+      glPushMatrix(); // 2
+      glTranslatef(0.0f, 0.2f, 0.0f);
+      glScalef(0.6f, 0.6f, 1.0f);
+      if (game->gamestate == GS_COUNTDOWN)
+      {
+          float sizer = fmodf(game->othertime, 1.0f) + 0.5f;
+          glScalef(sizer, sizer, 1.0f);
+          getSSRender().drawText(
+              PUtil::formatInt(((int)game->othertime + 1), 1),
+              PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
+      }
+      else if (game->gamestate == GS_FINISHED)
+      {
+          if (game->getFinishState() == GF_PASS)
+          {
+              glColor4f(0.5f, 1.0f, 0.5f, 1.0f);
+              getSSRender().drawText("WIN", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
+          }
+          else
+          {
+              glScalef(0.5f, 0.5f, 1.0f);
+              glColor4f(0.5f, 0.0f, 0.0f, 1.0f);
+              getSSRender().drawText("TIME EXCEEDED", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
+          }
+      }
+      else if (game->coursetime < 1.0f)
+      {
+          glColor4f(0.5f, 1.0f, 0.5f, 1.0f);
+          getSSRender().drawText("GO!", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
+      }
+      else if (game->coursetime < 2.0f)
+      {
+          float a = 1.0f - (game->coursetime - 1.0f);
+          glColor4f(0.5f, 1.0f, 0.5f, a);
+          getSSRender().drawText("GO!", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
+      }
+      glPopMatrix(); // 2
+
+      if (game->gamestate == GS_COUNTDOWN)
+      {
+          glPushMatrix(); // 2
+          glTranslatef(0.0f, 0.6f, 0.0f);
+          glScalef(0.08f, 0.08f, 1.0f);
+          if (game->othertime < 1.0f)
+          {
+              glColor4f(1.0f, 1.0f, 1.0f, game->othertime);
+              getSSRender().drawText(game->comment, PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
+          }
+          else
+          {
+              glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+              getSSRender().drawText(game->comment, PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
+          }
+          glPopMatrix(); // 2
+      }
+
+      glPopMatrix(); // 1
+
     }
-
-    tex_fontDsmNormal->bind();
-
-    // show current gear and speed
-    {
-        // gear number
-        const int gear = vehic->getCurrentGear();
-        const std::string buff = (gear >= 0) ? PUtil::formatInt(gear + 1, 1) : "R";
-
-        glPushMatrix(); // 2
-        // position of gear & speed number & label
-        glTranslatef( hratio * (1.f - (5.75f/50.f)) - 0.3f, -vratio * (40.f/50.f) + 0.21f, 0.0f);
-        glScalef(0.20f, 0.20f, 1.0f);
-        getSSRender().drawText(buff, PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
-
-        // speed number
-        const int speed = std::fabs(vehic->getWheelSpeed()) * hud_speedo_mps_speed_mult;
-        std::string speedstr = std::to_string(speed);
-
-        //glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-        glTranslatef(1.1f, -0.625f, 0.0f);
-        glScalef(0.5f, 0.5f, 1.0f);
-        getSSRender().drawText(speedstr, PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER);
-
-        // speed label
-        glTranslatef(0.0f, -0.82f, 0.0f);
-        glScalef(0.5f, 0.5f, 1.0f);
-
-        if (cfg_speed_unit == MainApp::Speedunit::mph)
-            getSSRender().drawText("MPH", PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER);
-        else
-            getSSRender().drawText("km/h", PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER);
-
-        glPopMatrix(); // 2
-    }
-
-#ifndef NDEBUG
-    // draw revs for debugging
-    glPushMatrix(); // 2
-    glTranslatef(1.17f, 0.52f, 0.0f);
-    glScalef(0.2f, 0.2f, 1.0f);
-    getSSRender().drawText(std::to_string(vehic->getEngineRPM()), PTEXT_HZA_RIGHT | PTEXT_VTA_TOP);
-    glPopMatrix(); // 2
-#endif
-
-    tex_fontDsmOutlined->bind();
-
-    glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
-    glPushMatrix(); // 2
-    glTranslatef(0.0f, 0.2f, 0.0f);
-    glScalef(0.6f, 0.6f, 1.0f);
-    if (game->gamestate == GS_COUNTDOWN)
-    {
-        float sizer = fmodf(game->othertime, 1.0f) + 0.5f;
-        glScalef(sizer, sizer, 1.0f);
-        getSSRender().drawText(
-            PUtil::formatInt(((int)game->othertime + 1), 1),
-            PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
-    }
-    else if (game->gamestate == GS_FINISHED)
-    {
-        if (game->getFinishState() == GF_PASS)
-        {
-            glColor4f(0.5f, 1.0f, 0.5f, 1.0f);
-            getSSRender().drawText("WIN", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
-        }
-        else
-        {
-            glScalef(0.5f, 0.5f, 1.0f);
-            glColor4f(0.5f, 0.0f, 0.0f, 1.0f);
-            getSSRender().drawText("TIME EXCEEDED", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
-        }
-    }
-    else if (game->coursetime < 1.0f)
-    {
-        glColor4f(0.5f, 1.0f, 0.5f, 1.0f);
-        getSSRender().drawText("GO!", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
-    }
-    else if (game->coursetime < 2.0f)
-    {
-        float a = 1.0f - (game->coursetime - 1.0f);
-        glColor4f(0.5f, 1.0f, 0.5f, a);
-        getSSRender().drawText("GO!", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
-    }
-    glPopMatrix(); // 2
-
-    if (game->gamestate == GS_COUNTDOWN)
-    {
-        glPushMatrix(); // 2
-        glTranslatef(0.0f, 0.6f, 0.0f);
-        glScalef(0.08f, 0.08f, 1.0f);
-        if (game->othertime < 1.0f)
-        {
-            glColor4f(1.0f, 1.0f, 1.0f, game->othertime);
-            getSSRender().drawText(game->comment, PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
-        }
-        else
-        {
-            glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-            getSSRender().drawText(game->comment, PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
-        }
-        glPopMatrix(); // 2
-    }
-
-    glPopMatrix(); // 1
 
     glPopMatrix(); // 0
 

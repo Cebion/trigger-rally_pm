@@ -232,6 +232,7 @@ private:
     ActionCamLeft,
     ActionCamRight,
     ActionShowMap,
+    ActionShowUi,
     ActionCount
   };
   struct {
@@ -301,6 +302,8 @@ private:
   bool renderowncar; // this is determined from cameraview
   
   bool showmap;
+
+  bool showui;
   
   float crashnoise_timeout;
   

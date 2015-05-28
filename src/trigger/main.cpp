@@ -114,6 +114,7 @@ void MainApp::loadConfig()
   ctrl.action_name[ActionCamLeft] = std::string("camleft");
   ctrl.action_name[ActionCamRight] = std::string("camright");
   ctrl.action_name[ActionShowMap] = std::string("showmap");
+  ctrl.action_name[ActionShowUi] = std::string("showui");
   
   for (int i = 0; i < ActionCount; i++) {
     ctrl.map[i].type = UserControl::TypeUnassigned;
@@ -565,6 +566,8 @@ bool MainApp::loadAll()
   
   showmap = true;
   
+  showui = true;
+
   crashnoise_timeout = 0.0f;
   
   psys_dirt = new DirtParticleSystem();
@@ -1180,6 +1183,11 @@ void MainApp::keyEvent(const SDL_KeyboardEvent &ke)
         showmap = !showmap;
         return;
       }
+      if (ctrl.map[ActionShowUi].type == UserControl::TypeKey &&
+        ctrl.map[ActionShowUi].key.sym == ke.keysym.sym) {
+        showui = !showui;
+        return;
+      }
       
       switch (ke.keysym.sym) {
       case SDLK_ESCAPE:
@@ -1261,6 +1269,11 @@ void MainApp::joyButtonEvent(int which, int button, bool down)
       if (ctrl.map[ActionShowMap].type == UserControl::TypeJoyButton &&
         ctrl.map[ActionShowMap].joybutton.button == button) {
         showmap = !showmap;
+        return;
+      }
+      if (ctrl.map[ActionShowUi].type == UserControl::TypeJoyButton &&
+        ctrl.map[ActionShowUi].joybutton.button == button) {
+        showui = !showui;
         return;
       }
     }
