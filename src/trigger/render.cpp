@@ -220,14 +220,30 @@ void MainApp::renderStateLoading(float eyetranslation)
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
     glBegin(GL_QUADS);
-    glTexCoord2f(1.0f,1.0f);
-    glVertex2f(1.0f,1.0f);
-    glTexCoord2f(0.0f,1.0f);
-    glVertex2f(-1.0f,1.0f);
-    glTexCoord2f(0.0f,0.0f);
-    glVertex2f(-1.0f,-1.0f);
-    glTexCoord2f(1.0f,0.0f);
-    glVertex2f(1.0f,-1.0f);
+    // the background image is square and cut out a piece based on aspect ratio
+    // if aspect ratio is larger than 4:3
+    if ((float)getWidth()/(float)getHeight() > 4/3.f)
+    {
+      
+      // lower and upper offset based on aspect ratio
+      float off_l = (1 - ((float)getHeight() / (float)getWidth())) / 2.f;
+      float off_u = 1 - off_l;
+      glTexCoord2f(1.0f,off_u); glVertex2f(1.0f, 1.0f);
+      glTexCoord2f(0.0f,off_u); glVertex2f(-1.0f, 1.0f);
+      glTexCoord2f(0.0f,off_l); glVertex2f(-1.0f, -1.0f);
+      glTexCoord2f(1.0f,off_l); glVertex2f(1.0f, -1.0f);
+    }
+    // other cases (including 4:3, in which case off_l and off_u are = 1)
+    else
+    {
+
+      float off_l = (1 - ((float)getWidth() / (float)getHeight())) / 2.f;
+      float off_u = 1 - off_l;
+      glTexCoord2f(off_u,1.0f); glVertex2f(1.0f, 1.f);
+      glTexCoord2f(off_l,1.0f); glVertex2f(-1.0f, 1.f);
+      glTexCoord2f(off_l,0.0f); glVertex2f(-1.0f, -1.0f);
+      glTexCoord2f(off_u,0.0f); glVertex2f(1.0f, -1.0f);
+    }
     glEnd();
 
     glEnable(GL_DEPTH_TEST);
