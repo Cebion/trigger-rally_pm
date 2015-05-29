@@ -1,6 +1,9 @@
 #
 # Trigger Rally GNUmakefile.MSYS for Dev-C++/MSYS users
 #
+# This is a watered-down version of the "real" GNUmakefile and it
+# doesn't support the `install`, `uninstall` and `dist` targets.
+#
 
 # custom and standard GNU variables
 DISTVER := 0.6.3

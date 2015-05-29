@@ -65,7 +65,7 @@ printvars:
 
 # installs the software (executable, data files and documentation)
 install: installdirs build
-	@printf "\ninstall [$(DISTNAME)] begin\n"
+	@printf "\ninstall [%s] begin\n" "$(DISTNAME)"
 	@$(INSTALL_PROGRAM) $(TR_EXENAME) $(DESTDIR)$(bindir)
 	@$(INSTALL_DATA) $(TR_CFGNAME) $(DESTDIR)$(bindir)
 	@for file in $(TR_DATAFILES); do \
@@ -74,7 +74,7 @@ install: installdirs build
 	@for file in $(TR_DOCFILES); do \
 		$(INSTALL_DATA) -D $(TR_DOCDIR)/$$file $(DESTDIR)$(docdir)/$$file; \
 		done;
-	@printf "install [$(DISTNAME)] end\n\n"
+	@printf "install [%s] end\n\n" "$(DISTNAME)"
 
 # deletes the software (executable, data files and documentation)
 uninstall:
