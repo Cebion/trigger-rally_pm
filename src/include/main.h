@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include "../pengine/pengine.h"
+#include <pengine.h>
 
-#include "../psim/psim.h"
+#include <psim.h>
 
 
 

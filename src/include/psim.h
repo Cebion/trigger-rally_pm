@@ -5,7 +5,7 @@
 // License: GPL version 2 (see included gpl.txt)
 
 
-#include "../pengine/pengine.h"
+#include <pengine.h>
 
 /*
 #include <tnl/tnl.h>
