@@ -12,15 +12,17 @@ TR_DATADIR := ../data
 TR_DOCDIR := ../doc
 TR_DATAFILES := $(shell cd $(TR_DATADIR); find * -type f)
 TR_DOCFILES := $(shell cd $(TR_DOCDIR); find * -type f)
-PROJDIRS := pengine psim trigger
+PROJDIRS := PEngine PSim TinyXML Trigger
 SRCFILES := $(shell find $(PROJDIRS) -type f -name "*.cpp")
 OBJFILES := $(patsubst %.cpp, %.o, $(SRCFILES))
 DEPFILES := $(patsubst %.cpp, %.d, $(SRCFILES))
 WARNINGS ?= -Wall -Wextra -pedantic
 OPTIMS ?= -march=native -mtune=native -Ofast
 DMACROS := -DNDEBUG -DUNIX -DPACKAGE_VERSION=\"$(DISTVER)\"
-CXXFLAGS := -std=c++11 $(WARNINGS) $(OPTIMS) $(DMACROS)
-LDFLAGS := -lGL -lGLU -lGLEW -lSDL -lSDL_image -lphysfs -lopenal -lalut
+INCDIRS := -I"./include"
+CXXFLAGS := -std=c++11 $(WARNINGS) $(OPTIMS) $(DMACROS) $(INCDIRS)
+EXTRA_LIBS := -lGL -lGLU -lGLEW -lSDL -lSDL_image -lphysfs -lopenal -lalut
+LDFLAGS := $(EXTRA_LIBS)
 INSTALL_PROGRAM := install --mode=0755
 INSTALL_DATA := install --mode=0644
 

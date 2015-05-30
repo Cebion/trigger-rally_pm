@@ -8,7 +8,7 @@
 # custom and standard GNU variables
 DISTVER := 0.6.3
 TR_EXENAME := ../bin/trigger-rally.exe
-PROJDIRS := pengine psim trigger
+PROJDIRS := PEngine PSim TinyXML Trigger
 SRCFILES := $(shell find $(PROJDIRS) -type f -name "*.cpp")
 OBJFILES := $(patsubst %.cpp, %.o, $(SRCFILES))
 DEPFILES := $(patsubst %.cpp, %.d, $(SRCFILES))
@@ -16,10 +16,11 @@ WARNINGS ?= -Wall -Wextra -pedantic
 OPTIMS ?= -march=native -mtune=native -Ofast
 MODENV ?= -m32
 DMACROS := -DNDEBUG -DWIN32 -DPACKAGE_VERSION=\"$(DISTVER)\"
-INCDIRS := -I"/local/include" -I"/c/Program Files/FMOD SoundSystem/FMOD Studio API Windows/api/lowlevel/inc"
+INCDIRS := -I"./include" -I"/local/include" -I"/c/Program Files/FMOD SoundSystem/FMOD Studio API Windows/api/lowlevel/inc"
 LIBDIRS := -L"/local/lib" -L"/c/Program Files/FMOD SoundSystem/FMOD Studio API Windows/api/lowlevel/lib"
 CXXFLAGS := -std=c++11 $(MODENV) $(WARNINGS) $(OPTIMS) $(DMACROS) $(INCDIRS)
-LDFLAGS := $(MODENV) $(LIBDIRS) -lopengl32 -lglu32 -lglew32 -lSDL -lSDL_image -lphysfs -lfmod
+EXTRA_LIBS := -lopengl32 -lglu32 -lglew32 -lSDL -lSDL_image -lphysfs -lfmod
+LDFLAGS := $(MODENV) $(LIBDIRS) $(EXTRA_LIBS)
 
 #
 # phony targets, whose names aren't names of resulting files

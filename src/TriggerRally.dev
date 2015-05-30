@@ -4,7 +4,7 @@ Name=TriggerRally
 Type=1
 Ver=2
 ObjFiles=
-Includes=..\..\libraries-win32\include;"C:\Program Files\FMOD SoundSystem\FMOD Studio API Windows\api\lowlevel\inc"
+Includes=.\include;..\..\libraries-win32\include;"C:\Program Files\FMOD SoundSystem\FMOD Studio API Windows\api\lowlevel\inc"
 Libs=..\..\libraries-win32\lib;"C:\Program Files\FMOD SoundSystem\FMOD Studio API Windows\api\lowlevel\lib"
 PrivateResource=
 ResourceIncludes=
@@ -24,7 +24,7 @@ HostApplication=
 UseCustomMakefile=0
 CustomMakefile=
 CommandLine=
-Folders=Headers,Headers/PEngine,Headers/PSim,Headers/Trigger,Source,Source/PEngine,Source/PSim,Source/Trigger
+Folders=Headers,PEngine,PSim,TinyXML,Trigger
 IncludeVersionInfo=0
 SupportXPThemes=0
 CompilerSet=3
@@ -51,9 +51,9 @@ AutoIncBuildNr=0
 SyncProduct=1
 
 [Unit1]
-FileName=pengine\app.h
+FileName=include\app.h
 CompileCpp=1
-Folder=Headers/PEngine
+Folder=Headers
 Compile=1
 Link=1
 Priority=1000
@@ -61,9 +61,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit2]
-FileName=pengine\audio.h
+FileName=include\audio.h
 CompileCpp=1
-Folder=Headers/PEngine
+Folder=Headers
 Compile=1
 Link=1
 Priority=1000
@@ -71,9 +71,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit3]
-FileName=pengine\exception.h
+FileName=include\exception.h
 CompileCpp=1
-Folder=Headers/PEngine
+Folder=Headers
 Compile=1
 Link=1
 Priority=1000
@@ -81,9 +81,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit4]
-FileName=pengine\pengine.h
+FileName=include\main.h
 CompileCpp=1
-Folder=Headers/PEngine
+Folder=Headers
 Compile=1
 Link=1
 Priority=1000
@@ -91,9 +91,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit5]
-FileName=pengine\render.h
+FileName=include\menu.h
 CompileCpp=1
-Folder=Headers/PEngine
+Folder=Headers
 Compile=1
 Link=1
 Priority=1000
@@ -101,9 +101,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit6]
-FileName=pengine\subsys.h
+FileName=include\pengine.h
 CompileCpp=1
-Folder=Headers/PEngine
+Folder=Headers
 Compile=1
 Link=1
 Priority=1000
@@ -111,9 +111,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit7]
-FileName=pengine\tinystr.h
+FileName=include\psim.h
 CompileCpp=1
-Folder=Headers/PEngine
+Folder=Headers
 Compile=1
 Link=1
 Priority=1000
@@ -121,9 +121,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit8]
-FileName=pengine\tinyxml.h
+FileName=include\render.h
 CompileCpp=1
-Folder=Headers/PEngine
+Folder=Headers
 Compile=1
 Link=1
 Priority=1000
@@ -131,9 +131,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit9]
-FileName=pengine\vbuffer.h
+FileName=include\subsys.h
 CompileCpp=1
-Folder=Headers/PEngine
+Folder=Headers
 Compile=1
 Link=1
 Priority=1000
@@ -141,9 +141,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit10]
-FileName=pengine\vmath.h
+FileName=include\tinystr.h
 CompileCpp=1
-Folder=Headers/PEngine
+Folder=Headers
 Compile=1
 Link=1
 Priority=1000
@@ -151,9 +151,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit11]
-FileName=psim\psim.h
+FileName=include\tinyxml.h
 CompileCpp=1
-Folder=Headers/PSim
+Folder=Headers
 Compile=1
 Link=1
 Priority=1000
@@ -161,9 +161,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit12]
-FileName=psim\vehicle.h
+FileName=include\vbuffer.h
 CompileCpp=1
-Folder=Headers/PSim
+Folder=Headers
 Compile=1
 Link=1
 Priority=1000
@@ -171,9 +171,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit13]
-FileName=trigger\main.h
+FileName=include\vehicle.h
 CompileCpp=1
-Folder=Headers/Trigger
+Folder=Headers
 Compile=1
 Link=1
 Priority=1000
@@ -181,9 +181,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit14]
-FileName=trigger\menu.h
+FileName=include\vmath.h
 CompileCpp=1
-Folder=Headers/Trigger
+Folder=Headers
 Compile=1
 Link=1
 Priority=1000
@@ -191,9 +191,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit15]
-FileName=pengine\app.cpp
+FileName=PEngine\app.cpp
 CompileCpp=1
-Folder=Source/PEngine
+Folder=PEngine
 Compile=1
 Link=1
 Priority=1000
@@ -201,9 +201,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit16]
-FileName=pengine\audio.cpp
+FileName=PEngine\audio.cpp
 CompileCpp=1
-Folder=Source/PEngine
+Folder=PEngine
 Compile=1
 Link=1
 Priority=1000
@@ -211,9 +211,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit17]
-FileName=pengine\fxman.cpp
+FileName=PEngine\fxman.cpp
 CompileCpp=1
-Folder=Source/PEngine
+Folder=PEngine
 Compile=1
 Link=1
 Priority=1000
@@ -221,9 +221,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit18]
-FileName=pengine\model.cpp
+FileName=PEngine\model.cpp
 CompileCpp=1
-Folder=Source/PEngine
+Folder=PEngine
 Compile=1
 Link=1
 Priority=1000
@@ -231,9 +231,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit19]
-FileName=pengine\physfs_rw.cpp
+FileName=PEngine\physfs_rw.cpp
 CompileCpp=1
-Folder=Source/PEngine
+Folder=PEngine
 Compile=1
 Link=1
 Priority=1000
@@ -241,9 +241,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit20]
-FileName=pengine\render.cpp
+FileName=PEngine\render.cpp
 CompileCpp=1
-Folder=Source/PEngine
+Folder=PEngine
 Compile=1
 Link=1
 Priority=1000
@@ -251,9 +251,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit21]
-FileName=pengine\terrain.cpp
+FileName=PEngine\terrain.cpp
 CompileCpp=1
-Folder=Source/PEngine
+Folder=PEngine
 Compile=1
 Link=1
 Priority=1000
@@ -261,9 +261,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit22]
-FileName=pengine\texture.cpp
+FileName=PEngine\texture.cpp
 CompileCpp=1
-Folder=Source/PEngine
+Folder=PEngine
 Compile=1
 Link=1
 Priority=1000
@@ -271,9 +271,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit23]
-FileName=pengine\tinystr.cpp
+FileName=PEngine\util.cpp
 CompileCpp=1
-Folder=Source/PEngine
+Folder=PEngine
 Compile=1
 Link=1
 Priority=1000
@@ -281,9 +281,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit24]
-FileName=pengine\tinyxml.cpp
+FileName=PEngine\vbuffer.cpp
 CompileCpp=1
-Folder=Source/PEngine
+Folder=PEngine
 Compile=1
 Link=1
 Priority=1000
@@ -291,9 +291,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit25]
-FileName=pengine\tinyxmlerror.cpp
+FileName=PEngine\vmath.cpp
 CompileCpp=1
-Folder=Source/PEngine
+Folder=PEngine
 Compile=1
 Link=1
 Priority=1000
@@ -301,9 +301,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit26]
-FileName=pengine\tinyxmlparser.cpp
+FileName=PSim\rigidbody.cpp
 CompileCpp=1
-Folder=Source/PEngine
+Folder=PSim
 Compile=1
 Link=1
 Priority=1000
@@ -311,9 +311,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit27]
-FileName=pengine\util.cpp
+FileName=PSim\sim.cpp
 CompileCpp=1
-Folder=Source/PEngine
+Folder=PSim
 Compile=1
 Link=1
 Priority=1000
@@ -321,9 +321,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit28]
-FileName=pengine\vbuffer.cpp
+FileName=PSim\vehicle.cpp
 CompileCpp=1
-Folder=Source/PEngine
+Folder=PSim
 Compile=1
 Link=1
 Priority=1000
@@ -331,9 +331,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit29]
-FileName=pengine\vmath.cpp
+FileName=TinyXML\tinystr.cpp
 CompileCpp=1
-Folder=Source/PEngine
+Folder=TinyXML
 Compile=1
 Link=1
 Priority=1000
@@ -341,9 +341,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit30]
-FileName=psim\rigidbody.cpp
+FileName=TinyXML\tinyxml.cpp
 CompileCpp=1
-Folder=Source/PSim
+Folder=TinyXML
 Compile=1
 Link=1
 Priority=1000
@@ -351,9 +351,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit31]
-FileName=psim\sim.cpp
+FileName=TinyXML\tinyxmlerror.cpp
 CompileCpp=1
-Folder=Source/PSim
+Folder=TinyXML
 Compile=1
 Link=1
 Priority=1000
@@ -361,9 +361,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit32]
-FileName=psim\vehicle.cpp
+FileName=TinyXML\tinyxmlparser.cpp
 CompileCpp=1
-Folder=Source/PSim
+Folder=TinyXML
 Compile=1
 Link=1
 Priority=1000
@@ -371,9 +371,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit33]
-FileName=trigger\game.cpp
+FileName=Trigger\game.cpp
 CompileCpp=1
-Folder=Source/Trigger
+Folder=Trigger
 Compile=1
 Link=1
 Priority=1000
@@ -381,9 +381,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit34]
-FileName=trigger\main.cpp
+FileName=Trigger\main.cpp
 CompileCpp=1
-Folder=Source/Trigger
+Folder=Trigger
 Compile=1
 Link=1
 Priority=1000
@@ -391,9 +391,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit35]
-FileName=trigger\menu.cpp
+FileName=Trigger\menu.cpp
 CompileCpp=1
-Folder=Source/Trigger
+Folder=Trigger
 Compile=1
 Link=1
 Priority=1000
@@ -401,9 +401,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit36]
-FileName=trigger\render.cpp
+FileName=Trigger\render.cpp
 CompileCpp=1
-Folder=Source/Trigger
+Folder=Trigger
 Compile=1
 Link=1
 Priority=1000
