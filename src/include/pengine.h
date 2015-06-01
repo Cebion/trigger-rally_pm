@@ -28,9 +28,7 @@
 #include <physfs.h>
 
 
-// This is a slightly modified GLEW for internal build
-#define GLEW_STATIC
-#include "GL/glew.h"
+#include <GL/glew.h>
 
 
 // TinyXML is built into the pengine library
@@ -40,8 +38,6 @@
 // Some maths utils and macros
 #include "vmath.h"
 
-
-#define null 0
 
 
 class PUtil;
