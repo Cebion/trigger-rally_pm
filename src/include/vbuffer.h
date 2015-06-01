@@ -6,7 +6,7 @@
 
 
 
-#define BUFFER_OFFSET(i) ((char *)null + (i))
+#define BUFFER_OFFSET(i) ((char *)nullptr + (i))
 
 
 class PVBuffer {
@@ -35,10 +35,10 @@ protected:
     //static PVBuffer *bound, *boundelem;
 
 public:
-    PVBuffer() { buffid = 0; buffer = null; }
+    PVBuffer() { buffid = 0; buffer = nullptr; }
     ~PVBuffer();
 
-    bool create(int buffsize, contenttype type, usagemode usage, const void *data = null);
+    bool create(int buffsize, contenttype type, usagemode usage, const void *data = nullptr);
     void update(int offset, int buffsize, const void *data);
     void unload();
 

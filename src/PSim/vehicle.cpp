@@ -124,7 +124,7 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
   dims = vec3f(1.0,1.0,1.0);
   
   wheelscale = 1.0;
-  wheelmodel = null;
+  wheelmodel = nullptr;
   
   ctrlrate.setDefaultRates();
   
@@ -305,7 +305,7 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
       vtp->parent = -1;
       //vtp->ref_local.setPosition(vec3f::zero());
       //vtp->ref_local.setOrientation(vec3f::zero());
-      vtp->model = null;
+      vtp->model = nullptr;
       vtp->scale = 1.0;
 
       val = walk->Attribute("name");

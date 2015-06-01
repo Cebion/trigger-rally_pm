@@ -54,13 +54,13 @@ char* PUtil::fgets2(char *s, int size, PHYSFS_file *pfile)
   for (i = 0; i < size-1; i++) {
     
     // check for EOF
-    if (PHYSFS_eof(pfile)) return null;
+    if (PHYSFS_eof(pfile)) return nullptr;
     
     int ret = PHYSFS_read(pfile, s + i, 1, 1);
     
     if (s[i] == '\n') break;
     
-    if (ret == -1) return null; // major error
+    if (ret == -1) return nullptr; // major error
     if (ret == 0) { i--; break; } // er, must be end of file anyway
   }
   
@@ -134,16 +134,16 @@ TiXmlElement *PUtil::loadRootElement(TiXmlDocument &doc, const char *rootName)
   if (!doc.LoadFile()) {
     PUtil::outLog() << "Load failed: TinyXML couldn't load file, possibly file not found or invalid XML" << std::endl;
     PUtil::outLog() << "TinyXML: " << xmlfile.ErrorDesc() << std::endl;
-    return null;
+    return nullptr;
   }
   */
   
   // New PhysFS handler
   
   PHYSFS_file *pfile = PHYSFS_openRead(doc.Value());
-  if (pfile == null) {
+  if (pfile == nullptr) {
     PUtil::outLog() << "Load failed: PhysFS: " << PHYSFS_getLastError() << std::endl;
-    return null;
+    return nullptr;
   }
   
   int filesize = PHYSFS_fileLength(pfile);
@@ -164,14 +164,14 @@ TiXmlElement *PUtil::loadRootElement(TiXmlDocument &doc, const char *rootName)
   if (!rootnode) {
     PUtil::outLog() << "Couldn't process <" << rootName << "> element, possibly invalid file type" << std::endl;
     PUtil::outLog() << "TinyXML: " << doc.ErrorDesc() << std::endl;
-    return null;
+    return nullptr;
   }
 
   TiXmlElement *rootelem = rootnode->ToElement();
   if (!rootelem) {
     PUtil::outLog() << "Load failed: TinyXML error" << std::endl;
     PUtil::outLog() << "TinyXML: " << doc.ErrorDesc() << std::endl;
-    return null;
+    return nullptr;
   }
 
   return rootelem;

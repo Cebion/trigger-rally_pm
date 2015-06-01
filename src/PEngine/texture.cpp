@@ -39,7 +39,7 @@ PTexture *PSSTexture::loadTexture(const std::string &name, bool genMipmaps, bool
     {
       if (PUtil::isDebugLevel(DEBUGLEVEL_ENDUSER))
         PUtil::outLog() << "Failed to load " << name << ": " << e.what () << std::endl;
-      return null;
+      return nullptr;
     }
     texlist.add(tex);
   }
@@ -56,12 +56,12 @@ PImage::~PImage()
 void PImage::unload ()
 {
   delete[] data;
-  data = null;
+  data = nullptr;
 }
 
 void PImage::load (const std::string &filename)
 {
-  data = null;
+  data = nullptr;
   
   if (PUtil::isDebugLevel(DEBUGLEVEL_TEST))
     PUtil::outLog() << "Loading image \"" << filename << "\"" << std::endl;
@@ -70,7 +70,7 @@ void PImage::load (const std::string &filename)
   
   PHYSFS_file *pfile = PHYSFS_openRead(filename.c_str());
   
-  if (pfile == null) {
+  if (pfile == nullptr) {
     throw MakePException (filename + ", PhysFS: " + PHYSFS_getLastError ());
   }
   

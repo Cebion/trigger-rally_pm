@@ -31,7 +31,7 @@ public:
     for (typename std::vector<T *>::iterator i = reslist.begin(); i != reslist.end(); i++)
       if (name == (*i)->getName())
         return *i;
-    return null;
+    return nullptr;
   }
 
   void clear() {

@@ -13,8 +13,8 @@ TriggerGame::TriggerGame(MainApp *parent)
 {
   app = parent;
   
-  sim = null;
-  terrain = null;
+  sim = nullptr;
+  terrain = nullptr;
   
   randomseed = 0;
 }
@@ -73,7 +73,7 @@ bool TriggerGame::loadLevel(const std::string &filename)
   if (PUtil::isDebugLevel(DEBUGLEVEL_TEST))
     PUtil::outLog() << "Loading level \"" << filename << "\"\n";
 
-  if (sim == null)
+  if (sim == nullptr)
     sim = new PSim();
   
   sim->setGravity(vec3f(0.0,0.0,-9.81));

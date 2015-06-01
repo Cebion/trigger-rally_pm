@@ -56,7 +56,7 @@ PEffect *PSSEffect::loadEffect(const std::string &name)
     {
       if (PUtil::isDebugLevel(DEBUGLEVEL_ENDUSER))
         PUtil::outLog() << "Failed to load " << name << ": " << e.what () << std::endl;
-      return null;
+      return nullptr;
     }
     fx->setFirstValidTechnique();
     fxlist.add(fx);
@@ -118,7 +118,7 @@ void PEffect::loadMTL(const std::string &filename)
 
    /* Let's read from file */
    pfile = PHYSFS_openRead(filename.c_str());
-   if(pfile == null)
+   if(pfile == nullptr)
    {
       con_printf("Cannot find effect file \"%s\"\n",filename);
       throw MakePException ("PhysFS: " + PHYSFS_getLastError());
@@ -186,7 +186,7 @@ void PEffect::loadFX(const std::string &filename)
 
   //FILE *file = fopen(filename.c_str(),"rb");
   PHYSFS_file *pfile = PHYSFS_openRead(filename.c_str());
-  if (pfile == null) {
+  if (pfile == nullptr) {
     con_printf("Cannot find effect file \"%s\"\n",filename);
     throw MakePException ("PhysFS: " + PHYSFS_getLastError());
   }
@@ -249,7 +249,7 @@ void PEffect::loadFX(const std::string &filename)
       tex.push_back(fx_texture_s());
       fx_texture_s *curtex = &tex.back();
       
-      curtex->texobject = null;
+      curtex->texobject = nullptr;
 
       SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
 

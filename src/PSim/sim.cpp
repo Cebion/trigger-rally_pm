@@ -8,7 +8,7 @@
 
 
 
-PSim::PSim() : terrain(null), gravity(vec3f::zero())
+PSim::PSim() : terrain(nullptr), gravity(vec3f::zero())
 {
 }
 
@@ -28,7 +28,7 @@ PVehicleType *PSim::loadVehicleType(const std::string &filename, PSSModel &ssMod
     if (!vtype->load(filename, ssModel)) {
       if (PUtil::isDebugLevel(DEBUGLEVEL_ENDUSER))
         PUtil::outLog() << "Failed to load " << filename << "\n";
-      return null;
+      return nullptr;
     }
     vtypelist.add(vtype);
   }
@@ -52,7 +52,7 @@ PVehicle *PSim::createVehicle(TiXmlElement *element, const std::string &filepath
   const char *type = element->Attribute("type");
   if (!type) {
     PUtil::outLog() << "Vehicle has no type\n";
-    return null;
+    return nullptr;
   }
   
   vec3f pos = vec3f::zero();
@@ -79,7 +79,7 @@ PVehicle *PSim::createVehicle(PVehicleType *type, const vec3f &pos, const quatf 
 {
   PSSModel *unused = &ssModel; unused = unused;
   
-  if (!type) return null;
+  if (!type) return nullptr;
   
   PVehicle *newvehicle = new PVehicle(*this, type);
   

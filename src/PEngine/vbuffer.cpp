@@ -12,8 +12,8 @@
 //#define USE_VBO_ARB (false)
 
 // emulation of GL buffer binding functionality
-//PVBuffer *PVBuffer::bound = null;
-//PVBuffer *PVBuffer::boundelem = null;
+//PVBuffer *PVBuffer::bound = nullptr;
+//PVBuffer *PVBuffer::boundelem = nullptr;
 
 
 PVBuffer::~PVBuffer()
@@ -29,7 +29,7 @@ void PVBuffer::unload()
         buffid = 0;
     } else {
         if (buffer) delete[] buffer;
-        buffer = null;
+        buffer = nullptr;
     }
 }
 
@@ -128,7 +128,7 @@ void PVBuffer::update(int offset, int buffsize, const void *data)
 uint8 *PVBuffer::getPointer(int offset)
 {
     if (USE_VBO_ARB) {
-        return ((uint8*)null + offset);
+        return ((uint8*)nullptr + offset);
     } else {
         return ((uint8*)buffer + offset);
     }
@@ -141,8 +141,8 @@ void PVBuffer::bind()
     } else {
         // don't bind if buffer hasn't been allocated
         //switch (pr_type) {
-        //case VertexContent: bound = buffer ? this : null; break;
-        //case IndexContent: boundelem = buffer ? this : null; break;
+        //case VertexContent: bound = buffer ? this : nullptr; break;
+        //case IndexContent: boundelem = buffer ? this : nullptr; break;
         //}
     }
 }
@@ -154,8 +154,8 @@ void PVBuffer::unbind()
         glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
         glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, 0);
     } else {
-        //bound = null;
-        //boundelem = null;
+        //bound = nullptr;
+        //boundelem = nullptr;
     }
 }
 

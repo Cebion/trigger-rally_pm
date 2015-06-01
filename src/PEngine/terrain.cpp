@@ -67,9 +67,9 @@ PTerrain::PTerrain (TiXmlElement *element, const std::string &filepath, PSSTextu
       tfb.middle = 0.5f;
       tfb.range = 0.5f;
       tfb.density = 1.0f;
-      //tfb.model = null;
+      //tfb.model = nullptr;
       //tfb.modelscale = 1.0f;
-      tfb.sprite_tex = null;
+      tfb.sprite_tex = nullptr;
       tfb.sprite_count = 1;
       
       val = walk->Attribute("middle");
@@ -262,7 +262,7 @@ PTerrain::PTerrain (TiXmlElement *element, const std::string &filepath, PSSTextu
   
   // load hud map
   
-  tex_hud_map = null;
+  tex_hud_map = nullptr;
   
   if (hudmap.length()) {
     tex_hud_map = ssTexture.loadTexture(PUtil::assemblePath(hudmap, filepath));
@@ -309,7 +309,7 @@ PTerrainTile *PTerrain::getTile(int tilex, int tiley)
 {
   // find the least recently used tile while searching for x,y
   int best_lru = 0, unused = 0;
-  PTerrainTile *tileptr = null;
+  PTerrainTile *tileptr = nullptr;
   for (std::list<PTerrainTile>::iterator iter = tile.begin();
     iter != tile.end(); ++iter) {
     if (iter->posx == tilex && iter->posy == tiley) {

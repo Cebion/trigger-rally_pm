@@ -134,7 +134,7 @@ int PApp::run(int argc, char *argv[])
   
   outLog() << "Initialising PhysFS" << std::endl;
   
-  if (PHYSFS_init((argc >= 1) ? argv[0] : null) == 0) {
+  if (PHYSFS_init((argc >= 1) ? argv[0] : nullptr) == 0) {
     outLog() << "PhysFS failed to initialise" << std::endl;
     outLog() << "PhysFS: " << PHYSFS_getLastError() << std::endl;
     return 1;
@@ -239,7 +239,7 @@ int PApp::run(int argc, char *argv[])
   
   srand(SDL_GetTicks());
   
-  SDL_WM_SetCaption(apptitle.c_str(), null);
+  SDL_WM_SetCaption(apptitle.c_str(), nullptr);
   
   outLog() << "Create window and set video mode" << std::endl;
   
@@ -294,7 +294,7 @@ int PApp::run(int argc, char *argv[])
   for (unsigned int i=0; i<sdl_joy.size(); i++) {
     outLog() << "Joystick " << (i+1) << ": ";
     sdl_joy[i].sdl_joystick = SDL_JoystickOpen(i);
-    if (sdl_joy[i].sdl_joystick == null) {
+    if (sdl_joy[i].sdl_joystick == nullptr) {
       outLog() << "failed to open joystick" << std::endl;
       SDL_Quit();
       if (PHYSFS_deinit() == 0) {
@@ -533,7 +533,7 @@ int PApp::run(int argc, char *argv[])
       break;
     }
 
-    sdl_mousemap = SDL_GetMouseState(null, null);
+    sdl_mousemap = SDL_GetMouseState(nullptr, nullptr);
 
 #define TIMESCALE 1.0
 
@@ -678,7 +678,7 @@ int PApp::run(int argc, char *argv[])
       }
       
     } else {
-      SDL_WaitEvent(null);
+      SDL_WaitEvent(nullptr);
     }
 
     if (exit_requested) break;

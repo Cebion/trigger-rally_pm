@@ -33,7 +33,7 @@ PModel *PSSModel::loadModel(const std::string &name)
     {
       if (PUtil::isDebugLevel(DEBUGLEVEL_ENDUSER))
         PUtil::outLog() << "Failed to load " << name << ": " << e.what () << std::endl;
-      return null;
+      return nullptr;
     }
     modlist.add(mdl);
   }
@@ -47,11 +47,11 @@ PModel *PSSModel::loadModel(const std::string &name)
 
 char *strtok2(char *input)
 {
-  static char *inputstore = null;
+  static char *inputstore = nullptr;
 
-  if (input != null) inputstore = input;
+  if (input != nullptr) inputstore = input;
 
-  if (!inputstore) return null;
+  if (!inputstore) return nullptr;
 
   // eat whitespace
   while (*inputstore == ' ' || *inputstore == '\t' || *inputstore == '\n' || *inputstore == '\r') inputstore++;
@@ -81,9 +81,9 @@ char *strtok2(char *input)
     while (*inputstore == ' ' || *inputstore == '\t' || *inputstore == '\n' || *inputstore == '\r') inputstore++;
     *nullout = 0;
     if (!*inputstore)
-      inputstore = null;
+      inputstore = nullptr;
   } else {
-    inputstore = null;
+    inputstore = nullptr;
   }
 
   return tokstart;
@@ -316,7 +316,7 @@ void PModel::loadASE (const std::string &filename, float globalScale)
     PUtil::outLog() << "Loading ASE model \"" << filename << "\"" << std::endl;
 
   PHYSFS_file *pfile = PHYSFS_openRead(filename.c_str());
-  if (pfile == null) {
+  if (pfile == nullptr) {
     throw MakePException (filename + ", PhysFS: " + PHYSFS_getLastError());
   }
 
@@ -392,7 +392,7 @@ void PModel::loadASE (const std::string &filename, float globalScale)
         dcon_printf("*GEOMOBJECT<br>\n");
         vec3f tm[4];
         int tempi;
-        PMesh *curmesh = null;
+        PMesh *curmesh = nullptr;
         tm[0] = vec3f(1,0,0);
         tm[1] = vec3f(0,1,0);
         tm[2] = vec3f(0,0,1);
@@ -407,7 +407,7 @@ void PModel::loadASE (const std::string &filename, float globalScale)
               dcon_printf("*MESH<br>\n");
               mesh.push_back(PMesh());
               curmesh = &mesh.back();
-              curmesh->effect = null;
+              curmesh->effect = nullptr;
               while (PUtil::fgets2(buff,1000,pfile)) {
                 TOKENIZE_LINE_AND_CHECK
                 if (!strcmp(tok[0],"}")) break;

@@ -37,12 +37,12 @@ void MainApp::config()
 
 void MainApp::load()
 {
-  psys_dirt = null;
+  psys_dirt = nullptr;
   
-  audinst_engine = null;
-  audinst_wind = null;
-  audinst_gravel = null;
-  game = null;
+  audinst_engine = nullptr;
+  audinst_wind = nullptr;
+  audinst_gravel = nullptr;
+  game = nullptr;
   
   // use PUtil, not boost
   //std::string buff = boost::str(boost::format("textures/splash/splash%u.jpg") % ((rand() % 3) + 1));
@@ -623,15 +623,15 @@ bool MainApp::startGame(const std::string &filename)
     appstate = AS_IN_GAME;
   }
   
-  tex_sky[0] = null;
+  tex_sky[0] = nullptr;
   
   if (game->weather.cloud.texname.length() > 0)
     tex_sky[0] = getSSTexture().loadTexture(game->weather.cloud.texname);
   
-  if (tex_sky[0] == null) {
+  if (tex_sky[0] == nullptr) {
     tex_sky[0] = getSSTexture().loadTexture("textures/sky/blue.jpg");
     
-    if (tex_sky[0] == null) tex_sky[0] = tex_detail; // last fallback...
+    if (tex_sky[0] == nullptr) tex_sky[0] = tex_detail; // last fallback...
   }
   
   return true;
@@ -660,17 +660,17 @@ void MainApp::endGame(int gamestate)
   
   if (audinst_engine) {
     delete audinst_engine;
-    audinst_engine = null;
+    audinst_engine = nullptr;
   }
   
   if (audinst_wind) {
     delete audinst_wind;
-    audinst_wind = null;
+    audinst_wind = nullptr;
   }
   
   if (audinst_gravel) {
     delete audinst_gravel;
-    audinst_gravel = null;
+    audinst_gravel = nullptr;
   }
   
   for (unsigned int i=0; i<audinst.size(); i++) {
@@ -680,7 +680,7 @@ void MainApp::endGame(int gamestate)
   
   if (game) {
     delete game;
-    game = null;
+    game = nullptr;
   }
   
   finishRace(gamestate, coursetime);

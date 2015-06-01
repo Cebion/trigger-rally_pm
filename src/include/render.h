@@ -34,7 +34,7 @@ public:
     startsize = 0.0;
     endsize = 1.0;
     decay = 1.0;
-    tex = null;
+    tex = nullptr;
     blendparam1 = GL_SRC_ALPHA;
     blendparam2 = GL_ONE;
   }
@@ -123,9 +123,9 @@ private:
   int cx,cy,cc;
 
 public:
-  PImage () : data (null) { }
-  PImage (const std::string &filename) : data (null) { load (filename); }
-  PImage (int _cx, int _cy, int _cc) : data (null) { load (_cx, _cy, _cc); }
+  PImage () : data (nullptr) { }
+  PImage (const std::string &filename) : data (nullptr) { load (filename); }
+  PImage (int _cx, int _cy, int _cc) : data (nullptr) { load (_cx, _cy, _cc); }
   ~PImage ();
   
   void load (const std::string &filename);
@@ -250,7 +250,7 @@ struct fx_texture_s {
   PTexture *texobject;
 
   fx_texture_s() {
-    texobject = null;
+    texobject = nullptr;
   }
 };
 
