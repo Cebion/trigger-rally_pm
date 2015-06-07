@@ -6,6 +6,7 @@
 DISTNAME := trigger-rally
 DISTVER := 0.6.3
 DISTDIR := $(DISTNAME)-$(DISTVER)
+DISTARC := $(DISTDIR).tar.gz
 TR_EXENAME := ../bin/trigger-rally
 TR_CFGNAME := ../bin/trigger-rally.config.defs
 TR_DATADIR := ../data
@@ -101,10 +102,12 @@ installdirs:
 # awareness of the $(DISTVER) variable, which you must update for each release!
 #
 dist: clean
-	@printf "\ntar | gzip -> \"../../%s.tar.gz\"\n" "$(DISTDIR)"
-	@cd ../..; tar --owner=root --group=root --create --file - "$(DISTDIR)" | gzip --to-stdout - > "$(DISTDIR).tar.gz"
-	@printf "md5sum -> \"../../%s.tar.gz.md5sum\"\n\n" "$(DISTDIR)"
-	@cd ../..; md5sum "$(DISTDIR).tar.gz" > "$(DISTDIR).tar.gz.md5sum"
+	@printf "\ntar -> \"../../%s\"\n" "$(DISTARC)"
+	@cd ../..; \
+		tar --create --file="$(DISTARC)" --auto-compress "$(DISTDIR)"
+	@printf "md5sum -> \"../../%s.md5\"\n\n" "$(DISTARC)"
+	@cd ../..; \
+		md5sum "$(DISTARC)" > "$(DISTARC).md5"
 
 # links the object files into the executable, which it then strips
 $(TR_EXENAME): $(OBJFILES)
@@ -122,7 +125,11 @@ $(TR_EXENAME): $(OBJFILES)
 # backup files (such as "func.cpp~")
 #
 clean:
-	-@$(RM) --verbose $(OBJFILES) $(DEPFILES) $(TR_EXENAME) $(shell find -type f -name "*~")
+	-@$(RM) --verbose \
+		$(OBJFILES) \
+		$(DEPFILES) \
+		$(TR_EXENAME) \
+		$(shell find -type f -name "*~")
 
 #
 # includes dependency files; these files are needed to speed up

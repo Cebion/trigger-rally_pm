@@ -67,7 +67,11 @@ $(TR_EXENAME): $(OBJFILES)
 # backup files (such as "func.cpp~")
 #
 clean:
-	-@$(RM) --verbose $(OBJFILES) $(DEPFILES) $(TR_EXENAME) $(shell find -type f -name "*~")
+	-@$(RM) --verbose \
+		$(OBJFILES) \
+		$(DEPFILES) \
+		$(TR_EXENAME) \
+		$(shell find -type f -name "*~")
 
 #
 # includes dependency files; these files are needed to speed up
