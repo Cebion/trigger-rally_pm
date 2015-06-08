@@ -8,7 +8,7 @@ Includes=.\include;..\..\libraries-win32\include;"C:\Program Files\FMOD SoundSys
 Libs=..\..\libraries-win32\lib;"C:\Program Files\FMOD SoundSystem\FMOD Studio API Windows\api\lowlevel\lib"
 PrivateResource=
 ResourceIncludes=
-MakeIncludes=
+MakeIncludes=TriggerRally.mak
 Compiler=
 CppCompiler=-DNDEBUG_@@_-DWIN32_@@_-DPACKAGE_VERSION=\"0.6.3\"_@@_
 Linker=-lopengl32_@@_-lglu32_@@_-lglew32_@@_-lSDL_@@_-lSDL_image_@@_-lphysfs_@@_-lfmod_@@_
