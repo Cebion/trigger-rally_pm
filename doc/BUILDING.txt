@@ -1,4 +1,4 @@
-﻿==========================
+==========================
 How to build Trigger Rally
 ==========================
 
@@ -79,6 +79,13 @@ See the GCC documentation for the currently supported x86 options:
 The "dist" target is also supported, and it creates a zipped tarball of the
 Trigger Rally directory and then calculates the archive's MD5 sum.
 
+Finally be sure to check the Trigger Rally default configuration file at:
+
+  bin/trigger-rally.config.defs
+
+and edit the default data paths accordingly. And yes this config file needs to stay
+in the binary folder, for compatibility with the Windows build and code simplicity.
+
 -------------------------------
 3. Windows users - the easy way
 -------------------------------
@@ -108,20 +115,8 @@ such that "libraries-win32" and "trigger-rally-VER" are side-by-side.
 Then all you need to do is open the "TriggerRally.dev" file (the .DEV file
 extension should be associated with Dev-C++) and click the "Rebuild All" button.
 
-After the build is complete you must copy certain .DLL files from "libraries-win32\bin"
-and from the FMOD folder into "trigger-rally-VER\bin" where "trigger-rally.exe" should be.
-
-  .DLL FILENAME     SOURCE LOCATION
-  ---------------------------------
-  fmod.dll          "C:\Program Files\FMOD SoundSystem\FMOD Studio API Windows\api\lowlevel\lib"
-  glew32.dll        libraries-win32\bin
-  libjpeg-9.dll     libraries-win32\bin
-  libphysfs.dll     libraries-win32\bin
-  SDL.dll           libraries-win32\bin
-  SDL_image.dll     libraries-win32\bin
-  ---------------------------------
-
-You should now be able to play the game by running "trigger-rally.exe".
+You should now be able to play the game by running "trigger-rally.exe" which
+should be located in the binary folder "bin".
 
 -------------------------------
 4. Windows users - the hard way
@@ -363,19 +358,6 @@ If you haven't already, install the FMOD Studio API to its default location.
   $ #
   $ cd trigger-rally-0.6.3/src/
   $ make -f GNUmakefile.MSYS
-
-Before you can play the game you need to copy the required .DLL files from "/local/bin"
-to the Trigger Rally "bin" directory, where "trigger-rally.exe" should be.
-
-  .DLL FILENAME     SOURCE LOCATION
-  ---------------------------------
-  fmod.dll          "C:\Program Files\FMOD SoundSystem\FMOD Studio API Windows\api\lowlevel\lib"
-  glew32.dll        C:\MinGW\msys\1.0\local\bin\
-  libjpeg-9.dll     C:\MinGW\msys\1.0\local\bin\
-  libphysfs.dll     C:\MinGW\msys\1.0\local\bin\
-  SDL.dll           C:\MinGW\msys\1.0\local\bin\
-  SDL_image.dll     C:\MinGW\msys\1.0\local\bin\
-  ---------------------------------
 
 ------------------------
 5. Packaging for Windows
