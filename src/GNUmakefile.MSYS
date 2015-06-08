@@ -4,23 +4,41 @@
 # This is a watered-down version of the "real" GNUmakefile and it
 # doesn't support the `install`, `uninstall` and `dist` targets.
 #
+# TODO:
+#   * change TR_EXENAME to TR_EXEFILE
+#   * beautify printing of copied .DLL files
+#
 
-# custom and standard GNU variables
-DISTVER := 0.6.3
-TR_EXENAME := ../bin/trigger-rally.exe
-PROJDIRS := PEngine PSim TinyXML Trigger
-SRCFILES := $(shell find $(PROJDIRS) -type f -name "*.cpp")
-OBJFILES := $(patsubst %.cpp, %.o, $(SRCFILES))
-DEPFILES := $(patsubst %.cpp, %.d, $(SRCFILES))
-WARNINGS ?= -Wall -Wextra -pedantic
-OPTIMS ?= -march=native -mtune=native -Ofast
-MODENV ?= -m32
-DMACROS := -DNDEBUG -DWIN32 -DPACKAGE_VERSION=\"$(DISTVER)\"
-INCDIRS := -I"./include" -I"/local/include" -I"/c/Program Files/FMOD SoundSystem/FMOD Studio API Windows/api/lowlevel/inc"
-LIBDIRS := -L"/local/lib" -L"/c/Program Files/FMOD SoundSystem/FMOD Studio API Windows/api/lowlevel/lib"
-CXXFLAGS := -std=c++11 $(MODENV) $(WARNINGS) $(OPTIMS) $(DMACROS) $(INCDIRS)
-EXTRA_LIBS := -lopengl32 -lglu32 -lglew32 -lSDL -lSDL_image -lphysfs -lfmod
-LDFLAGS := $(MODENV) $(LIBDIRS) $(EXTRA_LIBS)
+# standard GNU and custom variables
+DISTVER         := 0.6.3
+TR_BINDIR       := ../bin
+TR_EXENAME      := ../bin/trigger-rally.exe
+TR_DLLFILES     :=              \
+    $(TR_BINDIR)/fmod.dll       \
+    $(TR_BINDIR)/glew32.dll     \
+    $(TR_BINDIR)/libjpeg-9.dll  \
+    $(TR_BINDIR)/libphysfs.dll  \
+    $(TR_BINDIR)/SDL.dll        \
+    $(TR_BINDIR)/SDL_image.dll
+FMODAPIDIR      := /c/Program Files/FMOD SoundSystem/FMOD Studio API Windows/api/lowlevel
+PROJDIRS        := PEngine PSim TinyXML Trigger
+SRCFILES        := $(shell find $(PROJDIRS) -type f -name "*.cpp")
+OBJFILES        := $(patsubst %.cpp, %.o, $(SRCFILES))
+DEPFILES        := $(patsubst %.cpp, %.d, $(SRCFILES))
+WARNINGS        ?= -Wall -Wextra -pedantic
+OPTIMS          ?= -march=native -mtune=native -Ofast
+MODENV          ?= -m32
+DMACROS         := -DNDEBUG -DWIN32 -DPACKAGE_VERSION=\"$(DISTVER)\"
+INCDIRS         :=              \
+    -I"./include"               \
+    -I"/local/include"          \
+    -I"$(FMODAPIDIR)/inc"
+LIBDIRS         :=              \
+    -L"/local/lib"              \
+    -L"$(FMODAPIDIR)/lib"
+CXXFLAGS        := -std=c++11 $(MODENV) $(WARNINGS) $(OPTIMS) $(DMACROS) $(INCDIRS)
+EXTRA_LIBS      := -lopengl32 -lglu32 -lglew32 -lSDL -lSDL_image -lphysfs -lfmod
+LDFLAGS         := $(MODENV) $(LIBDIRS) $(EXTRA_LIBS)
 
 #
 # phony targets, whose names aren't names of resulting files
@@ -29,10 +47,10 @@ LDFLAGS := $(MODENV) $(LIBDIRS) $(EXTRA_LIBS)
 # `all` is `build` because I always felt "all" was a bad name,
 # while the others I had either no time or no incentive to implement
 #
-.PHONY: build printvars clean
+.PHONY: build printvars clean copydlls
 
 # builds the executable
-build: printvars $(TR_EXENAME)
+build: printvars $(TR_EXENAME) copydlls
 
 #
 # prints the variables that the user can change;
@@ -46,8 +64,8 @@ build: printvars $(TR_EXENAME)
 #
 printvars:
 	@printf "\ncurrent values of user-set variables:\n"
-	@printf "\tOPTIMS ?= %s\n" "$(OPTIMS)"
-	@printf "\tMODENV ?= %s\n" "$(MODENV)"
+	@printf "\tOPTIMS   ?= %s\n" "$(OPTIMS)"
+	@printf "\tMODENV   ?= %s\n" "$(MODENV)"
 	@printf "\tWARNINGS ?= %s\n" "$(WARNINGS)"
 	@printf "\n"
 
@@ -63,13 +81,14 @@ $(TR_EXENAME): $(OBJFILES)
 	@strip $@
 
 #
-# removes object files, dependency files, executable and
+# removes object files, dependency files, .DLL files, executable and
 # backup files (such as "func.cpp~")
 #
 clean:
 	-@$(RM) --verbose \
 		$(OBJFILES) \
 		$(DEPFILES) \
+		$(TR_DLLFILES) \
 		$(TR_EXENAME) \
 		$(shell find -type f -name "*~")
 
@@ -89,3 +108,30 @@ clean:
 %.o: %.cpp GNUmakefile.MSYS
 	@printf "%s\t%s -> %s\n" $(CXX) $< $@
 	@$(CXX) $(CXXFLAGS) -MMD -MP -c $< -o $@
+
+#
+# the following targets handle the copying of .DLL files to the binary directory
+#
+# this section may be simplified in the future if FMOD support is
+# dropped and all .DLL files can be copied from /local/bin exclusively
+#
+
+copydlls: $(TR_DLLFILES)
+
+$(TR_BINDIR)/fmod.dll:
+	@cp --verbose "$(FMODAPIDIR)/lib/fmod.dll" $(TR_BINDIR)
+
+$(TR_BINDIR)/glew32.dll:
+	@cp --verbose /local/bin/glew32.dll $(TR_BINDIR)
+
+$(TR_BINDIR)/libjpeg-9.dll:
+	@cp --verbose /local/bin/libjpeg-9.dll $(TR_BINDIR)
+
+$(TR_BINDIR)/libphysfs.dll:
+	@cp --verbose /local/bin/libphysfs.dll $(TR_BINDIR)
+
+$(TR_BINDIR)/SDL.dll:
+	@cp --verbose /local/bin/SDL.dll $(TR_BINDIR)
+
+$(TR_BINDIR)/SDL_image.dll:
+	@cp --verbose /local/bin/SDL_image.dll $(TR_BINDIR)

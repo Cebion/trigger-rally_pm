@@ -1,39 +1,43 @@
 #
 # Trigger Rally GNUmakefile for Linux users
 #
+# TODO:
+#   * change TR_EXENAME to TR_EXEFILE
+#   * change TR_CFGNAME to TR_CFGFILE
+#
 
-# custom and standard GNU variables
-DISTNAME := trigger-rally
-DISTVER := 0.6.3
-DISTDIR := $(DISTNAME)-$(DISTVER)
-DISTARC := $(DISTDIR).tar.gz
-TR_EXENAME := ../bin/trigger-rally
-TR_CFGNAME := ../bin/trigger-rally.config.defs
-TR_DATADIR := ../data
-TR_DOCDIR := ../doc
-TR_DATAFILES := $(shell cd $(TR_DATADIR); find * -type f)
-TR_DOCFILES := $(shell cd $(TR_DOCDIR); find * -type f)
-PROJDIRS := PEngine PSim TinyXML Trigger
-SRCFILES := $(shell find $(PROJDIRS) -type f -name "*.cpp")
-OBJFILES := $(patsubst %.cpp, %.o, $(SRCFILES))
-DEPFILES := $(patsubst %.cpp, %.d, $(SRCFILES))
-WARNINGS ?= -Wall -Wextra -pedantic
-OPTIMS ?= -march=native -mtune=native -Ofast
-DMACROS := -DNDEBUG -DUNIX -DPACKAGE_VERSION=\"$(DISTVER)\"
-INCDIRS := -I"./include"
-CXXFLAGS := -std=c++11 $(WARNINGS) $(OPTIMS) $(DMACROS) $(INCDIRS)
-EXTRA_LIBS := -lGL -lGLU -lGLEW -lSDL -lSDL_image -lphysfs -lopenal -lalut
-LDFLAGS := $(EXTRA_LIBS)
+# standard GNU and custom variables
+DISTNAME        := trigger-rally
+DISTVER         := 0.6.3
+DISTDIR         := $(DISTNAME)-$(DISTVER)
+DISTARC         := $(DISTDIR).tar.gz
+TR_EXENAME      := ../bin/trigger-rally
+TR_CFGNAME      := ../bin/trigger-rally.config.defs
+TR_DATADIR      := ../data
+TR_DOCDIR       := ../doc
+TR_DATAFILES    := $(shell cd $(TR_DATADIR); find * -type f)
+TR_DOCFILES     := $(shell cd $(TR_DOCDIR); find * -type f)
+PROJDIRS        := PEngine PSim TinyXML Trigger
+SRCFILES        := $(shell find $(PROJDIRS) -type f -name "*.cpp")
+OBJFILES        := $(patsubst %.cpp, %.o, $(SRCFILES))
+DEPFILES        := $(patsubst %.cpp, %.d, $(SRCFILES))
+WARNINGS        ?= -Wall -Wextra -pedantic
+OPTIMS          ?= -march=native -mtune=native -Ofast
+DMACROS         := -DNDEBUG -DUNIX -DPACKAGE_VERSION=\"$(DISTVER)\"
+INCDIRS         := -I"./include"
+CXXFLAGS        := -std=c++11 $(WARNINGS) $(OPTIMS) $(DMACROS) $(INCDIRS)
+EXTRA_LIBS      := -lGL -lGLU -lGLEW -lSDL -lSDL_image -lphysfs -lopenal -lalut
+LDFLAGS         := $(EXTRA_LIBS)
 INSTALL_PROGRAM := install --mode=0755
-INSTALL_DATA := install --mode=0644
+INSTALL_DATA    := install --mode=0644
 
 # standard GNU directories
-prefix ?= /usr/local
-exec_prefix ?= $(prefix)
-bindir := $(exec_prefix)/games
-datarootdir := $(prefix)/share
-datadir := $(datarootdir)/games
-docdir := $(datarootdir)/doc/$(DISTNAME)
+prefix          ?= /usr/local
+exec_prefix     ?= $(prefix)
+bindir          := $(exec_prefix)/games
+datarootdir     := $(prefix)/share
+datadir         := $(datarootdir)/games
+docdir          := $(datarootdir)/doc/$(DISTNAME)
 
 #
 # phony targets, whose names aren't names of resulting files
@@ -59,11 +63,11 @@ build: printvars $(TR_EXENAME)
 #
 printvars:
 	@printf "\ncurrent values of user-set variables:\n"
-	@printf "\tDESTDIR ?= %s\n" "$(DESTDIR)"
-	@printf "\tprefix ?= %s\n" "$(prefix)"
-	@printf "\texec_prefix ?= %s\n" "$(exec_prefix)"
-	@printf "\tOPTIMS ?= %s\n" "$(OPTIMS)"
-	@printf "\tWARNINGS ?= %s\n" "$(WARNINGS)"
+	@printf "\tDESTDIR      ?= %s\n" "$(DESTDIR)"
+	@printf "\tprefix       ?= %s\n" "$(prefix)"
+	@printf "\texec_prefix  ?= %s\n" "$(exec_prefix)"
+	@printf "\tOPTIMS       ?= %s\n" "$(OPTIMS)"
+	@printf "\tWARNINGS     ?= %s\n" "$(WARNINGS)"
 	@printf "\n"
 
 # installs the software (executable, data files and documentation)
