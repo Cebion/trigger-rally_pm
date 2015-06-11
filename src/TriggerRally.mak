@@ -7,33 +7,33 @@
 # TODO: make sure backslashes won't cause problems
 #
 
-LIBWINPATH  = ..\..\libraries-win32\bin
-LIBFMODPATH = C:\Program Files\FMOD SoundSystem\FMOD Studio API Windows\api\lowlevel\lib
-TRBINDIR    = ..\bin
-DLLFILES    = \
-    $(TRBINDIR)\fmod.dll \
-    $(TRBINDIR)\glew32.dll \
-    $(TRBINDIR)\libjpeg-9.dll \
-    $(TRBINDIR)\libphysfs.dll \
-    $(TRBINDIR)\SDL.dll \
-    $(TRBINDIR)\SDL_image.dll
+LIBWINPATH      = ..\..\libraries-win32\bin
+LIBFMODPATH     = C:\Program Files\FMOD SoundSystem\FMOD Studio API Windows\api\lowlevel\lib
+TR_BINDIR       = ..\bin
+TR_DLLFILES     =               \
+    $(TR_BINDIR)\fmod.dll       \
+    $(TR_BINDIR)\glew32.dll     \
+    $(TR_BINDIR)\libjpeg-9.dll  \
+    $(TR_BINDIR)\libphysfs.dll  \
+    $(TR_BINDIR)\SDL.dll        \
+    $(TR_BINDIR)\SDL_image.dll
 
-all-after: $(DLLFILES)
+all-after: $(TR_DLLFILES)
 
-$(TRBINDIR)\fmod.dll:
-	@xcopy "$(LIBFMODPATH)\fmod.dll" "$(TRBINDIR)"
+$(TR_BINDIR)\fmod.dll:
+	@xcopy "$(LIBFMODPATH)\fmod.dll" "$(TR_BINDIR)"
 
-$(TRBINDIR)\glew32.dll:
-	@xcopy "$(LIBWINPATH)\glew32.dll" "$(TRBINDIR)"
+$(TR_BINDIR)\glew32.dll:
+	@xcopy "$(LIBWINPATH)\glew32.dll" "$(TR_BINDIR)"
 
-$(TRBINDIR)\libjpeg-9.dll:
-	@xcopy "$(LIBWINPATH)\libjpeg-9.dll" "$(TRBINDIR)"
+$(TR_BINDIR)\libjpeg-9.dll:
+	@xcopy "$(LIBWINPATH)\libjpeg-9.dll" "$(TR_BINDIR)"
 
-$(TRBINDIR)\libphysfs.dll:
-	@xcopy "$(LIBWINPATH)\libphysfs.dll" "$(TRBINDIR)"
+$(TR_BINDIR)\libphysfs.dll:
+	@xcopy "$(LIBWINPATH)\libphysfs.dll" "$(TR_BINDIR)"
 
-$(TRBINDIR)\SDL.dll:
-	@xcopy "$(LIBWINPATH)\SDL.dll" "$(TRBINDIR)"
+$(TR_BINDIR)\SDL.dll:
+	@xcopy "$(LIBWINPATH)\SDL.dll" "$(TR_BINDIR)"
 
-$(TRBINDIR)\SDL_image.dll:
-	@xcopy "$(LIBWINPATH)\SDL_image.dll" "$(TRBINDIR)"
+$(TR_BINDIR)\SDL_image.dll:
+	@xcopy "$(LIBWINPATH)\SDL_image.dll" "$(TR_BINDIR)"

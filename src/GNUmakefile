@@ -1,20 +1,19 @@
 #
 # Trigger Rally GNUmakefile for Linux users
 #
-# TODO:
-#   * change TR_EXENAME to TR_EXEFILE
-#   * change TR_CFGNAME to TR_CFGFILE
-#
 
 # standard GNU and custom variables
 DISTNAME        := trigger-rally
 DISTVER         := 0.6.3
 DISTDIR         := $(DISTNAME)-$(DISTVER)
 DISTARC         := $(DISTDIR).tar.gz
-TR_EXENAME      := ../bin/trigger-rally
-TR_CFGNAME      := ../bin/trigger-rally.config.defs
+TR_EXENAME      := trigger-rally
+TR_CFGNAME      := trigger-rally.config.defs
+TR_BINDIR       := ../bin
 TR_DATADIR      := ../data
 TR_DOCDIR       := ../doc
+TR_EXEFILE      := $(TR_BINDIR)/$(TR_EXENAME)
+TR_CFGFILE      := $(TR_BINDIR)/$(TR_CFGNAME)
 TR_DATAFILES    := $(shell cd $(TR_DATADIR); find * -type f)
 TR_DOCFILES     := $(shell cd $(TR_DOCDIR); find * -type f)
 PROJDIRS        := PEngine PSim TinyXML Trigger
@@ -49,7 +48,7 @@ docdir          := $(datarootdir)/doc/$(DISTNAME)
 .PHONY: build printvars install uninstall installdirs dist clean
 
 # builds the executable
-build: printvars $(TR_EXENAME)
+build: printvars $(TR_EXEFILE)
 
 #
 # prints the variables that the user can change;
@@ -73,8 +72,8 @@ printvars:
 # installs the software (executable, data files and documentation)
 install: installdirs build
 	@printf "\ninstall [%s] begin\n" "$(DISTNAME)"
-	@$(INSTALL_PROGRAM) $(TR_EXENAME) $(DESTDIR)$(bindir)
-	@$(INSTALL_DATA) $(TR_CFGNAME) $(DESTDIR)$(bindir)
+	@$(INSTALL_PROGRAM) $(TR_EXEFILE) $(DESTDIR)$(bindir)
+	@$(INSTALL_DATA) $(TR_CFGFILE) $(DESTDIR)$(bindir)
 	@for file in $(TR_DATAFILES); do \
 		$(INSTALL_DATA) -D $(TR_DATADIR)/$$file $(DESTDIR)$(datadir)/$(DISTNAME)/$$file; \
 		done;
@@ -85,17 +84,17 @@ install: installdirs build
 
 # deletes the software (executable, data files and documentation)
 uninstall:
-	-@$(RM) --verbose "$(DESTDIR)$(bindir)/`basename $(TR_EXENAME)`"
-	-@$(RM) --verbose "$(DESTDIR)$(bindir)/`basename $(TR_CFGNAME)`"
+	-@$(RM) --verbose "$(DESTDIR)$(bindir)/$(TR_EXENAME)"
+	-@$(RM) --verbose "$(DESTDIR)$(bindir)/$(TR_CFGNAME)"
 	-@$(RM) --verbose --recursive "$(DESTDIR)$(datadir)/$(DISTNAME)"
 	-@$(RM) --verbose --recursive "$(DESTDIR)$(docdir)"
 
 # creates the installation directories if they do not exist
 installdirs:
 	@printf "\nmkdir\t[installation directories]\n"
-	@mkdir --mode=0755 --parents \
-		$(DESTDIR)$(bindir) \
-		$(DESTDIR)$(datadir)/$(DISTNAME) \
+	@mkdir --mode=0755 --parents            \
+		$(DESTDIR)$(bindir)                 \
+		$(DESTDIR)$(datadir)/$(DISTNAME)    \
 		$(DESTDIR)$(docdir)
 
 #
@@ -114,7 +113,7 @@ dist: clean
 		md5sum "$(DISTARC)" > "$(DISTARC).md5"
 
 # links the object files into the executable, which it then strips
-$(TR_EXENAME): $(OBJFILES)
+$(TR_EXEFILE): $(OBJFILES)
 	@printf "%s" $(CXX)
 	@for file in $(OBJFILES); do \
 		printf "\t%s\n" $$file; \
@@ -129,10 +128,10 @@ $(TR_EXENAME): $(OBJFILES)
 # backup files (such as "func.cpp~")
 #
 clean:
-	-@$(RM) --verbose \
-		$(OBJFILES) \
-		$(DEPFILES) \
-		$(TR_EXENAME) \
+	-@$(RM) --verbose   \
+		$(OBJFILES)     \
+		$(DEPFILES)     \
+		$(TR_EXEFILE)   \
 		$(shell find -type f -name "*~")
 
 #
