@@ -72,13 +72,13 @@ printvars:
 # installs the software (executable, data files and documentation)
 install: installdirs build
 	@printf "\ninstall [%s] begin\n" "$(DISTNAME)"
-	@$(INSTALL_PROGRAM) $(TR_EXEFILE) $(DESTDIR)$(bindir)
-	@$(INSTALL_DATA) $(TR_CFGFILE) $(DESTDIR)$(bindir)
+	@$(INSTALL_PROGRAM) "$(TR_EXEFILE)" "$(DESTDIR)$(bindir)"
+	@$(INSTALL_DATA) "$(TR_CFGFILE)" "$(DESTDIR)$(bindir)"
 	@for file in $(TR_DATAFILES); do \
-		$(INSTALL_DATA) -D $(TR_DATADIR)/$$file $(DESTDIR)$(datadir)/$(DISTNAME)/$$file; \
+		$(INSTALL_DATA) -D "$(TR_DATADIR)/$$file" "$(DESTDIR)$(datadir)/$(DISTNAME)/$$file"; \
 		done;
 	@for file in $(TR_DOCFILES); do \
-		$(INSTALL_DATA) -D $(TR_DOCDIR)/$$file $(DESTDIR)$(docdir)/$$file; \
+		$(INSTALL_DATA) -D "$(TR_DOCDIR)/$$file" "$(DESTDIR)$(docdir)/$$file"; \
 		done;
 	@printf "install [%s] end\n\n" "$(DISTNAME)"
 
@@ -92,10 +92,10 @@ uninstall:
 # creates the installation directories if they do not exist
 installdirs:
 	@printf "\nmkdir\t[installation directories]\n"
-	@mkdir --mode=0755 --parents            \
-		$(DESTDIR)$(bindir)                 \
-		$(DESTDIR)$(datadir)/$(DISTNAME)    \
-		$(DESTDIR)$(docdir)
+	@mkdir --mode=0755 --parents \
+		"$(DESTDIR)$(bindir)" \
+		"$(DESTDIR)$(datadir)/$(DISTNAME)" \
+		"$(DESTDIR)$(docdir)"
 
 #
 # creates a zipped tarball for redistribution
@@ -128,10 +128,10 @@ $(TR_EXEFILE): $(OBJFILES)
 # backup files (such as "func.cpp~")
 #
 clean:
-	-@$(RM) --verbose   \
-		$(OBJFILES)     \
-		$(DEPFILES)     \
-		$(TR_EXEFILE)   \
+	-@$(RM) --verbose \
+		$(OBJFILES) \
+		$(DEPFILES) \
+		$(TR_EXEFILE) \
 		$(shell find -type f -name "*~")
 
 #

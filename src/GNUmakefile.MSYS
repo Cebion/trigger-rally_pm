@@ -85,11 +85,11 @@ $(TR_EXEFILE): $(OBJFILES)
 # backup files (such as "func.cpp~")
 #
 clean:
-	-@$(RM) --verbose   \
-		$(OBJFILES)     \
-		$(DEPFILES)     \
-		$(TR_DLLFILES)  \
-		$(TR_EXEFILE)   \
+	-@$(RM) --verbose \
+		$(OBJFILES) \
+		$(DEPFILES) \
+		$(TR_DLLFILES) \
+		$(TR_EXEFILE) \
 		$(shell find -type f -name "*~")
 
 #
