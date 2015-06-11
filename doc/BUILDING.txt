@@ -20,7 +20,7 @@ To build Trigger Rally, your system must satisfy the following requirements:
 * have the GNU Make utility
 * have these development libraries installed:
 
-  LIB NAME          POSSIBLE PACKAGE NAME       OFFICIAL DOWNLOAD LINK
+  LIBRARY NAME      POSSIBLE PACKAGE NAME       OFFICIAL DOWNLOAD LINK
   --------------------------------------------------------------------
   GL                libgl1-mesa-dev             N/A
   GLU               libglu1-mesa-dev            N/A
@@ -84,7 +84,7 @@ Finally be sure to check the Trigger Rally default configuration file at:
   bin/trigger-rally.config.defs
 
 and edit the default data paths accordingly. And yes this config file needs to stay
-in the binary folder, for compatibility with the Windows build and code simplicity.
+in the binary folder, for compatibility with the Windows build and for code simplicity.
 
 -------------------------------
 3. Windows users - the easy way
@@ -109,9 +109,8 @@ with the version of Trigger Rally that you have downloaded.
 
 For example, "trigger-rally-0.6.3.tar.gz" needs "libraries-win32-0.6.3.zip".
 
-You must extract the prebuild libraries inside the parent folder of Trigger Rally,
+You must extract the prebuilt libraries inside the parent folder of Trigger Rally,
 such that "libraries-win32" and "trigger-rally-VER" are side-by-side.
-
 Then all you need to do is open the "TriggerRally.dev" file (the .DEV file
 extension should be associated with Dev-C++) and click the "Rebuild All" button.
 
@@ -123,15 +122,14 @@ should be located in the binary folder "bin".
 -------------------------------
 
 The hard way to build on Windows is to build not only Trigger Rally, but
-also all the libraries that it uses: SDL, SDL_image, PhysFS and GLEW,
-with the obvious exception of FMOD.
+also all the libraries that it uses (except FMOD): SDL, SDL_image, PhysFS and GLEW.
 
-One benefit of doing all this work is that you can enable more aggressive
+The benefit of doing all this work is that you can enable more aggressive
 optimizations tailored to your machine: in theory your build should run faster
 on your computer than the official build which uses the prebuilt libraries.
 
 The official Trigger Rally builds and libraries-win32 addons have been optimized
-with the following flags, in an attempt to balance compatibility and performance:
+with the following settings, in an attempt to balance compatibility and performance:
 
     -march=i686 -mtune=generic -O2
 
@@ -152,7 +150,6 @@ In order to build you need to download and install the following software:
 Be sure to install Dev-C++ in a way such that there are no spaces in the path
 to its "bin" folder. The buggy configuration scripts of some libraries that we
 need to build will generate broken makefiles due to spaces in compiler paths!
-
 So DO NOT install Dev-C++ in the usual "C:\Program Files\Dev-Cpp" folder.
 Recommended installation folder: "C:\Dev-Cpp".
 
@@ -191,7 +188,7 @@ Extract all the archives into your MSYS home folder, which by default should be:
 Also extract the Trigger Rally archive in there. The end result should be a clean
 collection of folders, each named after the original archive you extracted.
 
-Now start MSYS by running its batch file, which by default should be located at:
+Start MSYS by running its batch file, which by default should be located at:
 
     "C:\MinGW\msys\1.0\msys.bat"
 
@@ -224,9 +221,7 @@ Note to Win32 users: because modern versions of Dev-C++ use a "tdm64" compiler
 you also need to pass the "-m32" switch to ensure that the compiler doesn't generate
 64-bit code by default, and specify the 32-bit PE target to WINDRES by way of
 the "-F pe-i386" option.
-
-If you want to build for Win64 you can disregard the problematic options that
-force the "-m32" switch onto the compiler or the "pe-i386" target onto WINDRES.
+(If you want to build for Win64 you can disregard these problematic 32-bit options.)
 
 Let's start by building libjpeg.
 
@@ -316,10 +311,10 @@ a minor WINDRES hack so that each library is linked for 32-bit machines.
   $ make
   $ make install-strip
 
-Finally there is PhysFS which is best built with CMake. 
+Finally there is PhysFS which is configured with CMake:
 
-1. Start "cmake-gui" from the link found in the Start Menu
-   (or the Classic Shell, God help you).
+1. Start "cmake-gui" from the link found in the Start Menu, or on the Desktop
+   (or in the Classic Shell, God help you).
 2. Select the PhysFS folder in MSYS /home as the source code folder,
    and a new empty folder next to it for the binaries, to prevent any
    filename conflicts. The name I used for the new folder was:
@@ -351,7 +346,7 @@ Finally there is PhysFS which is best built with CMake.
   $ mingw32-make install/strip
 
 Now we're finally ready to build Trigger Rally, and it is the easiest bit.
-If you haven't already, install the FMOD Studio API to its default location.
+(If you haven't already, install the FMOD Studio API to its default location now.)
 
   $ #
   $ # building Trigger Rally
@@ -395,16 +390,19 @@ The pack contains the following:
    !define VERSION "X.X.X"
 4. Right-click on "TriggerRally.nsi" and choose "Compile NSIS Script".
 5. If the installer was compiled successfully as "trigger-rally-X.X.X-win32-setup.exe"
-   then scan it for viruses*, test it, test its uninstaller, and distribute it.
+   then test it, test its uninstaller, scan it for viruses*, and distribute it.
 
  * For obvious reasons, you must scan it with a freshly downloaded virus scanner
    instead of your resident antivirus. Such tools are freely available at the time
-   of this writing, with the following examples:
+   of this writing, with the following examples (in no particular order):
 
-   Kaspersky Virus Removal Tool
-   Microsoft Safety Scanner
-   Emsisoft Emergency Kit
-   Dr.Web CureIt!
+  VIRUS SCANNER NAME                OFFICIAL DOWNLOAD LINK
+  --------------------------------------------------------
+  Kaspersky Virus Removal Tool      http://www.kaspersky.com/antivirus-removal-tool?form=1
+  Microsoft Safety Scanner          http://www.microsoft.com/security/scanner/en-us/default.aspx
+  Emsisoft Emergency Kit            https://www.emsisoft.com/en/software/eek/
+  Dr.Web CureIt!                    http://www.freedrweb.com/cureit/?lng=en
+  --------------------------------------------------------
 
 ##########################################################
 A1. List of software used to build Trigger Rally (Windows)
