@@ -2,14 +2,17 @@
 # Trigger Rally GNUmakefile.MSYS for Dev-C++/MSYS users
 #
 # This is a watered-down version of the "real" GNUmakefile and it
-# doesn't support the `install`, `uninstall` and `dist` targets.
+# doesn't support the `install` and `uninstall` targets.
 #
 # TODO:
 #   * beautify printing of copied .DLL files
 #
 
 # standard GNU and custom variables
+DISTNAME        := trigger-rally
 DISTVER         := 0.6.3
+DISTDIR         := $(DISTNAME)-$(DISTVER)
+DISTARC         := $(DISTDIR).zip
 TR_BINDIR       := ../bin
 TR_EXENAME      := trigger-rally.exe
 TR_EXEFILE      := $(TR_BINDIR)/$(TR_EXENAME)
@@ -47,7 +50,7 @@ LDFLAGS         := $(MODENV) $(LIBDIRS) $(EXTRA_LIBS)
 # `all` is `build` because I always felt "all" was a bad name,
 # while the others I had either no time or no incentive to implement
 #
-.PHONY: build printvars clean copydlls
+.PHONY: build printvars dist clean winclean copydlls
 
 # builds the executable and copies the .DLL files
 build: printvars $(TR_EXEFILE) copydlls
@@ -68,6 +71,28 @@ printvars:
 	@printf "\tMODENV   ?= %s\n" "$(MODENV)"
 	@printf "\tWARNINGS ?= %s\n" "$(WARNINGS)"
 	@printf "\n"
+
+#
+# creates a .ZIP archive for redistribution
+#
+# NOTE that this fails if the directory we're in isn't named $(DISTDIR) however
+# this is by design: it's meant to enforce directory naming consistency and
+# awareness of the $(DISTVER) variable, which you must update for each release!
+#
+# NOTE that this target builds the game if it wasn't already and then performs
+# a light clean, suitable for Windows users most of which prefer to have a
+# working game out-of-the-box despite having downloaded the .ZIP archive instead
+# of the Trigger Rally installer
+#
+# NOTE that this target requires the "msys-zip" bin package to be installed
+#
+dist: build winclean
+	@printf "\nzip -> \"../../%s\"\n" "$(DISTARC)"
+	@cd ../..; \
+		zip --recurse-paths --quiet "$(DISTARC)" "$(DISTDIR)"
+	@printf "md5sum -> \"../../%s.md5\"\n\n" "$(DISTARC)"
+	@cd ../..; \
+		md5sum "$(DISTARC)" > "$(DISTARC).md5"
 
 # links the object files into the executable, which it then strips
 $(TR_EXEFILE): $(OBJFILES)
@@ -90,6 +115,16 @@ clean:
 		$(DEPFILES) \
 		$(TR_DLLFILES) \
 		$(TR_EXEFILE) \
+		$(shell find -type f -name "*~")
+
+#
+# removes object files, dependency files and backup files (such as "func.cpp~")
+# the .DLL files and the game executable, from the binary directory, are not cleaned
+#
+winclean:
+	-@$(RM) --verbose \
+		$(OBJFILES) \
+		$(DEPFILES) \
 		$(shell find -type f -name "*~")
 
 #
