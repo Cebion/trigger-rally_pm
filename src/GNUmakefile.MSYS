@@ -119,7 +119,8 @@ clean:
 
 #
 # removes object files, dependency files and backup files (such as "func.cpp~")
-# the .DLL files and the game executable, from the binary directory, are not cleaned
+#
+# NOTE that the .DLL files and the game executable are not cleaned
 #
 winclean:
 	-@$(RM) --verbose \
