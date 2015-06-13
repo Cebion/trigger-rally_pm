@@ -1,10 +1,8 @@
 #
 # Addon makefile for the "TriggerRally.dev" Dev-C++ project;
-# its purpose is to conveniently copy DLL files to the binary folder.
+# its purpose is to conveniently copy .DLL files to the binary folder.
 #
 # Written for Trigger Rally 0.6.3
-#
-# TODO: make sure backslashes won't cause problems
 #
 
 LIBWINPATH      = ..\..\libraries-win32\bin
