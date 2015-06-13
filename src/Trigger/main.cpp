@@ -25,12 +25,12 @@ void MainApp::config()
   for (const std::string &datadir: cfg_datadirs)
     if (PHYSFS_addToSearchPath(datadir.c_str(), 1) == 0)
     {
-      outLog() << "Failed to add PhysFS search directory \"" << datadir << "\"" << std::endl
+      PUtil::outLog() << "Failed to add PhysFS search directory \"" << datadir << "\"" << std::endl
           << "PhysFS: " << PHYSFS_getLastError() << std::endl;
     }
     else
     {
-        outLog() << "Main game data directory datadir=\"" << datadir << "\"" << std::endl;
+        PUtil::outLog() << "Main game data directory datadir=\"" << datadir << "\"" << std::endl;
         break;
     }
 }

@@ -8,12 +8,12 @@
 
 PSSRender::PSSRender(PApp &parentApp) : PSubsystem(parentApp)
 {
-  app.outLog() << "Initialising render subsystem" << std::endl;
+  PUtil::outLog() << "Initialising render subsystem" << std::endl;
 }
 
 PSSRender::~PSSRender()
 {
-  app.outLog() << "Shutting down render subsystem" << std::endl;
+  PUtil::outLog() << "Shutting down render subsystem" << std::endl;
 }
 
 

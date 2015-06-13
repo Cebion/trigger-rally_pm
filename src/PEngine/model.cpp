@@ -10,12 +10,12 @@
 
 PSSModel::PSSModel(PApp &parentApp) : PSubsystem(parentApp)
 {
-  app.outLog() << "Initialising model subsystem" << std::endl;
+  PUtil::outLog() << "Initialising model subsystem" << std::endl;
 }
 
 PSSModel::~PSSModel()
 {
-  app.outLog() << "Shutting down model subsystem" << std::endl;
+  PUtil::outLog() << "Shutting down model subsystem" << std::endl;
 
   modlist.clear();
 }

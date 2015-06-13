@@ -15,12 +15,12 @@
 
 PSSTexture::PSSTexture(PApp &parentApp) : PSubsystem(parentApp)
 {
-  app.outLog() << "Initialising texture subsystem [SDL_Image]" << std::endl;
+  PUtil::outLog() << "Initialising texture subsystem [SDL_Image]" << std::endl;
 }
 
 PSSTexture::~PSSTexture()
 {
-  app.outLog() << "Shutting down texture subsystem" << std::endl;
+  PUtil::outLog() << "Shutting down texture subsystem" << std::endl;
   
   texlist.clear();
 }

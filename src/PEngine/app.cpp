@@ -123,20 +123,20 @@ void PApp::stereoFrustum(float xmin, float xmax, float ymin, float ymax, float z
 
 int PApp::run(int argc, char *argv[])
 {
-  outLog() << apptitle << " init" << std::endl;
+  PUtil::outLog() << apptitle << " init" << std::endl;
   
-  outLog() << "Build: " << PACKAGE_VERSION << " on " << __DATE__ << " at " << __TIME__ << std::endl;
+  PUtil::outLog() << "Build: " << PACKAGE_VERSION << " on " << __DATE__ << " at " << __TIME__ << std::endl;
   
   if (exit_requested) {
-    outLog() << "Exit requested" << std::endl;
+    PUtil::outLog() << "Exit requested" << std::endl;
     return 0;
   }
   
-  outLog() << "Initialising PhysFS" << std::endl;
+  PUtil::outLog() << "Initialising PhysFS" << std::endl;
   
   if (PHYSFS_init((argc >= 1) ? argv[0] : nullptr) == 0) {
-    outLog() << "PhysFS failed to initialise" << std::endl;
-    outLog() << "PhysFS: " << PHYSFS_getLastError() << std::endl;
+    PUtil::outLog() << "PhysFS failed to initialise" << std::endl;
+    PUtil::outLog() << "PhysFS: " << PHYSFS_getLastError() << std::endl;
     return 1;
   }
   
@@ -153,32 +153,32 @@ int PApp::run(int argc, char *argv[])
     // over to that dir.
     
 #if 1
-    outLog() << "Set writable user directory to \"" << lsdbuff << "\"" << std::endl;
+    PUtil::outLog() << "Set writable user directory to \"" << lsdbuff << "\"" << std::endl;
     
     if (PHYSFS_setWriteDir(lsdbuff.c_str()) == 0) {
-      outLog() << "Failed to set PhysFS writable directory to \"" << lsdbuff << "\"" << std::endl
+      PUtil::outLog() << "Failed to set PhysFS writable directory to \"" << lsdbuff << "\"" << std::endl
           << "PhysFS: " << PHYSFS_getLastError() << std::endl;
     }
     
     if (PHYSFS_mkdir(appname.c_str()) == 0) {
-      outLog() << "Failed to create directory \"" << appname << "\"" << std::endl
+      PUtil::outLog() << "Failed to create directory \"" << appname << "\"" << std::endl
           << "PhysFS: " << PHYSFS_getLastError() << std::endl;
     }
 #endif
     
     lsdbuff += appname;
     
-    outLog() << "Reset writable user directory to \"" << lsdbuff << "\"" << std::endl;
+    PUtil::outLog() << "Reset writable user directory to \"" << lsdbuff << "\"" << std::endl;
     
     if (PHYSFS_setWriteDir(lsdbuff.c_str()) == 0) {
-      outLog() << "Failed to set PhysFS writable directory to \"" << lsdbuff << "\"" << std::endl
+      PUtil::outLog() << "Failed to set PhysFS writable directory to \"" << lsdbuff << "\"" << std::endl
           << "PhysFS: " << PHYSFS_getLastError() << std::endl;
     }
     
     // Adding "." to the search path seems to add more trouble than it's worth
 #if 0
     if (PHYSFS_addToSearchPath(".", 1) == 0) {
-      outLog() << "Failed to add PhysFS search directory \".\"" << std::endl
+      PUtil::outLog() << "Failed to add PhysFS search directory \".\"" << std::endl
           << "PhysFS: " << PHYSFS_getLastError() << std::endl;
     }
 #endif
@@ -186,12 +186,12 @@ int PApp::run(int argc, char *argv[])
     std::string basedir = PHYSFS_getBaseDir();
     PUtil::outLog() << "Application base directory \"" << basedir << '\"' << std::endl;
     if (PHYSFS_addToSearchPath(basedir.c_str(), 1) == 0) {
-      outLog() << "Failed to add PhysFS search directory \"" << basedir << "\"" << std::endl
+      PUtil::outLog() << "Failed to add PhysFS search directory \"" << basedir << "\"" << std::endl
           << "PhysFS: " << PHYSFS_getLastError() << std::endl;
     }
     
     if (PHYSFS_addToSearchPath(lsdbuff.c_str(), 1) == 0) {
-      outLog() << "Failed to add PhysFS search directory \"" << lsdbuff << "\"" << std::endl
+      PUtil::outLog() << "Failed to add PhysFS search directory \"" << lsdbuff << "\"" << std::endl
           << "PhysFS: " << PHYSFS_getLastError() << std::endl;
     }
 
@@ -205,7 +205,7 @@ int PApp::run(int argc, char *argv[])
         PUtil::outLog() << "Config failed: " << e.what() << std::endl;
         
         if (PHYSFS_deinit() == 0)
-            outLog() << "PhysFS: " << PHYSFS_getLastError() << std::endl;
+            PUtil::outLog() << "PhysFS: " << PHYSFS_getLastError() << std::endl;
 
         return 1;
     }
@@ -222,17 +222,17 @@ int PApp::run(int argc, char *argv[])
         std::string fullpath = (std::string)realpath + *i;
         
         if (PHYSFS_addToSearchPath(fullpath.c_str(), 1) == 0) {
-          outLog() << "Failed to add archive \"" << fullpath << "\"" << std::endl
+          PUtil::outLog() << "Failed to add archive \"" << fullpath << "\"" << std::endl
               << "PhysFS: " << PHYSFS_getLastError() << std::endl;
         }
       } else {
-        outLog() << "Failed to find path of archive \"" << *i << "\"" << std::endl
+        PUtil::outLog() << "Failed to find path of archive \"" << *i << "\"" << std::endl
             << "PhysFS: " << PHYSFS_getLastError() << std::endl;
       }
     }
   }
   
-  outLog() << "Initialising SDL" << std::endl;
+  PUtil::outLog() << "Initialising SDL" << std::endl;
   
   SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_JOYSTICK | SDL_INIT_NOPARACHUTE);
   //SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_JOYSTICK);
@@ -241,7 +241,7 @@ int PApp::run(int argc, char *argv[])
   
   SDL_WM_SetCaption(apptitle.c_str(), nullptr);
   
-  outLog() << "Create window and set video mode" << std::endl;
+  PUtil::outLog() << "Create window and set video mode" << std::endl;
   
   SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
   
@@ -274,12 +274,12 @@ int PApp::run(int argc, char *argv[])
     (noframe ? SDL_NOFRAME : 0));
   
   if (!screen) {
-    outLog() << "Failed to create window or set video mode" << std::endl;
-    outLog() << "SDL error: " << SDL_GetError() << std::endl;
-    outLog() << "Try changing your video settings in trigger-rally.config" << std::endl;
+    PUtil::outLog() << "Failed to create window or set video mode" << std::endl;
+    PUtil::outLog() << "SDL error: " << SDL_GetError() << std::endl;
+    PUtil::outLog() << "Try changing your video settings in trigger-rally.config" << std::endl;
     SDL_Quit();
     if (PHYSFS_deinit() == 0) {
-      outLog() << "PhysFS: " << PHYSFS_getLastError() << std::endl;
+      PUtil::outLog() << "PhysFS: " << PHYSFS_getLastError() << std::endl;
     }
     return 1;
   }
@@ -288,17 +288,17 @@ int PApp::run(int argc, char *argv[])
   
   sdl_joy.resize(SDL_NumJoysticks());
   
-  outLog() << "Found " << sdl_joy.size() << " joystick" <<
+  PUtil::outLog() << "Found " << sdl_joy.size() << " joystick" <<
     (sdl_joy.size() == 1 ? "" : "s") << std::endl;
   
   for (unsigned int i=0; i<sdl_joy.size(); i++) {
-    outLog() << "Joystick " << (i+1) << ": ";
+    PUtil::outLog() << "Joystick " << (i+1) << ": ";
     sdl_joy[i].sdl_joystick = SDL_JoystickOpen(i);
     if (sdl_joy[i].sdl_joystick == nullptr) {
-      outLog() << "failed to open joystick" << std::endl;
+      PUtil::outLog() << "failed to open joystick" << std::endl;
       SDL_Quit();
       if (PHYSFS_deinit() == 0) {
-        outLog() << "PhysFS: " << PHYSFS_getLastError() << std::endl;
+        PUtil::outLog() << "PhysFS: " << PHYSFS_getLastError() << std::endl;
       }
       return 1;
     }
@@ -319,7 +319,7 @@ int PApp::run(int argc, char *argv[])
       else if (state & SDL_HAT_DOWN) sdl_joy[i].hat[j].y = -1;
     }
     
-    outLog() << sdl_joy[i].name << ", " <<
+    PUtil::outLog() << sdl_joy[i].name << ", " <<
       sdl_joy[i].axis.size() << " axis, " <<
       sdl_joy[i].button.size() << " button, " <<
       sdl_joy[i].hat.size() << " hat" << std::endl;
@@ -330,40 +330,21 @@ int PApp::run(int argc, char *argv[])
   int err = glewInit();
   
   if (err != GLEW_OK) {
-    outLog() << "GLEW failed to initialise: " << glewGetErrorString(err) << std::endl;
+    PUtil::outLog() << "GLEW failed to initialise: " << glewGetErrorString(err) << std::endl;
     SDL_Quit();
     if (PHYSFS_deinit() == 0) {
-      outLog() << "PhysFS: " << PHYSFS_getLastError() << std::endl;
+      PUtil::outLog() << "PhysFS: " << PHYSFS_getLastError() << std::endl;
     }
     return 1;
   }
   
-  outLog() << "GLEW initialized" << std::endl;
+  PUtil::outLog() << "GLEW initialized" << std::endl;
   
-  outLog() << "Graphics: " <<
+  PUtil::outLog() << "Graphics: " <<
     glGetString(GL_VENDOR) << " " << glGetString(GL_RENDERER) << std::endl;
   
-  outLog() << "Using OpenGL " << glGetString(GL_VERSION) << std::endl;
-/*
-    if (GLEW_VERSION_4_5)   outLog() << "4.5" << std::endl;     else
-    if (GLEW_VERSION_4_4)   outLog() << "4.4" << std::endl;     else
-    if (GLEW_VERSION_4_3)   outLog() << "4.3" << std::endl;     else
-    if (GLEW_VERSION_4_2)   outLog() << "4.2" << std::endl;     else
-    if (GLEW_VERSION_4_1)   outLog() << "4.1" << std::endl;     else
-    if (GLEW_VERSION_4_0)   outLog() << "4.0" << std::endl;     else
-    if (GLEW_VERSION_3_3)   outLog() << "3.3" << std::endl;     else
-    if (GLEW_VERSION_3_2)   outLog() << "3.2" << std::endl;     else
-    if (GLEW_VERSION_3_1)   outLog() << "3.1" << std::endl;     else
-    if (GLEW_VERSION_3_0)   outLog() << "3.0" << std::endl;     else
-    if (GLEW_VERSION_2_1)   outLog() << "2.1" << std::endl;     else
-    if (GLEW_VERSION_2_0)   outLog() << "2.0" << std::endl;     else
-    if (GLEW_VERSION_1_5)   outLog() << "1.5" << std::endl;     else
-    if (GLEW_VERSION_1_4)   outLog() << "1.4" << std::endl;     else
-    if (GLEW_VERSION_1_3)   outLog() << "1.3" << std::endl;     else
-    if (GLEW_VERSION_1_2_1) outLog() << "1.2.1" << std::endl;   else
-    if (GLEW_VERSION_1_2)   outLog() << "1.2" << std::endl;     else
-    if (GLEW_VERSION_1_1)   outLog() << "1.1" << std::endl;
-*/
+  PUtil::outLog() << "Using OpenGL " << glGetString(GL_VERSION) << std::endl;
+
   switch (stereo) {
   default: break;
   case StereoQuadBuffer:
@@ -416,7 +397,7 @@ int PApp::run(int argc, char *argv[])
     return 1;
   }
 
-  outLog() << "Performing app load" << std::endl;
+  PUtil::outLog() << "Performing app load" << std::endl;
   
   try
   {
@@ -424,7 +405,7 @@ int PApp::run(int argc, char *argv[])
   }
   catch (PException e)
   {
-    outLog() << "App load failed: " << e.what () << std::endl;
+    PUtil::outLog() << "App load failed: " << e.what () << std::endl;
 
     while (!sslist.empty()) {
       delete sslist.back();
@@ -433,7 +414,7 @@ int PApp::run(int argc, char *argv[])
 
     SDL_Quit();
     if (PHYSFS_deinit() == 0) {
-      outLog() << "PhysFS: " << PHYSFS_getLastError() << std::endl;
+      PUtil::outLog() << "PhysFS: " << PHYSFS_getLastError() << std::endl;
     }
     return 1;
   }
@@ -448,7 +429,7 @@ int PApp::run(int argc, char *argv[])
 
   resize();
 
-  outLog() << "Initialisation complete, entering main loop" << std::endl;
+  PUtil::outLog() << "Initialisation complete, entering main loop" << std::endl;
 
   srand(rand() + SDL_GetTicks());
 
@@ -469,11 +450,11 @@ int PApp::run(int argc, char *argv[])
         if (active) {
           SDL_ShowCursor(SDL_DISABLE);
           //SDL_WM_GrabInput(SDL_GRAB_ON);
-          outLog() << "Window made active" << std::endl;
+          PUtil::outLog() << "Window made active" << std::endl;
         } else {
           SDL_ShowCursor(SDL_ENABLE);
           //SDL_WM_GrabInput(SDL_GRAB_OFF);
-          outLog() << "Window made inactive" << std::endl;
+          PUtil::outLog() << "Window made inactive" << std::endl;
         }
         break;
       */
@@ -684,7 +665,7 @@ int PApp::run(int argc, char *argv[])
     if (exit_requested) break;
   }
 
-  outLog() << "Exit requested" << std::endl;
+  PUtil::outLog() << "Exit requested" << std::endl;
 
   unload();
   
@@ -699,10 +680,10 @@ int PApp::run(int argc, char *argv[])
   SDL_Quit();
   
   if (PHYSFS_deinit() == 0) {
-    outLog() << "PhysFS: " << PHYSFS_getLastError() << std::endl;
+    PUtil::outLog() << "PhysFS: " << PHYSFS_getLastError() << std::endl;
   }
   
-  outLog() << "Shutdown complete" << std::endl;
+  PUtil::outLog() << "Shutdown complete" << std::endl;
   
   return 0;
 }

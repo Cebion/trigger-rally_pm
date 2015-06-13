@@ -17,7 +17,7 @@ int max_tex_units;
 
 PSSEffect::PSSEffect(PApp &parentApp) : PSubsystem(parentApp)
 {
-  app.outLog() << "Initialising effects subsystem" << std::endl;
+  PUtil::outLog() << "Initialising effects subsystem" << std::endl;
 
   def_rs.depthtest = true;
 
@@ -38,7 +38,7 @@ PSSEffect::PSSEffect(PApp &parentApp) : PSubsystem(parentApp)
 
 PSSEffect::~PSSEffect()
 {
-  app.outLog() << "Shutting down effects subsystem" << std::endl;
+  PUtil::outLog() << "Shutting down effects subsystem" << std::endl;
 
   fxlist.clear();
 }
