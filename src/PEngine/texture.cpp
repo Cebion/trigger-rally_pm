@@ -35,7 +35,7 @@ PTexture *PSSTexture::loadTexture(const std::string &name, bool genMipmaps, bool
     {
       tex = new PTexture(name,genMipmaps,clamp);
     }
-    catch (PException e)
+    catch (PException &e)
     {
       if (PUtil::isDebugLevel(DEBUGLEVEL_ENDUSER))
         PUtil::outLog() << "Failed to load " << name << ": " << e.what () << std::endl;

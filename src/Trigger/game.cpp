@@ -107,7 +107,7 @@ bool TriggerGame::loadLevel(const std::string &filename)
       {
         terrain = new PTerrain (walk, filename, app->getSSTexture ());
       }
-      catch (PException e)
+      catch (PException &e)
       {
         PUtil::outLog () << "Terrain problem: " << e.what () << std::endl;
         return false;

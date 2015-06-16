@@ -200,7 +200,7 @@ int PApp::run(int argc, char *argv[])
     {
         config();
     }
-    catch (PException e)
+    catch (PException &e)
     {
         PUtil::outLog() << "Config failed: " << e.what() << std::endl;
         
@@ -379,7 +379,7 @@ int PApp::run(int argc, char *argv[])
     sslist.push_back(ssmod = new PSSModel(*this));
     sslist.push_back(ssaud = new PSSAudio(*this));
   }
-  catch (PException e)
+  catch (PException &e)
   {
     PUtil::outLog () << "Subsystem failed to init: " << e.what() << std::endl;
     
@@ -403,7 +403,7 @@ int PApp::run(int argc, char *argv[])
   {
     load();
   }
-  catch (PException e)
+  catch (PException &e)
   {
     PUtil::outLog() << "App load failed: " << e.what () << std::endl;
 

@@ -52,7 +52,7 @@ PEffect *PSSEffect::loadEffect(const std::string &name)
     {
       fx = new PEffect (name);
     }
-    catch (PException e)
+    catch (PException &e)
     {
       if (PUtil::isDebugLevel(DEBUGLEVEL_ENDUSER))
         PUtil::outLog() << "Failed to load " << name << ": " << e.what () << std::endl;

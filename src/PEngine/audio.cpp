@@ -57,7 +57,7 @@ PAudioSample *PSSAudio::loadSample(const std::string &name, bool positional3D)
         {
             samp = new PAudioSample(name, positional3D);
         }
-        catch (PException e)
+        catch (PException &e)
         {
             if (PUtil::isDebugLevel(DEBUGLEVEL_ENDUSER))
                 PUtil::outLog() << "Failed to load " << name << ": " << e.what() << std::endl;

@@ -29,7 +29,7 @@ PModel *PSSModel::loadModel(const std::string &name)
     {
       mdl = new PModel (name);
     }
-    catch (PException e)
+    catch (PException &e)
     {
       if (PUtil::isDebugLevel(DEBUGLEVEL_ENDUSER))
         PUtil::outLog() << "Failed to load " << name << ": " << e.what () << std::endl;
