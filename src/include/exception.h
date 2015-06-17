@@ -31,7 +31,7 @@ public:
     {
     }
 
-    const char *what() const noexcept
+    const char * what() const noexcept
     {
         return text.c_str();
     }
@@ -41,8 +41,10 @@ private:
     std::string text;
 };
 
-#define makestring2(x)          #x
-#define makestring(x)           makestring2(x)
+/// Helper macros to convert `__LINE__` into a string literal.
+#define MAKESTRING2(x)          #x
+#define MAKESTRING(x)           MAKESTRING2(x)
 
-#define MakePException(text)    PException(std::string() + text + " at " __FILE__ ":" makestring(__LINE__))
+// Helper macro to use when throwing a `PException`.
+#define MakePException(text)    PException(std::string() + text + std::string(" at " __FILE__ ":" MAKESTRING(__LINE__)))
 
