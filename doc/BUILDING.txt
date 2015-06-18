@@ -27,7 +27,7 @@ To build Trigger Rally, your system must satisfy the following requirements:
   GLEW              libglew-dev                 http://sourceforge.net/projects/glew/files/glew/
   OpenAL            libopenal-dev               N/A
   ALUT              libalut-dev                 N/A
-  PhysFS            libphyfs-dev                http://icculus.org/physfs/downloads/
+  PhysFS            libphysfs-dev               http://icculus.org/physfs/downloads/
   SDL 1.2           libsdl1.2-dev               http://www.libsdl.org/download-1.2.php
   SDL_image 1.2     libsdl-image1.2-dev         http://www.libsdl.org/projects/SDL_image/release-1.2.html
   --------------------------------------------------------------------
