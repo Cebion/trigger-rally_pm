@@ -67,6 +67,8 @@ PTerrain::PTerrain (TiXmlElement *element, const std::string &filepath, PSSTextu
       tfb.middle = 0.5f;
       tfb.range = 0.5f;
       tfb.density = 1.0f;
+      tfb.scalemin = 1.0f;
+      tfb.scalemax = 1.4f;
       //tfb.model = nullptr;
       //tfb.modelscale = 1.0f;
       tfb.sprite_tex = nullptr;
@@ -81,6 +83,12 @@ PTerrain::PTerrain (TiXmlElement *element, const std::string &filepath, PSSTextu
       val = walk->Attribute("density");
       if (val) tfb.density = atof(val);
       
+      val = walk->Attribute("scalemin");
+      if (val) tfb.scalemin = atof(val);
+      
+      val = walk->Attribute("scalemax");
+      if (val) tfb.scalemax = atof(val);
+
       /*
       val = walk->Attribute("model");
       if (val) tfb.model = ssModel.loadModel(PUtil::assemblePath(val, filepath));
@@ -408,7 +416,8 @@ PTerrainTile *PTerrain::getTile(int tilex, int tiley)
       tileptr->foliage[b].inst.back().pos.y = ftry.y;
       tileptr->foliage[b].inst.back().pos.z = getHeight(ftry.x, ftry.y);
       tileptr->foliage[b].inst.back().ang = rand01 * PI*2.0f;
-      tileptr->foliage[b].inst.back().scale = (1.0f + fol * 0.5f) * (rand01 * rand01 + 0.5) * 1.4;
+      //tileptr->foliage[b].inst.back().scale = (1.0f + fol * 0.5f) * (rand01 * rand01 + 0.5) * 1.4;
+      tileptr->foliage[b].inst.back().scale = (foliageband[b].scalemin + fol * 0.5f) * (rand01 * rand01 + 0.5) * foliageband[b].scalemax;
     }
     
     // Create vertex buffers for rendering
