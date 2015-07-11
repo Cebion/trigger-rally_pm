@@ -205,7 +205,7 @@ bool TriggerGame::loadLevel(const std::string &filename)
       if (val) weather.fog.density_sky = atof(val);
       
       val = walk->Attribute("rain");
-      if (val) weather.precip.rain = atof(val);
+      if (val && MainApp::cfg_weather) weather.precip.rain = atof(val);
     }
   }
   
