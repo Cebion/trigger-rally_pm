@@ -7,7 +7,7 @@
 
 #include "pengine.h"
 
-
+#include "main.h"
 
 PTerrain::~PTerrain ()
 {
@@ -53,7 +53,7 @@ PTerrain::PTerrain (TiXmlElement *element, const std::string &filepath, PSSTextu
   if (val) colormap = val;
   
   val = element->Attribute("foliagemap");
-  if (val) foliagemap = val;
+  if (val && MainApp::cfg_foliage) foliagemap = val;
   
   val = element->Attribute("hudmap");
   if (val) hudmap = val;
@@ -61,7 +61,7 @@ PTerrain::PTerrain (TiXmlElement *element, const std::string &filepath, PSSTextu
   for (TiXmlElement *walk = element->FirstChildElement();
     walk; walk = walk->NextSiblingElement()) {
     
-    if (!strcmp(walk->Value(), "foliageband")) {
+    if (!strcmp(walk->Value(), "foliageband") && MainApp::cfg_foliage) {
       
       PTerrainFoliageBand tfb;
       tfb.middle = 0.5f;
