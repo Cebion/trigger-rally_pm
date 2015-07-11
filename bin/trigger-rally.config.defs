@@ -22,6 +22,31 @@
 			yellow-blue - anaglyph
 		-->
 
+	<graphics
+		anisotropy="4"
+		foliage="yes"
+		weather="yes"
+	/>
+	<!--
+		anisotropy:
+			Sets the level of anisotropic filtering for textures.
+			The higher the value, the higher the quality of textures.
+			Its value should be a power of two, such as: 1, 2, 4, 8, 16.
+			Setting it to "off" causes anisotropic filtering to be turned off.
+			Setting it to "max" causes the highest supported value to be used.
+			(Note that "max" may not work on some computers.)
+
+		foliage:
+			Turns vegetation on and off.
+			"yes" means that bushes, grass and trees will be displayed.
+			"no" means that they won't be.
+
+		weather:
+			Turns weather effects on and off.
+			"yes" means that rain will be displayed.
+			"no" means that it won't be.
+	-->
+
 	<!-- The possible paths of the data directory, ordered by decreasing priority.
 		If the first directory cannot be found, the next one is tried, and so on.
 		If none of the paths is valid then the game will fail to run.

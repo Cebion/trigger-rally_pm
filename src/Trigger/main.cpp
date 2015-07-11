@@ -10,6 +10,9 @@
 
 #include <SDL/SDL_thread.h>
 
+GLfloat MainApp::cfg_anisotropy = 1.0f;
+bool MainApp::cfg_foliage = true;
+bool MainApp::cfg_weather = true;
 
 void MainApp::config()
 {
@@ -96,6 +99,9 @@ void MainApp::loadConfig()
   
   cfg_drivingassist = 1.0f;
   cfg_enable_sound = true;
+  cfg_anisotropy = 1.0f;
+  cfg_foliage = true;
+  cfg_weather = true;
   cfg_speed_unit = mph;
   cfg_speed_style = analogue;
   cfg_datadirs.clear();
@@ -229,6 +235,49 @@ void MainApp::loadConfig()
       if (val) {
         setStereoEyeSeperation(atof(val) * sepMult);
       }
+    }
+    else
+    if (!strcmp(walk->Value(), "graphics"))
+    {
+        val = walk->Attribute("anisotropy");
+        
+        if (val)
+        {
+            if (!strcmp(val, "off"))
+            {
+                cfg_anisotropy = 1.0f;
+            }
+            else
+            if (!strcmp(val, "max"))
+            {
+                glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &cfg_anisotropy);
+            }
+            else // TODO: listen to the user, but don't trust him
+            {
+                cfg_anisotropy = atof(val);
+                CLAMP_LOWER(cfg_anisotropy, 1.0f);
+            }
+        }
+
+        val = walk->Attribute("foliage");
+
+        if (val)
+        {
+            if (!strcmp(val, "no"))
+                cfg_foliage = false;
+            else // "yes"
+                cfg_foliage = true;
+        }
+        
+        val = walk->Attribute("weather");
+        
+        if (val)
+        {
+            if (!strcmp(val, "no"))
+                cfg_weather = false;
+            else // "yes"
+                cfg_weather = true;
+        }
     }
     else
     if (!strcmp(walk->Value(), "datadirectory"))

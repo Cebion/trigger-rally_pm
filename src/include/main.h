@@ -195,6 +195,11 @@ public:
     hybrid
   };
 
+  // TODO: these shouldn't be static+public, but the simplicity is worth it for now
+  static GLfloat    cfg_anisotropy;     ///< Anisotropic filter quality.
+  static bool       cfg_foliage;        ///< Foliage on/off flag.
+  static bool       cfg_weather;        ///< Weather on/off flag.
+
 private:
   
   int appstate;
