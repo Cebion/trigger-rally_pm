@@ -80,8 +80,8 @@
 			<key action="handbrake" id="SDLK_SPACE" />
 			<key action="recover" id="SDLK_r" />
 			<key action="cammode" id="SDLK_c" />
-			<key action="camleft" id="SDLK_LESS" />
-			<key action="camright" id="SDLK_GREATER" />
+			<key action="camleft" id="SDLK_PERIOD" />
+			<key action="camright" id="SDLK_COMMA" />
 			<key action="showmap" id="SDLK_m" />
 			<key action="showui" id="SDLK_n" />
 		</keyboard>
