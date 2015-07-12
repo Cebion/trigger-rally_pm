@@ -87,6 +87,163 @@ void MainApp::load()
   }
 }
 
+namespace
+{
+
+///
+/// @brief X-macro defining supported SDL keymaps.
+/// @see http://www.libsdl.org/release/SDL-1.2.15/docs/html/sdlkey.html
+///
+#define STRING_TO_SDL_KEYMAP    \
+    X(SDLK_BACKSPACE)           \
+    X(SDLK_TAB)                 \
+    X(SDLK_CLEAR)               \
+    X(SDLK_RETURN)              \
+    X(SDLK_PAUSE)               \
+    X(SDLK_ESCAPE)              \
+    X(SDLK_SPACE)               \
+    X(SDLK_EXCLAIM)             \
+    X(SDLK_QUOTEDBL)            \
+    X(SDLK_HASH)                \
+    X(SDLK_DOLLAR)              \
+    X(SDLK_AMPERSAND)           \
+    X(SDLK_QUOTE)               \
+    X(SDLK_LEFTPAREN)           \
+    X(SDLK_RIGHTPAREN)          \
+    X(SDLK_ASTERISK)            \
+    X(SDLK_PLUS)                \
+    X(SDLK_COMMA)               \
+    X(SDLK_MINUS)               \
+    X(SDLK_PERIOD)              \
+    X(SDLK_SLASH)               \
+    X(SDLK_0)                   \
+    X(SDLK_1)                   \
+    X(SDLK_2)                   \
+    X(SDLK_3)                   \
+    X(SDLK_4)                   \
+    X(SDLK_5)                   \
+    X(SDLK_6)                   \
+    X(SDLK_7)                   \
+    X(SDLK_8)                   \
+    X(SDLK_9)                   \
+    X(SDLK_COLON)               \
+    X(SDLK_SEMICOLON)           \
+    X(SDLK_LESS)                \
+    X(SDLK_EQUALS)              \
+    X(SDLK_GREATER)             \
+    X(SDLK_QUESTION)            \
+    X(SDLK_AT)                  \
+    X(SDLK_LEFTBRACKET)         \
+    X(SDLK_BACKSLASH)           \
+    X(SDLK_RIGHTBRACKET)        \
+    X(SDLK_CARET)               \
+    X(SDLK_UNDERSCORE)          \
+    X(SDLK_BACKQUOTE)           \
+    X(SDLK_a)                   \
+    X(SDLK_b)                   \
+    X(SDLK_c)                   \
+    X(SDLK_d)                   \
+    X(SDLK_e)                   \
+    X(SDLK_f)                   \
+    X(SDLK_g)                   \
+    X(SDLK_h)                   \
+    X(SDLK_i)                   \
+    X(SDLK_j)                   \
+    X(SDLK_k)                   \
+    X(SDLK_l)                   \
+    X(SDLK_m)                   \
+    X(SDLK_n)                   \
+    X(SDLK_o)                   \
+    X(SDLK_p)                   \
+    X(SDLK_q)                   \
+    X(SDLK_r)                   \
+    X(SDLK_s)                   \
+    X(SDLK_t)                   \
+    X(SDLK_u)                   \
+    X(SDLK_v)                   \
+    X(SDLK_w)                   \
+    X(SDLK_x)                   \
+    X(SDLK_y)                   \
+    X(SDLK_z)                   \
+    X(SDLK_DELETE)              \
+    X(SDLK_KP0)                 \
+    X(SDLK_KP1)                 \
+    X(SDLK_KP2)                 \
+    X(SDLK_KP3)                 \
+    X(SDLK_KP4)                 \
+    X(SDLK_KP5)                 \
+    X(SDLK_KP6)                 \
+    X(SDLK_KP7)                 \
+    X(SDLK_KP8)                 \
+    X(SDLK_KP9)                 \
+    X(SDLK_KP_PERIOD)           \
+    X(SDLK_KP_DIVIDE)           \
+    X(SDLK_KP_MULTIPLY)         \
+    X(SDLK_KP_MINUS)            \
+    X(SDLK_KP_PLUS)             \
+    X(SDLK_KP_ENTER)            \
+    X(SDLK_KP_EQUALS)           \
+    X(SDLK_UP)                  \
+    X(SDLK_DOWN)                \
+    X(SDLK_RIGHT)               \
+    X(SDLK_LEFT)                \
+    X(SDLK_INSERT)              \
+    X(SDLK_HOME)                \
+    X(SDLK_END)                 \
+    X(SDLK_PAGEUP)              \
+    X(SDLK_PAGEDOWN)            \
+    X(SDLK_F1)                  \
+    X(SDLK_F2)                  \
+    X(SDLK_F3)                  \
+    X(SDLK_F4)                  \
+    X(SDLK_F5)                  \
+    X(SDLK_F6)                  \
+    X(SDLK_F7)                  \
+    X(SDLK_F8)                  \
+    X(SDLK_F9)                  \
+    X(SDLK_F10)                 \
+    X(SDLK_F11)                 \
+    X(SDLK_F12)                 \
+    X(SDLK_F13)                 \
+    X(SDLK_F14)                 \
+    X(SDLK_F15)                 \
+    X(SDLK_NUMLOCK)             \
+    X(SDLK_CAPSLOCK)            \
+    X(SDLK_SCROLLOCK)           \
+    X(SDLK_RSHIFT)              \
+    X(SDLK_LSHIFT)              \
+    X(SDLK_RCTRL)               \
+    X(SDLK_LCTRL)               \
+    X(SDLK_RALT)                \
+    X(SDLK_LALT)                \
+    X(SDLK_RMETA)               \
+    X(SDLK_LMETA)               \
+    X(SDLK_LSUPER)              \
+    X(SDLK_RSUPER)              \
+    X(SDLK_MODE)                \
+    X(SDLK_HELP)                \
+    X(SDLK_PRINT)               \
+    X(SDLK_SYSREQ)              \
+    X(SDLK_BREAK)               \
+    X(SDLK_MENU)                \
+    X(SDLK_POWER)               \
+    X(SDLK_EURO)
+
+///
+/// @brief Converts the string to a SDL keycode.
+/// @param [in] s   The string to be converted.
+/// @returns The keycode.
+///
+SDLKey getSdlKeySym(const std::string &s)
+{
+#define X(SdlKey)   if (s == #SdlKey) return SdlKey;
+    STRING_TO_SDL_KEYMAP
+#undef X
+    return SDLK_HELP;
+}
+
+}
+
 void MainApp::loadConfig()
 {
   PUtil::outLog() << "Loading game configuration" << std::endl;
@@ -340,16 +497,26 @@ void MainApp::loadConfig()
                 PUtil::outLog() << "Config ctrls: Unknown action \"" << val << "\"" << std::endl;
                 continue;
               }
-              
+              /*
               // TODO: implement string to keycode mapping
               val = walk3->Attribute("code");
               if (!val) {
                 PUtil::outLog() << "Config ctrls: Key has no code" << std::endl;
                 continue;
               }
+              */
+              
+              val = walk3->Attribute("id");
+              
+              if (!val)
+              {
+                  PUtil::outLog() << "Config ctrls: Key has no ID" << std::endl;
+                  continue;
+              }
               
               ctrl.map[a].type = UserControl::TypeKey;
-              ctrl.map[a].key.sym = (SDLKey) atoi(val);
+              //ctrl.map[a].key.sym = (SDLKey) atoi(val);
+              ctrl.map[a].key.sym = getSdlKeySym(val);
             }
           }
           
