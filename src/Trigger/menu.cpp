@@ -297,6 +297,9 @@ void MainApp::levelScreenAction(int action, int index)
           gui.addLabel(100.0f, 420.0f - (float)(i - firstraceindex) * 30.0f,
           levels[i].name, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 25.0f),
           AA_PICK_LVL, i);
+          
+        gui.addLabel(790.0f, 420.0f - (float)(i - firstraceindex) * 30.0f,
+            levels[i].targettime, PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 25.0f);
       }
     }
     break;
