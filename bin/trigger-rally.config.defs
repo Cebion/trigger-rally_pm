@@ -73,18 +73,21 @@
 
 	<controls>
 		<keyboard enable="yes">
-			<key action="forward" code="273" />
-			<key action="back" code="274" />
-			<key action="left" code="276" />
-			<key action="right" code="275" />
-			<key action="handbrake" code="32" />
-			<key action="recover" code="114" />
-			<key action="cammode" code="99" />
-			<key action="camleft" code="44" />
-			<key action="camright" code="46" />
-			<key action="showmap" code="109" />
-			<key action="showui" code="110" />
+			<key action="forward" id="SDLK_UP" />
+			<key action="back" id="SDLK_DOWN" />
+			<key action="left" id="SDLK_LEFT" />
+			<key action="right" id="SDLK_RIGHT" />
+			<key action="handbrake" id="SDLK_SPACE" />
+			<key action="recover" id="SDLK_r" />
+			<key action="cammode" id="SDLK_c" />
+			<key action="camleft" id="SDLK_LESS" />
+			<key action="camright" id="SDLK_GREATER" />
+			<key action="showmap" id="SDLK_m" />
+			<key action="showui" id="SDLK_n" />
 		</keyboard>
+		<!-- For a list of SDLKey ID's visit:
+			http://www.libsdl.org/release/SDL-1.2.15/docs/html/sdlkey.html
+		-->
 
 		<!-- Typical joystick or wheel & pedals configuration -->
 		<joystick enable="no">
