@@ -26,7 +26,7 @@
 		anisotropy="4"
 		foliage="yes"
 		weather="yes"
-	/>
+		/>
 	<!--
 		anisotropy:
 			Sets the level of anisotropic filtering for textures.
