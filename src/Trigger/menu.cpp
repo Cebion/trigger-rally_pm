@@ -312,7 +312,7 @@ void MainApp::levelScreenAction(int action, int index)
     gui.addLabel(100.0f,515.0f,
         levels[lss.currentlevel].name + " " + levels[lss.currentlevel].targettime,
         PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 35.0f);
-    gui.addLabel(105.0f,480.0f,
+    gui.addLabel(100.0f,477.5f,
         std::string("by ") + levels[lss.currentlevel].author,
         PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f);
 
@@ -323,7 +323,6 @@ void MainApp::levelScreenAction(int action, int index)
         gui.addGraphic(450, 190, 250, 250, levels[lss.currentlevel].tex_hudmap);
 
     gui.addLabel(100.0f,170.0f, levels[lss.currentlevel].description, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f);
-
     gui.makeDefault(
       gui.makeClickable(
         gui.addLabel(400.0f,100.0f, "START RACE", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER, 40.0f),
