@@ -4,7 +4,8 @@
 	description="Fast and flowing but with bad visibility."
 	comment="Don't fear the darkening!"
 	author="Onsemeliot"
-	screenshot="ss.png">
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"
