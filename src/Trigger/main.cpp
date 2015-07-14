@@ -611,6 +611,7 @@ void MainApp::loadConfig()
 bool MainApp::loadLevel(TriggerLevel &tl)
 {
   tl.name = "Untitled";
+  tl.description = "(no description)";
   tl.comment = "";
   tl.author = "";
   tl.targettime = "";
@@ -626,17 +627,36 @@ bool MainApp::loadLevel(TriggerLevel &tl)
   
   val = rootelem->Attribute("name");
   if (val) tl.name = val;
+  
+  val = rootelem->Attribute("description");
+
+  if (val != nullptr)
+    tl.description = val;
+  
   val = rootelem->Attribute("comment");
   if (val) tl.comment = val;
   val = rootelem->Attribute("author");
   if (val) tl.author = val;
+
+  val = rootelem->Attribute("screenshot");
+  
+  if (val != nullptr)
+    tl.tex_screenshot = getSSTexture().loadTexture(PUtil::assemblePath(val, tl.filename));
+
   for (TiXmlElement *walk = rootelem->FirstChildElement();
     walk; walk = walk->NextSiblingElement()) {
-    
+
+    if (!strcmp(walk->Value(), "terrain"))
+    {
+        val = walk->Attribute("hudmap");
+
+        if (val != nullptr)
+            tl.tex_hudmap = getSSTexture().loadTexture(PUtil::assemblePath(val, tl.filename));
+    }
+
     if (!strcmp(walk->Value(), "race")) {
       val = walk->Attribute("targettime");
       if (val) tl.targettime = PUtil::formatTime(atof(val));
-
     }
   }
   

@@ -125,7 +125,10 @@ public:
 
 
 struct TriggerLevel {
-  std::string filename, name, comment, author, targettime;
+  std::string filename, name, description, comment, author, targettime;
+  
+  PTexture *tex_hudmap = nullptr;
+  PTexture *tex_screenshot = nullptr;
 };
 
 struct TriggerEvent {
