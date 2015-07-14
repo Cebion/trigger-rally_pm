@@ -127,7 +127,7 @@ public:
 struct TriggerLevel {
   std::string filename, name, description, comment, author, targettime;
   
-  PTexture *tex_hudmap = nullptr;
+  PTexture *tex_minimap = nullptr;
   PTexture *tex_screenshot = nullptr;
 };
 
@@ -280,7 +280,9 @@ private:
            *tex_hud_revneedle,
            *tex_hud_life,
            *tex_splash_screen,
-           *tex_end_screen;
+           *tex_end_screen,
+           *tex_race_no_screenshot,
+           *tex_race_no_minimap;
   
   DirtParticleSystem *psys_dirt;
   

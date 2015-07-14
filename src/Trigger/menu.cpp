@@ -318,9 +318,13 @@ void MainApp::levelScreenAction(int action, int index)
 
     if (levels[lss.currentlevel].tex_screenshot != nullptr)
         gui.addGraphic(100, 190, 250.0f * 4/3, 250, levels[lss.currentlevel].tex_screenshot);
+    else
+        gui.addGraphic(100, 190, 250.0f * 4/3, 250, tex_race_no_screenshot);
 
-    if (levels[lss.currentlevel].tex_hudmap != nullptr)
-        gui.addGraphic(450, 190, 250, 250, levels[lss.currentlevel].tex_hudmap);
+    if (levels[lss.currentlevel].tex_minimap != nullptr)
+        gui.addGraphic(450, 190, 250, 250, levels[lss.currentlevel].tex_minimap);
+    else
+        gui.addGraphic(450, 190, 250, 250, tex_race_no_minimap);
 
     gui.addLabel(100.0f,170.0f, levels[lss.currentlevel].description, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f);
     gui.makeDefault(

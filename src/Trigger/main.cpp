@@ -644,16 +644,13 @@ bool MainApp::loadLevel(TriggerLevel &tl)
   if (val != nullptr)
     tl.tex_screenshot = getSSTexture().loadTexture(PUtil::assemblePath(val, tl.filename));
 
+  val = rootelem->Attribute("minimap");
+  
+  if (val != nullptr)
+    tl.tex_minimap = getSSTexture().loadTexture(PUtil::assemblePath(val, tl.filename));
+
   for (TiXmlElement *walk = rootelem->FirstChildElement();
     walk; walk = walk->NextSiblingElement()) {
-
-    if (!strcmp(walk->Value(), "terrain"))
-    {
-        val = walk->Attribute("hudmap");
-
-        if (val != nullptr)
-            tl.tex_hudmap = getSSTexture().loadTexture(PUtil::assemblePath(val, tl.filename));
-    }
 
     if (!strcmp(walk->Value(), "race")) {
       val = walk->Attribute("targettime");
@@ -770,6 +767,10 @@ bool MainApp::loadAll()
   if (!(tex_hud_revneedle = getSSTexture().loadTexture("/textures/rev_needle.png"))) return false;
   
   if (!(tex_hud_revs = getSSTexture().loadTexture("/textures/dial_rev.png"))) return false;
+  
+  if (!(tex_race_no_screenshot = getSSTexture().loadTexture("/textures/no_screenshot.png"))) return false;
+  
+  if (!(tex_race_no_minimap = getSSTexture().loadTexture("/textures/no_minimap.png"))) return false;
 
   if (cfg_enable_sound) {
     if (!(aud_engine = getSSAudio().loadSample("/sounds/engine.wav", false))) return false;
