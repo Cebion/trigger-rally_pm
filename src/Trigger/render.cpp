@@ -743,84 +743,87 @@ void MainApp::renderStateGame(float eyetranslation)
         vec4f(0.2f, 0.8f, 0.2f, 0.4f)  // 2 = all other checkpoints
     };
 
-    for (unsigned int i=0; i<game->checkpt.size(); i++)
+    if (showcheckpoint)
     {
+        for (unsigned int i=0; i<game->checkpt.size(); i++)
+        {
 
-        vec4f colr = checkpoint_col[2];
+            vec4f colr = checkpoint_col[2];
 
-        if ((int)i == vehic->nextcp)
-            colr = checkpoint_col[0];
-        else if ((int)i == (vehic->nextcp + 1) % (int)game->checkpt.size())
-            colr = checkpoint_col[1];
+            if ((int)i == vehic->nextcp)
+                colr = checkpoint_col[0];
+            else if ((int)i == (vehic->nextcp + 1) % (int)game->checkpt.size())
+                colr = checkpoint_col[1];
 
-        glPushMatrix(); // 1
+            glPushMatrix(); // 1
 
-        glTranslatef(game->checkpt[i].pt.x, game->checkpt[i].pt.y, game->checkpt[i].pt.z);
+            glTranslatef(game->checkpt[i].pt.x, game->checkpt[i].pt.y, game->checkpt[i].pt.z);
 
-        glScalef(25.0f, 25.0f, 1.0f);
+            glScalef(25.0f, 25.0f, 1.0f);
 
 #if 0 // Checkpoint style one
-        glBegin(GL_TRIANGLE_STRIP);
+            glBegin(GL_TRIANGLE_STRIP);
 
-        for (float a = 0.0f; a < 0.99f; a += 0.05f)
-        {
-            glColor4f(colr[0], colr[1], colr[2], colr[3] * a);
-            float ang = cprotate + a * 6.0f;
-            float ht = sinf(ang * 1.7f) * 7.0f + 8.0f;
-            glVertex3f(cosf(ang), sinf(ang), ht - 1.0f);
-            glVertex3f(cosf(ang), sinf(ang), ht + 1.0f);
-        }
+            for (float a = 0.0f; a < 0.99f; a += 0.05f)
+            {
+                glColor4f(colr[0], colr[1], colr[2], colr[3] * a);
+                float ang = cprotate + a * 6.0f;
+                float ht = sinf(ang * 1.7f) * 7.0f + 8.0f;
+                glVertex3f(cosf(ang), sinf(ang), ht - 1.0f);
+                glVertex3f(cosf(ang), sinf(ang), ht + 1.0f);
+            }
 
-        for (float a = 1.0f; a < 2.01f; a += 0.05f)
-        {
-            glColor4f(colr[0], colr[1], colr[2], colr[3] * (2.0f - a));
-            float ang = cprotate + a * 6.0f;
-            float ht = sinf(ang * 1.7f) * 7.0f + 8.0f;
-            glVertex3f(cosf(ang), sinf(ang), ht - 1.0f);
-            glVertex3f(cosf(ang), sinf(ang), ht + 1.0f);
-        }
+            for (float a = 1.0f; a < 2.01f; a += 0.05f)
+            {
+                glColor4f(colr[0], colr[1], colr[2], colr[3] * (2.0f - a));
+                float ang = cprotate + a * 6.0f;
+                float ht = sinf(ang * 1.7f) * 7.0f + 8.0f;
+                glVertex3f(cosf(ang), sinf(ang), ht - 1.0f);
+                glVertex3f(cosf(ang), sinf(ang), ht + 1.0f);
+            }
 
-        glEnd();
+            glEnd();
 #else // Regular checkpoint style
-        glBegin(GL_TRIANGLE_STRIP);
-        float ht = sinf(cprotate * 6.0f) * 7.0f + 8.0f;
-        glColor4f(colr[0], colr[1], colr[2], 0.0f);
-        glVertex3f(1.0f, 0.0f, ht - 1.0f);
-        glColor4f(colr[0], colr[1], colr[2], colr[3]);
-        glVertex3f(1.0f, 0.0f, ht + 0.0f);
-        for (float a = PI/10.0f; a < PI*2.0f-0.01f; a += PI/10.0f)
-        {
+            glBegin(GL_TRIANGLE_STRIP);
+            float ht = sinf(cprotate * 6.0f) * 7.0f + 8.0f;
             glColor4f(colr[0], colr[1], colr[2], 0.0f);
-            glVertex3f(cosf(a), sinf(a), ht - 1.0f);
+            glVertex3f(1.0f, 0.0f, ht - 1.0f);
             glColor4f(colr[0], colr[1], colr[2], colr[3]);
-            glVertex3f(cosf(a), sinf(a), ht + 0.0f);
-        }
-        glColor4f(colr[0], colr[1], colr[2], 0.0f);
-        glVertex3f(1.0f, 0.0f, ht - 1.0f);
-        glColor4f(colr[0], colr[1], colr[2], colr[3]);
-        glVertex3f(1.0f, 0.0f, ht + 0.0f);
-        glEnd();
+            glVertex3f(1.0f, 0.0f, ht + 0.0f);
+            for (float a = PI/10.0f; a < PI*2.0f-0.01f; a += PI/10.0f)
+            {
+                glColor4f(colr[0], colr[1], colr[2], 0.0f);
+                glVertex3f(cosf(a), sinf(a), ht - 1.0f);
+                glColor4f(colr[0], colr[1], colr[2], colr[3]);
+                glVertex3f(cosf(a), sinf(a), ht + 0.0f);
+            }
+            glColor4f(colr[0], colr[1], colr[2], 0.0f);
+            glVertex3f(1.0f, 0.0f, ht - 1.0f);
+            glColor4f(colr[0], colr[1], colr[2], colr[3]);
+            glVertex3f(1.0f, 0.0f, ht + 0.0f);
+            glEnd();
 
-        glBegin(GL_TRIANGLE_STRIP);
-        glColor4f(colr[0], colr[1], colr[2], colr[3]);
-        glVertex3f(1.0f, 0.0f, ht - 0.0f);
-        glColor4f(colr[0], colr[1], colr[2], 0.0f);
-        glVertex3f(1.0f, 0.0f, ht + 1.0f);
-        for (float a = PI/10.0f; a < PI*2.0f-0.01f; a += PI/10.0f)
-        {
+            glBegin(GL_TRIANGLE_STRIP);
             glColor4f(colr[0], colr[1], colr[2], colr[3]);
-            glVertex3f(cosf(a), sinf(a), ht - 0.0f);
+            glVertex3f(1.0f, 0.0f, ht - 0.0f);
             glColor4f(colr[0], colr[1], colr[2], 0.0f);
-            glVertex3f(cosf(a), sinf(a), ht + 1.0f);
-        }
-        glColor4f(colr[0], colr[1], colr[2], colr[3]);
-        glVertex3f(1.0f, 0.0f, ht - 0.0f);
-        glColor4f(colr[0], colr[1], colr[2], 0.0f);
-        glVertex3f(1.0f, 0.0f, ht + 1.0f);
-        glEnd();
+            glVertex3f(1.0f, 0.0f, ht + 1.0f);
+            for (float a = PI/10.0f; a < PI*2.0f-0.01f; a += PI/10.0f)
+            {
+                glColor4f(colr[0], colr[1], colr[2], colr[3]);
+                glVertex3f(cosf(a), sinf(a), ht - 0.0f);
+                glColor4f(colr[0], colr[1], colr[2], 0.0f);
+                glVertex3f(cosf(a), sinf(a), ht + 1.0f);
+            }
+            glColor4f(colr[0], colr[1], colr[2], colr[3]);
+            glVertex3f(1.0f, 0.0f, ht - 0.0f);
+            glColor4f(colr[0], colr[1], colr[2], 0.0f);
+            glVertex3f(1.0f, 0.0f, ht + 1.0f);
+            glEnd();
 #endif
 
-        glPopMatrix(); // 1
+            glPopMatrix(); // 1
+        }
     }
 
     glEnable(GL_TEXTURE_2D);

@@ -278,6 +278,7 @@ void MainApp::loadConfig()
   ctrl.action_name[ActionCamRight] = std::string("camright");
   ctrl.action_name[ActionShowMap] = std::string("showmap");
   ctrl.action_name[ActionShowUi] = std::string("showui");
+  ctrl.action_name[ActionShowCheckpoint] = std::string("showcheckpoint");
   
   for (int i = 0; i < ActionCount; i++) {
     ctrl.map[i].type = UserControl::TypeUnassigned;
@@ -801,8 +802,10 @@ bool MainApp::loadAll()
   camera_user_angle = 0.0f;
   
   showmap = true;
-  
+
   showui = true;
+  
+  showcheckpoint = true;
 
   crashnoise_timeout = 0.0f;
   
@@ -1424,6 +1427,13 @@ void MainApp::keyEvent(const SDL_KeyboardEvent &ke)
         showui = !showui;
         return;
       }
+      
+      if (ctrl.map[ActionShowCheckpoint].type == UserControl::TypeKey &&
+        ctrl.map[ActionShowCheckpoint].key.sym == ke.keysym.sym) {
+            showcheckpoint = !showcheckpoint;
+            return;
+      }
+      
       
       switch (ke.keysym.sym) {
       case SDLK_ESCAPE:

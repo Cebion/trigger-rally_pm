@@ -241,6 +241,7 @@ private:
     ActionCamRight,
     ActionShowMap,
     ActionShowUi,
+    ActionShowCheckpoint,
     ActionCount
   };
   struct {
@@ -313,6 +314,8 @@ private:
 
   bool showui;
   
+  bool showcheckpoint;
+
   float crashnoise_timeout;
   
   std::vector<RainDrop> rain;

@@ -84,6 +84,7 @@
 			<key action="camright" id="SDLK_COMMA" />
 			<key action="showmap" id="SDLK_m" />
 			<key action="showui" id="SDLK_n" />
+			<key action="showcheckpoint" id="SDLK_k" />
 		</keyboard>
 		<!-- For a list of SDLKey ID's visit:
 			http://www.libsdl.org/release/SDL-1.2.15/docs/html/sdlkey.html
