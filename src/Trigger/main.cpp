@@ -1228,11 +1228,33 @@ void MainApp::tickStateGame(float delta)
       makevec3f(rfmat.row[2]) * 0.1f;
     } break;
     
+    // Periscope view
+  case 3:{
+    quatf temp2;
+    temp2.fromZAngle(camera_user_angle);
+
+    quatf target = tempo * temp2 * rf->ori;
+
+    if (target.dot(camori) < 0.0f) target = target * -1.0f;
+
+    PULLTOWARD(camori, target, delta * 25.0f);
+
+    camori.normalize();
+
+    cammat = camori.getMatrix();
+    cammat = cammat.transpose();
+    const mat44f &rfmat = rf->getInverseOrientationMatrix();
+    //campos = rf->getPosition() + makevec3f(cammat.row[2]) * 100.0;
+    campos = rf->getPosition() +
+      makevec3f(rfmat.row[1]) * 1.7f +
+      makevec3f(rfmat.row[2]) * 5.0f;
+    } break;
+    
     // Piggyback (fixed chase)
     //
     // TODO: broken because of "world turns upside down" bug
     //
-  case 3:{
+  case -1:{
     quatf temp2, temp3, temp4;
     temp2.fromZAngle(forwangle + camera_user_angle);
     temp3.fromXAngle(noseangle);
@@ -1414,7 +1436,7 @@ void MainApp::keyEvent(const SDL_KeyboardEvent &ke)
       }
       if (ctrl.map[ActionCamMode].type == UserControl::TypeKey &&
         ctrl.map[ActionCamMode].key.sym == ke.keysym.sym) {
-        cameraview = (cameraview + 1) % 3;
+        cameraview = (cameraview + 1) % 4;
         camera_user_angle = 0.0f;
         return;
       }
@@ -1508,8 +1530,8 @@ void MainApp::joyButtonEvent(int which, int button, bool down)
       }
       if (ctrl.map[ActionCamMode].type == UserControl::TypeJoyButton &&
         ctrl.map[ActionCamMode].joybutton.button == button) {
-        cameraview = (cameraview + 1) % 3;
-        // current camera views: Chase, Bumper, Side, [Piggyback - disabled]
+        cameraview = (cameraview + 1) % 4;
+        // current camera views: Chase, Bumper, Side, Periscope, [Piggyback - disabled]
         camera_user_angle = 0.0f;
         return;
       }
