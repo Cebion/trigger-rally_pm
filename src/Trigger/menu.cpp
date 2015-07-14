@@ -307,22 +307,23 @@ void MainApp::levelScreenAction(int action, int index)
     gui.makeClickable(
       gui.addLabel(400.0f,590.0f, "(back)", PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 30.0f),
       AA_GO_LVL, (lss.currentlevel / MAX_RACES_ON_SCREEN) * MAX_RACES_ON_SCREEN);
+
     gui.addLabel(790.0f,590.0f, "Single Race", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 30.0f);
-    gui.addLabel(200.0f,235.0f, "Name", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 20.0f);
-    gui.addLabel(230.0f,235.0f, levels[lss.currentlevel].name, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f);
-    gui.addLabel(200.0f,210.0f, "Author", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 20.0f);
-    gui.addLabel(230.0f,210.0f, levels[lss.currentlevel].author, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f);
-    gui.addLabel(200.0f,185.0f, "Time", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 20.0f);
-    gui.addLabel(230.0f,185.0f, levels[lss.currentlevel].targettime, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f);
-    gui.addLabel(200.0f,160.0f, "Description", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 20.0f);
-    gui.addLabel(230.0f,160.0f, levels[lss.currentlevel].description, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f);
-    
+    gui.addLabel(100.0f,515.0f,
+        levels[lss.currentlevel].name + " " + levels[lss.currentlevel].targettime,
+        PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 35.0f);
+    gui.addLabel(105.0f,480.0f,
+        std::string("by ") + levels[lss.currentlevel].author,
+        PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f);
+
     if (levels[lss.currentlevel].tex_screenshot != nullptr)
-        gui.addGraphic(100, 250, 350, 250, levels[lss.currentlevel].tex_screenshot);
-    
+        gui.addGraphic(100, 190, 250.0f * 4/3, 250, levels[lss.currentlevel].tex_screenshot);
+
     if (levels[lss.currentlevel].tex_hudmap != nullptr)
-        gui.addGraphic(450, 250, 250, 250, levels[lss.currentlevel].tex_hudmap);
-    
+        gui.addGraphic(450, 190, 250, 250, levels[lss.currentlevel].tex_hudmap);
+
+    gui.addLabel(100.0f,170.0f, levels[lss.currentlevel].description, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f);
+
     gui.makeDefault(
       gui.makeClickable(
         gui.addLabel(400.0f,100.0f, "START RACE", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER, 40.0f),
