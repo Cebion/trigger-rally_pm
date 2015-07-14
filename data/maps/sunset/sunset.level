@@ -1,8 +1,10 @@
 <?xml version="1.0" ?>
 <level 
 	name="Sunset"
+	description="Fast and flowing but with bad visibility."
 	comment="Don't fear the darkening!"
-	author="Onsemeliot">
+	author="Onsemeliot"
+	screenshot="ss.png">
 	
 	<terrain
 		heightmap="h.png"
