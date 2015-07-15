@@ -279,6 +279,7 @@ private:
            *tex_hud_revs,
            *tex_hud_revneedle,
            *tex_hud_life,
+           *tex_loading_screen,
            *tex_splash_screen,
            *tex_end_screen,
            *tex_race_no_screenshot,

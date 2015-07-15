@@ -480,11 +480,15 @@ void MainApp::renderStateLevel(float eyetranslation)
   glMatrixMode(GL_PROJECTION);
   glPushMatrix();
   glLoadIdentity();
-  //glOrtho(0.0f, 800.0f, 0.0f, 600.0f, -1.0f, 1.0f);
-  
+
   const GLdouble margin = (800.0 - 600.0 * cfg_video_cx / cfg_video_cy) / 2.0;
-  
+
   glOrtho(margin, 600.0 * cfg_video_cx / cfg_video_cy + margin, 0.0, 600.0, -1.0, 1.0);
+
+  glPushMatrix();
+  glLoadIdentity();
+  glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
+  
   glMatrixMode(GL_MODELVIEW);
   
   // draw background image
@@ -493,41 +497,48 @@ void MainApp::renderStateLevel(float eyetranslation)
   glDisable(GL_DEPTH_TEST);
   glDisable(GL_FOG);
   glDisable(GL_LIGHTING);
-  
+
   tex_splash_screen->bind();
   
   //glColor4f(0.0f, 0.0f, 0.2f, 1.0f); // make image dark blue
   glColor4f(1.0f, 1.0f, 1.0f, 1.0f); // use image's normal colors
+  //glColor4f(0.5f, 0.5f, 0.5f, 1.0f); // make image darker
   
-  glBegin(GL_QUADS);
-  // the background image is square and cut out a piece based on aspect ratio
-  // if aspect ratio is larger than 4:3
-  if ((float)getWidth()/(float)getHeight() > 4/3.f)
-  {
-    
-    // lower and upper offset based on aspect ratio
-    float off_l = (1 - ((float)getHeight() / (float)getWidth())) / 2.f;
-    float off_u = 1 - off_l;
-    glTexCoord2f(1.0f,off_u); glVertex2f(800.0f, 600.f);
-    glTexCoord2f(0.0f,off_u); glVertex2f(0.0f, 600.f);
-    glTexCoord2f(0.0f,off_l); glVertex2f(0.0f, 0.0f);
-    glTexCoord2f(1.0f,off_l); glVertex2f(800.0f, 0.0f);
-  }
-  // other cases (including 4:3, in which case off_l and off_u are = 1)
-  else
-  {
+    glBegin(GL_QUADS);
+    // the background image is square and cut out a piece based on aspect ratio
+    // -------- if aspect ratio is larger than 4:3
+    // if aspect ratio is larger than 1:1
+    if ((float)getWidth()/(float)getHeight() > 1.0f)
+    {
 
-    float off_l = (1 - ((float)getWidth() / (float)getHeight())) / 2.f;
-    float off_u = 1 - off_l;
-    glTexCoord2f(off_u,1.0f); glVertex2f(800.0f, 600.f);
-    glTexCoord2f(off_l,1.0f); glVertex2f(0.0f, 600.f);
-    glTexCoord2f(off_l,0.0f); glVertex2f(0.0f, 0.0f);
-    glTexCoord2f(off_u,0.0f); glVertex2f(800.0f, 0.0f);
-  }
-  glEnd();
-  
+      // lower and upper offset based on aspect ratio
+      float off_l = (1 - ((float)getHeight() / (float)getWidth())) / 2.f;
+      float off_u = 1 - off_l;
+      glTexCoord2f(1.0f,off_u); glVertex2f(1.0f, 1.0f);
+      glTexCoord2f(0.0f,off_u); glVertex2f(-1.0f, 1.0f);
+      glTexCoord2f(0.0f,off_l); glVertex2f(-1.0f, -1.0f);
+      glTexCoord2f(1.0f,off_l); glVertex2f(1.0f, -1.0f);
+    }
+    // other cases (including 4:3, in which case off_l and off_u are = 1)
+    else
+    {
+
+      float off_l = (1 - ((float)getWidth() / (float)getHeight())) / 2.f;
+      float off_u = 1 - off_l;
+      glTexCoord2f(off_u,1.0f); glVertex2f(1.0f, 1.0f);
+      glTexCoord2f(off_l,1.0f); glVertex2f(-1.0f, 1.0f);
+      glTexCoord2f(off_l,0.0f); glVertex2f(-1.0f, -1.0f);
+      glTexCoord2f(off_u,0.0f); glVertex2f(1.0f, -1.0f);
+    }
+    glEnd();
+
+
+  glMatrixMode(GL_PROJECTION);
+  glPopMatrix();
+
+  glMatrixMode(GL_MODELVIEW);
   // draw GUI
-  
+
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   
   glColor4f(1.0f, 1.0f, 1.0f, 0.2f);

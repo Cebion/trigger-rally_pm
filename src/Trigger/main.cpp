@@ -51,8 +51,8 @@ void MainApp::load()
   //std::string buff = boost::str(boost::format("textures/splash/splash%u.jpg") % ((rand() % 3) + 1));
   //if (!(tex_splash_screen = getSSTexture().loadTexture(buff))) return false;
   
-  if (!(tex_splash_screen = getSSTexture().loadTexture("textures/splash/splash.jpg")))
-    throw MakePException ("Failed to load splash screen");
+  if (!(tex_loading_screen = getSSTexture().loadTexture("textures/splash/loading.jpg")))
+    throw MakePException("Failed to load the Loading screen");
   
   appstate = AS_LOAD_1;
   
@@ -756,6 +756,7 @@ bool MainApp::loadAll()
   if (!(tex_fontDsmOutlined = getSSTexture().loadTexture("/textures/fontDsmOutlined.png")))
     return false;
   
+  if (!(tex_splash_screen = getSSTexture().loadTexture("textures/splash/splash.jpg"))) return false;
   if (!(tex_end_screen = getSSTexture().loadTexture("/textures/splash/endgame.jpg"))) return false;
   
   if (!(tex_hud_life = getSSTexture().loadTexture("/textures/life_helmet.png"))) return false;
