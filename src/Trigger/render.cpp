@@ -337,6 +337,10 @@ void MainApp::renderStateEnd(float eyetranslation)
 {
     eyetranslation = eyetranslation;
 
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
     glMatrixMode(GL_MODELVIEW);
 
     tex_end_screen->bind();
@@ -379,6 +383,7 @@ void MainApp::renderStateEnd(float eyetranslation)
     tex_fontDsmOutlined->bind();
 
     glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
     glPushMatrix();
     glLoadIdentity();
     glOrtho(0 - hratio, hratio, 0 - vratio, vratio, 0 - 1.0, 1.0);
