@@ -117,6 +117,7 @@ public:
   static std::string formatInt(int value);
   
   static std::string formatTime(float seconds);
+  static std::string formatTimeShort(float seconds);
   
   // RWops created must be freed by using SDL freesrc on load
   static SDL_RWops *allocPhysFSops(PHYSFS_file *pfile);

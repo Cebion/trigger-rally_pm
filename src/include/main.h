@@ -24,6 +24,21 @@ struct CheckPoint {
   CheckPoint(const vec3f &_pt) : pt(_pt) { }
 };
 
+///
+/// @brief Holds codriver checkpoint information.
+///
+struct CodriverCP
+{
+    vec3f pt;           ///< Where this checkpoint is on the map.
+    std::string notes;  ///< What the codriver should say.
+
+    CodriverCP(const vec3f &pt, const std::string &notes):
+        pt(pt),
+        notes(notes)
+    {
+    }
+};
+
 /*
 struct AIDriver {
   int vehic;
@@ -59,6 +74,7 @@ private:
   PTerrain *terrain;
   
   std::vector<CheckPoint> checkpt;
+  std::vector<CodriverCP> codrivercheckpt;
   
   int gamestate;
   
@@ -125,14 +141,16 @@ public:
 
 
 struct TriggerLevel {
-  std::string filename, name, description, comment, author, targettime;
+  std::string filename, name, description, comment, author, targettime, targettimeshort;
+  
+  float targettimefloat;
   
   PTexture *tex_minimap = nullptr;
   PTexture *tex_screenshot = nullptr;
 };
 
 struct TriggerEvent {
-  std::string filename, name, comment, author;
+  std::string filename, name, comment, author, totaltime;
   
   // Note that levels are not linked to... they are
   // stored in the event because an event may have
@@ -283,7 +301,9 @@ private:
            *tex_splash_screen,
            *tex_end_screen,
            *tex_race_no_screenshot,
-           *tex_race_no_minimap;
+           *tex_race_no_minimap,
+           *tex_button_next,
+           *tex_button_prev;
   
   DirtParticleSystem *psys_dirt;
   
