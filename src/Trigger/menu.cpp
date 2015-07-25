@@ -7,7 +7,7 @@
 #include <sstream>
 #include "main.h"
 
-const int MAX_RACES_ON_SCREEN = 10;
+const int MAX_RACES_ON_SCREEN = 12;
 
 
 void MainApp::levelScreenAction(int action, int index)
@@ -93,90 +93,82 @@ void MainApp::levelScreenAction(int action, int index)
   }
   
   gui.setSSRender(getSSRender());
-  
   gui.setFont(tex_fontDsmOutlined);
-  
   grabMouse(false);
-  
   gui.clear();
-  
-  gui.addLabel(10.0f,590.0f, (std::string)"Trigger " + PACKAGE_VERSION, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 30.0f);
-  
-  {
-    // Switch the icky M D Y date format to D M Y
-    // TODO: do this at startup
-    
-    const char *ickydate = __DATE__;
-    char pieces[3][10];
-    char resultdate[30];
-    sscanf(ickydate, "%s %s %s", pieces[0], pieces[1], pieces[2]);
-    sprintf(resultdate, "%s %s %s", pieces[1], pieces[0], pieces[2]);
-    
-    gui.addLabel(10.0f,10.0f,
-      (std::string)"Build: " + resultdate + " at " + __TIME__,
-      PTEXT_HZA_LEFT | PTEXT_VTA_BOTTOM, 20.0f);
-  }
-  
+  gui.addLabel(10.0f,570.0f, "Trigger Rally", PTEXT_HZA_LEFT | PTEXT_VTA_CENTER, 30.0f);
+
   switch (lss.state) {
   case AM_TOP:
     gui.makeClickable(
-      gui.addLabel(400.0f,400.0f, "Enter an Event", PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 40.0f), AA_GO_EVT, 0);
+      gui.addLabel(400.0f,350.0f, "events", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER, 40.0f), AA_GO_EVT, 0);
     gui.makeClickable(
-      gui.addLabel(400.0f,350.0f, "Practice", PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 40.0f), AA_GO_PRAC, 0);
+      gui.addLabel(400.0f,300.0f, "practice", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER, 40.0f), AA_GO_PRAC, 0);
     gui.makeClickable(
-      gui.addLabel(400.0f,300.0f, "Single Race", PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 40.0f), AA_GO_LVL, 0);
+      gui.addLabel(400.0f,250.0f, "single race", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER, 40.0f), AA_GO_LVL, 0);
     gui.makeClickable(
-      gui.addLabel(400.0f,250.0f, "Quit", PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 40.0f), AA_GO_QUIT, 0);
+      gui.addLabel(10.0f,30.0f, "quit", PTEXT_HZA_LEFT | PTEXT_VTA_CENTER, 40.0f), AA_GO_QUIT, 0);
+
+    gui.addLabel(790.0f, 570.0f, "version " PACKAGE_VERSION, PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 30.0f);
+    gui.addLabel(790.0f, 30.0f, "Build: " __DATE__ " at " __TIME__, PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20.0f);
     break;
   case AM_TOP_EVT:
   {
     gui.makeClickable(
-      gui.addLabel(400.0f,590.0f, "(back)", PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 30.0f), AA_GO_TOP, 0);
-    gui.addLabel(790.0f,590.0f, "Event", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 30.0f);
-    gui.addLabel(100.0f,470.0f, "Choose Event:", PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 30.0f);
+      gui.addLabel(10.0f,30.0f, "back", PTEXT_HZA_LEFT | PTEXT_VTA_CENTER, 40.0f), AA_GO_TOP, 0);
+    gui.addLabel(100.0f,470.0f, "Choose Event:", PTEXT_HZA_LEFT | PTEXT_VTA_CENTER, 30.0f);
     
       int firstraceindex = index;
-      int prevlabel = gui.addLabel(100.0f, 90.0f, "(prev)", PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 30.0f);
+      const int prevbutton = gui.addGraphic(20.0f, 275.0f, 50.0f, 50.0f, tex_button_prev);
+      const int nextbutton = gui.addGraphic(730.0f, 275.0f, 50.0f, 50.0f, tex_button_next);
 
-      if (firstraceindex > 0) {
-        gui.makeClickable(prevlabel, AA_GO_PRAC, firstraceindex - MAX_RACES_ON_SCREEN);
+      if (firstraceindex > 0) { // FIXME: originally was AA_GO_PRAC?
+        gui.makeClickable(prevbutton, AA_GO_EVT, firstraceindex - MAX_RACES_ON_SCREEN);
       }
 
       int racesonscreencount = events.size() - firstraceindex;
-      int nextlabel = gui.addLabel(380.0f, 90.0f, "(next)", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 30.0f);
+
       if (racesonscreencount > MAX_RACES_ON_SCREEN) {
         racesonscreencount = MAX_RACES_ON_SCREEN;
-        gui.makeClickable( nextlabel, AA_GO_EVT, firstraceindex + MAX_RACES_ON_SCREEN);
+        gui.makeClickable(nextbutton, AA_GO_EVT, firstraceindex + MAX_RACES_ON_SCREEN);
       }
 
       std::stringstream racecountmsg;
-      racecountmsg << "Events " << firstraceindex + 1 << "-" << firstraceindex + racesonscreencount << " of " << events.size();
-      gui.addLabel(790.0f, 10.0f, racecountmsg.str(), PTEXT_HZA_RIGHT | PTEXT_VTA_BOTTOM, 20.0f);
+      racecountmsg << "events " << firstraceindex + 1 << '-' << firstraceindex + racesonscreencount << '/' << events.size();
+      gui.addLabel(790.0f, 570.0f, racecountmsg.str(), PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20.0f);
+        gui.addLabel(700, 470, "races (timelimit)", PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20);
 
     for (int i = firstraceindex; i < firstraceindex + racesonscreencount; i++) {
       gui.makeClickable(
-        gui.addLabel(100.0f,420.0f - (float)(i - firstraceindex) * 30.0f,
+        gui.addLabel(100.0f,440.0f - (float)(i - firstraceindex) * 30.0f,
         events[i].name, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 25.0f), AA_PICK_EVT, i);
+        
+      gui.addLabel(700.0f, 440.0f - (float)(i - firstraceindex) * 30.0f,
+            PUtil::formatInt(events[i].levels.size()) + " (" + events[i].totaltime + ')',
+            PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 25.0f);
     }
     break;
   }
   case AM_TOP_EVT_PREP:
     gui.makeClickable(
-      gui.addLabel(400.0f,590.0f, "(back)", PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 30.0f), AA_GO_EVT, 0);
-    gui.addLabel(790.0f,590.0f, "Event", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 30.0f);
-    gui.addLabel(100.0f,470.0f, "Races:", PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 30.0f);
+      gui.addLabel(10.0f, 10.0f, "back", PTEXT_HZA_LEFT | PTEXT_VTA_BOTTOM, 40.0f),
+      AA_GO_EVT, 0);
+    gui.addLabel(790.0f, 570.0f, events[lss.currentevent].name, PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20.0f);
+    gui.addLabel(100.0f,470.0f, "Races:", PTEXT_HZA_LEFT | PTEXT_VTA_CENTER, 30.0f);
+    gui.addLabel(700, 470, "status/time", PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20);
+
     for (unsigned int i = 0; i < events[lss.currentevent].levels.size(); i++) {
-      gui.addLabel(100.0f,420.0f - (float)i * 30.0f,
+      gui.addLabel(100.0f,440.0f - (float)i * 30.0f,
         events[lss.currentevent].levels[i].name, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 25.0f);
-      std::string infotext = "Not yet raced";
+      std::string infotext = "not yet raced";
       if (lss.currentlevel > (int)i)
         infotext = PUtil::formatTime(lss.leveltimes[i]);
       else if (lss.currentlevel == (int)i)
-        infotext = "NEXT";
-      gui.addLabel(700.0f,420.0f - (float)i * 30.0f,
+        infotext = "next";
+      gui.addLabel(700.0f,440.0f - (float)i * 30.0f,
         infotext, PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 25.0f);
     }
-    gui.addLabel(700.0f,420.0f - (float)events[lss.currentevent].levels.size() * 30.0f,
+    gui.addLabel(700.0f,430.0f - (float)events[lss.currentevent].levels.size() * 30.0f,
       "Total: " + PUtil::formatTime(lss.totaltime), PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 25.0f);
     if (lss.livesleft <= 0) {
       gui.addLabel(400.0f,150.0f, "No tries remaining", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER, 30.0f);
@@ -187,18 +179,20 @@ void MainApp::levelScreenAction(int action, int index)
       gui.addLabel(400.0f,150.0f, "CONGRATULATIONS!", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER, 40.0f);
       gui.addLabel(400.0f,100.0f, "EVENT COMPLETED", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER, 40.0f);
     } else {
-      gui.addLabel(300.0f,100.0f, "Tries remaining:", PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 30.0f);
+      gui.addLabel(400.0f,10.0f, PUtil::formatInt(lss.livesleft) + " tries remaining",
+        PTEXT_HZA_CENTER | PTEXT_VTA_BOTTOM, 20.0f);
+
       for (int i = 0; i < lss.livesleft; i++) {
-        gui.addGraphic(325.0f + i * 50.0f,75.0f, 50.0f,50.0f, tex_hud_life);
+        gui.addGraphic(325.0f + i * 50.0f,30.0f, 50.0f,50.0f, tex_hud_life);
       }
       gui.makeDefault(
         gui.makeClickable(
-          gui.addLabel(650.0f,100.0f, "START RACE", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER, 40.0f),
+          gui.addLabel(790.0f,10.0f, "continue", PTEXT_HZA_RIGHT | PTEXT_VTA_BOTTOM, 40.0f),
           AA_START_EVT, 0));
     }
     break;
   case AM_TOP_EVT_ABANDON:
-    gui.addLabel(400.0f,350.0f, "Really leave event?", PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 40.0f);
+    gui.addLabel(400.0f,350.0f, "Really leave Event?", PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 40.0f);
     gui.makeClickable(
       gui.addLabel(300.0f,250.0f, "Yes", PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 40.0f),
       AA_GO_EVT, 0);
@@ -209,128 +203,188 @@ void MainApp::levelScreenAction(int action, int index)
   case AM_TOP_PRAC:
   {
     gui.makeClickable(
-      gui.addLabel(400.0f,590.0f, "(back)", PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 30.0f), AA_GO_TOP, 0);
-    gui.addLabel(790.0f,590.0f, "Practice", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 30.0f);
-    gui.addLabel(100.0f,470.0f, "Choose Event:", PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 30.0f);
+      gui.addLabel(10.0f, 10.0f, "back", PTEXT_HZA_LEFT | PTEXT_VTA_BOTTOM, 40.0f), AA_GO_TOP, 0);
+    gui.addLabel(100.0f,470.0f, "Practice Event:", PTEXT_HZA_LEFT | PTEXT_VTA_CENTER, 30.0f);
     
       int firstraceindex = index;
-      int prevlabel = gui.addLabel(100.0f, 90.0f, "(prev)", PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 30.0f);
-      
+      const int prevbutton = gui.addGraphic(20.0f, 275.0f, 50.0f, 50.0f, tex_button_prev);
+      const int nextbutton = gui.addGraphic(730.0f, 275.0f, 50.0f, 50.0f, tex_button_next);
+
       if (firstraceindex > 0) {
-        gui.makeClickable(prevlabel, AA_GO_PRAC, firstraceindex - MAX_RACES_ON_SCREEN);
+        gui.makeClickable(prevbutton, AA_GO_PRAC, firstraceindex - MAX_RACES_ON_SCREEN);
       }
 
       int racesonscreencount = events.size() - firstraceindex;
-      int nextlabel = gui.addLabel(380.0f, 90.0f, "(next)", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 30.0f);
+
       if (racesonscreencount > MAX_RACES_ON_SCREEN) {
         racesonscreencount = MAX_RACES_ON_SCREEN;
-        gui.makeClickable( nextlabel, AA_GO_PRAC, firstraceindex + MAX_RACES_ON_SCREEN);
+        gui.makeClickable(nextbutton, AA_GO_PRAC, firstraceindex + MAX_RACES_ON_SCREEN);
       }
 
       std::stringstream racecountmsg;
-      racecountmsg << "Events " << firstraceindex + 1 << "-" << firstraceindex + racesonscreencount << " of " << events.size();
-      gui.addLabel(790.0f, 10.0f, racecountmsg.str(), PTEXT_HZA_RIGHT | PTEXT_VTA_BOTTOM, 20.0f);
+      racecountmsg << "events " << firstraceindex + 1 << '-' << firstraceindex + racesonscreencount << '/' << events.size();
+      gui.addLabel(790.0f, 570.0f, racecountmsg.str(), PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20.0f);
+      gui.addLabel(700, 470, "races (timelimit)", PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20);
 
     for (int i = firstraceindex; i < firstraceindex + racesonscreencount; i++) {
       gui.makeClickable(
-        gui.addLabel(100.0f,420.0f - (float)(i - firstraceindex) * 30.0f,
+        gui.addLabel(100.0f,440.0f - (float)(i - firstraceindex) * 30.0f,
         events[i].name, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 25.0f), AA_PICK_PRAC, i);
+        
+      gui.addLabel(700.0f, 440.0f - (float)(i - firstraceindex) * 30.0f,
+            PUtil::formatInt(events[i].levels.size()) + " (" + events[i].totaltime + ')',
+            PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 25.0f);
     }
     break;
   }
   case AM_TOP_PRAC_SEL:
+  {
     gui.makeClickable(
-      gui.addLabel(400.0f,590.0f, "(back)", PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 30.0f),
+      gui.addLabel(10.0f, 10.0f, "back", PTEXT_HZA_LEFT | PTEXT_VTA_BOTTOM, 40.0f),
       AA_GO_PRAC, 0);
-    gui.addLabel(790.0f,590.0f, "Practice", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 30.0f);
-    gui.addLabel(100.0f,470.0f, "Choose Race:", PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 30.0f);
+    gui.addLabel(790.0f, 570.0f, events[lss.currentevent].name, PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20.0f);
+    gui.addLabel(100.0f,470.0f, "Choose Race:", PTEXT_HZA_LEFT | PTEXT_VTA_CENTER, 30.0f);
+    gui.addLabel(700, 470, "timelimit", PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20);
+
     for (unsigned int i = 0; i < events[lss.currentevent].levels.size(); i++) {
-      gui.makeClickable(
-        gui.addLabel(100.0f,420.0f - (float)i * 30.0f,
+        gui.makeClickable(
+          gui.addLabel(100.0f, 440.0f - (float)i * 30.0f,
           events[lss.currentevent].levels[i].name, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 25.0f),
-        AA_PICK_PRAC_LVL, i);
+          AA_PICK_PRAC_LVL, i);
+
+        gui.addLabel(700.0f, 440.0f - (float)i * 30.0f,
+            events[lss.currentevent].levels[i].targettimeshort, PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 25.0f);
     }
     break;
+  }
   case AM_TOP_PRAC_SEL_PREP:
+  {
+      const int prevbutton = gui.addGraphic(20.0f, 275.0f, 50.0f, 50.0f, tex_button_prev);
+      const int nextbutton = gui.addGraphic(730.0f, 275.0f, 50.0f, 50.0f, tex_button_next);
+
+      int idxnext = lss.currentlevel + 1;
+      int idxprev = lss.currentlevel - 1;
+
+      CLAMP(idxnext, 0, static_cast<int> (events[lss.currentevent].levels.size() - 1));
+      CLAMP(idxprev, 0, static_cast<int> (events[lss.currentevent].levels.size() - 1));
+
+      gui.makeClickable(nextbutton, AA_PICK_PRAC_LVL, idxnext);
+      gui.makeClickable(prevbutton, AA_PICK_PRAC_LVL, idxprev);
+
     gui.makeClickable(
-      gui.addLabel(400.0f,590.0f, "(back)", PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 30.0f),
+      gui.addLabel(10.0f, 10.0f, "back", PTEXT_HZA_LEFT | PTEXT_VTA_BOTTOM, 40.0f),
       AA_PICK_PRAC, lss.currentevent);
-    gui.addLabel(790.0f,590.0f, "Practice", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 30.0f);
-    gui.addLabel(200.0f,450.0f, "Event", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 30.0f);
-    gui.addLabel(250.0f,450.0f, events[lss.currentevent].name, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 30.0f);
-    gui.addLabel(200.0f,400.0f, "Name", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 30.0f);
-    gui.addLabel(250.0f,400.0f, events[lss.currentevent].levels[lss.currentlevel].name, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 30.0f);
-    gui.addLabel(200.0f,350.0f, "Author", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 30.0f);
-    gui.addLabel(250.0f,350.0f, events[lss.currentevent].levels[lss.currentlevel].author, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 30.0f);
-    gui.addLabel(200.0f,300.0f, "Time", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 30.0f);
-    gui.addLabel(250.0f,300.0f, events[lss.currentevent].levels[lss.currentlevel].targettime, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 30.0f);
+    gui.addLabel(790.0f, 570.0f, events[lss.currentevent].name + " (" +
+        PUtil::formatInt(lss.currentlevel + 1) + '/' + PUtil::formatInt(events[lss.currentevent].levels.size()) + ')',
+        PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20.0f);
+    gui.addLabel(100.0f,500.0f, events[lss.currentevent].levels[lss.currentlevel].name,
+        PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 35.0f);
+    gui.addLabel(100.0f,462.5f,
+        std::string("by ") + events[lss.currentevent].levels[lss.currentlevel].author,
+        PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f);
+    gui.addLabel(700.0f, 462.5f, events[lss.currentevent].levels[lss.currentlevel].targettimeshort,
+        PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 20.0f);
+
+    if (events[lss.currentevent].levels[lss.currentlevel].tex_screenshot != nullptr)
+        gui.addGraphic(100, 175, 250.0f * 4/3, 250, events[lss.currentevent].levels[lss.currentlevel].tex_screenshot);
+    else
+        gui.addGraphic(100, 175, 250.0f * 4/3, 250, tex_race_no_screenshot);
+
+    if (events[lss.currentevent].levels[lss.currentlevel].tex_minimap != nullptr)
+        gui.addGraphic(450, 175, 250, 250, events[lss.currentevent].levels[lss.currentlevel].tex_minimap);
+    else
+        gui.addGraphic(450, 175, 250, 250, tex_race_no_minimap);
+
+    gui.addLabel(100.0f,150.0f, events[lss.currentevent].levels[lss.currentlevel].description,
+        PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f);
     gui.makeDefault(
       gui.makeClickable(
-        gui.addLabel(400.0f,100.0f, "START PRACTICE", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER, 40.0f),
+        gui.addLabel(790.0f,10.0f, "continue", PTEXT_HZA_RIGHT | PTEXT_VTA_BOTTOM, 40.0f),
         AA_START_PRAC, 0));
     break;
+  }
   case AM_TOP_LVL:
     {
       gui.makeClickable(
-        gui.addLabel(400.0f,590.0f, "(back)", PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 30.0f),
+        gui.addLabel(10.0f, 10.0f, "back", PTEXT_HZA_LEFT | PTEXT_VTA_BOTTOM, 40.0f),
         AA_GO_TOP, 0);
-      gui.addLabel(790.0f,590.0f, "Single Race", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 30.0f);
-      gui.addLabel(100.0f,470.0f, "Choose Race:", PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 30.0f);
+      gui.addLabel(100.0f,470.0f, "Choose Race:", PTEXT_HZA_LEFT | PTEXT_VTA_CENTER, 30.0f);
 
       int firstraceindex = index;
-      int prevlabel = gui.addLabel(100.0f, 90.0f, "(prev)", PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 30.0f);
+      const int prevbutton = gui.addGraphic(20.0f, 275.0f, 50.0f, 50.0f, tex_button_prev);
+      const int nextbutton = gui.addGraphic(730.0f, 275.0f, 50.0f, 50.0f, tex_button_next);
+
       if (firstraceindex > 0) {
-        gui.makeClickable(prevlabel, AA_GO_LVL, firstraceindex - MAX_RACES_ON_SCREEN);
+        gui.makeClickable(prevbutton, AA_GO_LVL, firstraceindex - MAX_RACES_ON_SCREEN);
       }
+
       int racesonscreencount = levels.size() - firstraceindex;
-      int nextlabel = gui.addLabel(380.0f, 90.0f, "(next)", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 30.0f);
+
       if (racesonscreencount > MAX_RACES_ON_SCREEN) {
         racesonscreencount = MAX_RACES_ON_SCREEN;
-        gui.makeClickable( nextlabel, AA_GO_LVL, firstraceindex + MAX_RACES_ON_SCREEN);
+        gui.makeClickable(nextbutton, AA_GO_LVL, firstraceindex + MAX_RACES_ON_SCREEN);
       }
       std::stringstream racecountmsg;
-      racecountmsg << "Races " << firstraceindex + 1 << "-" << firstraceindex + racesonscreencount << " of " << levels.size();
-      gui.addLabel(790.0f, 10.0f, racecountmsg.str(), PTEXT_HZA_RIGHT | PTEXT_VTA_BOTTOM, 20.0f);
+      racecountmsg << "single races " << firstraceindex + 1 << "-" << firstraceindex + racesonscreencount << '/' << levels.size();
+      gui.addLabel(790.0f, 570.0f, racecountmsg.str(), PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20.0f);
+
+        gui.addLabel(700, 470, "timelimit", PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20);
 
       for (int i = firstraceindex; i < firstraceindex + racesonscreencount; i++) {
         gui.makeClickable(
-          gui.addLabel(100.0f, 420.0f - (float)(i - firstraceindex) * 30.0f,
+          gui.addLabel(100.0f, 440.0f - (float)(i - firstraceindex) * 30.0f,
           levels[i].name, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 25.0f),
           AA_PICK_LVL, i);
           
-        gui.addLabel(700.0f, 420.0f - (float)(i - firstraceindex) * 30.0f,
-            levels[i].targettime.substr(0, levels[i].targettime.length() - 3), PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 25.0f);
+        gui.addLabel(700.0f, 440.0f - (float)(i - firstraceindex) * 30.0f,
+            levels[i].targettimeshort, PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 25.0f);
       }
     }
     break;
   case AM_TOP_LVL_PREP:
+  {
+      const int prevbutton = gui.addGraphic(20.0f, 275.0f, 50.0f, 50.0f, tex_button_prev);
+      const int nextbutton = gui.addGraphic(730.0f, 275.0f, 50.0f, 50.0f, tex_button_next);
+      
+      int idxnext = lss.currentlevel + 1;
+      int idxprev = lss.currentlevel - 1;
+
+      CLAMP(idxnext, 0, static_cast<int> (levels.size() - 1));
+      CLAMP(idxprev, 0, static_cast<int> (levels.size() - 1));
+      
+      gui.makeClickable(nextbutton, AA_PICK_LVL, idxnext);
+      gui.makeClickable(prevbutton, AA_PICK_LVL, idxprev);
+      
     gui.makeClickable(
-      gui.addLabel(400.0f,590.0f, "(back)", PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 30.0f),
+      gui.addLabel(10.0f, 10.0f, "back", PTEXT_HZA_LEFT | PTEXT_VTA_BOTTOM, 40.0f),
       AA_GO_LVL, (lss.currentlevel / MAX_RACES_ON_SCREEN) * MAX_RACES_ON_SCREEN);
 
-    gui.addLabel(790.0f,590.0f, "Single Race", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 30.0f);
-    gui.addLabel(100.0f,515.0f,
-        levels[lss.currentlevel].name + " " + levels[lss.currentlevel].targettime,
-        PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 35.0f);
-    gui.addLabel(100.0f,477.5f,
+    std::stringstream racenummsg;
+
+    racenummsg << "single race " << lss.currentlevel+1 << '/' << levels.size();
+    gui.addLabel(790.0f,570.0f, racenummsg.str(), PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20.0f);
+    gui.addLabel(100.0f,500.0f, levels[lss.currentlevel].name, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 35.0f);
+    gui.addLabel(100.0f,462.5f,
         std::string("by ") + levels[lss.currentlevel].author,
         PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f);
+    gui.addLabel(700.0f, 462.5f, levels[lss.currentlevel].targettimeshort, PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 20.0f);
 
     if (levels[lss.currentlevel].tex_screenshot != nullptr)
-        gui.addGraphic(100, 190, 250.0f * 4/3, 250, levels[lss.currentlevel].tex_screenshot);
+        gui.addGraphic(100, 175, 250.0f * 4/3, 250, levels[lss.currentlevel].tex_screenshot);
     else
-        gui.addGraphic(100, 190, 250.0f * 4/3, 250, tex_race_no_screenshot);
+        gui.addGraphic(100, 175, 250.0f * 4/3, 250, tex_race_no_screenshot);
 
     if (levels[lss.currentlevel].tex_minimap != nullptr)
-        gui.addGraphic(450, 190, 250, 250, levels[lss.currentlevel].tex_minimap);
+        gui.addGraphic(450, 175, 250, 250, levels[lss.currentlevel].tex_minimap);
     else
-        gui.addGraphic(450, 190, 250, 250, tex_race_no_minimap);
+        gui.addGraphic(450, 175, 250, 250, tex_race_no_minimap);
 
-    gui.addLabel(100.0f,170.0f, levels[lss.currentlevel].description, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f);
+    gui.addLabel(100.0f,150.0f, levels[lss.currentlevel].description, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f);
     gui.makeDefault(
       gui.makeClickable(
-        gui.addLabel(400.0f,100.0f, "START RACE", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER, 40.0f),
+        gui.addLabel(790.0f,10.0f, "continue", PTEXT_HZA_RIGHT | PTEXT_VTA_BOTTOM, 40.0f),
         AA_START_LVL, 0));
+  }
     break;
   case AM_TOP_QUIT:
     gui.addLabel(400.0f,350.0f, "Really quit?", PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 40.0f);
@@ -377,7 +431,8 @@ void MainApp::finishRace(int gamestate, float coursetime)
     break;
   case AM_TOP_LVL_PREP:
     // Calculate the index of first level in the page by truncating the current level index to the nearest 10
-    levelScreenAction(AA_GO_LVL, (lss.currentlevel / MAX_RACES_ON_SCREEN) * MAX_RACES_ON_SCREEN );
+    //levelScreenAction(AA_GO_LVL, (lss.currentlevel / MAX_RACES_ON_SCREEN) * MAX_RACES_ON_SCREEN );
+    levelScreenAction(AA_PICK_LVL, lss.currentlevel);
     break;
   default:
     PUtil::outLog() << "Race finished in invalid state " << lss.state << std::endl;
@@ -431,6 +486,9 @@ void MainApp::mouseButtonEvent(const SDL_MouseButtonEvent &mbe)
   levelScreenAction(action, index);
 }
 
+//
+// TODO: use ActionLeft and ActionRight instead of hardcoded right/left arrow
+//
 void MainApp::handleLevelScreenKey(const SDL_KeyboardEvent &ke)
 {
   switch (ke.keysym.sym) {
@@ -467,6 +525,112 @@ void MainApp::handleLevelScreenKey(const SDL_KeyboardEvent &ke)
       if (gui.getDefaultAction(data1, data2))
         levelScreenAction(data1, data2);
     } break;
+
+    case SDLK_LEFT:
+    {
+        switch (lss.state)
+        {
+            case AM_TOP_LVL_PREP:
+            {
+                lss.currentlevel -= 1;
+                CLAMP(lss.currentlevel, 0, static_cast<int> (levels.size() - 1));
+                levelScreenAction(AA_PICK_LVL, lss.currentlevel);
+                break;
+            }
+
+            case AM_TOP_LVL:
+            {
+                lss.currentlevel = (lss.currentlevel / MAX_RACES_ON_SCREEN - 1) * MAX_RACES_ON_SCREEN;
+                CLAMP(lss.currentlevel, 0, static_cast<int> (levels.size() - 1));
+                levelScreenAction(AA_GO_LVL, lss.currentlevel);
+                break;
+            }
+
+            case AM_TOP_EVT:
+            {
+                lss.currentevent = (lss.currentevent / MAX_RACES_ON_SCREEN - 1) * MAX_RACES_ON_SCREEN;
+                CLAMP(lss.currentevent, 0, static_cast<int> (events.size() - 1));
+                levelScreenAction(AA_GO_EVT, lss.currentevent);
+                break;
+            }
+
+            case AM_TOP_PRAC:
+            {
+                lss.currentevent = (lss.currentevent / MAX_RACES_ON_SCREEN - 1) * MAX_RACES_ON_SCREEN;
+                CLAMP(lss.currentevent, 0, static_cast<int> (events.size() - 1));
+                levelScreenAction(AA_GO_PRAC, lss.currentevent);
+                break;
+            }
+
+            case AM_TOP_PRAC_SEL_PREP:
+            {
+                lss.currentlevel -= 1;
+                CLAMP(lss.currentlevel, 0, static_cast<int> (events[lss.currentlevel].levels.size() - 1));
+                levelScreenAction(AA_PICK_PRAC_LVL, lss.currentlevel);
+                break;
+            }
+        }
+
+        break;
+    }
+
+    case SDLK_RIGHT:
+    {
+        switch (lss.state)
+        {
+            case AM_TOP_LVL_PREP:
+            {
+                lss.currentlevel += 1;
+                CLAMP(lss.currentlevel, 0, static_cast<int> (levels.size() - 1));
+                levelScreenAction(AA_PICK_LVL, lss.currentlevel);
+                break;
+            }
+
+            case AM_TOP_LVL:
+            {
+                if (levels.size() - lss.currentlevel < MAX_RACES_ON_SCREEN)
+                    break;
+
+                lss.currentlevel = (lss.currentlevel / MAX_RACES_ON_SCREEN + 1) * MAX_RACES_ON_SCREEN;
+                CLAMP(lss.currentlevel, 0, static_cast<int> (levels.size() - 1));
+                levelScreenAction(AA_GO_LVL, lss.currentlevel);
+                break;
+            }
+
+            case AM_TOP_EVT:
+            {
+                if (events.size() - lss.currentevent < MAX_RACES_ON_SCREEN)
+                    break;
+
+                lss.currentevent = (lss.currentevent / MAX_RACES_ON_SCREEN + 1) * MAX_RACES_ON_SCREEN;
+                CLAMP(lss.currentevent, 0, static_cast<int> (events.size() - 1));
+                levelScreenAction(AA_GO_EVT, lss.currentevent);
+                break;
+            }
+
+            case AM_TOP_PRAC:
+            {
+                if (events.size() - lss.currentevent < MAX_RACES_ON_SCREEN)
+                    break;
+
+                lss.currentevent = (lss.currentevent / MAX_RACES_ON_SCREEN + 1) * MAX_RACES_ON_SCREEN;
+                CLAMP(lss.currentevent, 0, static_cast<int> (events.size() - 1));
+                levelScreenAction(AA_GO_PRAC, lss.currentevent);
+                break;
+            }
+
+            case AM_TOP_PRAC_SEL_PREP:
+            {
+                lss.currentlevel += 1;
+                CLAMP(lss.currentlevel, 0, static_cast<int> (events[lss.currentevent].levels.size() - 1));
+                levelScreenAction(AA_PICK_PRAC_LVL, lss.currentlevel);
+                break;
+            }
+        }
+
+        break;
+    }
+
   default:
     break;
   }
