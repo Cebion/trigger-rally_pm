@@ -1,9 +1,12 @@
 <?xml version="1.0" ?>
 <level 
 	name="Blunt"
+	description="fast sand road with tricky corners"
 	comment="Quo vadis?"
 	author="Onsemeliot"
-	randomseed="1000">
+	randomseed="1000"
+	screenshot="ss.png"
+	minimap="mm.png">
 
 	<terrain
 		heightmap="h.png"
