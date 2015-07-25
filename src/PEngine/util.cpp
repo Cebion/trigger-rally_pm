@@ -312,6 +312,19 @@ std::string PUtil::formatTime(float seconds)
     formatInt(time_centis, 2);
 }
 
+///
+/// @brief Converts time expressed in seconds to a human-readable string.
+/// @param seconds      The number of seconds.
+/// @returns String representing the time.
+///
+std::string PUtil::formatTimeShort(float seconds)
+{
+    const int time_mins = static_cast<int> (seconds / 60.0f);
+    seconds -= time_mins * 60;
+    const int time_secs = static_cast<int> (seconds);
+    
+    return formatInt(time_mins) + ':' + formatInt(time_secs, 2);
+}
 
 // These are implemented over in physfs_rw.cpp
 
