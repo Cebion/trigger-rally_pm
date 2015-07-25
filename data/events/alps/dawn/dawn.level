@@ -4,6 +4,9 @@
 	comment="A cold, but promising morning."
 	author="Onsemeliot"
 	randomseed="1000"
+	description="wide and forgiving road but poor light"
+	screenshot="ss.png"
+	minimap="mm.png"
 	>
 	
 	<terrain
