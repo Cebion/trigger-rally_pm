@@ -210,12 +210,13 @@ void MainApp::renderStateLoading(float eyetranslation)
     glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
     glMatrixMode(GL_MODELVIEW);
 
-    tex_loading_screen->bind();
+    tex_splash_screen->bind();
 
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_FOG);
     glDisable(GL_LIGHTING);
-    glBlendFunc(GL_ONE, GL_ZERO);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
@@ -246,6 +247,29 @@ void MainApp::renderStateLoading(float eyetranslation)
       glTexCoord2f(off_u,0.0f); glVertex2f(1.0f, -1.0f);
     }
     glEnd();
+    
+    tex_loading_screen->bind();
+
+    GLfloat logovratio = static_cast<float> (getWidth()) / getHeight();
+    GLfloat logohratio = static_cast<float> (getHeight()) / getWidth();
+
+    // FIXME: nasty, nasty code
+    if (logovratio > 1.0f)
+        logohratio = 1.0f;
+    else
+    if (logohratio > 1.0f)
+        logovratio = 1.0f;
+
+#define LOGO_VRATIO     (logovratio/3.5)
+#define LOGO_HRATIO     (logohratio/3.5)
+    glBegin(GL_QUADS);
+      glTexCoord2f(1.0f, 1.0f); glVertex2f( LOGO_HRATIO,  LOGO_VRATIO);
+      glTexCoord2f(0.0f, 1.0f); glVertex2f(-LOGO_HRATIO,  LOGO_VRATIO);
+      glTexCoord2f(0.0f, 0.0f); glVertex2f(-LOGO_HRATIO, -LOGO_VRATIO);
+      glTexCoord2f(1.0f, 0.0f); glVertex2f( LOGO_HRATIO, -LOGO_VRATIO);
+    glEnd();
+#undef LOGO_VRATIO
+#undef LOGO_HRATIO
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_FOG);
@@ -292,7 +316,7 @@ const char *creditstext[] =
     "Ishmael Turner",
     "Iwan 'qubodup' Gabovitch",
     "Farrer",
-    "Andrei Bondor"
+    "Andrei Bondor",
     "",
     "New levels",
     "Tim Wintle",
@@ -467,7 +491,8 @@ void MainApp::renderStateChoose(float eyetranslation)
 
     glPushMatrix(); // 0
 
-    glTranslatef(-eyetranslation, -0.3f, -3.0f);
+    glTranslatef(-eyetranslation, -0.5f, -4.0f);
+    //glTranslatef(-eyetranslation, -0.3f, -3.0f);
 
     glDisable(GL_FOG);
     glEnable(GL_LIGHTING);
@@ -475,7 +500,9 @@ void MainApp::renderStateChoose(float eyetranslation)
     vec4f lpos = vec4f(0.0f, 1.0f, 0.0f, 0.0f);
     glLightfv(GL_LIGHT0, GL_POSITION, lpos);
 
-    float tmp = sinf(choose_spin * 2.0f) * 0.5f;
+    //float tmp = 1.0f;
+    //float tmp = sinf(choose_spin * 2.0f) * 0.5f;
+    float tmp = cosf(choose_spin * 2.0f) * 0.5f;
     tmp += choose_spin;
     glRotatef(90.0f, -1.0f, 0.0f, 0.0f);
     glRotatef(DEGREES(tmp), 0.0f, 0.0f, 1.0f);
