@@ -186,6 +186,36 @@ bool TriggerGame::loadLevel(const std::string &filename)
           val = walk2->Attribute("ori");
           if (val) sscanf(val, "%f , %f , %f , %f", &start_ori.w, &start_ori.x, &start_ori.y, &start_ori.z);
         }
+        else
+        if (!strcmp(walk2->Value(), "codrivercp"))
+        {
+            vec2f coords(0.0f, 0.0f);
+            std::string notes;
+
+            val = walk2->Attribute("coords");
+
+            if (val != nullptr)
+            {
+                if (sscanf(val, "%f , %f", &coords.x, &coords.y) == 2)
+                {
+                    coords.x *= coordscale.x;
+                    coords.y *= coordscale.y;
+                }
+                else
+                    PUtil::outLog() << "Error reading codriver checkpoint coords\n";
+            }
+            else
+                PUtil::outLog() << "Warning: codriver checkpoint has no coords\n";
+
+            val = walk2->Attribute("notes");
+
+            if (val != nullptr)
+                notes = val;
+            else
+                PUtil::outLog() << "Warning: codriver checkpoint has no pace notes\n";
+
+            codrivercheckpt.push_back({{coords.x, coords.y, terrain->getHeight(coords.x, coords.y)}, notes});
+        }
       }
     } else if (!strcmp(walk->Value(), "weather")) {
       
@@ -251,13 +281,9 @@ bool TriggerGame::loadLevel(const std::string &filename)
   */
   
   coursetime = 0.0f;
-  
   othertime = 3.0f;
-  
   cptime = -4.0f;
-  
   gamestate = GS_COUNTDOWN;
-  
   return true;
 }
 
