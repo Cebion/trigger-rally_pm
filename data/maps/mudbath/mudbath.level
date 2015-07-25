@@ -1,8 +1,11 @@
 <?xml version="1.0" ?>
 <level 
 	name="Mudbath"
+	description="rain, mud, curvy, alternative routes"
 	comment="Battle the wilderness!"
-	author="Onsemeliot">
+	author="Onsemeliot"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"
