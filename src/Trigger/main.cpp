@@ -51,9 +51,12 @@ void MainApp::load()
   //std::string buff = boost::str(boost::format("textures/splash/splash%u.jpg") % ((rand() % 3) + 1));
   //if (!(tex_splash_screen = getSSTexture().loadTexture(buff))) return false;
   
-  if (!(tex_loading_screen = getSSTexture().loadTexture("textures/splash/loading.jpg")))
+  if (!(tex_loading_screen = getSSTexture().loadTexture("/textures/splash/loading.png")))
     throw MakePException("Failed to load the Loading screen");
   
+  if (!(tex_splash_screen = getSSTexture().loadTexture("/textures/splash/splash.jpg")))
+    throw MakePException("Failed to load the Splash screen");
+
   appstate = AS_LOAD_1;
   
   loadscreencount = 3;
@@ -616,6 +619,10 @@ bool MainApp::loadLevel(TriggerLevel &tl)
   tl.comment = "";
   tl.author = "";
   tl.targettime = "";
+  tl.targettimeshort = "";
+  tl.targettimefloat = 0.0f;
+  tl.tex_minimap = nullptr;
+  tl.tex_screenshot = nullptr;
   
   TiXmlDocument xmlfile(tl.filename.c_str());
   TiXmlElement *rootelem = PUtil::loadRootElement(xmlfile, "level");
@@ -654,7 +661,12 @@ bool MainApp::loadLevel(TriggerLevel &tl)
 
     if (!strcmp(walk->Value(), "race")) {
       val = walk->Attribute("targettime");
-      if (val) tl.targettime = PUtil::formatTime(atof(val));
+      if (val)
+      {
+        tl.targettime = PUtil::formatTime(atof(val));
+        tl.targettimeshort = PUtil::formatTimeShort(atof(val));
+        tl.targettimefloat = atof(val);
+      }
     }
   }
   
@@ -708,6 +720,8 @@ bool MainApp::loadLevelsAndEvents()
     val = rootelem->Attribute("author");
     if (val) te.author = val;
     
+    float evtotaltime = 0.0f;
+    
     for (TiXmlElement *walk = rootelem->FirstChildElement();
       walk; walk = walk->NextSiblingElement()) {
       
@@ -723,7 +737,10 @@ bool MainApp::loadLevelsAndEvents()
         tl.filename = PUtil::assemblePath(val, *i);
         
         if (loadLevel(tl))
+        {
           te.levels.push_back(tl);
+          evtotaltime += tl.targettimefloat;
+        }
           
         PUtil::outLog() << tl.filename << std::endl;
       }
@@ -733,6 +750,8 @@ bool MainApp::loadLevelsAndEvents()
       PUtil::outLog() << "Warning: Event has no levels" << std::endl;
       continue;
     }
+    
+    te.totaltime = PUtil::formatTimeShort(evtotaltime);
     
     // Insert event in alphabetical order
     std::vector<TriggerEvent>::iterator j = events.begin();
@@ -755,8 +774,7 @@ bool MainApp::loadAll()
 
   if (!(tex_fontDsmOutlined = getSSTexture().loadTexture("/textures/fontDsmOutlined.png")))
     return false;
-  
-  if (!(tex_splash_screen = getSSTexture().loadTexture("textures/splash/splash.jpg"))) return false;
+
   if (!(tex_end_screen = getSSTexture().loadTexture("/textures/splash/endgame.jpg"))) return false;
   
   if (!(tex_hud_life = getSSTexture().loadTexture("/textures/life_helmet.png"))) return false;
@@ -772,6 +790,9 @@ bool MainApp::loadAll()
   if (!(tex_race_no_screenshot = getSSTexture().loadTexture("/textures/no_screenshot.png"))) return false;
   
   if (!(tex_race_no_minimap = getSSTexture().loadTexture("/textures/no_minimap.png"))) return false;
+
+  if (!(tex_button_next = getSSTexture().loadTexture("/textures/button_next.png"))) return false;
+  if (!(tex_button_prev = getSSTexture().loadTexture("/textures/button_prev.png"))) return false;
 
   if (cfg_enable_sound) {
     if (!(aud_engine = getSSAudio().loadSample("/sounds/engine.wav", false))) return false;
