@@ -93,7 +93,7 @@ void MainApp::levelScreenAction(int action, int index)
   }
   
   gui.setSSRender(getSSRender());
-  gui.setFont(tex_fontDsmOutlined);
+  gui.setFont(tex_fontDsmShadowed);
   grabMouse(false);
   gui.clear();
   gui.addLabel(10.0f,570.0f, "Trigger Rally", PTEXT_HZA_LEFT | PTEXT_VTA_CENTER, 30.0f);
