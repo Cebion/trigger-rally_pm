@@ -775,6 +775,9 @@ bool MainApp::loadAll()
   if (!(tex_fontDsmOutlined = getSSTexture().loadTexture("/textures/fontDsmOutlined.png")))
     return false;
 
+  if (!(tex_fontDsmShadowed = getSSTexture().loadTexture("/textures/fontDsmShadowed.png")))
+    return false;
+
   if (!(tex_end_screen = getSSTexture().loadTexture("/textures/splash/endgame.jpg"))) return false;
   
   if (!(tex_hud_life = getSSTexture().loadTexture("/textures/life_helmet.png"))) return false;

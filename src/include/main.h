@@ -287,7 +287,8 @@ private:
   PVehicleType *vt_tank;
   
   PTexture *tex_fontDsmNormal,
-           *tex_fontDsmOutlined;
+           *tex_fontDsmOutlined,
+           *tex_fontDsmShadowed;
   
   PTexture *tex_detail,
            *tex_sky[1],
