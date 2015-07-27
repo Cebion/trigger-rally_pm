@@ -913,7 +913,8 @@ void MainApp::renderStateGame(float eyetranslation)
     {
       glPushMatrix(); // 1
       // position of rpm dial and needle
-      glTranslatef( hratio * (1.f - (5.75f/50.f)) - 0.3f, -vratio * (40.f/50.f) + 0.22f, 0.0f);
+      //glTranslatef( hratio * (1.f - (5.75f/50.f)) - 0.3f, -vratio * (40.f/50.f) + 0.22f, 0.0f);
+      glTranslatef( hratio * (1.f - (2.5f/50.f)) - 0.3f, -vratio * (43.5f/50.f) + 0.22f, 0.0f);
       glScalef(0.30f, 0.30f, 1.0f);
 
       tex_hud_revs->bind();
@@ -994,7 +995,8 @@ void MainApp::renderStateGame(float eyetranslation)
     if (showmap)
     {
         // position and size of map
-        glViewport(getWidth() * (5.75f/100.f), getHeight() * (6.15f/100.f), getHeight()/3.5f, getHeight()/3.5f);
+        //glViewport(getWidth() * (5.75f/100.f), getHeight() * (6.15f/100.f), getHeight()/3.5f, getHeight()/3.5f);
+        glViewport(getWidth() * (2.5f/100.f), getHeight() * (2.5f/100.f), getHeight()/3.5f, getHeight()/3.5f);
 
         glPushMatrix(); // 1
         glScalef(hratio, vratio, 1.0f);
@@ -1126,8 +1128,10 @@ void MainApp::renderStateGame(float eyetranslation)
       // -hratio is left border, 0 is center, +hratio is right
       // hratio * (1/50) gives 1% of the entire width
       // +vratio is top border, 0 is middle, -vratio is bottom
-      glTranslatef( -hratio + hratio * (5.75f/50.f), vratio * (4.f/5.f), 0.0f);
-      glScalef(0.15f, 0.15f, 1.0f);
+
+      glTranslatef( -hratio + hratio * (2.5f/50.f), vratio - vratio * (5.5f/50.f), 0.0f);
+      glScalef(0.125f, 0.125f, 1.0f);
+
       if (game->gamestate == GS_FINISHED)
       {
           getSSRender().drawText(
@@ -1182,8 +1186,8 @@ void MainApp::renderStateGame(float eyetranslation)
           const std::string nextcp = std::to_string(vehic->nextcp);
 
           // checkpoint position
-          glTranslatef( hratio - hratio * (5.75f/50.f), vratio * (4.f/5.f), 0.0f);
-          glScalef(0.15f, 0.15f, 1.0f);
+          glTranslatef( hratio - hratio * (2.5f/50.f), vratio - vratio * (5.5f/50.f), 0.0f);
+          glScalef(0.125f, 0.125f, 1.0f);
 
           getSSRender().drawText( ((game->getFinishState() == GF_PASS) ? totalcp : nextcp) + '/' + totalcp, PTEXT_HZA_RIGHT | PTEXT_VTA_TOP);
 
@@ -1207,7 +1211,8 @@ void MainApp::renderStateGame(float eyetranslation)
 
           glPushMatrix(); // 2
           // position of gear & speed number & label
-          glTranslatef( hratio * (1.f - (5.75f/50.f)) - 0.3f, -vratio * (40.f/50.f) + 0.21f, 0.0f);
+          //glTranslatef( hratio * (1.f - (5.75f/50.f)) - 0.3f, -vratio * (40.f/50.f) + 0.21f, 0.0f);
+          glTranslatef( hratio * (1.f - (2.5f/50.f)) - 0.3f, -vratio * (43.5f/50.f) + 0.21f, 0.0f);
           glScalef(0.20f, 0.20f, 1.0f);
           getSSRender().drawText(buff, PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
 
