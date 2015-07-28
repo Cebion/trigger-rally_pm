@@ -787,11 +787,11 @@ void Gui::render()
     case GWT_LABEL: {
       vec4f colc;
       if (widget[i].clickable) {
-        vec4f cola = vec4f(1.0f, 0.6f, 0.6f, 0.7f);
-        vec4f colb = vec4f(0.4f, 0.8f, 1.0f, 0.85f);
+        vec4f cola = vec4f(1.0f, 1.0f, 1.0f, 0.75f);
+        vec4f colb = vec4f(1.0f, 0.4f, 0.0f, 1.0f);
         colc = INTERP(cola, colb, widget[i].glow);
       } else {
-        colc = vec4f(1.0f, 1.0f, 1.0f, 0.8f);
+        colc = vec4f(0.75f, 1.0f, 0.75f, 0.75f);
       }
       
       if ((int)i == defwidget)
@@ -812,13 +812,22 @@ void Gui::render()
       } break;
       
     case GWT_GRAPHIC: {
-      
+      vec4f colc = vec4f(1.0f, 1.0f, 1.0f, 1.0f);
+/*
+      if (widget[i].clickable) {
+        vec4f cola = vec4f(1.0f, 1.0f, 1.0f, 0.25f);
+        vec4f colb = vec4f(1.0f, 1.0f, 1.0f, 1.0f);
+        colc = INTERP(cola, colb, widget[i].glow);
+      } else {
+        colc = vec4f(1.0f, 1.0f, 1.0f, 1.0f);
+      }
+*/
       vec2f min = widget[i].pos;
       vec2f max = widget[i].pos + widget[i].dims_min;
       
       widget[i].tex->bind();
       
-      glColor3f(1.0f, 1.0f, 1.0f);
+      glColor4fv(colc);
       
       glBegin(GL_QUADS);
       glTexCoord2f(0.0f, 0.0f); glVertex2f(min.x, min.y);
