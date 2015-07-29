@@ -81,6 +81,11 @@ struct GuiWidget {
     dims_min,
     pos;
   
+  vec4f
+    colnormal   {1.00f, 1.00f, 1.00f, 0.85f},  ///< Normal color for unclickable widgets.
+    colclick    {0.65f, 1.00f, 0.65f, 0.85f},  ///< Normal color for clickable widgets.
+    colhover    {1.00f, 0.40f, 0.00f, 1.00f};  ///< Mouse hover color for clickable widgets.
+  
   float glow;
   
   PTexture *tex;
@@ -133,7 +138,10 @@ public:
   
   int addContainer(int parent, float minwidth, float minheight, bool vert);
   
-  int addLabel(float x, float y, const std::string &text, uint32 flags, float fontsize);
+  int addLabel(float x, float y, const std::string &text, uint32 flags, float fontsize,
+    const vec4f &colnormal  = {1, 0, 0, 1},
+    const vec4f &colclick   = {0, 1, 0, 1},
+    const vec4f &colhover   = {0, 0, 1, 1});
   
   int addGraphic(float x, float y, float width, float height, PTexture *tex);
   

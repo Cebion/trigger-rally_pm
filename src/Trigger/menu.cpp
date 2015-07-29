@@ -787,11 +787,9 @@ void Gui::render()
     case GWT_LABEL: {
       vec4f colc;
       if (widget[i].clickable) {
-        vec4f cola = vec4f(1.0f, 1.0f, 1.0f, 1.0f);
-        vec4f colb = vec4f(1.0f, 0.4f, 0.0f, 1.0f);
-        colc = INTERP(cola, colb, widget[i].glow);
+        colc = INTERP(widget[i].colclick, widget[i].colhover, widget[i].glow);
       } else {
-        colc = vec4f(0.70f, 0.70f, 0.70f, 1.0f);
+        colc = widget[i].colnormal;
       }
       
       if ((int)i == defwidget)
@@ -1093,7 +1091,10 @@ int Gui::addContainer(float x, float y, float width, float height, bool vert)
 }
 #endif
 
-int Gui::addLabel(float x, float y, const std::string &text, uint32 flags, float fontsize)
+int Gui::addLabel(float x, float y, const std::string &text, uint32 flags, float fontsize,
+    const vec4f &colnormal,
+    const vec4f &colclick,
+    const vec4f &colhover)
 {
   int w = getFreeWidget();
   widget[w].type = GWT_LABEL;
@@ -1101,7 +1102,10 @@ int Gui::addLabel(float x, float y, const std::string &text, uint32 flags, float
   widget[w].fontsize = fontsize;
   widget[w].dims_min = ssRender->getTextDims(text) * fontsize;
   widget[w].pos = vec2f(x, y);
-  
+  widget[w].colnormal = colnormal;
+  widget[w].colclick = colclick;
+  widget[w].colhover = colhover;
+
   if (flags & PTEXT_HZA_CENTER)
     widget[w].pos.x -= widget[w].dims_min.x * 0.5f;
   else if (flags & PTEXT_HZA_RIGHT)
