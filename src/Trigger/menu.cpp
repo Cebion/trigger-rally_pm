@@ -187,7 +187,7 @@ void MainApp::levelScreenAction(int action, int index)
       }
       gui.makeDefault(
         gui.makeClickable(
-          gui.addLabel(790.0f,10.0f, "continue", PTEXT_HZA_RIGHT | PTEXT_VTA_BOTTOM, 40.0f),
+          gui.addLabel(790.0f,10.0f, "race", PTEXT_HZA_RIGHT | PTEXT_VTA_BOTTOM, 40.0f),
           AA_START_EVT, 0));
     }
     break;
@@ -299,7 +299,7 @@ void MainApp::levelScreenAction(int action, int index)
         PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f);
     gui.makeDefault(
       gui.makeClickable(
-        gui.addLabel(790.0f,10.0f, "continue", PTEXT_HZA_RIGHT | PTEXT_VTA_BOTTOM, 40.0f),
+        gui.addLabel(790.0f,10.0f, "race", PTEXT_HZA_RIGHT | PTEXT_VTA_BOTTOM, 40.0f),
         AA_START_PRAC, 0));
     break;
   }
@@ -382,7 +382,7 @@ void MainApp::levelScreenAction(int action, int index)
     gui.addLabel(100.0f,150.0f, levels[lss.currentlevel].description, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f);
     gui.makeDefault(
       gui.makeClickable(
-        gui.addLabel(790.0f,10.0f, "continue", PTEXT_HZA_RIGHT | PTEXT_VTA_BOTTOM, 40.0f),
+        gui.addLabel(790.0f,10.0f, "race", PTEXT_HZA_RIGHT | PTEXT_VTA_BOTTOM, 40.0f),
         AA_START_LVL, 0));
   }
     break;
