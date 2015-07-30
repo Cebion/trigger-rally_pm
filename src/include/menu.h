@@ -45,8 +45,8 @@ the game. Ick.
 #define AA_QUIT_CONFIRM       52
 
 // predefined label colors (defaults)
-#define LBCOLOR_HEADER      {1.00f, 1.00f, 1.00f, 1.00f}
-#define LBCOLOR_NORMAL      {0.80f, 0.80f, 0.80f, 1.00f}
+#define LBCOLOR_NORMAL      {1.00f, 1.00f, 1.00f, 1.00f}
+#define LBCOLOR_DULL        {0.80f, 0.80f, 0.80f, 1.00f}
 #define LBCOLOR_CLICK       {0.85f, 0.85f, 0.30f, 1.00f}
 #define LBCOLOR_HOVER       {1.00f, 0.40f, 0.00f, 1.00f}
 
