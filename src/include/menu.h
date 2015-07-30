@@ -44,6 +44,8 @@ the game. Ick.
 #define AA_GO_QUIT            51
 #define AA_QUIT_CONFIRM       52
 
+// predefined label colors
+#define LBCOLOR_HEADER                  {1.00f, 1.00f, 1.00f, 1.00f}
 
 struct LevelState {
   
@@ -139,9 +141,9 @@ public:
   int addContainer(int parent, float minwidth, float minheight, bool vert);
   
   int addLabel(float x, float y, const std::string &text, uint32 flags, float fontsize,
-    const vec4f &colnormal  = {1, 0, 0, 1},
-    const vec4f &colclick   = {0, 1, 0, 1},
-    const vec4f &colhover   = {0, 0, 1, 1});
+    const vec4f &colnormal  = {0.70f, 0.70f, 0.70f, 1.00f},
+    const vec4f &colclick   = {1.00f, 1.00f, 0.00f, 1.00f},
+    const vec4f &colhover   = {1.00f, 0.40f, 0.00f, 1.00f});
   
   int addGraphic(float x, float y, float width, float height, PTexture *tex);
   
