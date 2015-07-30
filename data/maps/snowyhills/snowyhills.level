@@ -1,0 +1,56 @@
+<?xml version="1.0" ?>
+<level
+	name="Snowy Hills"
+	comment="Find the best route around the hills!"
+	author="Matthias Keysermann"
+	description="smooth maze, unclear path"
+	screenshot="ss.png"
+	minimap="mm.png">
+	
+	<terrain
+		heightmap="h.png"
+		colormap="c.png"
+		foliagemap="f.png"
+		hudmap="c.png"
+		tilesize="32"
+		horizontalscale="2.0"
+		verticalscale="0.2"
+		>
+		
+		<foliageband
+			middle="0.8"
+			range="0.2"
+			density="0.001"
+			sprite="/textures/veg/grass-sprite.png"
+			spritecount="3"
+			/>
+		
+	</terrain>
+	
+	<weather
+		cloudtexture="/textures/sky/overcast.jpg"
+		cloudscrollrate="0.01"
+		fogcolor="0.4, 0.5, 0.6"
+		fogdensity="0.01"
+		fogdensitysky="0.1"
+		rain="0.0"
+		/>
+	
+	<vehicleoption type="/vehicles/seat/seat.vehicle" />
+	<vehicleoption type="/vehicles/focus/focus.vehicle" />
+	<vehicleoption type="/vehicles/evo/evo.vehicle" />
+	
+	<race coordscale="2.0, -2.0"
+		targettime="112.9">
+		
+		<startposition pos="150, 125, 2.0" oridegrees="160" />
+
+		<checkpoint coords="120, 294" />
+		<checkpoint coords="296, 450" />
+		<checkpoint coords="450, 330" />
+		<checkpoint coords="315, 140" />
+		<checkpoint coords="228, 182" />
+		
+	</race>
+	
+</level>

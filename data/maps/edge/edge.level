@@ -3,7 +3,9 @@
 	name="Edge"
 	comment="You don't want to go off-road."
 	author="Onsemeliot"
-	randomseed="1000">
+	description="smooth road, steep abysses, tight turns"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

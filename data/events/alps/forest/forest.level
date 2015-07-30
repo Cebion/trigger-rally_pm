@@ -3,8 +3,9 @@
 	name="Dark Forest"
 	comment="Precision expected"
 	author="Onsemeliot"
-	randomseed="1000"
-	>
+	description="hard turns, low light, mostly plain"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

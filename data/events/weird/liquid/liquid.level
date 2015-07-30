@@ -3,7 +3,9 @@
 	name="Liquid Rocks"
 	comment="Don't burn the rubber wheels!"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="curvy, dark, bad visibility"
+	screenshot="ss.png"
+	minimap="mm.png">
 
 	<terrain
 		heightmap="h.png"

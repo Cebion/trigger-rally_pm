@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<event
+	name="Western Challenge"
+	author="Matthias Keysermann"
+	>
+	
+	<level file="smoothcanyon/smoothcanyon.level" />
+	
+	<level file="greatplains/greatplains.level" />
+	
+	<level file="rockyprairie/rockyprairie.level" />
+	
+	<level file="whitesands/whitesands.level" />
+		
+</event>

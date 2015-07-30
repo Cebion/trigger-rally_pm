@@ -3,7 +3,9 @@
 	name="High Pass"
 	comment="Speed limits are a necessity."
 	author="Onsemeliot"
-	randomseed="1000">
+	description="smooth and fast but still demanding"
+	screenshot="ss.png"
+	minimap="mm.png">
 
 	<terrain
 		heightmap="h.png"

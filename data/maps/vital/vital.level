@@ -3,7 +3,9 @@
 	name="Vital Turn"
 	comment="This is madness."
 	author="Onsemeliot"
-	randomseed="1000">
+	description="smooth, curvy, up and down, different routes"
+	screenshot="ss.png"
+	minimap="mm.png">
 
 	<terrain
 		heightmap="h.png"

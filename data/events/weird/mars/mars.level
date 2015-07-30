@@ -3,7 +3,9 @@
 	name="Mars"
 	comment="Is there (fast) life on Mars?"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="fast, smooth, low red light/fog"
+	screenshot="ss.png"
+	minimap="mm.png">
 
 	<terrain
 		heightmap="h.png"
@@ -25,7 +27,7 @@
 	</terrain>
 
 	<weather
-		cloudtexture="gas-sky.png"
+		cloudtexture="/textures/sky/gas-sky.png"
 		cloudscrollrate="0.04"
 		fogcolor="0.3, 0.05, 0.02"
 		fogdensity="0.005"

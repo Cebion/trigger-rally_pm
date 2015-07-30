@@ -3,7 +3,9 @@
 	name="Dry Run"
 	comment="You're dusted!"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="smooth road, sudden turns, alternative routes"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

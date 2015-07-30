@@ -1,0 +1,57 @@
+<?xml version="1.0" ?>
+<level 
+	name="Cross Mountain"
+	comment="Going Fast is not always the faster way to goal"
+	author="David PAGNIER"
+	description="nicely flat but curvy road, thight time limit"
+	screenshot="ss.png"
+	minimap="mm.png">
+	
+	<terrain
+		heightmap="h.png"
+		colormap="c.jpg"
+		foliagemap="f.png"
+		hudmap="m.jpg"
+		tilesize="16"
+		horizontalscale="4"
+		verticalscale="0.15"
+		>
+		
+		<foliageband
+			middle="0.5"
+			range="0.5"
+			density="0.00002"
+			sprite="/textures/veg/grass-sprite.png"
+			spritecount="1"
+			/>
+	</terrain>
+	
+	<weather
+		cloudtexture="/textures/sky/blue.jpg"
+		cloudscrollrate="0.003"
+		fogcolor="0.9, 0.95, 1"
+		fogdensity="0.01"
+		fogdensitysky="0.8"
+		/>
+		
+	<vehicleoption type="/vehicles/seat/seat.vehicle" />
+	<vehicleoption type="/vehicles/focus/focus.vehicle" />
+	
+	<race coordscale="4, -4" targettime="330">
+		
+		<startposition pos="17, 24" oridegrees="180" />
+		<checkpoint coords="119, 69" />
+		<checkpoint coords="101, 126" />
+		<checkpoint coords="193, 148" />
+		<checkpoint coords="114, 293" />
+		<checkpoint coords="262, 192" />
+		<checkpoint coords="302, 223" />
+		<checkpoint coords="157, 342" />
+		<checkpoint coords="154, 433" />
+		<checkpoint coords="319, 298" />
+		<checkpoint coords="416, 300" />
+		<checkpoint coords="218, 429" />
+		<checkpoint coords="460, 456" />
+		<checkpoint coords="478, 426" />
+	</race>
+</level>

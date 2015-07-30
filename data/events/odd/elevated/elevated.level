@@ -3,7 +3,9 @@
 	name="Elevated"
 	comment="Differences are relative!"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="rather curvy and hilly, low light"
+	screenshot="ss.png"
+	minimap="mm.png">
 
 	<terrain
 		heightmap="h.png"

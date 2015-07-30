@@ -3,7 +3,9 @@
 	name="Marathon"
 	comment="Don't get tired!"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="constantly curvy, tiresome long race"
+	screenshot="marathon.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

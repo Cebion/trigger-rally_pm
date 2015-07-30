@@ -3,8 +3,9 @@
 	name="Rocky Trail"
 	comment="Car on the rocks?"
 	author="Onsemeliot"
-	randomseed="1000"
-	>
+	description="fast smooth road, rough terrain"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

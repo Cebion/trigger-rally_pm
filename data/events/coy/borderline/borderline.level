@@ -3,7 +3,9 @@
 	name="Borderline"
 	comment="More than rocky. Isn't it?"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="slow, tortuous road, massive rocks"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

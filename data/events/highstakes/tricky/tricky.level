@@ -3,7 +3,9 @@
 	name="Tricky"
 	comment="Caution!"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="mostly slow, curvy, rocky"
+	screenshot="ss.png"
+	minimap="mm.png">
 
 	<terrain
 		heightmap="h.png"

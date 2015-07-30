@@ -3,7 +3,9 @@
 	name="Tropic Island"
 	comment="Mind the gap!"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="narrow, slow, rainy, difficult"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

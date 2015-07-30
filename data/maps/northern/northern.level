@@ -3,7 +3,9 @@
 	name="Northern Pass"
 	comment="Rush into the unknown!"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="smooth road, very curvy, abysses"
+	screenshot="ss.png"
+	minimap="mm.png">
 
 	<terrain
 		heightmap="h.png"

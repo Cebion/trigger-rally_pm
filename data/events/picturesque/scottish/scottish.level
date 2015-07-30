@@ -3,7 +3,9 @@
 	name="Scottish"
 	comment="Anticipate the road ahead!"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="fast with dangerous turns"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

@@ -3,7 +3,9 @@
 	name="Faster"
 	comment="Test the speed limit!"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="maximum speed road but tight turns"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

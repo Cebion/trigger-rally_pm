@@ -2,7 +2,10 @@
 <level 
 	name="Foreign"
 	comment="This is unusual"
-	author="Onsemeliot">
+	author="Onsemeliot"
+	description="fast, smooth, alternative routes"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"
@@ -18,7 +21,7 @@
 			middle="0.49"
 			range="0.47"
 			density="0.0001"
-			sprite="bush-ash.png"
+			sprite="/textures/veg/bush-ash.png"
 			spritecount="2"
 			scale="3"
 			/>

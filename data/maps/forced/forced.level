@@ -2,7 +2,10 @@
 <level 
 	name="Forced Caution"
 	comment="Don't be over confident!"
-	author="Onsemeliot">
+	author="Onsemeliot"
+	description="fast, tight road, undriveable landscape"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

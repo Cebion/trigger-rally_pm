@@ -3,7 +3,9 @@
 	name="Riddle"
 	comment="Where to go?"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="smooth and fast maze of roads"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

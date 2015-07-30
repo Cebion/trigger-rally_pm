@@ -3,8 +3,9 @@
 	name="Mountain"
 	comment="Shitty weather. Drive Carefully!"
 	author="Onsemeliot"
-	randomseed="1200"
-	>
+	description="smooth, fast, fog, rain"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

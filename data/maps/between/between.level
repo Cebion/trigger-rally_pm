@@ -3,7 +3,9 @@
 	name="Between Rocks"
 	comment="Don't hit the rocks!"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="maze of rocks, fast alternative routes"
+	screenshot="ss.png"
+	minimap="mm.png">
 
 	<terrain
 		heightmap="h.png"

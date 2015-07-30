@@ -3,16 +3,17 @@
 	name="Mountain Pass"
 	comment="Don't fall off the cliffs!"
 	author="Matthias Keysermann"
-	randomseed="1000"
-	>
+	description="slow, steep, narrow, unpredictable"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
-		heightmap="heightmap.png"
-		colormap="colormap.jpg"
-		foliagemap="foliagemap.png"
-		hudmap="colormap.jpg"
+		heightmap="h.png"
+		colormap="c.jpg"
+		foliagemap="f.png"
+		hudmap="c.jpg"
 		tilesize="32"
-		horizontalscale="2.0"
+		horizontalscale="2"
 		verticalscale="0.4"
 		>
 		
@@ -31,7 +32,6 @@
 			sprite="/textures/veg/palmy.png"
 			spritecount="3"
 			/>
-		
 	</terrain>
 	
 	<weather
@@ -40,18 +40,16 @@
 		fogcolor="0.7, 0.6, 0.5"
 		fogdensity="0.005"
 		fogdensitysky="0.008"
-		rain="84.0"
+		rain="84"
 		/>
 	
 	<vehicleoption type="/vehicles/seat/seat.vehicle" />
 	<vehicleoption type="/vehicles/focus/focus.vehicle" />
 	<vehicleoption type="/vehicles/evo/evo.vehicle" />
 	
-	<race coordscale="2.0, -2.0"
-		targettime="201.32">
+	<race coordscale="2, -2" targettime="201.32">
 		
-		<startposition pos="485, 85, 2.0" oridegrees="70" />
-
+		<startposition pos="485, 85" oridegrees="70" />
 		<checkpoint coords="106, 185" />
 		<checkpoint coords="215, 485" />
 		<checkpoint coords="172, 320" />
@@ -59,7 +57,5 @@
 		<checkpoint coords="263, 228" />
 		<checkpoint coords="445, 375" />
 		<checkpoint coords="360, 254" />
-		
 	</race>
-	
 </level>

@@ -1,0 +1,53 @@
+<?xml version="1.0" ?>
+<level
+	name="Snow Level"
+	author="Tim Wintle"
+	description="smooth, wide, fast"
+	screenshot="ss.png"
+	minimap="mm.png">
+	
+	<terrain
+		heightmap="h.png"
+		colormap="c.jpg"
+		foliagemap="f.png"
+		hudmap="c.jpg"
+		tilesize="16"
+		horizontalscale="3"
+		verticalscale="0.4"
+		>
+		
+		<foliageband
+			middle="0.7"
+			range="0.4"
+			density="0.0005"
+			sprite="/textures/veg/grass-sprite.png"
+			spritecount="1"
+			/>
+	</terrain>
+	
+	<weather
+		cloudtexture="/textures/sky/overcast.jpg"
+		fogcolor="0.74, 0.72, 0.7"
+		/>
+	
+	<vehicleoption type="/vehicles/seat/seat.vehicle" />
+	<vehicleoption type="/vehicles/focus/focus.vehicle" />
+	<vehicleoption type="/vehicles/evo/evo.vehicle" />
+	
+	<race coordscale="3, -3" targettime="155">
+		
+		<startposition pos="80, 375" oridegrees="0" />
+		<checkpoint coords="80, 300" />
+		<checkpoint coords="95, 250" />
+		<checkpoint coords="128, 140" />
+		<checkpoint coords="212, 207" />
+		<checkpoint coords="230, 300" />
+		<checkpoint coords="235, 400" />
+		<checkpoint coords="355, 445" />
+		<checkpoint coords="460, 345" />
+		<checkpoint coords="393, 270" />
+		<checkpoint coords="400, 140" />
+		<checkpoint coords="315, 310" />
+		<checkpoint coords="350, 370" />
+	</race>
+</level>

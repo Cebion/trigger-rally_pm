@@ -3,15 +3,17 @@
 	name="Eversnake"
 	comment="Is this ever going to end?"
 	author="Iwan 'qubodup' Gabovitch"
-	randomseed="1337">
+	description="smooth and fast, good for beginners"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
-		heightmap="eversnake-h.png"
-		colormap="eversnake-c.jpg"
-		foliagemap="eversnake-f.jpg"
-		hudmap="eversnake-c.jpg"
+		heightmap="h.png"
+		colormap="c.jpg"
+		foliagemap="f.jpg"
+		hudmap="c.jpg"
 		tilesize="16"
-		horizontalscale="4.0"
+		horizontalscale="4"
 		verticalscale="0.15"
 		>
 		
@@ -22,13 +24,12 @@
 			sprite="/textures/veg/grass-sprite.png"
 			spritecount="1"
 			/>
-
 	</terrain>
 	
 	<weather
 		cloudtexture="/textures/sky/blue.jpg"
 		cloudscrollrate="0.003"
-		fogcolor="0.9, 0.95, 1.0"
+		fogcolor="0.9, 0.95, 1"
 		fogdensity="0.002"
 		fogdensitysky="0.1"
 		/>
@@ -37,11 +38,9 @@
 	<vehicleoption type="/vehicles/focus/focus.vehicle" />
 	<vehicleoption type="/vehicles/evo/evo.vehicle" />
 	
-	<race coordscale="4.0, 4.0"
-		targettime="179.k">
+	<race coordscale="4, 4" targettime="179">
 		
-		<startposition pos="66, 43, 2.0" oridegrees="250" />
-		
+		<startposition pos="66, 43" oridegrees="250" />
 		<checkpoint coords="197, 36" />
 		<checkpoint coords="193, 160" />
 		<checkpoint coords="100, 234" />
@@ -58,7 +57,5 @@
 		<checkpoint coords="397, 313" />
 		<checkpoint coords="356, 194" />
 		<checkpoint coords="301, 123" />
-		
 	</race>
-	
 </level>

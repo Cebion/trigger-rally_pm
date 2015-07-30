@@ -3,7 +3,9 @@
 	name="Jumpy"
 	comment="Cars aren't birds?"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="fast, many huge jumps"
+	screenshot="ss.png"
+	minimap="m.png">
 	
 	<terrain
 		heightmap="h.png"

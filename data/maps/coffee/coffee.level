@@ -3,7 +3,9 @@
 	name="Coffee Break"
 	comment="Swallow the Dust!"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="dangerously tight and fast, rocky landscape"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

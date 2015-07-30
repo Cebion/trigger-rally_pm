@@ -3,7 +3,9 @@
 	name="Cracks"
 	comment="Mind the hideous cracks!"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="fast and flat but dangerously rough roadside"
+	screenshot="ss.png"
+	minimap="mm.png">
 
 	<terrain
 		heightmap="h.png"

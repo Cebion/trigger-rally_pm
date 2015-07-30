@@ -3,7 +3,9 @@
 	name="Year Zero"
 	comment="Don't get lonely!"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="very fast and smooth"
+	screenshot="ss.png"
+	minimap="mm.png">
 
 	<terrain
 		heightmap="h.png"

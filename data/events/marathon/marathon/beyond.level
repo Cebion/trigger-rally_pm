@@ -3,7 +3,9 @@
 	name="Beyond Roads"
 	comment="Enjoy an off road adventure!"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="very slow, totally offroad"
+	screenshot="beyond.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

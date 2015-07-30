@@ -3,7 +3,9 @@
 	name="Crusted Snow"
 	comment="Don't skid!"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="fast, smooth, alternative routes"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

@@ -3,7 +3,9 @@
 	name="Endless options"
 	comment="Just take the faster way!"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="a network of smooth alternatives"
+	screenshot="ss.png"
+	minimap="mm.png">
 
 	<terrain
 		heightmap="h.png"

@@ -3,7 +3,9 @@
 	name="Stumble"
 	comment="Expect bumps!"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="mean up and down on a very curvy road"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

@@ -4,7 +4,6 @@
 	description="fast sand road with tricky corners"
 	comment="Quo vadis?"
 	author="Onsemeliot"
-	randomseed="1000"
 	screenshot="ss.png"
 	minimap="mm.png">
 

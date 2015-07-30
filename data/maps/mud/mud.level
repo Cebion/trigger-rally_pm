@@ -3,7 +3,9 @@
 	name="Mud"
 	comment="Short but dirty."
 	author="Onsemeliot"
-	randomseed="1000">
+	description="curvy, hilly, low light"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

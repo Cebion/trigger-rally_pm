@@ -1,9 +1,9 @@
 <?xml version="1.0" ?>
 <level 
 	name="Sunset"
-	description="Fast and flowing but with bad visibility."
 	comment="Don't fear the darkening!"
 	author="Onsemeliot"
+	description="fast and flowing, sudden turns, low light"
 	screenshot="ss.png"
 	minimap="mm.png">
 	

@@ -1,9 +1,11 @@
 <?xml version="1.0" ?>
 <level 
 	name="Zone"
-	comment=""
+	comment="Rush trough the night!"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="up and down, mean jumps before curves"
+	screenshot="ss.png"
+	minimap="mm.png">
 
 	<terrain
 		heightmap="h.png"

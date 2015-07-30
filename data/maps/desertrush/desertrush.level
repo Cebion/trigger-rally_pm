@@ -1,0 +1,90 @@
+<?xml version="1.0" ?>
+<level 
+	name="Desert Rush"
+	comment="Push the pedal to the camel!"
+	author="Bruno &quot;Fuddl&quot; Kleinert"
+	description="poorly visible wide and flat road"
+	screenshot="ss.png"
+	minimap="mm.png">
+	
+	<terrain
+		heightmap="h.png"
+		colormap="c.png"
+		foliagemap="f.png"
+		hudmap="c.png"
+		tilesize="16"
+		horizontalscale="4.0"
+		verticalscale="0.10"
+		>
+		
+		<foliageband
+			middle="1.0"
+			range="0.5"
+			density="0.000002"
+			sprite="/textures/veg/cactus1.png"
+			spritecount="2"
+			/>
+		
+		
+	</terrain>
+	
+	<weather
+		cloudtexture="/textures/sky/blue.jpg"
+		cloudscrollrate="0.007"
+		fogcolor="0.8, 0.85, 1.0"
+		fogdensity="0.005"
+		fogdensitysky="0.8"
+		/>
+	
+	<vehicleoption type="/vehicles/focus/focus.vehicle" />
+	<vehicleoption type="/vehicles/evo/evo.vehicle" />
+	
+	<race coordscale="4.0, -4.0"
+		targettime="360.0">
+		
+		<startposition pos="67, 52, 4.0" oridegrees="230" />
+
+		<checkpoint coords="125, 107" />
+		<checkpoint coords="213, 176" />
+		<checkpoint coords="320, 189" />
+		<checkpoint coords="352, 156" />
+		<checkpoint coords="376, 174" />
+		<checkpoint coords="395, 145" />
+		<checkpoint coords="334, 104" />
+		<checkpoint coords="219, 108" />
+		<checkpoint coords="182, 42" />
+		<checkpoint coords="304, 37" />
+		<checkpoint coords="312, 69" />
+		<checkpoint coords="366, 73" />
+		<checkpoint coords="411, 45" />
+		<checkpoint coords="446, 82" />
+		<checkpoint coords="463, 139" />
+		<checkpoint coords="443, 173" />
+		<checkpoint coords="412, 193" />
+		<checkpoint coords="394, 242" />
+		<checkpoint coords="330, 277" />
+		<checkpoint coords="400, 374" />
+		<checkpoint coords="399, 412" />
+		<checkpoint coords="282, 443" />
+		<checkpoint coords="286, 383" />
+		<checkpoint coords="267, 333" />
+		<checkpoint coords="212, 309" />
+		<checkpoint coords="204, 343" />
+		<checkpoint coords="233, 355" />
+		<checkpoint coords="217, 399" />
+		<checkpoint coords="188, 416" />
+		<checkpoint coords="182, 464" />
+		<checkpoint coords="51, 433" />
+		<checkpoint coords="76, 366" />
+		<checkpoint coords="99, 372" />
+		<checkpoint coords="130, 292" />
+		<checkpoint coords="243, 266" />
+		<checkpoint coords="279, 233" />
+		<checkpoint coords="238, 214" />
+		<checkpoint coords="104, 204" />
+		<checkpoint coords="67, 169" />
+		<checkpoint coords="66, 104" />
+		
+	</race>
+	
+</level>

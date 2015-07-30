@@ -3,7 +3,9 @@
 	name="Curvy"
 	comment="Skip all to winded detours!"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="slow, uneven curvy wild road"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

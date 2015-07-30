@@ -3,7 +3,9 @@
 	name="Wet Ponds"
 	comment="No Bathing!"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="slow, very curvy, partly elevated road"
+	screenshot="wet.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

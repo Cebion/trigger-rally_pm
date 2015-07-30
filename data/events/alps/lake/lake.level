@@ -3,8 +3,9 @@
 	name="Evening Lake"
 	comment="Sunset rush"
 	author="Onsemeliot"
-	randomseed="1000"
-	>
+	description="fast, smooth, rougher shortcuts"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

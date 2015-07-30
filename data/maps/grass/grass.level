@@ -3,7 +3,9 @@
 	name="Grassland"
 	comment=""
 	author="Onsemeliot"
-	randomseed="1000">
+	description="fast and smooth, tricky curves"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"
@@ -44,8 +46,7 @@
 	<vehicleoption type="/vehicles/focus/focus.vehicle" />
 	<vehicleoption type="/vehicles/evo/evo.vehicle" />
 	
-	<race coordscale="4, 4"
-		targettime="150.0">
+	<race coordscale="4, 4" targettime="150.0">
 		
 		<startposition pos="69, 1" oridegrees="5" />
 		<checkpoint coords="65, 63" />

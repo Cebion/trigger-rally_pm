@@ -3,7 +3,9 @@
 	name="Stoned"
 	comment="Don't get too high!"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="smooth, harsh turns, big jumps"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

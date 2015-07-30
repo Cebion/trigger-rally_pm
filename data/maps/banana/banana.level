@@ -1,0 +1,96 @@
+<?xml version="1.0" ?>
+<level 
+	name="Banana Island"
+	comment="Get the monkey!"
+	author="Bruno &quot;Fuddl&quot; Kleinert"
+	description="easy going and fast with crazy jumps"
+	screenshot="ss.png"
+	minimap="mm.png">
+	
+	<terrain
+		heightmap="h.png"
+		colormap="c.png"
+		foliagemap="f.png"
+		hudmap="c.png"
+		tilesize="16"
+		horizontalscale="4.0"
+		verticalscale="0.15"
+		>
+		
+		<foliageband
+			middle="1.0"
+			range="0.2"
+			density="0.000020"
+			sprite="/textures/veg/grass-sprite.png"
+			spritecount="1"
+			/>
+		
+		
+	</terrain>
+	
+	<weather
+		cloudtexture="/textures/sky/blue.jpg"
+		cloudscrollrate="0.005"
+		fogcolor="0.8, 0.85, 1.0"
+		fogdensity="0.005"
+		fogdensitysky="0.8"
+		/>
+	
+	<vehicleoption type="/vehicles/seat/seat.vehicle" />
+	<vehicleoption type="/vehicles/focus/focus.vehicle" />
+	
+	<race coordscale="4.0, -4.0"
+		targettime="300.0">
+		
+		<startposition pos="202, 114, 4.0" oridegrees="210" />
+
+		<checkpoint coords="220, 158" />
+		<checkpoint coords="209, 169" />
+		<checkpoint coords="222, 213" />
+		<checkpoint coords="244, 247" />
+		<checkpoint coords="276, 246" />
+		<checkpoint coords="288, 258" />
+		<checkpoint coords="249, 280" />
+		<checkpoint coords="252, 301" />
+		<checkpoint coords="245, 323" />
+		<checkpoint coords="244, 359" />
+		<checkpoint coords="220, 358" />
+		<checkpoint coords="193, 350" />
+		<checkpoint coords="179, 369" />
+		<checkpoint coords="168, 374" />
+		<checkpoint coords="154, 435" />
+		<checkpoint coords="183, 468" />
+		<checkpoint coords="218, 482" />
+		<checkpoint coords="245, 462" />
+		<checkpoint coords="238, 417" />
+		<checkpoint coords="224, 404" />
+		<checkpoint coords="218, 415" />
+		<checkpoint coords="221, 440" />
+		<checkpoint coords="204, 449" />
+		<checkpoint coords="188, 436" />
+		<checkpoint coords="201, 382" />
+		<checkpoint coords="256, 376" />
+		<checkpoint coords="264, 353" />
+		<checkpoint coords="278, 336" />
+		<checkpoint coords="340, 328" />
+		<checkpoint coords="344, 305" />
+		<checkpoint coords="366, 301" />
+		<checkpoint coords="378, 266" />
+		<checkpoint coords="322, 288" />
+		<checkpoint coords="305, 272" />
+		<checkpoint coords="310, 238" />
+		<checkpoint coords="334, 196" />
+		<checkpoint coords="373, 190" />
+		<checkpoint coords="382, 208" />
+		<checkpoint coords="350, 226" />
+		<checkpoint coords="321, 228" />
+		<checkpoint coords="315, 195" />
+		<checkpoint coords="300, 161" />
+		<checkpoint coords="268, 158" />
+		<checkpoint coords="261, 194" />
+		<checkpoint coords="242, 178" />
+		<checkpoint coords="240, 149" />
+		
+	</race>
+	
+</level>

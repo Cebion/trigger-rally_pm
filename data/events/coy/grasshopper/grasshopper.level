@@ -3,7 +3,9 @@
 	name="Grasshopper"
 	comment="Gravity matters!"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="up and down, many curves"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

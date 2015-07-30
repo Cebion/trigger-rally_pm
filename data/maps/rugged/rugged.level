@@ -3,7 +3,9 @@
 	name="Rugged"
 	comment=""
 	author="Onsemeliot"
-	randomseed="1000">
+	description="fast, steep, rocky terrain"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

@@ -1,0 +1,77 @@
+<?xml version="1.0" ?>
+<level 
+	name="Ripe"
+	comment="Don't stop for pears!"
+	author="Onsemeliot"
+	description="nice and smooth with error friendly terrain"
+	screenshot="ss.png"
+	minimap="c.png">
+	
+	<terrain
+		heightmap="h.png"
+		colormap="c.png"
+		foliagemap="f.png"
+		hudmap="c.png"
+		tilesize="32"
+		horizontalscale="6"
+		verticalscale="0.2"
+		>
+		
+		<foliageband
+			middle="0.45"
+			range="0.44"
+			density="0.001"
+			sprite="/textures/veg/palmy.png"
+			spritecount="2"
+			scale="1.2"
+			/>
+		
+		<foliageband
+			middle="0.49"
+			range="0.4"
+			density="0.0007"
+			sprite="/textures/veg/grain.png"
+			spritecount="2"
+			scale="1"
+			/>
+		
+		<foliageband
+			middle="0.49"
+			range="0.3"
+			density="0.000006"
+			sprite="/textures/veg/pear-tree.png"
+			spritecount="3"
+			scale="7"
+			/>
+	</terrain>
+	
+	<weather
+		cloudtexture="/textures/sky/dark-blue.png"
+		cloudscrollrate="0.01"
+		fogcolor="0.7, 0.7, 1"
+		fogdensity="0.001"
+		fogdensitysky="1"
+		/>
+	
+	<vehicleoption type="/vehicles/seat/seat.vehicle" />
+	<vehicleoption type="/vehicles/focus/focus.vehicle" />
+	<vehicleoption type="/vehicles/evo/evo.vehicle" />
+	
+	<race coordscale="1.5, 1.5" targettime="251">
+
+		<startposition pos="93, 311" oridegrees="0" />
+		<checkpoint coords="109, 773" />
+		<checkpoint coords="42, 923" />
+		<checkpoint coords="234, 923" />
+		<checkpoint coords="781, 920" />
+		<checkpoint coords="942, 771" />
+		<checkpoint coords="878, 219" />
+		<checkpoint coords="741, 145" />
+		<checkpoint coords="731, 65" />
+		<checkpoint coords="478, 183" />
+		<checkpoint coords="331, 149" />
+		<checkpoint coords="93, 311" />
+		
+	</race>
+	
+</level>

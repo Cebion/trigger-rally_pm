@@ -3,7 +3,9 @@
 	name="Fields"
 	comment="Don't destroy the wheat!"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="fast and smooth with curvy interludes"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

@@ -3,7 +3,9 @@
 	name="Highland"
 	comment="Find the limit!"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="fast, wide, smooth, alternative routes"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

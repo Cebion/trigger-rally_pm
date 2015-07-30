@@ -3,11 +3,9 @@
 	name="Dawn"
 	comment="A cold, but promising morning."
 	author="Onsemeliot"
-	randomseed="1000"
-	description="wide and forgiving road but poor light"
+	description="only partly on asphalt, very curvy"
 	screenshot="ss.png"
-	minimap="mm.png"
-	>
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

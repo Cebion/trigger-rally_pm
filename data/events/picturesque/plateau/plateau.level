@@ -3,7 +3,9 @@
 	name="Plateau"
 	comment="Careful driving pays off."
 	author="Onsemeliot"
-	randomseed="1000">
+	description="high speeds will cause accidents!"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

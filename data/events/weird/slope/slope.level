@@ -3,7 +3,9 @@
 	name="Slope"
 	comment="Down and up again."
 	author="Onsemeliot"
-	randomseed="1000">
+	description="fast but partly uneven road"
+	screenshot="ss.png"
+	minimap="m.png">
 
 	<terrain
 		heightmap="h.png"

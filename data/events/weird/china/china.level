@@ -1,9 +1,11 @@
 <?xml version="1.0" ?>
 <level 
 	name="China"
-	comment=""
+	comment="Don't slip away on the grass!"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="fast, smooth, offroad, tight curves"
+	screenshot="ss.png"
+	minimap="mm.png">
 
 	<terrain
 		heightmap="h.png"

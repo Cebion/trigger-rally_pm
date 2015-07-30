@@ -3,7 +3,9 @@
 	name="Banned"
 	comment="Flat, but nasty."
 	author="Onsemeliot"
-	randomseed="1000">
+	description="fast streatches broken by tight tricky turns"
+	screenshot="ss.png"
+	minimap="mm.png">
 
 	<terrain
 		heightmap="h.png"

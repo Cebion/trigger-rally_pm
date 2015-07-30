@@ -3,13 +3,15 @@
 	name="Smallswirl"
 	comment="A little swirl never did any harm."
 	author="Iwan 'qubodup' Gabovitch"
-	randomseed="1337">
+	description="plain, easy going, narrow road"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
-		heightmap="smallswirl-h.jpg"
-		colormap="smallswirl-c.jpg"
-		foliagemap="smallswirl-f.jpg"
-		hudmap="smallswirl-c.jpg"
+		heightmap="h.jpg"
+		colormap="c.jpg"
+		foliagemap="f.jpg"
+		hudmap="c.jpg"
 		tilesize="16"
 		horizontalscale="4.0"
 		verticalscale="0.15"

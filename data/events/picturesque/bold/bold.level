@@ -3,7 +3,9 @@
 	name="Bold"
 	comment="Get over it!"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="slow and fast mixed, huge jump"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

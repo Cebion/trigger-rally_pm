@@ -3,7 +3,9 @@
 	name="Unleashed"
 	comment="Who will be fastest?"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="wide, smooth, fast, jumps"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

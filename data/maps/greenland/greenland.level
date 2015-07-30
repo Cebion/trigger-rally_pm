@@ -3,7 +3,9 @@
 	name="Green Land"
 	comment="Come on, grasshopper!"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="much up and down, jumps, curvy"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"
@@ -36,8 +38,7 @@
 	<vehicleoption type="/vehicles/focus/focus.vehicle" />
 	<vehicleoption type="/vehicles/evo/evo.vehicle" />
 	
-	<race coordscale="4, 4"
-		targettime="173">
+	<race coordscale="4, 4" targettime="173">
 		
 		<startposition pos="105, 62" oridegrees="235" />
 		<checkpoint coords="232, 26" />

@@ -3,8 +3,9 @@
 	name="Green Hill"
 	comment="Stay focused!"
 	author="Onsemeliot"
-	randomseed="1200"
-	>
+	description="fast, smooth, thick fog"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

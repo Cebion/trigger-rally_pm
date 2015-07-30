@@ -3,16 +3,17 @@
 	name="Green Grounds"
 	comment="Feel free in the beautiful landscape!"
 	author="Matthias Keysermann"
-	randomseed="1000"
-	>
+	description="challenging layout, precision needed"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
-		heightmap="heightmap.png"
-		colormap="colormap.jpg"
-		foliagemap="foliagemap.png"
-		hudmap="colormap.jpg"
+		heightmap="h.png"
+		colormap="c.jpg"
+		foliagemap="f.png"
+		hudmap="c.jpg"
 		tilesize="32"
-		horizontalscale="2.0"
+		horizontalscale="2"
 		verticalscale="0.5"
 		>
 		
@@ -40,18 +41,15 @@
 		fogcolor="0.5, 0.6, 0.7"
 		fogdensity="0.004"
 		fogdensitysky="0.004"
-		rain="0.0"
 		/>
 	
 	<vehicleoption type="/vehicles/seat/seat.vehicle" />
 	<vehicleoption type="/vehicles/focus/focus.vehicle" />
 	<vehicleoption type="/vehicles/evo/evo.vehicle" />
 	
-	<race coordscale="2.0, -2.0"
-		targettime="263.23">
+	<race coordscale="2, -2" targettime="263.23">
 		
-		<startposition pos="100, 100, 2.0" oridegrees="270" />
-
+		<startposition pos="100, 100" oridegrees="270" />
 		<checkpoint coords="177, 164" />
 		<checkpoint coords="433, 96" />
 		<checkpoint coords="393, 336" />
@@ -66,7 +64,5 @@
 		<checkpoint coords="145, 448" />				
 		<checkpoint coords="140, 480" />
 		<checkpoint coords="180, 480" />
-		
 	</race>
-	
 </level>

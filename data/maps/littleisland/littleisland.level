@@ -3,8 +3,9 @@
 	name="Little Island"
 	comment="Just take a round-trip!"
 	author="Onsemeliot"
-	randomseed="1000"
-	>
+	description="plain, smooth, curvy"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

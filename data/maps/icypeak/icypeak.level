@@ -1,0 +1,67 @@
+<?xml version="1.0" ?>
+<level
+	name="Icy Peak"
+	comment="Climb up to the peak!"
+	author="Matthias Keysermann"
+	description="slow and curvy, rough terrain"
+	screenshot="ss.png"
+	minimap="mm.png">
+	
+	<terrain
+		heightmap="h.png"
+		colormap="c.png"
+		foliagemap="f.png"
+		hudmap="c.png"
+		tilesize="32"
+		horizontalscale="2"
+		verticalscale="0.3"
+		>
+		
+		<foliageband
+			middle="0.5"
+			range="0.3"
+			density="0.00001"
+			sprite="/textures/veg/grass-sprite.png"
+			spritecount="3"
+			/>
+
+		<foliageband
+			middle="0.8"
+			range="0.2"
+			density="0.0001"
+			sprite="/textures/veg/grass-sprite.png"
+			spritecount="3"
+			/>
+	</terrain>
+	
+	<weather
+		cloudtexture="/textures/sky/overcast.jpg"
+		cloudscrollrate="0.01"
+		fogcolor="0.7, 0.7, 0.7"
+		fogdensity="0.01"
+		fogdensitysky="0.1"
+		/>
+	
+	<vehicleoption type="/vehicles/seat/seat.vehicle" />
+	<vehicleoption type="/vehicles/focus/focus.vehicle" />
+	
+	<race coordscale="2, -2" targettime="219.78">
+		
+		<startposition pos="465, 410" oridegrees="0" />
+		<checkpoint coords="433, 310" />
+		<checkpoint coords="453, 123" />
+		<checkpoint coords="426, 181" />
+		<checkpoint coords="299, 278" />
+		<checkpoint coords="257, 404" />
+		<checkpoint coords="160, 365" />
+		<checkpoint coords="196, 273" />
+		<checkpoint coords="141, 189" />
+		<checkpoint coords="213, 74" />
+		<checkpoint coords="261, 77" />
+		<checkpoint coords="175, 181" />
+		<checkpoint coords="249, 279" />
+		<checkpoint coords="311, 191" />
+		<checkpoint coords="258, 149" />
+		<checkpoint coords="280, 180" />
+	</race>
+</level>

@@ -3,7 +3,9 @@
 	name="Aegyptian"
 	comment="Damn right!"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="fast desert road with sudden tricky turns"
+	screenshot="ss.png"
+	minimap="mm.png">
 
 	<terrain
 		heightmap="h.png"

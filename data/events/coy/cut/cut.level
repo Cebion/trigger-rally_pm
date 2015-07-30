@@ -3,7 +3,9 @@
 	name="Cut"
 	comment="Some jumps are traps."
 	author="Onsemeliot"
-	randomseed="1000">
+	description="rough rocks along the road, harsh turns"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

@@ -3,7 +3,9 @@
 	name="Crossing"
 	comment="Not time for detours. Keep at the race!"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="mixed fast and slow route"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

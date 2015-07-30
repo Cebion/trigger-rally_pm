@@ -1,0 +1,55 @@
+<?xml version="1.0" ?>
+<level
+	name="Rocky Prairie"
+	comment="Let the map be your guide!"
+	author="Matthias Keysermann"
+	description="find the finish by looking at the map!"
+	screenshot="ss.png"
+	minimap="mm.png">
+	
+	<terrain
+		heightmap="h.png"
+		colormap="c.png"
+		foliagemap="f.png"
+		hudmap="c.png"
+		tilesize="32"
+		horizontalscale="2"
+		verticalscale="0.1"
+		>
+		
+		<foliageband
+			middle="0.4"
+			range="0.3"
+			density="0.0002"
+			sprite="/textures/veg/grass-sprite.png"
+			spritecount="3"
+			/>
+
+		<foliageband
+			middle="0.9"
+			range="0.1"
+			density="0.00005"
+			sprite="/textures/veg/cactus1.png"
+			spritecount="3"
+			/>
+	</terrain>
+	
+	<weather
+		cloudtexture="/textures/sky/stars.jpg"
+		cloudscrollrate="0.0"
+		fogcolor="0.1, 0.1, 0.2"
+		fogdensity="0.01"
+		fogdensitysky="0.01"
+		rain="0.0"
+		/>
+	
+	<vehicleoption type="/vehicles/seat/seat.vehicle" />
+	<vehicleoption type="/vehicles/focus/focus.vehicle" />
+	<vehicleoption type="/vehicles/evo/evo.vehicle" />
+	
+	<race coordscale="2, -2" targettime="98.3">
+		
+		<startposition pos="405, 385" oridegrees="90" />
+		<checkpoint coords="315, 65" />
+	</race>
+</level>

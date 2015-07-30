@@ -3,7 +3,9 @@
 	name="Remote"
 	comment="A thunderstorm is on it's way."
 	author="Onsemeliot"
-	randomseed="1000">
+	description="fast, smooth, dangerous holes"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

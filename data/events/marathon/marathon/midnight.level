@@ -3,7 +3,9 @@
 	name="Midnight Endeavor"
 	comment="Hurry up!"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="curvy but smooth, tricky turns, dark"
+	screenshot="midnight.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

@@ -3,7 +3,9 @@
 	name="Mirrowed"
 	comment="Dizzyness is no excuse."
 	author="Onsemeliot"
-	randomseed="1000">
+	description="partly fast/slow road, fog"
+	screenshot="ss.png"
+	minimap="mm.png">
 
 	<terrain
 		heightmap="h.png"

@@ -3,7 +3,9 @@
 	name="Canyon"
 	comment="Alter the old ways!"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="smoothly down and up, shortcuts"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

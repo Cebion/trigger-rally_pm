@@ -3,7 +3,9 @@
 	name="Frisky Hills"
 	comment="Enjoy the adventourous nature!"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="fast, many curves, hilly"
+	screenshot="ss.png"
+	minimap="mm.png">
 
 	<terrain
 		heightmap="h.png"

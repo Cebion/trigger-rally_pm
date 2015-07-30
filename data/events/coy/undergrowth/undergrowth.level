@@ -3,7 +3,9 @@
 	name="Undergrowth"
 	comment="Find your way through!"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="sudden holes and mean rocks on the roadside"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

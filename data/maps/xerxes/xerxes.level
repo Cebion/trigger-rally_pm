@@ -2,7 +2,10 @@
 <level 
 	name="Xerxes"
 	comment="Do you beat the odds?"
-	author="Onsemeliot">
+	author="Onsemeliot"
+	description="fast, curvy, much up and down"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

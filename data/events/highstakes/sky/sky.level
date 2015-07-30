@@ -3,7 +3,9 @@
 	name="Sky climbing"
 	comment=""
 	author="Onsemeliot"
-	randomseed="1000">
+	description="smooth, fast, dangerous"
+	screenshot="ss.png"
+	minimap="mm.png">
 
 	<terrain
 		heightmap="h.png"

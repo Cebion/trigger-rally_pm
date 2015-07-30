@@ -3,7 +3,9 @@
 	name="Scale"
 	comment="Don't mind the gap!"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="smooth partly fast/curvy road"
+	screenshot="ss.png"
+	minimap="mm.png">
 
 	<terrain
 		heightmap="h.png"

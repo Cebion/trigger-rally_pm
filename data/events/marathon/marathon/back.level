@@ -3,7 +3,9 @@
 	name="Back Again"
 	comment="The grand finale"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="curvy, low light"
+	screenshot="back.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

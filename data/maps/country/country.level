@@ -3,7 +3,9 @@
 	name="Country Road"
 	comment="Hills, Rocks and Crops."
 	author="Onsemeliot"
-	randomseed="1000">
+	description="speed-friendly tilted road, rough shortcuts"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

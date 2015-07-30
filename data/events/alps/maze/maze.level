@@ -3,8 +3,9 @@
 	name="Maze"
 	comment="Don't get confused!"
 	author="Onsemeliot"
-	randomseed="1000"
-	>
+	description="smooth with wild turns"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

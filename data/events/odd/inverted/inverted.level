@@ -3,7 +3,9 @@
 	name="Inverted"
 	comment="Win this twisted race!"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="up and down in a slow sunken road"
+	screenshot="ss.png"
+	minimap="mm.png">
 
 	<terrain
 		heightmap="h.png"

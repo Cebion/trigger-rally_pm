@@ -1,0 +1,64 @@
+<?xml version="1.0" ?>
+<level
+	name="Great Plains"
+	comment="A huge valley is awaiting you!"
+	author="Matthias Keysermann"
+	description="mostly wide and plain, no clear road"
+	screenshot="ss.png"
+	minimap="mm.png">
+	
+	<terrain
+		heightmap="h.png"
+		colormap="c.png"
+		foliagemap="f.png"
+		hudmap="c.png"
+		tilesize="32"
+		horizontalscale="4"
+		verticalscale="0.1"
+		>
+		
+		<foliageband
+			middle="0.5"
+			range="0.4"
+			density="0.00001"
+			sprite="/textures/veg/grass-sprite.png"
+			spritecount="3"
+			/>
+
+		<foliageband
+			middle="0.8"
+			range="0.2"
+			density="0.00001"
+			sprite="/textures/veg/cactus1.png"
+			spritecount="3"
+			/>
+	</terrain>
+	
+	<weather
+		cloudtexture="/textures/sky/blue.jpg"
+		cloudscrollrate="0"
+		fogcolor="0.6, 0.6, 0.7"
+		fogdensity="0.002"
+		fogdensitysky="0.002"
+		/>
+	
+	<vehicleoption type="/vehicles/seat/seat.vehicle" />
+	<vehicleoption type="/vehicles/focus/focus.vehicle" />
+	<vehicleoption type="/vehicles/evo/evo.vehicle" />
+	
+	<race coordscale="4, -4" targettime="202.37">
+		
+		<startposition pos="100, 100" oridegrees="200" />
+		<checkpoint coords="195, 195" />
+		<checkpoint coords="288, 84" />
+		<checkpoint coords="400, 47" />
+		<checkpoint coords="410, 386" />
+		<checkpoint coords="412, 468" />
+		<checkpoint coords="155, 462" />
+		<checkpoint coords="108, 390" />
+		<checkpoint coords="182, 340" />
+		<checkpoint coords="128, 260" />
+		<checkpoint coords="70, 105" />
+		<checkpoint coords="100, 100" />
+	</race>
+</level>

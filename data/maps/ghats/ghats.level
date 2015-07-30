@@ -1,0 +1,54 @@
+<?xml version="1.0" ?>
+<level
+	name="Ghats"
+	comment="You are travelling through the Western ghats of India."
+	author="Laxminarayan G Kamath A"
+	description="difficult, slow, bad visibility"
+	screenshot="ss.png"
+	minimap="mm.png">
+	
+	<terrain
+		heightmap="h.png"
+		colormap="c.jpg"
+		foliagemap="f.png"
+		hudmap="c.jpg"
+		tilesize="16"
+		horizontalscale="3"
+		verticalscale="0.1"
+		>
+		
+		<foliageband
+			middle="1"
+			range="0.5"
+			density="0.0002"
+			sprite="/textures/veg/palmy.png"
+			spritecount="3"
+			/>
+	</terrain>
+	
+	<weather
+		cloudtexture="/textures/sky/overcast.jpg"
+		cloudscrollrate="0.021"
+		fogcolor="0.4, 0.4, 0.3"
+		fogdensity="0.03"
+		fogdensitysky="1"
+		rain="6500"
+		/>
+	
+	<vehicleoption type="/vehicles/seat/seat.vehicle" />
+	
+	<race coordscale="3, -3" targettime="390">
+		
+		<startposition pos="58, 382" oridegrees="270" />
+		<checkpoint coords="150, 340" />
+		<checkpoint coords="150, 295" />
+		<checkpoint coords="205, 205" />
+		<checkpoint coords="184, 83" />
+		<checkpoint coords="320, 106" />
+		<checkpoint coords="436, 146" />
+		<checkpoint coords="318, 367" />
+		<checkpoint coords="168, 367" />
+		<checkpoint coords="333, 434" />
+		<checkpoint coords="505, 351" />
+	</race>
+</level>

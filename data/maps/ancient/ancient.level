@@ -3,7 +3,9 @@
 	name="Ancient"
 	comment="Follow the pilgrims' path!"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="offroad hunt for stone monuments on grass"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

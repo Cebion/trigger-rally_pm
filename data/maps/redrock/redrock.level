@@ -3,7 +3,9 @@
 	name="Redrock"
 	comment="Stay on the road!"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="tricky turns, smooth road"
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"

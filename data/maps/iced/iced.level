@@ -3,7 +3,9 @@
 	name="Iced Up"
 	comment="Do not overestimate yourself!"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="fast and smooth, sudden turns"
+	screenshot="ss.png"
+	minimap="mm.png">
 
 	<terrain
 		heightmap="h.png"

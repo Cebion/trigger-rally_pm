@@ -3,7 +3,9 @@
 	name="Kraut"
 	comment="Quick or smooth?"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="fast and smooth"
+	screenshot="ss.png"
+	minimap="mm.png">
 
 	<terrain
 		heightmap="h.png"

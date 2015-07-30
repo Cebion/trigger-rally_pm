@@ -3,7 +3,9 @@
 	name="Wild Meadow"
 	comment="Transcend this wide soft hills!"
 	author="Onsemeliot"
-	randomseed="1000">
+	description="wide, soft, fast"
+	screenshot="ss.png"
+	minimap="mm.png">
 
 	<terrain
 		heightmap="h.png"
