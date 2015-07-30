@@ -1485,7 +1485,10 @@ void MainApp::keyEvent(const SDL_KeyboardEvent &ke)
       
       switch (ke.keysym.sym) {
       case SDLK_ESCAPE:
-        endGame(GF_FAIL);
+          if (game->getFinishState() == GF_PASS)
+            endGame(GF_PASS);
+          else // GF_FAIL or GF_NOT_FINISHED
+            endGame(GF_FAIL);
         return;
       default:
         break;
