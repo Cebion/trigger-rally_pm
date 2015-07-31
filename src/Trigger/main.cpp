@@ -805,6 +805,9 @@ bool MainApp::loadAll()
     if (!(aud_crash1 = getSSAudio().loadSample("/sounds/bang.wav", false))) return false;
   }
   
+  if (!gui.loadColors("/menu.colors"))
+    PUtil::outLog() << "Couldn't load (all) menu colors, continuing with defaults" << std::endl;
+  
   if (!loadLevelsAndEvents()) {
     PUtil::outLog() << "Couldn't load levels/events" << std::endl;
     return false;

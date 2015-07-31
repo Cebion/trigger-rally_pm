@@ -96,7 +96,7 @@ void MainApp::levelScreenAction(int action, int index)
   gui.setFont(tex_fontDsmShadowed);
   grabMouse(false);
   gui.clear();
-  gui.addLabel(10.0f,570.0f, "Trigger Rally", PTEXT_HZA_LEFT | PTEXT_VTA_CENTER, 30.0f, LBCOLOR_DULL);
+  gui.addLabel(10.0f,570.0f, "Trigger Rally", PTEXT_HZA_LEFT | PTEXT_VTA_CENTER, 30.0f, LabelStyle::Weak);
 
   switch (lss.state) {
   case AM_TOP:
@@ -109,18 +109,18 @@ void MainApp::levelScreenAction(int action, int index)
     gui.makeClickable(
       gui.addLabel(10.0f,30.0f, "quit", PTEXT_HZA_LEFT | PTEXT_VTA_CENTER, 40.0f), AA_GO_QUIT, 0);
 
-    gui.addLabel(790.0f, 570.0f, "version " PACKAGE_VERSION, PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 30.0f, LBCOLOR_DULL);
-    gui.addLabel(790.0f, 30.0f, "Build: " __DATE__ " at " __TIME__, PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20.0f, LBCOLOR_DULL);
+    gui.addLabel(790.0f, 570.0f, "version " PACKAGE_VERSION, PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 30.0f, LabelStyle::Weak);
+    gui.addLabel(790.0f, 30.0f, "Build: " __DATE__ " at " __TIME__, PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20.0f, LabelStyle::Weak);
     break;
   case AM_TOP_EVT:
   {
     gui.makeClickable(
       gui.addLabel(10.0f,30.0f, "back", PTEXT_HZA_LEFT | PTEXT_VTA_CENTER, 40.0f), AA_GO_TOP, 0);
-    gui.addLabel(100.0f,470.0f, "Choose Event:", PTEXT_HZA_LEFT | PTEXT_VTA_CENTER, 30.0f);
+    gui.addLabel(100.0f,470.0f, "Choose Event:", PTEXT_HZA_LEFT | PTEXT_VTA_CENTER, 30.0f, LabelStyle::Strong);
     
       int firstraceindex = index;
-      const int prevbutton = gui.addGraphic(20.0f, 275.0f, 50.0f, 50.0f, tex_button_prev);
-      const int nextbutton = gui.addGraphic(730.0f, 275.0f, 50.0f, 50.0f, tex_button_next);
+      const int prevbutton = gui.addGraphic(20.0f, 275.0f, 50.0f, 50.0f, tex_button_prev, GraphicStyle::Button);
+      const int nextbutton = gui.addGraphic(730.0f, 275.0f, 50.0f, 50.0f, tex_button_next, GraphicStyle::Button);
 
       if (firstraceindex > 0) { // FIXME: originally was AA_GO_PRAC?
         gui.makeClickable(prevbutton, AA_GO_EVT, firstraceindex - MAX_RACES_ON_SCREEN);
@@ -135,17 +135,17 @@ void MainApp::levelScreenAction(int action, int index)
 
       std::stringstream racecountmsg;
       racecountmsg << "events " << firstraceindex + 1 << '-' << firstraceindex + racesonscreencount << '/' << events.size();
-      gui.addLabel(790.0f, 570.0f, racecountmsg.str(), PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20.0f, LBCOLOR_DULL);
+      gui.addLabel(790.0f, 570.0f, racecountmsg.str(), PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20.0f, LabelStyle::Weak);
         gui.addLabel(700, 470, "races (timelimit)", PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20);
 
     for (int i = firstraceindex; i < firstraceindex + racesonscreencount; i++) {
       gui.makeClickable(
         gui.addLabel(100.0f,440.0f - (float)(i - firstraceindex) * 30.0f,
-        events[i].name, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 25.0f), AA_PICK_EVT, i);
+        events[i].name, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 25.0f, LabelStyle::List), AA_PICK_EVT, i);
         
       gui.addLabel(700.0f, 440.0f - (float)(i - firstraceindex) * 30.0f,
             PUtil::formatInt(events[i].levels.size()) + " (" + events[i].totaltime + ')',
-            PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 25.0f);
+            PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 25.0f, LabelStyle::List);
     }
     break;
   }
@@ -153,20 +153,20 @@ void MainApp::levelScreenAction(int action, int index)
     gui.makeClickable(
       gui.addLabel(10.0f, 10.0f, "back", PTEXT_HZA_LEFT | PTEXT_VTA_BOTTOM, 40.0f),
       AA_GO_EVT, 0);
-    gui.addLabel(790.0f, 570.0f, events[lss.currentevent].name, PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20.0f, LBCOLOR_DULL);
-    gui.addLabel(100.0f,470.0f, "Races:", PTEXT_HZA_LEFT | PTEXT_VTA_CENTER, 30.0f);
+    gui.addLabel(790.0f, 570.0f, events[lss.currentevent].name, PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20.0f, LabelStyle::Weak);
+    gui.addLabel(100.0f,470.0f, "Races:", PTEXT_HZA_LEFT | PTEXT_VTA_CENTER, 30.0f, LabelStyle::Strong);
     gui.addLabel(700, 470, "status/time", PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20);
 
     for (unsigned int i = 0; i < events[lss.currentevent].levels.size(); i++) {
       gui.addLabel(100.0f,440.0f - (float)i * 30.0f,
-        events[lss.currentevent].levels[i].name, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 25.0f);
+        events[lss.currentevent].levels[i].name, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 25.0f, LabelStyle::List);
       std::string infotext = "not yet raced";
       if (lss.currentlevel > (int)i)
         infotext = PUtil::formatTime(lss.leveltimes[i]);
       else if (lss.currentlevel == (int)i)
         infotext = "next";
       gui.addLabel(700.0f,440.0f - (float)i * 30.0f,
-        infotext, PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 25.0f);
+        infotext, PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 25.0f, LabelStyle::List);
     }
     gui.addLabel(700.0f,430.0f - (float)events[lss.currentevent].levels.size() * 30.0f,
       "Total: " + PUtil::formatTime(lss.totaltime), PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 25.0f);
@@ -180,7 +180,7 @@ void MainApp::levelScreenAction(int action, int index)
       gui.addLabel(400.0f,100.0f, "EVENT COMPLETED", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER, 40.0f);
     } else {
       gui.addLabel(400.0f,10.0f, PUtil::formatInt(lss.livesleft) + " tries remaining",
-        PTEXT_HZA_CENTER | PTEXT_VTA_BOTTOM, 20.0f);
+        PTEXT_HZA_CENTER | PTEXT_VTA_BOTTOM, 20.0f, LabelStyle::Strong);
 
       for (int i = 0; i < lss.livesleft; i++) {
         gui.addGraphic(325.0f + i * 50.0f,30.0f, 50.0f,50.0f, tex_hud_life);
@@ -192,7 +192,7 @@ void MainApp::levelScreenAction(int action, int index)
     }
     break;
   case AM_TOP_EVT_ABANDON:
-    gui.addLabel(400.0f,350.0f, "Really leave Event?", PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 40.0f);
+    gui.addLabel(400.0f,350.0f, "Really leave Event?", PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 40.0f, LabelStyle::Strong);
     gui.makeClickable(
       gui.addLabel(300.0f,250.0f, "Yes", PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 40.0f),
       AA_GO_EVT, 0);
@@ -204,11 +204,11 @@ void MainApp::levelScreenAction(int action, int index)
   {
     gui.makeClickable(
       gui.addLabel(10.0f, 10.0f, "back", PTEXT_HZA_LEFT | PTEXT_VTA_BOTTOM, 40.0f), AA_GO_TOP, 0);
-    gui.addLabel(100.0f,470.0f, "Practice Event:", PTEXT_HZA_LEFT | PTEXT_VTA_CENTER, 30.0f);
+    gui.addLabel(100.0f,470.0f, "Practice Event:", PTEXT_HZA_LEFT | PTEXT_VTA_CENTER, 30.0f, LabelStyle::Strong);
     
       int firstraceindex = index;
-      const int prevbutton = gui.addGraphic(20.0f, 275.0f, 50.0f, 50.0f, tex_button_prev);
-      const int nextbutton = gui.addGraphic(730.0f, 275.0f, 50.0f, 50.0f, tex_button_next);
+      const int prevbutton = gui.addGraphic(20.0f, 275.0f, 50.0f, 50.0f, tex_button_prev, GraphicStyle::Button);
+      const int nextbutton = gui.addGraphic(730.0f, 275.0f, 50.0f, 50.0f, tex_button_next, GraphicStyle::Button);
 
       if (firstraceindex > 0) {
         gui.makeClickable(prevbutton, AA_GO_PRAC, firstraceindex - MAX_RACES_ON_SCREEN);
@@ -223,17 +223,17 @@ void MainApp::levelScreenAction(int action, int index)
 
       std::stringstream racecountmsg;
       racecountmsg << "events " << firstraceindex + 1 << '-' << firstraceindex + racesonscreencount << '/' << events.size();
-      gui.addLabel(790.0f, 570.0f, racecountmsg.str(), PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20.0f, LBCOLOR_DULL);
+      gui.addLabel(790.0f, 570.0f, racecountmsg.str(), PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20.0f, LabelStyle::Weak);
       gui.addLabel(700, 470, "races (timelimit)", PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20);
 
     for (int i = firstraceindex; i < firstraceindex + racesonscreencount; i++) {
       gui.makeClickable(
         gui.addLabel(100.0f,440.0f - (float)(i - firstraceindex) * 30.0f,
-        events[i].name, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 25.0f), AA_PICK_PRAC, i);
+        events[i].name, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 25.0f, LabelStyle::List), AA_PICK_PRAC, i);
         
       gui.addLabel(700.0f, 440.0f - (float)(i - firstraceindex) * 30.0f,
             PUtil::formatInt(events[i].levels.size()) + " (" + events[i].totaltime + ')',
-            PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 25.0f);
+            PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 25.0f, LabelStyle::List);
     }
     break;
   }
@@ -242,25 +242,25 @@ void MainApp::levelScreenAction(int action, int index)
     gui.makeClickable(
       gui.addLabel(10.0f, 10.0f, "back", PTEXT_HZA_LEFT | PTEXT_VTA_BOTTOM, 40.0f),
       AA_GO_PRAC, 0);
-    gui.addLabel(790.0f, 570.0f, events[lss.currentevent].name, PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20.0f, LBCOLOR_DULL);
-    gui.addLabel(100.0f,470.0f, "Choose Race:", PTEXT_HZA_LEFT | PTEXT_VTA_CENTER, 30.0f);
+    gui.addLabel(790.0f, 570.0f, events[lss.currentevent].name, PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20.0f, LabelStyle::Weak);
+    gui.addLabel(100.0f,470.0f, "Choose Race:", PTEXT_HZA_LEFT | PTEXT_VTA_CENTER, 30.0f, LabelStyle::Strong);
     gui.addLabel(700, 470, "timelimit", PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20);
 
     for (unsigned int i = 0; i < events[lss.currentevent].levels.size(); i++) {
         gui.makeClickable(
           gui.addLabel(100.0f, 440.0f - (float)i * 30.0f,
-          events[lss.currentevent].levels[i].name, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 25.0f),
+          events[lss.currentevent].levels[i].name, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 25.0f, LabelStyle::List),
           AA_PICK_PRAC_LVL, i);
 
         gui.addLabel(700.0f, 440.0f - (float)i * 30.0f,
-            events[lss.currentevent].levels[i].targettimeshort, PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 25.0f);
+            events[lss.currentevent].levels[i].targettimeshort, PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 25.0f, LabelStyle::List);
     }
     break;
   }
   case AM_TOP_PRAC_SEL_PREP:
   {
-      const int prevbutton = gui.addGraphic(20.0f, 275.0f, 50.0f, 50.0f, tex_button_prev);
-      const int nextbutton = gui.addGraphic(730.0f, 275.0f, 50.0f, 50.0f, tex_button_next);
+      const int prevbutton = gui.addGraphic(20.0f, 275.0f, 50.0f, 50.0f, tex_button_prev, GraphicStyle::Button);
+      const int nextbutton = gui.addGraphic(730.0f, 275.0f, 50.0f, 50.0f, tex_button_next, GraphicStyle::Button);
 
       int idxnext = lss.currentlevel + 1;
       int idxprev = lss.currentlevel - 1;
@@ -278,10 +278,10 @@ void MainApp::levelScreenAction(int action, int index)
         PUtil::formatInt(lss.currentlevel + 1) + '/' + PUtil::formatInt(events[lss.currentevent].levels.size()) + ')',
         PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20.0f);
     gui.addLabel(100.0f,500.0f, events[lss.currentevent].levels[lss.currentlevel].name,
-        PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 35.0f);
+        PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 35.0f, LabelStyle::Strong);
     gui.addLabel(100.0f,462.5f,
         std::string("by ") + events[lss.currentevent].levels[lss.currentlevel].author,
-        PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, LBCOLOR_DULL);
+        PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, LabelStyle::Weak);
     gui.addLabel(700.0f, 462.5f, events[lss.currentevent].levels[lss.currentlevel].targettimeshort,
         PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 20.0f);
 
@@ -308,11 +308,11 @@ void MainApp::levelScreenAction(int action, int index)
       gui.makeClickable(
         gui.addLabel(10.0f, 10.0f, "back", PTEXT_HZA_LEFT | PTEXT_VTA_BOTTOM, 40.0f),
         AA_GO_TOP, 0);
-      gui.addLabel(100.0f,470.0f, "Choose Race:", PTEXT_HZA_LEFT | PTEXT_VTA_CENTER, 30.0f);
+      gui.addLabel(100.0f,470.0f, "Choose Race:", PTEXT_HZA_LEFT | PTEXT_VTA_CENTER, 30.0f, LabelStyle::Strong);
 
       int firstraceindex = index;
-      const int prevbutton = gui.addGraphic(20.0f, 275.0f, 50.0f, 50.0f, tex_button_prev);
-      const int nextbutton = gui.addGraphic(730.0f, 275.0f, 50.0f, 50.0f, tex_button_next);
+      const int prevbutton = gui.addGraphic(20.0f, 275.0f, 50.0f, 50.0f, tex_button_prev, GraphicStyle::Button);
+      const int nextbutton = gui.addGraphic(730.0f, 275.0f, 50.0f, 50.0f, tex_button_next, GraphicStyle::Button);
 
       if (firstraceindex > 0) {
         gui.makeClickable(prevbutton, AA_GO_LVL, firstraceindex - MAX_RACES_ON_SCREEN);
@@ -326,25 +326,25 @@ void MainApp::levelScreenAction(int action, int index)
       }
       std::stringstream racecountmsg;
       racecountmsg << "single races " << firstraceindex + 1 << '-' << firstraceindex + racesonscreencount << '/' << levels.size();
-      gui.addLabel(790.0f, 570.0f, racecountmsg.str(), PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20.0f, LBCOLOR_DULL);
+      gui.addLabel(790.0f, 570.0f, racecountmsg.str(), PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20.0f, LabelStyle::Weak);
 
         gui.addLabel(700, 470, "timelimit", PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20);
 
       for (int i = firstraceindex; i < firstraceindex + racesonscreencount; i++) {
         gui.makeClickable(
           gui.addLabel(100.0f, 440.0f - (float)(i - firstraceindex) * 30.0f,
-          levels[i].name, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 25.0f),
+          levels[i].name, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 25.0f, LabelStyle::List),
           AA_PICK_LVL, i);
           
         gui.addLabel(700.0f, 440.0f - (float)(i - firstraceindex) * 30.0f,
-            levels[i].targettimeshort, PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 25.0f);
+            levels[i].targettimeshort, PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 25.0f, LabelStyle::List);
       }
     }
     break;
   case AM_TOP_LVL_PREP:
   {
-      const int prevbutton = gui.addGraphic(20.0f, 275.0f, 50.0f, 50.0f, tex_button_prev);
-      const int nextbutton = gui.addGraphic(730.0f, 275.0f, 50.0f, 50.0f, tex_button_next);
+      const int prevbutton = gui.addGraphic(20.0f, 275.0f, 50.0f, 50.0f, tex_button_prev, GraphicStyle::Button);
+      const int nextbutton = gui.addGraphic(730.0f, 275.0f, 50.0f, 50.0f, tex_button_next, GraphicStyle::Button);
       
       int idxnext = lss.currentlevel + 1;
       int idxprev = lss.currentlevel - 1;
@@ -362,11 +362,11 @@ void MainApp::levelScreenAction(int action, int index)
     std::stringstream racenummsg;
 
     racenummsg << "single race " << lss.currentlevel+1 << '/' << levels.size();
-    gui.addLabel(790.0f,570.0f, racenummsg.str(), PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20.0f, LBCOLOR_DULL);
-    gui.addLabel(100.0f,500.0f, levels[lss.currentlevel].name, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 35.0f);
+    gui.addLabel(790.0f,570.0f, racenummsg.str(), PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20.0f, LabelStyle::Weak);
+    gui.addLabel(100.0f,500.0f, levels[lss.currentlevel].name, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 35.0f, LabelStyle::Strong);
     gui.addLabel(100.0f,462.5f,
         std::string("by ") + levels[lss.currentlevel].author,
-        PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, LBCOLOR_DULL);
+        PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, LabelStyle::Weak);
     gui.addLabel(700.0f, 462.5f, levels[lss.currentlevel].targettimeshort, PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 20.0f);
 
     if (levels[lss.currentlevel].tex_screenshot != nullptr)
@@ -387,7 +387,7 @@ void MainApp::levelScreenAction(int action, int index)
   }
     break;
   case AM_TOP_QUIT:
-    gui.addLabel(400.0f,350.0f, "Really quit?", PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 40.0f);
+    gui.addLabel(400.0f,350.0f, "Really quit?", PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 40.0f, LabelStyle::Strong);
     gui.makeClickable(
       gui.addLabel(300.0f,250.0f, "Yes", PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 40.0f),
       AA_QUIT_CONFIRM, 0);
@@ -396,7 +396,7 @@ void MainApp::levelScreenAction(int action, int index)
       AA_GO_TOP, 0);
     break;
   default:
-    gui.addLabel(400.0f,300.0f, "Error in menu system, sorry", PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 30.0f);
+    gui.addLabel(400.0f,300.0f, "Error in menu system, sorry", PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 30.0f, LabelStyle::Strong);
     gui.makeClickable(
       gui.addLabel(400.0f,150.0f, "Go to top menu", PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 30.0f),
       AA_GO_TOP, 0);
@@ -725,6 +725,54 @@ void MainApp::renderStateLevel(float eyetranslation)
   glMatrixMode(GL_MODELVIEW);
 }
 
+/// @see GuiWidgetColors
+#define LIST_OF_GUIWIDGETCOLORS_FIELDS  \
+    X(normal)                           \
+    X(click)                            \
+    X(hover)                            \
+    X(listnormal)                       \
+    X(listclick)                        \
+    X(listhover)                        \
+    X(weak)                             \
+    X(strong)                           \
+    X(bnormal)                          \
+    X(bclick)                           \
+    X(bhover)
+
+///
+/// @brief Loads the widget colors from the specified filename.
+/// @todo Should check `sscanf()` calls for success.
+/// @param [in] filename    Name of the XML file to be read.
+/// @returns Whether or not the operation was successful.
+/// @retval true            The colors were read successfully.
+/// @retval false           Some (or none) colors could not be read.
+///
+bool Gui::loadColors(const std::string &filename)
+{
+    if (PUtil::isDebugLevel(DEBUGLEVEL_TEST))
+        PUtil::outLog() << "Loading GUI colors from \"" << filename << "\"\n";
+
+    TiXmlDocument xmlfile(filename.c_str());
+    TiXmlElement *rootelem = PUtil::loadRootElement(xmlfile, "menucolors");
+
+    if (rootelem == nullptr)
+        return false;
+
+    bool r = true;
+    const char *val;
+
+#define X(ColorField) \
+    val = rootelem->Attribute(#ColorField); \
+    if (val != nullptr) \
+        sscanf(val, "%f, %f, %f, %f", &colors.ColorField.x, &colors.ColorField.y, &colors.ColorField.z, &colors.ColorField.w); \
+    else \
+        r = false;
+
+    LIST_OF_GUIWIDGETCOLORS_FIELDS
+
+#undef X
+    return r;
+}
 
 void Gui::tick(float delta)
 {
@@ -811,15 +859,13 @@ void Gui::render()
       
     case GWT_GRAPHIC: {
       vec4f colc = vec4f(1.0f, 1.0f, 1.0f, 1.0f);
-/*
+
       if (widget[i].clickable) {
-        vec4f cola = vec4f(1.0f, 1.0f, 1.0f, 0.25f);
-        vec4f colb = vec4f(1.0f, 1.0f, 1.0f, 1.0f);
-        colc = INTERP(cola, colb, widget[i].glow);
+        colc = INTERP(widget[i].colclick, widget[i].colhover, widget[i].glow);
       } else {
-        colc = vec4f(1.0f, 1.0f, 1.0f, 1.0f);
+        colc = widget[i].colnormal;
       }
-*/
+
       vec2f min = widget[i].pos;
       vec2f max = widget[i].pos + widget[i].dims_min;
       
@@ -1091,10 +1137,7 @@ int Gui::addContainer(float x, float y, float width, float height, bool vert)
 }
 #endif
 
-int Gui::addLabel(float x, float y, const std::string &text, uint32 flags, float fontsize,
-    const vec4f &colnormal,
-    const vec4f &colclick,
-    const vec4f &colhover)
+int Gui::addLabel(float x, float y, const std::string &text, uint32 flags, float fontsize, LabelStyle ls)
 {
   int w = getFreeWidget();
   widget[w].type = GWT_LABEL;
@@ -1102,9 +1145,34 @@ int Gui::addLabel(float x, float y, const std::string &text, uint32 flags, float
   widget[w].fontsize = fontsize;
   widget[w].dims_min = ssRender->getTextDims(text) * fontsize;
   widget[w].pos = vec2f(x, y);
-  widget[w].colnormal = colnormal;
-  widget[w].colclick = colclick;
-  widget[w].colhover = colhover;
+  
+  if (ls == LabelStyle::Regular)
+  {
+      widget[w].colnormal   = colors.normal;
+      widget[w].colclick    = colors.click;
+      widget[w].colhover    = colors.hover;
+  }
+  else
+  if (ls == LabelStyle::Weak)
+  {
+      widget[w].colnormal   = colors.weak;
+      widget[w].colclick    = colors.click;
+      widget[w].colhover    = colors.hover;
+  }
+  else
+  if (ls == LabelStyle::Strong)
+  {
+      widget[w].colnormal   = colors.strong;
+      widget[w].colclick    = colors.click;
+      widget[w].colhover    = colors.hover;
+  }
+  else
+  if (ls == LabelStyle::List)
+  {
+      widget[w].colnormal   = colors.listnormal;
+      widget[w].colclick    = colors.listclick;
+      widget[w].colhover    = colors.listhover;
+  }
 
   if (flags & PTEXT_HZA_CENTER)
     widget[w].pos.x -= widget[w].dims_min.x * 0.5f;
@@ -1119,14 +1187,28 @@ int Gui::addLabel(float x, float y, const std::string &text, uint32 flags, float
   return w;
 }
 
-int Gui::addGraphic(float x, float y, float width, float height, PTexture *tex)
+int Gui::addGraphic(float x, float y, float width, float height, PTexture *tex, GraphicStyle gs)
 {
   int w = getFreeWidget();
   widget[w].type = GWT_GRAPHIC;
   widget[w].dims_min = vec2f(width, height);
   widget[w].pos = vec2f(x, y);
   widget[w].tex = tex;
-  
+
+    if (gs == GraphicStyle::Button)
+    {
+        widget[w].colnormal = colors.bnormal;
+        widget[w].colclick  = colors.bclick;
+        widget[w].colhover  = colors.bhover;
+    }
+    else
+    if (gs == GraphicStyle::Image)
+    {
+        widget[w].colnormal = {1.00f, 1.00f, 1.00f, 1.00f};
+        widget[w].colclick  = {1.00f, 1.00f, 1.00f, 1.00f};
+        widget[w].colhover  = {1.00f, 1.00f, 1.00f, 1.00f};
+    }
+
   return w;
 }
 

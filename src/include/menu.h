@@ -44,11 +44,51 @@ the game. Ick.
 #define AA_GO_QUIT            51
 #define AA_QUIT_CONFIRM       52
 
-// predefined label colors (defaults)
-#define LBCOLOR_NORMAL      {1.00f, 1.00f, 1.00f, 1.00f}
-#define LBCOLOR_DULL        {0.80f, 0.80f, 0.80f, 1.00f}
-#define LBCOLOR_CLICK       {0.85f, 0.85f, 0.30f, 1.00f}
-#define LBCOLOR_HOVER       {1.00f, 0.40f, 0.00f, 1.00f}
+/// used to determine which colors to use for the GuiWidget label
+enum class LabelStyle
+{
+    Regular,
+    Weak,
+    Strong,
+    List
+};
+
+/// used to determine which colors to use for the GuiWidget graphic
+enum class GraphicStyle
+{
+    Button,
+    Image
+};
+
+struct GuiWidgetColors
+{
+    vec4f normal;       ///< non-clickable labels
+    vec4f click;        ///< clickable labels
+    vec4f hover;        ///< clickable labels with mouse hovering on top
+    vec4f listnormal;   ///< non-clickable list items
+    vec4f listclick;    ///< clickable list items
+    vec4f listhover;    ///< clickable list items with mouse hovering on top
+    vec4f weak;         ///< non-clickable labels that should be discreet
+    vec4f strong;       ///< non-clickable labels that should be obvious
+    vec4f bnormal;      ///< disabled button
+    vec4f bclick;       ///< clickable button
+    vec4f bhover;       ///< clickable button with mouse hovering on top
+
+    GuiWidgetColors():
+        normal      {1, 0, 0, 1},
+        click       {0, 1, 0, 1},
+        hover       {0, 0, 1, 1},
+        listnormal  {1, 1, 0, 1},
+        listclick   {1, 0, 1, 1},
+        listhover   {0, 1, 1, 1},
+        weak        {0.5, 0.5, 0.5, 1},
+        strong      {1, 1, 1, 1},
+        bnormal     {1, 1, 0, 0.75},
+        bclick      {0, 1, 1, 0.75},
+        bhover      {1, 1, 1, 1}
+    {
+    }
+};
 
 struct LevelState {
   
@@ -102,6 +142,9 @@ struct GuiWidget {
 class Gui {
   
 private:
+    
+    GuiWidgetColors colors;
+    
   std::vector<GuiWidget> widget;
   
   PSSRender *ssRender;
@@ -125,6 +168,8 @@ protected:
 public:
   Gui() : cursor(vec2f::zero()), defflash(0.0f) { }
   
+  bool loadColors(const std::string &filename);
+  
   void setSSRender(PSSRender &render) { ssRender = &render; }
   void setFont(PTexture *tex) { fonttex = tex; }
   
@@ -143,12 +188,9 @@ public:
   
   int addContainer(int parent, float minwidth, float minheight, bool vert);
   
-  int addLabel(float x, float y, const std::string &text, uint32 flags, float fontsize,
-    const vec4f &colnormal  = LBCOLOR_NORMAL,
-    const vec4f &colclick   = LBCOLOR_CLICK,
-    const vec4f &colhover   = LBCOLOR_HOVER);
+  int addLabel(float x, float y, const std::string &text, uint32 flags, float fontsize, LabelStyle ls = LabelStyle::Regular);
   
-  int addGraphic(float x, float y, float width, float height, PTexture *tex);
+  int addGraphic(float x, float y, float width, float height, PTexture *tex, GraphicStyle gs = GraphicStyle::Image);
   
   int makeClickable(int w, int data1, int data2) {
     widget[w].clickable = true;

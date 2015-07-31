@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" ?>
+<!-- This file sets the colors of the menu widgets:
+
+	normal      = non-clickable labels
+	click       = clickable labels
+	hover       = clickable labels with mouse hovering on top
+	listnormal  = non-clickable list items
+	listclick   = clickable list items
+	listhover   = clickable list items with mouse hovering on top
+	weak        = non-clickable labels that should be discreet
+	strong      = non-clickable labels that should be obvious
+	bnormal     = disabled button
+	bclick      = clickable button
+	bhover      = clickable button with mouse hovering on top
+
+	The format of the colors is OpenGL-style RGBA (Red Green Blue Alpha)
+	with the components being floating point numbers ranging from 0 to 1.
+-->
+<menucolors
+	normal="0.9, 0.9, 0.9, 1"
+	click="0.85, 0.85, 0.3, 1"
+	hover="1, 0.4, 0, 1"
+	listnormal="0.9, 0.9, 0.9, 1"
+	listclick="0.85, 0.85, 0.3, 1"
+	listhover="1, 0.4, 0, 1"
+	weak="0.8, 0.8, 0.8, 1"
+	strong="1, 1, 1, 1"
+	bnormal="0.75, 0.75, 0.75, 0.75"
+	bclick="1, 1, 1, 0.75"
+	bhover="1, 1, 0, 1"
+	/>
