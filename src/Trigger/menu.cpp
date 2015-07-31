@@ -268,7 +268,7 @@ void MainApp::levelScreenAction(int action, int index)
       CLAMP(idxnext, 0, static_cast<int> (events[lss.currentevent].levels.size() - 1));
       CLAMP(idxprev, 0, static_cast<int> (events[lss.currentevent].levels.size() - 1));
 
-    if (lss.currentlevel < static_cast<int> (levels.size() - 1))
+    if (lss.currentlevel < static_cast<int> (events[lss.currentevent].levels.size() - 1))
       gui.makeClickable(nextbutton, AA_PICK_PRAC_LVL, idxnext);
 
     if (lss.currentlevel > 0)
