@@ -279,7 +279,7 @@ void MainApp::levelScreenAction(int action, int index)
       AA_PICK_PRAC, lss.currentevent);
     gui.addLabel(790.0f, 570.0f, events[lss.currentevent].name + " (" +
         PUtil::formatInt(lss.currentlevel + 1) + '/' + PUtil::formatInt(events[lss.currentevent].levels.size()) + ')',
-        PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20.0f);
+        PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20.0f, LabelStyle::Weak);
     gui.addLabel(100.0f,500.0f, events[lss.currentevent].levels[lss.currentlevel].name,
         PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 35.0f, LabelStyle::Strong);
     gui.addLabel(100.0f,462.5f,
