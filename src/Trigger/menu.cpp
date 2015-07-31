@@ -268,7 +268,10 @@ void MainApp::levelScreenAction(int action, int index)
       CLAMP(idxnext, 0, static_cast<int> (events[lss.currentevent].levels.size() - 1));
       CLAMP(idxprev, 0, static_cast<int> (events[lss.currentevent].levels.size() - 1));
 
+    if (lss.currentlevel < static_cast<int> (levels.size() - 1))
       gui.makeClickable(nextbutton, AA_PICK_PRAC_LVL, idxnext);
+
+    if (lss.currentlevel > 0)
       gui.makeClickable(prevbutton, AA_PICK_PRAC_LVL, idxprev);
 
     gui.makeClickable(
@@ -352,8 +355,11 @@ void MainApp::levelScreenAction(int action, int index)
       CLAMP(idxnext, 0, static_cast<int> (levels.size() - 1));
       CLAMP(idxprev, 0, static_cast<int> (levels.size() - 1));
       
-      gui.makeClickable(nextbutton, AA_PICK_LVL, idxnext);
-      gui.makeClickable(prevbutton, AA_PICK_LVL, idxprev);
+      if (lss.currentlevel < static_cast<int> (levels.size() - 1))
+        gui.makeClickable(nextbutton, AA_PICK_LVL, idxnext);
+
+      if (lss.currentlevel > 0)
+        gui.makeClickable(prevbutton, AA_PICK_LVL, idxprev);
       
     gui.makeClickable(
       gui.addLabel(10.0f, 10.0f, "back", PTEXT_HZA_LEFT | PTEXT_VTA_BOTTOM, 40.0f),
@@ -474,16 +480,16 @@ void MainApp::mouseButtonEvent(const SDL_MouseButtonEvent &mbe)
   // TODO: fix this code
   
   const GLdouble margin = (800.0 - 600.0 * cfg_video_cx / cfg_video_cy) / 2.0;
-  
-  gui.setCursorPos(
-    (float)mbe.x / (float)getWidth() * (600.0 * cfg_video_cx / cfg_video_cy) + margin,
-    (1.0f - (float)mbe.y / (float)getHeight()) * 600.0f);
-  
+
   int action, index;
   
   if (!gui.getClickAction(action, index)) return;
   
   levelScreenAction(action, index);
+
+  gui.setCursorPos(
+    (float)mbe.x / (float)getWidth() * (600.0 * cfg_video_cx / cfg_video_cy) + margin,
+    (1.0f - (float)mbe.y / (float)getHeight()) * 600.0f);
 }
 
 //
