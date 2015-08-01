@@ -18,7 +18,7 @@
 	with the components being floating point numbers ranging from 0 to 1.
 -->
 <menucolors
-	normal="0.8, 0.8, 0.8, 1"
+	normal="1, 1, 1, 1"
 	click="0.8, 0.8, 0.4, 1"
 	hover="1, 1, 1, 1"
 	listnormal="1, 1, 1, 1"
