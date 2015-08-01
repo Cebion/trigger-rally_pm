@@ -158,15 +158,33 @@ void MainApp::levelScreenAction(int action, int index)
     gui.addLabel(700, 470, "status/time", PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20);
 
     for (unsigned int i = 0; i < events[lss.currentevent].levels.size(); i++) {
-      gui.addLabel(100.0f,440.0f - (float)i * 30.0f,
-        events[lss.currentevent].levels[i].name, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 25.0f, LabelStyle::List);
-      std::string infotext = "not yet raced";
+
+      LabelStyle namestyle = LabelStyle::List;
+      
       if (lss.currentlevel > (int)i)
+        namestyle = LabelStyle::Strong;
+      else
+      if (lss.currentlevel == (int)i)
+        namestyle = LabelStyle::Marked;
+        
+      gui.addLabel(100.0f,440.0f - (float)i * 30.0f,
+        events[lss.currentevent].levels[i].name, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 25.0f, namestyle);
+
+      std::string infotext = "not yet raced";
+      LabelStyle infostyle = LabelStyle::List;
+
+      if (lss.currentlevel > (int)i)
+      {
         infotext = PUtil::formatTime(lss.leveltimes[i]);
+        infostyle = LabelStyle::Strong;
+      }
       else if (lss.currentlevel == (int)i)
+      {
         infotext = "next";
+        infostyle = LabelStyle::Marked;
+      }
       gui.addLabel(700.0f,440.0f - (float)i * 30.0f,
-        infotext, PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 25.0f, LabelStyle::List);
+        infotext, PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 25.0f, infostyle);
     }
     gui.addLabel(700.0f,430.0f - (float)events[lss.currentevent].levels.size() * 30.0f,
       "Total: " + PUtil::formatTime(lss.totaltime), PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 25.0f);
@@ -192,7 +210,7 @@ void MainApp::levelScreenAction(int action, int index)
     }
     break;
   case AM_TOP_EVT_ABANDON:
-    gui.addLabel(400.0f,350.0f, "Really leave Event?", PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 40.0f, LabelStyle::Strong);
+    gui.addLabel(400.0f,350.0f, "Really leave Event?", PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 40.0f, LabelStyle::Marked);
     gui.makeClickable(
       gui.addLabel(300.0f,250.0f, "Yes", PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 40.0f),
       AA_GO_EVT, 0);
@@ -393,7 +411,7 @@ void MainApp::levelScreenAction(int action, int index)
   }
     break;
   case AM_TOP_QUIT:
-    gui.addLabel(400.0f,350.0f, "Really quit?", PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 40.0f, LabelStyle::Strong);
+    gui.addLabel(400.0f,350.0f, "Really quit?", PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 40.0f, LabelStyle::Marked);
     gui.makeClickable(
       gui.addLabel(300.0f,250.0f, "Yes", PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 40.0f),
       AA_QUIT_CONFIRM, 0);
@@ -402,7 +420,7 @@ void MainApp::levelScreenAction(int action, int index)
       AA_GO_TOP, 0);
     break;
   default:
-    gui.addLabel(400.0f,300.0f, "Error in menu system, sorry", PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 30.0f, LabelStyle::Strong);
+    gui.addLabel(400.0f,300.0f, "Error in menu system, sorry", PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 30.0f, LabelStyle::Marked);
     gui.makeClickable(
       gui.addLabel(400.0f,150.0f, "Go to top menu", PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 30.0f),
       AA_GO_TOP, 0);
@@ -741,6 +759,7 @@ void MainApp::renderStateLevel(float eyetranslation)
     X(listhover)                        \
     X(weak)                             \
     X(strong)                           \
+    X(marked)                           \
     X(bnormal)                          \
     X(bclick)                           \
     X(bhover)
@@ -1169,6 +1188,13 @@ int Gui::addLabel(float x, float y, const std::string &text, uint32 flags, float
   if (ls == LabelStyle::Strong)
   {
       widget[w].colnormal   = colors.strong;
+      widget[w].colclick    = colors.click;
+      widget[w].colhover    = colors.hover;
+  }
+  else
+  if (ls == LabelStyle::Marked)
+  {
+      widget[w].colnormal   = colors.marked;
       widget[w].colclick    = colors.click;
       widget[w].colhover    = colors.hover;
   }
