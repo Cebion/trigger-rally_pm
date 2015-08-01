@@ -51,6 +51,7 @@ enum class LabelStyle
     Weak,
     Strong,
     Marked,
+    Header,
     List
 };
 
@@ -72,6 +73,7 @@ struct GuiWidgetColors
     vec4f weak;         ///< non-clickable labels that should be discreet
     vec4f strong;       ///< non-clickable labels that should be obvious
     vec4f marked;       ///< non-clickable labels that should draw attention
+    vec4f header;       ///< non-clickable labels that are used as section title
     vec4f bnormal;      ///< disabled button
     vec4f bclick;       ///< clickable button
     vec4f bhover;       ///< clickable button with mouse hovering on top
@@ -86,6 +88,7 @@ struct GuiWidgetColors
         weak        {0.5, 0.5, 0.5, 1},
         strong      {1, 1, 1, 1},
         marked      {1, 0.5, 0.5, 1},
+        header      {0.8, 0.8, 0.4, 1},
         bnormal     {1, 1, 0, 0.75},
         bclick      {0, 1, 1, 0.75},
         bhover      {1, 1, 1, 1}
