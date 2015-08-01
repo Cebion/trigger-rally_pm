@@ -299,7 +299,7 @@ void MainApp::levelScreenAction(int action, int index)
         PUtil::formatInt(lss.currentlevel + 1) + '/' + PUtil::formatInt(events[lss.currentevent].levels.size()) + ')',
         PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20.0f, LabelStyle::Weak);
     gui.addLabel(100.0f,500.0f, events[lss.currentevent].levels[lss.currentlevel].name,
-        PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 35.0f, LabelStyle::Strong);
+        PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 35.0f, LabelStyle::Header);
     gui.addLabel(100.0f,462.5f,
         std::string("by ") + events[lss.currentevent].levels[lss.currentlevel].author,
         PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, LabelStyle::Weak);
@@ -387,7 +387,7 @@ void MainApp::levelScreenAction(int action, int index)
 
     racenummsg << "single race " << lss.currentlevel+1 << '/' << levels.size();
     gui.addLabel(790.0f,570.0f, racenummsg.str(), PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20.0f, LabelStyle::Weak);
-    gui.addLabel(100.0f,500.0f, levels[lss.currentlevel].name, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 35.0f, LabelStyle::Strong);
+    gui.addLabel(100.0f,500.0f, levels[lss.currentlevel].name, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 35.0f, LabelStyle::Header);
     gui.addLabel(100.0f,462.5f,
         std::string("by ") + levels[lss.currentlevel].author,
         PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, LabelStyle::Weak);
