@@ -797,7 +797,7 @@ bool MainApp::loadAll()
   if (!(tex_button_next = getSSTexture().loadTexture("/textures/button_next.png"))) return false;
   if (!(tex_button_prev = getSSTexture().loadTexture("/textures/button_prev.png"))) return false;
   
-  if (!(tex_water = getSSTexture().loadTexture("/textures/water.png"))) return false;
+  if (!(tex_waterdefault = getSSTexture().loadTexture("/textures/water/default.png"))) return false;
 
   if (cfg_enable_sound) {
     if (!(aud_engine = getSSAudio().loadSample("/sounds/engine.wav", false))) return false;
@@ -899,10 +899,18 @@ bool MainApp::startGame(const std::string &filename)
     tex_sky[0] = getSSTexture().loadTexture(game->weather.cloud.texname);
   
   if (tex_sky[0] == nullptr) {
-    tex_sky[0] = getSSTexture().loadTexture("textures/sky/blue.jpg");
+    tex_sky[0] = getSSTexture().loadTexture("/textures/sky/blue.jpg");
     
     if (tex_sky[0] == nullptr) tex_sky[0] = tex_detail; // last fallback...
   }
+  
+  tex_water = nullptr;
+  
+  if (!game->water.texname.empty())
+    tex_water = getSSTexture().loadTexture(game->water.texname);
+
+  if (tex_water == nullptr)
+    tex_water = tex_waterdefault;
   
   return true;
 }

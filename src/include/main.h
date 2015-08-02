@@ -110,9 +110,9 @@ private:
     ///
     struct
     {
-        bool        enabled = false;        ///< Enables or disables the water.
-        float       height  = 0.0f;         ///< The height of the water.
-//      PTexture    *tex    = tex_water;    ///< Custom water texture.
+        bool        enabled = false;    ///< Enables or disables the water.
+        float       height  = 0.0f;     ///< The height of the water.
+        std::string texname = "";       ///< Custom water texture.
     } water;
 
 public:
@@ -305,6 +305,7 @@ private:
   PTexture *tex_detail,
            *tex_sky[1],
            *tex_water,
+           *tex_waterdefault,
            *tex_dirt,
            *tex_shadow,
            *tex_hud_revs,
