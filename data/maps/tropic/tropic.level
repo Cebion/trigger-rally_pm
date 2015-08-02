@@ -37,15 +37,14 @@
 
 	<water
 		height="3"
-		watertexture="/textures/water/dark-water.png"
+		watertexture="/textures/water/black-water.png"
 		/>
 	
 	<vehicleoption type="/vehicles/evo/evo.vehicle" />
 	<vehicleoption type="/vehicles/seat/seat.vehicle" />
 	<vehicleoption type="/vehicles/focus/focus.vehicle" />
 	
-	<race coordscale="2.3, 2.3"
-		targettime="612">
+	<race coordscale="2.3, 2.3" targettime="612">
 		
 		<startposition pos="325, 605" oridegrees="225" />
 		<checkpoint coords="237, 503"/>

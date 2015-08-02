@@ -34,11 +34,9 @@
 	<vehicleoption type="/vehicles/evo/evo.vehicle" />
 	<vehicleoption type="/vehicles/seat/seat.vehicle" />
 	
-	<race coordscale="2, 2"
-		targettime="120.0">
-		
-		<startposition pos="72, 60" oridegrees="320" />
+	<race coordscale="2, 2" targettime="120.0">
 
+		<startposition pos="72, 60" oridegrees="320" />
 		<checkpoint coords="105, 229" />
 		<checkpoint coords="47, 308" />
 		<checkpoint coords="213, 313" />
@@ -48,7 +46,5 @@
 		<checkpoint coords="391, 227" />
 		<checkpoint coords="375, 43" />
 		<checkpoint coords="308, 39" />
-		
 	</race>
-	
 </level>
