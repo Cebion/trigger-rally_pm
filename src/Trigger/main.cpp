@@ -796,6 +796,8 @@ bool MainApp::loadAll()
 
   if (!(tex_button_next = getSSTexture().loadTexture("/textures/button_next.png"))) return false;
   if (!(tex_button_prev = getSSTexture().loadTexture("/textures/button_prev.png"))) return false;
+  
+  if (!(tex_water = getSSTexture().loadTexture("/textures/water.png"))) return false;
 
   if (cfg_enable_sound) {
     if (!(aud_engine = getSSAudio().loadSample("/sounds/engine.wav", false))) return false;

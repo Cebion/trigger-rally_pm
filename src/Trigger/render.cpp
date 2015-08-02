@@ -882,7 +882,7 @@ void MainApp::renderStateGame(float eyetranslation)
 
     glEnable(GL_TEXTURE_2D);
 
-    //renderWater();
+    renderWater();
 
     getSSRender().render(psys_dirt);
 
