@@ -93,6 +93,8 @@ bool TriggerGame::loadLevel(const std::string &filename)
   water.enabled = false;
   water.height = 0.0f;
   water.texname = "";
+  water.useralpha = false;
+  water.alpha = 1.0f;
   
   TiXmlDocument xmlfile(filename.c_str());
   TiXmlElement *rootelem = PUtil::loadRootElement(xmlfile, "level");
@@ -248,7 +250,7 @@ bool TriggerGame::loadLevel(const std::string &filename)
         val = walk->Attribute("height");
 
         if (val != nullptr)
-            sscanf(val, "%f", &water.height);
+            water.height = atof(val);
             
         val = walk->Attribute("watertexture");
         
@@ -256,6 +258,16 @@ bool TriggerGame::loadLevel(const std::string &filename)
             water.texname = val;
         else
             water.texname = "";
+            
+        val = walk->Attribute("alpha");
+        
+        if (val != nullptr)
+        {
+            water.useralpha = true;
+            water.alpha = atof(val);
+        }
+        else
+            water.useralpha = false;
     }
   }
   

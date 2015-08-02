@@ -105,14 +105,15 @@ private:
 
     ///
     /// @brief Water information.
-    /// @todo Enable, load and use custom water texture?
     /// @todo Maybe remove defaults, used in `game.cpp`.
     ///
     struct
     {
-        bool        enabled = false;    ///< Enables or disables the water.
-        float       height  = 0.0f;     ///< The height of the water.
-        std::string texname = "";       ///< Custom water texture.
+        bool        enabled     = false;    ///< Enables the water?
+        float       height      = 0.0f;     ///< The height of the water.
+        std::string texname     = "";       ///< Custom water texture.
+        bool        useralpha   = false;    ///< Use alpha provided by user?
+        float       alpha       = 1.0f;     ///< Default user alpha value.
     } water;
 
 public:
