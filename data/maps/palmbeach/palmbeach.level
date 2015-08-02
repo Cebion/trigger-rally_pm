@@ -51,6 +51,8 @@
 		fogdensity="0.002"
 		fogdensitysky="0.9"
 		/>
+
+	<water height="0.3" />
 	
 	<vehicleoption type="/vehicles/seat/seat.vehicle" />
 	<vehicleoption type="/vehicles/focus/focus.vehicle" />

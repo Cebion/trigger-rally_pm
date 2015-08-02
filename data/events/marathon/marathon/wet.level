@@ -42,6 +42,11 @@
 		fogdensitysky="0.4"
 		rain="2000"
 		/>
+
+	<water
+		height="6"
+		watertexture="/textures/water/dark-water.png"
+		/>
 	
 	<vehicleoption type="/vehicles/evo/evo.vehicle" />
 	<vehicleoption type="/vehicles/focus/focus.vehicle" />

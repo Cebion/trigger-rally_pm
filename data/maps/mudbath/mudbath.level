@@ -50,6 +50,11 @@
 		fogdensity="0.015"
 		fogdensitysky="0.9"
 		/>
+
+	<water
+		height="2.5"
+		watertexture="/textures/water/muddy-water.png"
+		/>
 	
 	<vehicleoption type="/vehicles/seat/seat.vehicle" />
 	<vehicleoption type="/vehicles/focus/focus.vehicle" />

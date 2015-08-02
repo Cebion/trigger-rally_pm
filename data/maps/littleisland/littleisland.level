@@ -43,6 +43,11 @@
 		fogdensitysky="0.3"
 		/>
 
+	<water
+		height="6"
+		watertexture="/textures/water/default.png"
+		/>
+
 	<vehicleoption type="/vehicles/seat/seat.vehicle" />
 	<vehicleoption type="/vehicles/focus/focus.vehicle" />	
 	<vehicleoption type="/vehicles/evo/evo.vehicle" />

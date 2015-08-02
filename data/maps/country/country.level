@@ -57,6 +57,11 @@
 		fogdensity="0.003"
 		fogdensitysky="0.2"
 		/>
+
+	<water
+		height="1"
+		watertexture="/textures/water/dark-water.png"
+		/>
 	
 	<vehicleoption type="/vehicles/seat/seat.vehicle" />
 	<vehicleoption type="/vehicles/focus/focus.vehicle" />

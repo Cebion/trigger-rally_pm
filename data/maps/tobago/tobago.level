@@ -12,9 +12,9 @@
 		colormap="c.jpg"
 		foliagemap="f.png"
 		hudmap="c.jpg"
-		tilesize="16"
+		tilesize="32"
 		horizontalscale="3"
-		verticalscale="0.24"
+		verticalscale="0.05"
 		>
 		
 		<foliageband
@@ -40,6 +40,11 @@
 		fogcolor="0.9, 1, 1"
 		fogdensity="0.002"
 		fogdensitysky="0.8"
+		/>
+
+	<water
+		height="0.4"
+		watertexture="/textures/water/pool-water.png"
 		/>
 
 	<vehicleoption type="/vehicles/seat/seat.vehicle" />

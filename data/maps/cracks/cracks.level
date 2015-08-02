@@ -43,6 +43,11 @@
 		rain="140"
 		/>
 
+	<water
+		height="17"
+		watertexture="/textures/water/black-water.png"
+		/>
+
 	<vehicleoption type="/vehicles/seat/seat.vehicle" />
 	<vehicleoption type="/vehicles/focus/focus.vehicle" />
 	<vehicleoption type="/vehicles/evo/evo.vehicle" />
