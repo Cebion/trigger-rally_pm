@@ -90,6 +90,9 @@ bool TriggerGame::loadLevel(const std::string &filename)
   weather.fog.density_sky = 0.8f;
   weather.precip.rain = 0.0f;
   
+  water.enabled = false;
+  water.height = 0.0f;
+  
   TiXmlDocument xmlfile(filename.c_str());
   TiXmlElement *rootelem = PUtil::loadRootElement(xmlfile, "level");
   if (!rootelem) return false;
@@ -236,6 +239,15 @@ bool TriggerGame::loadLevel(const std::string &filename)
       
       val = walk->Attribute("rain");
       if (val && MainApp::cfg_weather) weather.precip.rain = atof(val);
+    }
+    else
+    if (!strcmp(walk->Value(), "water"))
+    {
+        water.enabled = true;
+        val = walk->Attribute("height");
+
+        if (val != nullptr)
+            sscanf(val, "%f", &water.height);
     }
   }
   

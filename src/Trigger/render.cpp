@@ -112,15 +112,15 @@ void MainApp::renderWater()
             {
                 float ht,alpha;
                 ht = game->terrain->getHeight((x)*20.0,(y+1)*20.0);
-                alpha = 1.0 - exp(ht-40.3);
+                alpha = 1.0 - exp(ht - game->water.height);
                 CLAMP(alpha,0.0,0.5);
                 glColor4f(1.0,1.0,1.0,alpha);
-                glVertex3f(x,y+1,40.3);
+                glVertex3f(x, y+1, game->water.height);
                 ht = game->terrain->getHeight((x)*20.0,(y)*20.0);
-                alpha = 1.0 - exp(ht-40.3);
+                alpha = 1.0 - exp(ht - game->water.height);
                 CLAMP(alpha,0.0,0.5);
                 glColor4f(1.0,1.0,1.0,alpha);
-                glVertex3f(x,y,40.3);
+                glVertex3f(x, y, game->water.height);
             }
             glEnd();
         }
@@ -882,7 +882,8 @@ void MainApp::renderStateGame(float eyetranslation)
 
     glEnable(GL_TEXTURE_2D);
 
-    renderWater();
+    if (game->water.enabled)
+        renderWater();
 
     getSSRender().render(psys_dirt);
 

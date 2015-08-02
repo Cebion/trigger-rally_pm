@@ -102,7 +102,19 @@ private:
       float rain;
     } precip;
   } weather;
-  
+
+    ///
+    /// @brief Water information.
+    /// @todo Enable, load and use custom water texture?
+    /// @todo Maybe remove defaults, used in `game.cpp`.
+    ///
+    struct
+    {
+        bool        enabled = false;        ///< Enables or disables the water.
+        float       height  = 0.0f;         ///< The height of the water.
+//      PTexture    *tex    = tex_water;    ///< Custom water texture.
+    } water;
+
 public:
   std::vector<PVehicleType *> vehiclechoices;
   
