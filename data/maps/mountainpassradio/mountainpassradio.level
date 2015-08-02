@@ -46,6 +46,7 @@
 	<water
 		height="50.0"
 		watertexture="/textures/water/radioactive_waste.png"
+		alpha="1.0"
 		/>
 
 	<vehicleoption type="/vehicles/seat/seat.vehicle" />
