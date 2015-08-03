@@ -89,6 +89,7 @@ bool TriggerGame::loadLevel(const std::string &filename)
   weather.fog.density = 0.01f;
   weather.fog.density_sky = 0.8f;
   weather.precip.rain = 0.0f;
+  weather.precip.snowfall = 0.0f;
   
   water.enabled = false;
   water.height = 0.0f;
@@ -243,6 +244,10 @@ bool TriggerGame::loadLevel(const std::string &filename)
       
       val = walk->Attribute("rain");
       if (val && MainApp::cfg_weather) weather.precip.rain = atof(val);
+      
+      val = walk->Attribute("snowfall");
+      if (val != nullptr && MainApp::cfg_weather)
+        weather.precip.snowfall = atof(val);
     }
     else
     if (!strcmp(walk->Value(), "water"))

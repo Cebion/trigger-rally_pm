@@ -100,6 +100,7 @@ private:
     } fog;
     struct {
       float rain;
+      float snowfall;
     } precip;
   } weather;
 
@@ -192,6 +193,13 @@ struct RainDrop {
   float life, prevlife;
 };
 
+struct SnowFlake
+{
+    vec3f drop_pt;
+    vec3f drop_vect;
+    float life;
+    float prevlife;
+};
 
 struct UserControl {
   enum {
@@ -358,7 +366,8 @@ private:
   float crashnoise_timeout;
   
   std::vector<RainDrop> rain;
-  
+  std::vector<SnowFlake> snowfall;
+
   //
   
   int loadscreencount;

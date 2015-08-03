@@ -804,6 +804,44 @@ void MainApp::renderStateGame(float eyetranslation)
         glEnd();
     }
 
+#define SNOWFLAKE_SIZE      3.0f
+
+// NOTE: must not be less than 1.0f
+#define SNOWFLAKE_MAXLIFE   2.5f
+
+    if (!glIsEnabled(GL_PROGRAM_POINT_SIZE))
+        glEnable(GL_PROGRAM_POINT_SIZE);
+
+    GLfloat ops; // Original Point Size, for to be restored
+
+    glGetFloatv(GL_POINT_SIZE, &ops);
+    glPointSize(SNOWFLAKE_SIZE);
+
+    for (const SnowFlake &sf: snowfall)
+    {
+        const vec3f pt = sf.drop_pt + sf.drop_vect * sf.life;
+        GLfloat alpha;
+
+        if (sf.life > SNOWFLAKE_MAXLIFE)
+        {
+            alpha = 0.0f;
+        }
+        else
+        if (sf.life > 1.0f)
+        {
+            alpha = SNOWFLAKE_MAXLIFE - sf.life - 1.0f;
+        }
+        else
+            alpha = 1.0f;
+
+        glBegin(GL_POINTS);
+        glColor4f(1.0f, 1.0f, 1.0f, alpha);
+        glVertex3fv(pt);
+        glEnd();
+    }
+
+    glPointSize(ops);
+
     const vec4f checkpoint_col[3] =
     {
         vec4f(1.0f, 0.0f, 0.0f, 0.8f),  // 0 = next checkpoint
