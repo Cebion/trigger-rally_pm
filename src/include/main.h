@@ -113,6 +113,7 @@ private:
         float       height      = 0.0f;     ///< The height of the water.
         std::string texname     = "";       ///< Custom water texture.
         bool        useralpha   = false;    ///< Use alpha provided by user?
+        bool        fixedalpha  = false;    ///< Use the same alpha for all the water?
         float       alpha       = 1.0f;     ///< Default user alpha value.
     } water;
 

@@ -95,6 +95,7 @@ bool TriggerGame::loadLevel(const std::string &filename)
   water.texname = "";
   water.useralpha = false;
   water.alpha = 1.0f;
+  water.fixedalpha = false;
   
   TiXmlDocument xmlfile(filename.c_str());
   TiXmlElement *rootelem = PUtil::loadRootElement(xmlfile, "level");
@@ -268,6 +269,11 @@ bool TriggerGame::loadLevel(const std::string &filename)
         }
         else
             water.useralpha = false;
+
+        val = walk->Attribute("fixedalpha");
+
+        if (val != nullptr && !strcmp(val, "yes"))
+            water.fixedalpha = true;
     }
   }
   

@@ -110,9 +110,14 @@ void MainApp::renderWater()
             glBegin(GL_TRIANGLE_STRIP);
             for (int x=minx; x<=maxx; ++x)
             {
+                float maxalpha = 0.5f;
+
                 if (game->water.useralpha)
+                    maxalpha = game->water.alpha;
+
+                if (game->water.fixedalpha)
                 {
-                    glColor4f(1.0f, 1.0f, 1.0f, game->water.alpha);
+                    glColor4f(1.0f, 1.0f, 1.0f, maxalpha);
                     glVertex3f(x, y+1, game->water.height);
                     glVertex3f(x, y, game->water.height);
                 }
@@ -121,14 +126,12 @@ void MainApp::renderWater()
                     float ht,alpha;
                     ht = game->terrain->getHeight((x)*20.0,(y+1)*20.0);
                     alpha = 1.0 - exp(ht - game->water.height);
-                    //CLAMP(alpha,0.0,0.5);
-                    CLAMP(alpha, 0.0f, 1.0f);
+                    CLAMP(alpha, 0.0f, maxalpha);
                     glColor4f(1.0,1.0,1.0,alpha);
                     glVertex3f(x, y+1, game->water.height);
                     ht = game->terrain->getHeight((x)*20.0,(y)*20.0);
                     alpha = 1.0 - exp(ht - game->water.height);
-                    //CLAMP(alpha,0.0,0.5);
-                    CLAMP(alpha, 0.0f, 1.0f);
+                    CLAMP(alpha, 0.0f, maxalpha);
                     glColor4f(1.0,1.0,1.0,alpha);
                     glVertex3f(x, y, game->water.height);
                 }
