@@ -43,8 +43,8 @@
 
 		weather:
 			Turns weather effects on and off.
-			"yes" means that rain will be displayed.
-			"no" means that it won't be.
+			"yes" means that rain and snowfall will be displayed.
+			"no" means that they won't be.
 	-->
 
 	<!-- The possible paths of the data directory, ordered by decreasing priority.
