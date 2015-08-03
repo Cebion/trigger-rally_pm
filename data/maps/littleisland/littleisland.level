@@ -45,7 +45,8 @@
 
 	<water
 		height="6"
-		watertexture="/textures/water/default.png"
+		watertexture="/textures/water/dark-water.png"
+		alpha="0.7"
 		/>
 
 	<vehicleoption type="/vehicles/seat/seat.vehicle" />
