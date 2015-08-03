@@ -28,6 +28,7 @@
 	<weather
 		cloudtexture="/textures/sky/overcast.jpg"
 		fogcolor="0.74, 0.72, 0.7"
+		snowfall="400.0"
 		/>
 	
 	<vehicleoption type="/vehicles/seat/seat.vehicle" />
