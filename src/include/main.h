@@ -238,6 +238,13 @@ public:
     hybrid
   };
 
+  enum SnowFlakeType
+  {
+      point,
+      square,
+      textured
+  };
+
   // TODO: these shouldn't be static+public, but the simplicity is worth it for now
   static GLfloat    cfg_anisotropy;     ///< Anisotropic filter quality.
   static bool       cfg_foliage;        ///< Foliage on/off flag.
@@ -268,6 +275,8 @@ private:
   float hud_speedo_start_deg;
   float hud_speedo_mps_deg_mult;
   float hud_speedo_mps_speed_mult;
+
+    SnowFlakeType cfg_snowflaketype = SnowFlakeType::point;
 
   enum Action {
     ActionForward,
@@ -317,6 +326,7 @@ private:
            *tex_water,
            *tex_waterdefault,
            *tex_dirt,
+           *tex_snowflake,
            *tex_shadow,
            *tex_hud_revs,
            *tex_hud_revneedle,

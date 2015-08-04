@@ -264,6 +264,7 @@ void MainApp::loadConfig()
   cfg_weather = true;
   cfg_speed_unit = mph;
   cfg_speed_style = analogue;
+  cfg_snowflaketype = SnowFlakeType::point;
   cfg_datadirs.clear();
 
   hud_speedo_start_deg = MPH_ZERO_DEG;
@@ -438,6 +439,19 @@ void MainApp::loadConfig()
                 cfg_weather = false;
             else // "yes"
                 cfg_weather = true;
+        }
+        
+        val = walk->Attribute("snowflaketype");
+        
+        if (val)
+        {
+            if (!strcmp(val, "square"))
+                cfg_snowflaketype = SnowFlakeType::square;
+            else
+            if (!strcmp(val, "textured"))
+                cfg_snowflaketype = SnowFlakeType::textured;
+            else // default
+                cfg_snowflaketype = SnowFlakeType::point;
         }
     }
     else
@@ -798,6 +812,8 @@ bool MainApp::loadAll()
   if (!(tex_button_prev = getSSTexture().loadTexture("/textures/button_prev.png"))) return false;
   
   if (!(tex_waterdefault = getSSTexture().loadTexture("/textures/water/default.png"))) return false;
+  
+  if (!(tex_snowflake = getSSTexture().loadTexture("/textures/snowflake.png"))) return false;
 
   if (cfg_enable_sound) {
     if (!(aud_engine = getSSAudio().loadSample("/sounds/engine.wav", false))) return false;
