@@ -1,0 +1,105 @@
+<?xml version="1.0" ?>
+<level 
+	name="Frozen"
+	comment="Winter is here."
+	author="Onsemeliot"
+	description="fast and smooth; alternative routes"
+	screenshot="ss.png"
+	minimap="mm.png">
+	
+	<terrain
+		heightmap="h.png"
+		colormap="c.png"
+		foliagemap="f.png"
+		hudmap="c.png"
+		tilesize="32"
+		horizontalscale="5"
+		verticalscale="0.1"
+		>
+
+		<foliageband
+			middle="0.85"
+			range="0.03"
+			density="0.000002"
+			sprite="/textures/veg/snowy-tree.png"
+			spritecount="2"
+			scale="10"
+			/>
+
+		<foliageband
+			middle="0.72"
+			range="0.15"
+			density="0.0000004"
+			sprite="/textures/veg/bland-birch.png"
+			spritecount="2"
+			scale="12"
+			/>
+
+		<foliageband
+			middle="0.65"
+			range="0.22"
+			density="0.00003"
+			sprite="/textures/veg/bush-ash.png"
+			spritecount="2"
+			scale="1.5"
+			/>
+
+		<foliageband
+			middle="0.31"
+			range="0.28"
+			density="0.000005"
+			sprite="/textures/veg/snowy-spruce.png"
+			spritecount="2"
+			scale="15"
+			/>
+
+		<foliageband
+			middle="0.61"
+			range="0.28"
+			density="0.00001"
+			sprite="/textures/veg/snowy-spruce.png"
+			spritecount="2"
+			scale="8"
+			/>
+
+		<foliageband
+			middle="0.77"
+			range="0.12"
+			density="0.00001"
+			sprite="/textures/veg/snowy-spruce.png"
+			spritecount="2"
+			scale="5"
+			/>
+	</terrain>
+	
+	<weather
+		cloudtexture="/textures/sky/dark-clouds.png"
+		cloudscrollrate="0.003"
+		fogcolor="0.65, 0.65, 0.8"
+		fogdensity="0.006"
+		fogdensitysky="0.9"
+		snowfall="600"
+		/>
+
+	<water
+		height="9"
+		watertexture="/textures/water/dark-ice-water.png"
+		alpha="0.7"
+		/>
+	
+	<vehicleoption type="/vehicles/seat/seat.vehicle" />
+	<vehicleoption type="/vehicles/focus/focus.vehicle" />
+	<vehicleoption type="/vehicles/evo/evo.vehicle" />
+	
+	<race coordscale="5, 5" targettime="281">
+		
+		<startposition pos="64, 140" oridegrees="0" />
+		<checkpoint coords="85, 277" />
+		<checkpoint coords="184, 444" />
+		<checkpoint coords="280, 463" />
+		<checkpoint coords="413, 226" />
+		<checkpoint coords="312, 59" />
+		<checkpoint coords="255, 38" />
+		<checkpoint coords="64, 140" />
+	</race>
+</level>

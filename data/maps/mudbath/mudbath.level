@@ -52,8 +52,10 @@
 		/>
 
 	<water
-		height="2.5"
+		height="2.3"
 		watertexture="/textures/water/muddy-water.png"
+		alpha="0.7"
+		fixedalpha="yes"
 		/>
 	
 	<vehicleoption type="/vehicles/seat/seat.vehicle" />
