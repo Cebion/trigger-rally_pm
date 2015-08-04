@@ -26,6 +26,7 @@
 		anisotropy="4"
 		foliage="yes"
 		weather="yes"
+		snowflaketype="point"
 		/>
 	<!--
 		anisotropy:
@@ -45,6 +46,12 @@
 			Turns weather effects on and off.
 			"yes" means that rain and snowfall will be displayed.
 			"no" means that they won't be.
+
+		snowflaketype:
+			Chooses the kind of snowflake used in levels with snowfall.
+			"point" - default, but may not work on some computers
+			"square" - failsafe option but rather ugly
+			"textured" - the fancy, resource-heavy option
 	-->
 
 	<!-- The possible paths of the data directory, ordered by decreasing priority.
