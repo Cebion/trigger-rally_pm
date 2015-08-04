@@ -807,7 +807,7 @@ void MainApp::renderStateGame(float eyetranslation)
 #define SNOWFLAKE_SIZE      3.0f
 
 // NOTE: must not be less than 1.0f
-#define SNOWFLAKE_MAXLIFE   2.5f
+#define SNOWFLAKE_MAXLIFE   1.5f
 
     if (!glIsEnabled(GL_PROGRAM_POINT_SIZE))
         glEnable(GL_PROGRAM_POINT_SIZE);
@@ -829,7 +829,10 @@ void MainApp::renderStateGame(float eyetranslation)
         else
         if (sf.life > 1.0f)
         {
-            alpha = SNOWFLAKE_MAXLIFE - sf.life - 1.0f;
+#define ML      SNOWFLAKE_MAXLIFE
+            // this equation ensures that snowflaks fade in
+            alpha = (sf.life - ML) / (1 - ML);
+#undef ML
         }
         else
             alpha = 1.0f;

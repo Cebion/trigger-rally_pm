@@ -1407,8 +1407,8 @@ void MainApp::tickStateGame(float delta)
   rain.resize(j);
   }
 
-#define SNOWFALL_START_LIFE     1.5f
-#define SNOWFALL_POS_RANDOM     75.0f
+#define SNOWFALL_START_LIFE     1.6f
+#define SNOWFALL_POS_RANDOM     100.0f
 #define SNOWFALL_VEL_RANDOM     0.33f
 
   // snowfall logic; this is rain logic CPM'd (Copied, Pasted and Modified) -- A.B.
@@ -1420,7 +1420,7 @@ void MainApp::tickStateGame(float delta)
   for (int i=0; i<inumflakes; i++) {
     snowfall.push_back(SnowFlake());
     snowfall.back().drop_pt = vec3f(campos.x,campos.y,0);
-    snowfall.back().drop_pt += camvel * SNOWFALL_START_LIFE;
+    snowfall.back().drop_pt += camvel * SNOWFALL_START_LIFE / 2;
     snowfall.back().drop_pt += vec3f::rand() * SNOWFALL_POS_RANDOM;
     snowfall.back().drop_pt.z = game->terrain->getHeight(snowfall.back().drop_pt.x, snowfall.back().drop_pt.y);
     snowfall.back().drop_vect = def_drop_vect + vec3f::rand() * SNOWFALL_VEL_RANDOM;
