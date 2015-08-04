@@ -804,11 +804,16 @@ void MainApp::renderStateGame(float eyetranslation)
         glEnd();
     }
 
-#define SNOWFLAKE_SIZE      3.0f
+#define SNOWFLAKE_POINT_SIZE        3.0f
+#define SNOWFLAKE_BOX_SIZE          0.2f
 
-// NOTE: must not be less than 1.0f
-#define SNOWFLAKE_MAXLIFE   1.5f
+// NOTE: must be greater than 1.0f
+#define SNOWFLAKE_MAXLIFE           1.5f
 
+// use glPointSize() or actually draw the snowflakes as triangles?
+//#define USE_GLPOINTSIZE
+
+#ifdef USE_GLPOINTSIZE
     if (!glIsEnabled(GL_PROGRAM_POINT_SIZE))
         glEnable(GL_PROGRAM_POINT_SIZE);
 
@@ -816,6 +821,7 @@ void MainApp::renderStateGame(float eyetranslation)
 
     glGetFloatv(GL_POINT_SIZE, &ops);
     glPointSize(SNOWFLAKE_SIZE);
+#endif
 
     for (const SnowFlake &sf: snowfall)
     {
@@ -837,13 +843,33 @@ void MainApp::renderStateGame(float eyetranslation)
         else
             alpha = 1.0f;
 
+#ifdef USE_GLPOINTSIZE
         glBegin(GL_POINTS);
         glColor4f(1.0f, 1.0f, 1.0f, alpha);
         glVertex3fv(pt);
         glEnd();
+#else
+#define SBS     SNOWFLAKE_BOX_SIZE
+        vec3f zag = campos - sf.drop_pt;
+
+        zag = zag.cross(sf.drop_vect);
+        zag.normalize();
+        zag *= SBS;
+
+        glBegin(GL_TRIANGLE_STRIP);
+        glColor4f(1.0f, 1.0f, 1.0f, alpha);
+        glVertex3f(pt.x,            pt.y,           pt.z                );
+        glVertex3f(pt.x,            pt.y,           pt.z + zag.z + SBS  );
+        glVertex3f(pt.x + zag.x,    pt.y + zag.y,   pt.z                );
+        glVertex3f(pt.x + zag.x,    pt.y + zag.y,   pt.z + zag.z + SBS  );
+        glEnd();
+#undef SBS
+#endif
     }
 
+#ifdef USE_GLPOINTSIZE
     glPointSize(ops);
+#endif
 
     const vec4f checkpoint_col[3] =
     {
