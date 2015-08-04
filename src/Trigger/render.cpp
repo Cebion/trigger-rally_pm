@@ -810,18 +810,18 @@ void MainApp::renderStateGame(float eyetranslation)
 // NOTE: must be greater than 1.0f
 #define SNOWFLAKE_MAXLIFE           1.5f
 
-// use glPointSize() or actually draw the snowflakes as triangles?
-//#define USE_GLPOINTSIZE
+    glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
 
-#ifdef USE_GLPOINTSIZE
-    if (!glIsEnabled(GL_PROGRAM_POINT_SIZE))
-        glEnable(GL_PROGRAM_POINT_SIZE);
+    // use glPointSize() or actually draw the snowflakes as triangles?
+    const GLboolean use_glpointsize = glIsEnabled(GL_VERTEX_PROGRAM_POINT_SIZE);
 
     GLfloat ops; // Original Point Size, for to be restored
 
-    glGetFloatv(GL_POINT_SIZE, &ops);
-    glPointSize(SNOWFLAKE_SIZE);
-#endif
+    if (use_glpointsize)
+    {
+        glGetFloatv(GL_POINT_SIZE, &ops);
+        glPointSize(SNOWFLAKE_POINT_SIZE);
+    }
 
     for (const SnowFlake &sf: snowfall)
     {
@@ -843,33 +843,35 @@ void MainApp::renderStateGame(float eyetranslation)
         else
             alpha = 1.0f;
 
-#ifdef USE_GLPOINTSIZE
-        glBegin(GL_POINTS);
-        glColor4f(1.0f, 1.0f, 1.0f, alpha);
-        glVertex3fv(pt);
-        glEnd();
-#else
+        if (use_glpointsize)
+        {
+            glBegin(GL_POINTS);
+            glColor4f(1.0f, 1.0f, 1.0f, alpha);
+            glVertex3fv(pt);
+            glEnd();
+        }
+        else
+        {
 #define SBS     SNOWFLAKE_BOX_SIZE
-        vec3f zag = campos - sf.drop_pt;
+            vec3f zag = campos - sf.drop_pt;
 
-        zag = zag.cross(sf.drop_vect);
-        zag.normalize();
-        zag *= SBS;
+            zag = zag.cross(sf.drop_vect);
+            zag.normalize();
+            zag *= SBS;
 
-        glBegin(GL_TRIANGLE_STRIP);
-        glColor4f(1.0f, 1.0f, 1.0f, alpha);
-        glVertex3f(pt.x,            pt.y,           pt.z                );
-        glVertex3f(pt.x,            pt.y,           pt.z + zag.z + SBS  );
-        glVertex3f(pt.x + zag.x,    pt.y + zag.y,   pt.z                );
-        glVertex3f(pt.x + zag.x,    pt.y + zag.y,   pt.z + zag.z + SBS  );
-        glEnd();
+            glBegin(GL_TRIANGLE_STRIP);
+            glColor4f(1.0f, 1.0f, 1.0f, alpha);
+            glVertex3f(pt.x,            pt.y,           pt.z                );
+            glVertex3f(pt.x,            pt.y,           pt.z + zag.z + SBS  );
+            glVertex3f(pt.x + zag.x,    pt.y + zag.y,   pt.z                );
+            glVertex3f(pt.x + zag.x,    pt.y + zag.y,   pt.z + zag.z + SBS  );
+            glEnd();
 #undef SBS
-#endif
+        }
     }
 
-#ifdef USE_GLPOINTSIZE
-    glPointSize(ops);
-#endif
+    if (use_glpointsize)
+        glPointSize(ops); // restore original point size
 
     const vec4f checkpoint_col[3] =
     {
