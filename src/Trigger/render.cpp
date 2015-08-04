@@ -822,6 +822,7 @@ void MainApp::renderStateGame(float eyetranslation)
     if (cfg_snowflaketype == SnowFlakeType::textured)
     {
         glEnable(GL_TEXTURE_2D);
+        glBlendFunc(GL_SRC_COLOR, GL_ONE);
         tex_snowflake->bind();
     }
 
@@ -894,7 +895,10 @@ void MainApp::renderStateGame(float eyetranslation)
 
     // disable textures
     if (cfg_snowflaketype == SnowFlakeType::textured)
+    {
         glDisable(GL_TEXTURE_2D);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    }
 
     const vec4f checkpoint_col[3] =
     {
