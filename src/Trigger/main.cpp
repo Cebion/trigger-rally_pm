@@ -1170,13 +1170,21 @@ void MainApp::tickStateGame(float delta)
       for (unsigned int k=0; k<game->vehicle[i]->part[j].wheel.size(); k++) {
         if (rand01 * 20.0f < game->vehicle[i]->part[j].wheel[k].dirtthrow)
         {
+#define BRIGHTEN_ADD        0.20f
             const vec3f dirtpos = game->vehicle[i]->part[j].wheel[k].dirtthrowpos;
             const vec3f dirtvec = game->vehicle[i]->part[j].wheel[k].dirtthrowvec;
-            const vec3f dirtcolor = game->terrain->getCmapColor(dirtpos);
+            vec3f dirtcolor = game->terrain->getCmapColor(dirtpos);
 
+            dirtcolor.x += BRIGHTEN_ADD;
+            dirtcolor.y += BRIGHTEN_ADD;
+            dirtcolor.z += BRIGHTEN_ADD;
+            CLAMP(dirtcolor.x, 0.0f, 1.0f);
+            CLAMP(dirtcolor.y, 0.0f, 1.0f);
+            CLAMP(dirtcolor.z, 0.0f, 1.0f);
             psys_dirt->setColorStart(dirtcolor.x, dirtcolor.y, dirtcolor.z, 1.0f);
             psys_dirt->setColorEnd(dirtcolor.x, dirtcolor.y, dirtcolor.z, 0.0f);
             psys_dirt->addParticle(dirtpos, dirtvec + vec3f::rand() * 10.0f);
+#undef BRIGHTEN_ADD
         }
       }
     }
