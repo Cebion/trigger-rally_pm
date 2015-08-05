@@ -38,6 +38,14 @@
 			spritecount="2"
 			/>
 		<foliageband
+			middle="0.5"
+			range="0.15"
+			density="0.00001"
+			sprite="/textures/veg/wide-tree.png"
+			spritecount="2"
+			scale="9"
+			/>
+		<foliageband
 			middle="0.6"
 			range="0.2"
 			density="0.00001"
