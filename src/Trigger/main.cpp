@@ -860,7 +860,7 @@ bool MainApp::loadAll()
   psys_dirt->setColorStart(0.5f, 0.4f, 0.2f, 1.0f);
   psys_dirt->setColorEnd(0.5f, 0.4f, 0.2f, 0.0f);
   psys_dirt->setSize(0.1f, 0.5f);
-  psys_dirt->setDecay(7.0f);
+  psys_dirt->setDecay(6.0f);
   psys_dirt->setTexture(tex_dirt);
   psys_dirt->setBlend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   
@@ -1183,7 +1183,7 @@ void MainApp::tickStateGame(float delta)
             CLAMP(dirtcolor.z, 0.0f, 1.0f);
             psys_dirt->setColorStart(dirtcolor.x, dirtcolor.y, dirtcolor.z, 1.0f);
             psys_dirt->setColorEnd(dirtcolor.x, dirtcolor.y, dirtcolor.z, 0.0f);
-            psys_dirt->addParticle(dirtpos, dirtvec + vec3f::rand() * 10.0f);
+            psys_dirt->addParticle(dirtpos, dirtvec /*+ vec3f::rand() * 10.0f*/);
 #undef BRIGHTEN_ADD
         }
       }
