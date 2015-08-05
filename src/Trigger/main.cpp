@@ -1169,9 +1169,15 @@ void MainApp::tickStateGame(float delta)
     for (unsigned int j=0; j<game->vehicle[i]->part.size(); j++) {
       for (unsigned int k=0; k<game->vehicle[i]->part[j].wheel.size(); k++) {
         if (rand01 * 20.0f < game->vehicle[i]->part[j].wheel[k].dirtthrow)
-          psys_dirt->addParticle(
-            game->vehicle[i]->part[j].wheel[k].dirtthrowpos,
-            game->vehicle[i]->part[j].wheel[k].dirtthrowvec + vec3f::rand() * 10.0f);
+        {
+            const vec3f dirtpos = game->vehicle[i]->part[j].wheel[k].dirtthrowpos;
+            const vec3f dirtvec = game->vehicle[i]->part[j].wheel[k].dirtthrowvec;
+            const vec3f dirtcolor = game->terrain->getCmapColor(dirtpos);
+
+            psys_dirt->setColorStart(dirtcolor.x, dirtcolor.y, dirtcolor.z, 1.0f);
+            psys_dirt->setColorEnd(dirtcolor.x, dirtcolor.y, dirtcolor.z, 0.0f);
+            psys_dirt->addParticle(dirtpos, dirtvec + vec3f::rand() * 10.0f);
+        }
       }
     }
   }

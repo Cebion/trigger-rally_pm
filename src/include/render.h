@@ -138,6 +138,16 @@ public:
   int getcy() const { return cy; }
   int getcc() const { return cc; }
   uint8 *getData() { return data; }
+
+  uint8 & getByte(int i)
+  {
+      return data[i];
+  }
+  
+  uint8 getByte(int i) const
+  {
+      return data[i];
+  }
   
   void swap (PImage &other) throw ()
   {
@@ -471,6 +481,34 @@ public:
     vec3f normal;
   };
   
+    ///
+    /// @brief Returns the color of the pixel in the colormap that corresponds
+    ///  to the given position in the terrain.
+    /// @note The height component Z is ignored.
+    /// @todo Should check if cmap.getcc() returns at least 3?
+    /// @todo Should check if cmap.getcx() == cmap.getcy()?
+    /// @param [in] pos   Position in the terrain.
+    /// @returns Color in OpenGL-style RGB.
+    ///
+    vec3f getCmapColor(const vec3f &pos) const
+    {
+        vec3f r;
+
+        // Map Size and Trimmed positions
+        const unsigned int ms = static_cast<unsigned int> (getMapSize());
+        const unsigned int tx = static_cast<unsigned int> (pos.x) % ms;
+        const unsigned int ty = static_cast<unsigned int> (pos.y) % ms;
+
+        const unsigned int x = static_cast<unsigned int> (tx * cmap.getcx() / getMapSize());
+        const unsigned int y = static_cast<unsigned int> (ty * cmap.getcy() / getMapSize());
+
+        r.x = cmap.getByte((y * cmap.getcx() + x) * cmap.getcc() + 0);
+        r.y = cmap.getByte((y * cmap.getcx() + x) * cmap.getcc() + 1);
+        r.z = cmap.getByte((y * cmap.getcx() + x) * cmap.getcc() + 2);
+        r /= 255.0f;
+        return r;
+    }
+  
   void getContactInfo(ContactInfo &tci) {
     float x = tci.pos.x * scale_hz_inv;
     int xi = (int)x;
@@ -526,7 +564,7 @@ public:
   
   PTexture *getHUDMapTexture() { return tex_hud_map; }
   
-  float getMapSize() { return totsize * scale_hz; }
+  float getMapSize() const { return totsize * scale_hz; }
 };
 
 
