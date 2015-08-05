@@ -5,7 +5,7 @@
 // License: GPL version 2 (see included gpl.txt)
 
 
-
+#include <cmath>
 #include "vbuffer.h"
 
 
@@ -499,8 +499,8 @@ public:
         const unsigned int tx = static_cast<unsigned int> (pos.x) % ms;
         const unsigned int ty = static_cast<unsigned int> (pos.y) % ms;
 
-        const unsigned int x = static_cast<unsigned int> (tx * cmap.getcx() / getMapSize());
-        const unsigned int y = static_cast<unsigned int> (ty * cmap.getcy() / getMapSize());
+        const long int x = std::lround(tx * cmap.getcx() / getMapSize());
+        const long int y = std::lround(ty * cmap.getcy() / getMapSize());
 
         r.x = cmap.getByte((y * cmap.getcx() + x) * cmap.getcc() + 0);
         r.y = cmap.getByte((y * cmap.getcx() + x) * cmap.getcc() + 1);
