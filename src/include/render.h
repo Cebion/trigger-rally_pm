@@ -487,6 +487,7 @@ public:
     /// @note The height component Z is ignored.
     /// @todo Should check if cmap.getcc() returns at least 3?
     /// @todo Should check if cmap.getcx() == cmap.getcy()?
+    /// @todo Should remove paranoid clampings?
     /// @param [in] pos   Position in the terrain.
     /// @returns Color in OpenGL-style RGB.
     ///
@@ -499,13 +500,14 @@ public:
         const unsigned int tx = static_cast<unsigned int> (pos.x) % ms;
         const unsigned int ty = static_cast<unsigned int> (pos.y) % ms;
 
-        const long int x = std::lround(tx * cmap.getcx() / getMapSize());
-        const long int y = std::lround(ty * cmap.getcy() / getMapSize());
+        long int x = std::lround(tx * cmap.getcx() / getMapSize());
+        long int y = std::lround(ty * cmap.getcy() / getMapSize());
 
-        r.x = cmap.getByte((y * cmap.getcx() + x) * cmap.getcc() + 0);
-        r.y = cmap.getByte((y * cmap.getcx() + x) * cmap.getcc() + 1);
-        r.z = cmap.getByte((y * cmap.getcx() + x) * cmap.getcc() + 2);
-        r /= 255.0f;
+        CLAMP_UPPER(x, cmap.getcx() - 1);
+        CLAMP_UPPER(y, cmap.getcy() - 1);
+        r.x = cmap.getByte((y * cmap.getcx() + x) * cmap.getcc() + 0) / 255.0f;
+        r.y = cmap.getByte((y * cmap.getcx() + x) * cmap.getcc() + 1) / 255.0f;
+        r.z = cmap.getByte((y * cmap.getcx() + x) * cmap.getcc() + 2) / 255.0f;
         return r;
     }
   
