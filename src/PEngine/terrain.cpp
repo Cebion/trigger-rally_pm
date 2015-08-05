@@ -53,7 +53,7 @@ PTerrain::PTerrain (TiXmlElement *element, const std::string &filepath, PSSTextu
   if (val) colormap = val;
   
   val = element->Attribute("terrainmap");
-  if (val) terrainmap = val;
+  if (val != nullptr) terrainmap = val;
   
   val = element->Attribute("foliagemap");
   if (val && MainApp::cfg_foliage) foliagemap = val;
@@ -248,9 +248,9 @@ PTerrain::PTerrain (TiXmlElement *element, const std::string &filepath, PSSTextu
     throw;
   }
 
-  if (tmap.getcx() != tmap.getcy())
+  if (tmap.getData() != nullptr && tmap.getcx() != tmap.getcy())
     throw MakePException("Load failed: terrainmap not square");
-  
+
   // calculate foliage try counts for tile size
   
   for (unsigned int b = 0; b < foliageband.size(); b++) {
