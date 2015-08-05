@@ -808,7 +808,7 @@ void MainApp::renderStateGame(float eyetranslation)
 #define SNOWFLAKE_BOX_SIZE          0.175f
 
 // NOTE: must be greater than 1.0f
-#define SNOWFLAKE_MAXLIFE           1.5f
+#define SNOWFLAKE_MAXLIFE           4.5f
 
     GLfloat ops; // Original Point Size, for to be restored
 
