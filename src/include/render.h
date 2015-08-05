@@ -139,6 +139,11 @@ public:
   int getcc() const { return cc; }
   uint8 *getData() { return data; }
 
+  const uint8 * getData() const
+  {
+    return data;
+  }
+
   uint8 & getByte(int i)
   {
       return data[i];
@@ -415,6 +420,7 @@ protected:
   std::vector<float> hmap;
   
   PImage cmap;
+  PImage tmap; ///< Terrain map.
   
   std::vector<float> fmap;
   std::vector<PTerrainFoliageBand> foliageband;
@@ -464,7 +470,7 @@ protected:
       return INTERP(data[yiw*cx+xiw],data[yiw*cx+xiw2],x);
     }
   }
-  
+
 public:
   PTerrain(TiXmlElement *element, const std::string &filepath, PSSTexture &ssTexture);
   ~PTerrain();
@@ -511,6 +517,37 @@ public:
         return r;
     }
   
+    ///
+    /// @brief Returns the road surface type corresponding to the given position
+    ///  in the terrain.
+    /// @note The height component Z is ignored.
+    /// @todo Should remove paranoid clampings?
+    /// @param [in] pos   Position in the terrain.
+    /// @returns Terrain type.
+    ///
+    TerrainType getRoadSurface(const vec3f &pos) const
+    {
+        color_rgb temp;
+
+        if (tmap.getData() == nullptr)
+            return TerrainType::Unknown;
+
+        // Map Size and Trimmed positions
+        const unsigned int ms = static_cast<unsigned int> (getMapSize());
+        const unsigned int tx = static_cast<unsigned int> (pos.x) % ms;
+        const unsigned int ty = static_cast<unsigned int> (pos.y) % ms;
+
+        long int x = std::lround(tx * tmap.getcx() / getMapSize());
+        long int y = std::lround(ty * tmap.getcy() / getMapSize());
+
+        CLAMP_UPPER(x, tmap.getcx() - 1);
+        CLAMP_UPPER(y, tmap.getcy() - 1);
+        temp.r = tmap.getByte((y * tmap.getcx() + x) * tmap.getcc() + 0);
+        temp.g = tmap.getByte((y * tmap.getcx() + x) * tmap.getcc() + 1);
+        temp.b = tmap.getByte((y * tmap.getcx() + x) * tmap.getcc() + 2);
+        return PUtil::decideRoadSurface(temp);
+    }
+
   void getContactInfo(ContactInfo &tci) {
     float x = tci.pos.x * scale_hz_inv;
     int xi = (int)x;

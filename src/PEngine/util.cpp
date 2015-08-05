@@ -7,6 +7,38 @@
 
 #include "pengine.h"
 
+///
+/// @brief Returns the road surface based on the RGB color.
+///
+TerrainType PUtil::decideRoadSurface(const color_rgb &c)
+{
+    if (c == color_rgb(100, 100, 100)) return TerrainType::Tarmac;
+    if (c == color_rgb(170, 170, 170)) return TerrainType::Gravel;
+    if (c == color_rgb(255,   0,   0)) return TerrainType::Mud;
+    if (c == color_rgb(255, 255,   0)) return TerrainType::Sand;
+    if (c == color_rgb(255, 255, 255)) return TerrainType::Snow;
+    if (c == color_rgb(170, 170, 255)) return TerrainType::Ice;
+    if (c == color_rgb( 30, 255,  30)) return TerrainType::Grass;
+
+    return TerrainType::Unknown;
+}
+
+///
+/// @brief Returns the road surface friction coefficient.
+///
+float PUtil::decideFrictionCoef(TerrainType tt)
+{
+    if (tt == TerrainType::Tarmac)      return 1.50f;
+    if (tt == TerrainType::Gravel)      return 1.00f;
+    if (tt == TerrainType::Mud)         return 0.75f;
+    if (tt == TerrainType::Sand)        return 0.60f;
+    if (tt == TerrainType::Snow)        return 0.35f;
+    if (tt == TerrainType::Ice)         return 0.10f;
+    if (tt == TerrainType::Grass)       return 0.45f;
+
+    return 1.00f; // tt == TerrainType::Unknown
+}
+
 /*! Get token and value from a string line. The token is the string
  * before first space. The value, is the remaining string
  * \return true if could extract token and value */

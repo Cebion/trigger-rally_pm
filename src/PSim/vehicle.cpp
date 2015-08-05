@@ -966,7 +966,11 @@ void PVehicle::tick(float delta)
         if (perpforce > 0.0f) {
           vec2f friction = vec2f(-surfvel.x, -surfvel.y) * 10000.0f;
           
-          float maxfriction = perpforce * 1.0f;
+          const TerrainType mf_tt = sim.getTerrain()->getRoadSurface(wheel.ref_world.getPosition());
+          const float mf_coef = PUtil::decideFrictionCoef(mf_tt);
+          
+          //float maxfriction = perpforce * 1.0f;
+          float maxfriction = perpforce * mf_coef;
           float testfriction = perpforce * 1.0f;
           
           float leng = friction.length();

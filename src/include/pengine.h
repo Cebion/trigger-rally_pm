@@ -81,6 +81,57 @@ class   PParseException;
 #define UNREFERENCED_PARAMETER(p)   static_cast<void> (p)
 #endif
 
+///
+/// @brief Helper structure for storing colors.
+///
+struct color_rgb
+{
+    uint8_t r=0;    ///< Red.
+    uint8_t g=0;    ///< Green.
+    uint8_t b=0;    ///< Blue.
+    
+    color_rgb() = default;
+    
+    color_rgb(uint8_t r, uint8_t g, uint8_t b):
+        r(r),
+        g(g),
+        b(b)
+    {
+    }
+
+    bool operator == (const color_rgb &rhs) const
+    {
+        if (r == rhs.r &&
+            g == rhs.g &&
+            b == rhs.b)
+            return true;
+
+        return false;
+    }
+    
+    bool operator != (const color_rgb &rhs) const
+    {
+        if (r != rhs.r ||
+            g != rhs.g ||
+            b != rhs.b)
+            return true;
+
+        return false;
+    }
+};
+
+enum TerrainType
+{
+    Unknown,
+    Tarmac,
+    Gravel,
+    Mud,
+    Sand,
+    Snow,
+    Ice,
+    Grass
+};
+
 class PUtil {
 private:
   PUtil() { } // cannot be constructed
@@ -94,6 +145,10 @@ public:
   // Debug level
   static bool isDebugLevel(int debugLevel) { return deblev >= debugLevel; }
   static void setDebugLevel(int debugLevel) { deblev = debugLevel; }
+ 
+  // TODO: these two functions are probably misplaced here
+  static TerrainType decideRoadSurface(const color_rgb &c);
+  static float decideFrictionCoef(TerrainType tt);
  
   /*! Get token and value from a string line. The token is the string
    * before first space. The value, is the remaining string
