@@ -805,7 +805,7 @@ void MainApp::renderStateGame(float eyetranslation)
     }
 
 #define SNOWFLAKE_POINT_SIZE        3.0f
-#define SNOWFLAKE_BOX_SIZE          0.2f
+#define SNOWFLAKE_BOX_SIZE          0.175f
 
 // NOTE: must be greater than 1.0f
 #define SNOWFLAKE_MAXLIFE           1.5f

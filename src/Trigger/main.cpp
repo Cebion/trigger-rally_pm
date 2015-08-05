@@ -1396,11 +1396,11 @@ void MainApp::tickStateGame(float delta)
 #define RAIN_POS_RANDOM         15.0f
 #define RAIN_VEL_RANDOM         2.0f
 
-  const vec3f def_drop_vect(2.5f,0.0f,17.0f);
-  
   vec3f camvel = (campos - campos_prev) * (1.0f / delta);
   
   {
+  const vec3f def_drop_vect(2.5f,0.0f,17.0f);
+
   // randomised number of drops calculation
   float numdrops = game->weather.precip.rain * delta;
   int inumdrops = (int)numdrops;
@@ -1429,12 +1429,14 @@ void MainApp::tickStateGame(float delta)
   rain.resize(j);
   }
 
-#define SNOWFALL_START_LIFE     1.6f
-#define SNOWFALL_POS_RANDOM     100.0f
-#define SNOWFALL_VEL_RANDOM     0.33f
+#define SNOWFALL_START_LIFE     6.5f
+#define SNOWFALL_POS_RANDOM     110.0f
+#define SNOWFALL_VEL_RANDOM     0.8f
 
   // snowfall logic; this is rain logic CPM'd (Copied, Pasted and Modified) -- A.B.
   {
+    const vec3f def_drop_vect(1.3f, 0.0f, 6.0f);
+
   // randomised number of flakes calculation
   float numflakes = game->weather.precip.snowfall * delta;
   int inumflakes = (int)numflakes;
@@ -1446,7 +1448,7 @@ void MainApp::tickStateGame(float delta)
     snowfall.back().drop_pt += vec3f::rand() * SNOWFALL_POS_RANDOM;
     snowfall.back().drop_pt.z = game->terrain->getHeight(snowfall.back().drop_pt.x, snowfall.back().drop_pt.y);
     snowfall.back().drop_vect = def_drop_vect + vec3f::rand() * SNOWFALL_VEL_RANDOM;
-    snowfall.back().life = SNOWFALL_START_LIFE;
+    snowfall.back().life = SNOWFALL_START_LIFE * rand01;
   }
 
   // update life and delete dead snowflakes
