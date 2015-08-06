@@ -870,7 +870,11 @@ void PVehicle::tick(float delta)
       
       PVehicleWheel &wheel = part[i].wheel[j];
       PVehicleTypeWheel &typewheel = type->part[i].wheel[j];
-      
+
+        const TerrainType mf_tt = sim.getTerrain()->getRoadSurface(wheel.ref_world.getPosition());
+        const float mf_coef     = PUtil::decideFrictionCoef(mf_tt);
+        const float mf_resis    = PUtil::decideResistance(mf_tt);
+
       vec3f wclip = wheel.ref_world.getPosition();
       
       //vec3f wclip = vec3f(0,0,2000);
@@ -880,7 +884,7 @@ void PVehicle::tick(float delta)
       
       wclip.z += INTERP(wheel.bumplast, wheel.bumpnext, wheel.bumptravel);
       
-      wheel.spin_vel += drivetorque * typewheel.drive * delta;
+      wheel.spin_vel += drivetorque * typewheel.drive * delta * (1.0f - mf_resis);
       
       float desiredchange = (state.brake1 * typewheel.brake1 +
         state.brake2 * typewheel.brake2) * delta;
@@ -929,15 +933,15 @@ void PVehicle::tick(float delta)
         vec3f rightdir = makevec3f(wheel.ref_world.getInverseOrientationMatrix().row[0]);
         
         //float testval = tci.normal * rightdir;
-        
+
         vec3f surf_forward = tci.normal ^ rightdir;
         surf_forward.normalize();
         vec3f surf_right = surf_forward ^ tci.normal;
         surf_right.normalize();
         
         // add wheel rotation speed to ptvel
-        ptvel += surf_forward * (-wheel.spin_vel * typewheel.radius);
-        
+        ptvel += surf_forward * (-wheel.spin_vel * typewheel.radius) * (1.0f - mf_resis);
+
         vec3f surfvel(
           ptvel * surf_right,
           ptvel * surf_forward,
@@ -965,10 +969,6 @@ void PVehicle::tick(float delta)
         
         if (perpforce > 0.0f) {
           vec2f friction = vec2f(-surfvel.x, -surfvel.y) * 10000.0f;
-          
-          const TerrainType mf_tt   = sim.getTerrain()->getRoadSurface(wheel.ref_world.getPosition());
-          const float mf_coef       = PUtil::decideFrictionCoef(mf_tt);
-          const float mf_resis      = PUtil::decideResistance(mf_tt);
 
           //float maxfriction = perpforce * 1.0f;
           float maxfriction = perpforce * mf_coef;
@@ -978,7 +978,7 @@ void PVehicle::tick(float delta)
           
           if (leng > 0.0f && leng > testfriction)
             friction *= (maxfriction / leng) + 0.02f;
-          
+
           frc += (tci.normal * perpforce +
               surf_right * friction.x +
               surf_forward * friction.y);
@@ -986,15 +986,8 @@ void PVehicle::tick(float delta)
           wheel.spin_vel -= (friction.y * typewheel.radius) * 0.1f * delta;
           
           //wheel.turn_vel -= friction.x * 1.0f * delta;
-          
-          // method 1: modify existing force
-          // method 2: add a second force
-          //frc.y *= 1.0f - mf_resis;
-          
-          vec3f res(0.0f, -frc.y * mf_resis, 0.0f);
-          
+
           body->addForceAtPoint(frc, wclip);
-          body->addForceAtPoint(res, wclip);
           
           wheel.dirtthrow = leng / maxfriction;
           skid_level += wheel.dirtthrow;
