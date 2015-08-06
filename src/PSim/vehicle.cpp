@@ -966,9 +966,10 @@ void PVehicle::tick(float delta)
         if (perpforce > 0.0f) {
           vec2f friction = vec2f(-surfvel.x, -surfvel.y) * 10000.0f;
           
-          const TerrainType mf_tt = sim.getTerrain()->getRoadSurface(wheel.ref_world.getPosition());
-          const float mf_coef = PUtil::decideFrictionCoef(mf_tt);
-          
+          const TerrainType mf_tt   = sim.getTerrain()->getRoadSurface(wheel.ref_world.getPosition());
+          const float mf_coef       = PUtil::decideFrictionCoef(mf_tt);
+          const float mf_resis      = PUtil::decideResistance(mf_tt);
+
           //float maxfriction = perpforce * 1.0f;
           float maxfriction = perpforce * mf_coef;
           float testfriction = perpforce * 1.0f;
@@ -986,7 +987,14 @@ void PVehicle::tick(float delta)
           
           //wheel.turn_vel -= friction.x * 1.0f * delta;
           
+          // method 1: modify existing force
+          // method 2: add a second force
+          //frc.y *= 1.0f - mf_resis;
+          
+          vec3f res(0.0f, -frc.y * mf_resis, 0.0f);
+          
           body->addForceAtPoint(frc, wclip);
+          body->addForceAtPoint(res, wclip);
           
           wheel.dirtthrow = leng / maxfriction;
           skid_level += wheel.dirtthrow;

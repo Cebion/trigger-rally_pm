@@ -19,6 +19,7 @@ TerrainType PUtil::decideRoadSurface(const rgbcolor &c)
     if (c == rgbcolor(255, 255, 255)) return TerrainType::Snow;
     if (c == rgbcolor(170, 170, 255)) return TerrainType::Ice;
     if (c == rgbcolor( 30, 255,  30)) return TerrainType::Grass;
+    if (c == rgbcolor(  0,   0, 255)) return TerrainType::Water;
 
     return TerrainType::Unknown;
 }
@@ -32,11 +33,29 @@ float PUtil::decideFrictionCoef(TerrainType tt)
     if (tt == TerrainType::Gravel)      return 1.00f;
     if (tt == TerrainType::Mud)         return 0.75f;
     if (tt == TerrainType::Sand)        return 0.60f;
-    if (tt == TerrainType::Snow)        return 0.35f;
+    if (tt == TerrainType::Snow)        return 0.50f;
     if (tt == TerrainType::Ice)         return 0.10f;
-    if (tt == TerrainType::Grass)       return 0.45f;
+    if (tt == TerrainType::Grass)       return 0.40f;
+    if (tt == TerrainType::Water)       return 1.10f;
 
     return 1.00f; // tt == TerrainType::Unknown
+}
+
+///
+/// @brief Returns the road surface resistance.
+///
+float PUtil::decideResistance(TerrainType tt)
+{
+    if (tt == TerrainType::Tarmac)      return 0.00f;
+    if (tt == TerrainType::Gravel)      return 0.00f;
+    if (tt == TerrainType::Mud)         return 0.30f;
+    if (tt == TerrainType::Sand)        return 0.40f;
+    if (tt == TerrainType::Snow)        return 0.80f;
+    if (tt == TerrainType::Ice)         return 0.00f;
+    if (tt == TerrainType::Grass)       return 0.90f;
+    if (tt == TerrainType::Water)       return 0.99f;
+
+    return 0.00f; // tt == TerrainType::Unknown
 }
 
 /*! Get token and value from a string line. The token is the string
