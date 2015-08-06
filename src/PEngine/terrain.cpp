@@ -269,7 +269,7 @@ PTerrain::PTerrain (TiXmlElement *element, const std::string &filepath, PSSTextu
     }
     catch (...)
     {
-      PUtil::outLog() << "Load failed: couldn't open foliage map \"" << heightmap << "\"\n";
+      PUtil::outLog() << "Load failed: couldn't open foliage map \"" << foliagemap << "\"\n";
       throw;
     }
     
