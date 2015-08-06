@@ -84,22 +84,22 @@ class   PParseException;
 ///
 /// @brief Helper structure for storing colors.
 ///
-struct color_rgb
+struct rgbcolor
 {
     uint8_t r=0;    ///< Red.
     uint8_t g=0;    ///< Green.
     uint8_t b=0;    ///< Blue.
     
-    color_rgb() = default;
+    rgbcolor() = default;
     
-    color_rgb(uint8_t r, uint8_t g, uint8_t b):
+    rgbcolor(uint8_t r, uint8_t g, uint8_t b):
         r(r),
         g(g),
         b(b)
     {
     }
 
-    bool operator == (const color_rgb &rhs) const
+    bool operator == (const rgbcolor &rhs) const
     {
         if (r == rhs.r &&
             g == rhs.g &&
@@ -109,7 +109,7 @@ struct color_rgb
         return false;
     }
     
-    bool operator != (const color_rgb &rhs) const
+    bool operator != (const rgbcolor &rhs) const
     {
         if (r != rhs.r ||
             g != rhs.g ||
@@ -147,7 +147,7 @@ public:
   static void setDebugLevel(int debugLevel) { deblev = debugLevel; }
  
   // TODO: these two functions are probably misplaced here
-  static TerrainType decideRoadSurface(const color_rgb &c);
+  static TerrainType decideRoadSurface(const rgbcolor &c);
   static float decideFrictionCoef(TerrainType tt);
  
   /*! Get token and value from a string line. The token is the string

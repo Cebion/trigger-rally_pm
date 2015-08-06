@@ -527,7 +527,7 @@ public:
     ///
     TerrainType getRoadSurface(const vec3f &pos) const
     {
-        color_rgb temp;
+        rgbcolor temp;
 
         if (tmap.getData() == nullptr)
             return TerrainType::Unknown;

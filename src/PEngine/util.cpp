@@ -10,15 +10,15 @@
 ///
 /// @brief Returns the road surface based on the RGB color.
 ///
-TerrainType PUtil::decideRoadSurface(const color_rgb &c)
+TerrainType PUtil::decideRoadSurface(const rgbcolor &c)
 {
-    if (c == color_rgb(100, 100, 100)) return TerrainType::Tarmac;
-    if (c == color_rgb(170, 170, 170)) return TerrainType::Gravel;
-    if (c == color_rgb(255,   0,   0)) return TerrainType::Mud;
-    if (c == color_rgb(255, 255,   0)) return TerrainType::Sand;
-    if (c == color_rgb(255, 255, 255)) return TerrainType::Snow;
-    if (c == color_rgb(170, 170, 255)) return TerrainType::Ice;
-    if (c == color_rgb( 30, 255,  30)) return TerrainType::Grass;
+    if (c == rgbcolor(100, 100, 100)) return TerrainType::Tarmac;
+    if (c == rgbcolor(170, 170, 170)) return TerrainType::Gravel;
+    if (c == rgbcolor(255,   0,   0)) return TerrainType::Mud;
+    if (c == rgbcolor(255, 255,   0)) return TerrainType::Sand;
+    if (c == rgbcolor(255, 255, 255)) return TerrainType::Snow;
+    if (c == rgbcolor(170, 170, 255)) return TerrainType::Ice;
+    if (c == rgbcolor( 30, 255,  30)) return TerrainType::Grass;
 
     return TerrainType::Unknown;
 }
