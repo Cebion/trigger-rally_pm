@@ -46,6 +46,20 @@ float PUtil::decideResistance(TerrainType tt)
     return 0.00f; // tt == TerrainType::Unknown
 }
 
+///
+/// @brief Get string with information about terrain,
+///  for debugging purposes.
+///
+const char * PUtil::getTerrainInfo(TerrainType tt)
+{
+#define X(Name, RgbColor, Friction, Resistance) \
+    if (tt == TerrainType::Name) return #Name " " #Friction " " #Resistance;
+    TERRAINMAP_MATERIALS
+#undef X
+
+    return "Unknown 1.00 0.00";
+}
+
 /*! Get token and value from a string line. The token is the string
  * before first space. The value, is the remaining string
  * \return true if could extract token and value */

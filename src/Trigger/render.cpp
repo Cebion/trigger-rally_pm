@@ -1357,6 +1357,22 @@ void MainApp::renderStateGame(float eyetranslation)
       glPopMatrix(); // 2
   #endif
 
+    tex_fontDsmShadowed->bind();
+
+    // draw terrain info for debugging
+    #if 1
+    {
+        const vec3f wheelpos = vehic->part[0].wheel[0].ref_world.getPosition(); // wheel 0
+        const TerrainType tt = game->terrain->getRoadSurface(wheelpos);
+
+        glPushMatrix(); // 2
+        glTranslatef(0.0f, 0.5f, 0.0f);
+        glScalef(0.1f, 0.1f, 1.0f);
+        getSSRender().drawText(PUtil::getTerrainInfo(tt), PTEXT_HZA_CENTER | PTEXT_VTA_TOP);
+        glPopMatrix(); // 2
+    }
+    #endif
+
       tex_fontDsmOutlined->bind();
 
       glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
