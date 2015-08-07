@@ -1419,6 +1419,10 @@ void MainApp::tickStateGame(float delta)
     rain.back().drop_pt += camvel * RAIN_START_LIFE;
     rain.back().drop_pt += vec3f::rand() * RAIN_POS_RANDOM;
     rain.back().drop_pt.z = game->terrain->getHeight(rain.back().drop_pt.x, rain.back().drop_pt.y);
+
+    if (game->water.enabled && rain.back().drop_pt.z < game->water.height)
+        rain.back().drop_pt.z = game->water.height;
+
     rain.back().drop_vect = def_drop_vect + vec3f::rand() * RAIN_VEL_RANDOM;
     rain.back().life = RAIN_START_LIFE;
   }
@@ -1455,6 +1459,10 @@ void MainApp::tickStateGame(float delta)
     snowfall.back().drop_pt += camvel * SNOWFALL_START_LIFE / 2;
     snowfall.back().drop_pt += vec3f::rand() * SNOWFALL_POS_RANDOM;
     snowfall.back().drop_pt.z = game->terrain->getHeight(snowfall.back().drop_pt.x, snowfall.back().drop_pt.y);
+
+    if (game->water.enabled && snowfall.back().drop_pt.z < game->water.height)
+        snowfall.back().drop_pt.z = game->water.height;
+
     snowfall.back().drop_vect = def_drop_vect + vec3f::rand() * SNOWFALL_VEL_RANDOM;
     snowfall.back().life = SNOWFALL_START_LIFE * rand01;
   }
