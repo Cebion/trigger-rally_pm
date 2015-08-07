@@ -154,7 +154,7 @@ enum TerrainType
     X(SlipperyRoad,     RGB(200, 140, 255),     0.50,       0.00)   \
     X(Ice,              RGB(180, 220, 255),     0.10,       0.00)   \
     X(DeepSnow,         RGB(255, 255, 255),     0.30,       0.70)   \
-    X(FirmSand,         RGB(255, 220, 200),     0.80,       0.20)   \
+    X(FirmSand,         RGB(255, 220,   0),     0.80,       0.20)   \
     X(LooseSand,        RGB(255, 255, 140),     0.50,       0.50)   \
     X(PressedEarth,     RGB(255, 200, 200),     1.00,       0.20)   \
     X(LooseEarth,       RGB(255, 140, 140),     0.50,       0.40)   \
