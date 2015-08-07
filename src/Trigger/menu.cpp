@@ -25,6 +25,7 @@ void MainApp::levelScreenAction(int action, int index)
     lss.state = AM_TOP;
     break;
   case AA_GO_EVT:
+    lss.currentevent = index;
     if (lss.state == AM_TOP_EVT_PREP &&
       lss.currentlevel > 0 &&
       lss.currentlevel < (int)events[lss.currentevent].levels.size()) {
@@ -52,6 +53,7 @@ void MainApp::levelScreenAction(int action, int index)
     lss.state = AM_TOP_EVT_PREP;
     break;
   case AA_GO_PRAC:
+    lss.currentevent = index;
     lss.state = AM_TOP_PRAC;
     break;
   case AA_PICK_PRAC:
@@ -63,6 +65,7 @@ void MainApp::levelScreenAction(int action, int index)
     lss.state = AM_TOP_PRAC_SEL_PREP;
     break;
   case AA_GO_LVL:
+    lss.currentlevel = index;
     lss.state = AM_TOP_LVL;
     break;
   case AA_PICK_LVL:
@@ -552,45 +555,47 @@ void MainApp::handleLevelScreenKey(const SDL_KeyboardEvent &ke)
 
     case SDLK_LEFT:
     {
+        int pidx; // previous index
+
         switch (lss.state)
         {
             case AM_TOP_LVL_PREP:
             {
-                lss.currentlevel -= 1;
-                CLAMP(lss.currentlevel, 0, static_cast<int> (levels.size() - 1));
-                levelScreenAction(AA_PICK_LVL, lss.currentlevel);
+                pidx = lss.currentlevel - 1;
+                CLAMP_LOWER(pidx, 0);
+                levelScreenAction(AA_PICK_LVL, pidx);
                 break;
             }
 
             case AM_TOP_LVL:
             {
-                lss.currentlevel = (lss.currentlevel / MAX_RACES_ON_SCREEN - 1) * MAX_RACES_ON_SCREEN;
-                CLAMP(lss.currentlevel, 0, static_cast<int> (levels.size() - 1));
-                levelScreenAction(AA_GO_LVL, lss.currentlevel);
+                pidx = (lss.currentlevel / MAX_RACES_ON_SCREEN - 1) * MAX_RACES_ON_SCREEN;
+                CLAMP_LOWER(pidx, 0);
+                levelScreenAction(AA_GO_LVL, pidx);
                 break;
             }
 
             case AM_TOP_EVT:
             {
-                lss.currentevent = (lss.currentevent / MAX_RACES_ON_SCREEN - 1) * MAX_RACES_ON_SCREEN;
-                CLAMP(lss.currentevent, 0, static_cast<int> (events.size() - 1));
-                levelScreenAction(AA_GO_EVT, lss.currentevent);
+                pidx = (lss.currentevent / MAX_RACES_ON_SCREEN - 1) * MAX_RACES_ON_SCREEN;
+                CLAMP_LOWER(pidx, 0);
+                levelScreenAction(AA_GO_EVT, pidx);
                 break;
             }
 
             case AM_TOP_PRAC:
             {
-                lss.currentevent = (lss.currentevent / MAX_RACES_ON_SCREEN - 1) * MAX_RACES_ON_SCREEN;
-                CLAMP(lss.currentevent, 0, static_cast<int> (events.size() - 1));
-                levelScreenAction(AA_GO_PRAC, lss.currentevent);
+                pidx = (lss.currentevent / MAX_RACES_ON_SCREEN - 1) * MAX_RACES_ON_SCREEN;
+                CLAMP_LOWER(pidx, 0);
+                levelScreenAction(AA_GO_PRAC, pidx);
                 break;
             }
 
             case AM_TOP_PRAC_SEL_PREP:
             {
-                lss.currentlevel -= 1;
-                CLAMP(lss.currentlevel, 0, static_cast<int> (events[lss.currentlevel].levels.size() - 1));
-                levelScreenAction(AA_PICK_PRAC_LVL, lss.currentlevel);
+                pidx = lss.currentlevel - 1;
+                CLAMP_LOWER(pidx, 0);
+                levelScreenAction(AA_PICK_PRAC_LVL, pidx);
                 break;
             }
         }
@@ -600,13 +605,15 @@ void MainApp::handleLevelScreenKey(const SDL_KeyboardEvent &ke)
 
     case SDLK_RIGHT:
     {
+        int nidx; // next index
+
         switch (lss.state)
         {
             case AM_TOP_LVL_PREP:
             {
-                lss.currentlevel += 1;
-                CLAMP(lss.currentlevel, 0, static_cast<int> (levels.size() - 1));
-                levelScreenAction(AA_PICK_LVL, lss.currentlevel);
+                nidx = lss.currentlevel + 1;
+                CLAMP_UPPER(nidx, static_cast<int> (levels.size() - 1));
+                levelScreenAction(AA_PICK_LVL, nidx);
                 break;
             }
 
@@ -615,9 +622,9 @@ void MainApp::handleLevelScreenKey(const SDL_KeyboardEvent &ke)
                 if (levels.size() - lss.currentlevel < MAX_RACES_ON_SCREEN)
                     break;
 
-                lss.currentlevel = (lss.currentlevel / MAX_RACES_ON_SCREEN + 1) * MAX_RACES_ON_SCREEN;
-                CLAMP(lss.currentlevel, 0, static_cast<int> (levels.size() - 1));
-                levelScreenAction(AA_GO_LVL, lss.currentlevel);
+                nidx = (lss.currentlevel / MAX_RACES_ON_SCREEN + 1) * MAX_RACES_ON_SCREEN;
+                CLAMP_UPPER(nidx, static_cast<int> (levels.size() - 1));
+                levelScreenAction(AA_GO_LVL, nidx);
                 break;
             }
 
@@ -626,9 +633,9 @@ void MainApp::handleLevelScreenKey(const SDL_KeyboardEvent &ke)
                 if (events.size() - lss.currentevent < MAX_RACES_ON_SCREEN)
                     break;
 
-                lss.currentevent = (lss.currentevent / MAX_RACES_ON_SCREEN + 1) * MAX_RACES_ON_SCREEN;
-                CLAMP(lss.currentevent, 0, static_cast<int> (events.size() - 1));
-                levelScreenAction(AA_GO_EVT, lss.currentevent);
+                nidx = (lss.currentevent / MAX_RACES_ON_SCREEN + 1) * MAX_RACES_ON_SCREEN;
+                CLAMP_UPPER(nidx, static_cast<int> (events.size() - 1));
+                levelScreenAction(AA_GO_EVT, nidx);
                 break;
             }
 
@@ -637,17 +644,17 @@ void MainApp::handleLevelScreenKey(const SDL_KeyboardEvent &ke)
                 if (events.size() - lss.currentevent < MAX_RACES_ON_SCREEN)
                     break;
 
-                lss.currentevent = (lss.currentevent / MAX_RACES_ON_SCREEN + 1) * MAX_RACES_ON_SCREEN;
-                CLAMP(lss.currentevent, 0, static_cast<int> (events.size() - 1));
-                levelScreenAction(AA_GO_PRAC, lss.currentevent);
+                nidx = (lss.currentevent / MAX_RACES_ON_SCREEN + 1) * MAX_RACES_ON_SCREEN;
+                CLAMP_UPPER(nidx, static_cast<int> (events.size() - 1));
+                levelScreenAction(AA_GO_PRAC, nidx);
                 break;
             }
 
             case AM_TOP_PRAC_SEL_PREP:
             {
-                lss.currentlevel += 1;
-                CLAMP(lss.currentlevel, 0, static_cast<int> (events[lss.currentevent].levels.size() - 1));
-                levelScreenAction(AA_PICK_PRAC_LVL, lss.currentlevel);
+                nidx = lss.currentlevel + 1;
+                CLAMP_UPPER(nidx, static_cast<int> (events[lss.currentevent].levels.size() - 1));
+                levelScreenAction(AA_PICK_PRAC_LVL, nidx);
                 break;
             }
         }
