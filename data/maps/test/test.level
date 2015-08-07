@@ -1,0 +1,45 @@
+<?xml version="1.0" ?>
+<level 
+	name="1 Test"
+	comment="Terrain testing ground"
+	author="Onsemeliot"
+	description="Terrain testing ground"
+	screenshot="ss.png"
+	minimap="mm.png">
+	
+	<terrain
+		heightmap="h.png"
+		terrainmap="t.png"
+		colormap="c.png"
+		hudmap="c.png"
+		tilesize="32"
+		horizontalscale="4"
+		verticalscale="0.1"
+		>
+	</terrain>
+	
+	<weather
+		cloudtexture="/textures/sky/cloudy.png"
+		cloudscrollrate="0"
+		fogcolor="0.3, 0.4, 0.65"
+		fogdensity="0.003"
+		fogdensitysky="0.2"
+		/>
+
+	<water
+		height="4"
+		/>
+	
+	<vehicleoption type="/vehicles/seat/seat.vehicle" />
+	<vehicleoption type="/vehicles/focus/focus.vehicle" />
+	<vehicleoption type="/vehicles/evo/evo.vehicle" />
+	
+	<race coordscale="2, 2" targettime="1900">
+		
+		<startposition pos="44, 59" oridegrees="0" />
+		<checkpoint coords="687, 959" />
+		<checkpoint coords="44, 59" />
+		
+	</race>
+	
+</level>
