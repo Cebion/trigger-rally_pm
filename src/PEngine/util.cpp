@@ -12,14 +12,10 @@
 ///
 TerrainType PUtil::decideRoadSurface(const rgbcolor &c)
 {
-    if (c == rgbcolor(100, 100, 100)) return TerrainType::Tarmac;
-    if (c == rgbcolor(170, 170, 170)) return TerrainType::Gravel;
-    if (c == rgbcolor(255,   0,   0)) return TerrainType::Mud;
-    if (c == rgbcolor(255, 255,   0)) return TerrainType::Sand;
-    if (c == rgbcolor(255, 255, 255)) return TerrainType::Snow;
-    if (c == rgbcolor(170, 170, 255)) return TerrainType::Ice;
-    if (c == rgbcolor( 30, 255,  30)) return TerrainType::Grass;
-    if (c == rgbcolor(  0,   0, 255)) return TerrainType::Water;
+#define X(Name, RgbColor, Friction, Resistance) \
+    if (c == RgbColor) return TerrainType::Name;
+    TERRAINMAP_MATERIALS
+#undef X
 
     return TerrainType::Unknown;
 }
@@ -29,14 +25,10 @@ TerrainType PUtil::decideRoadSurface(const rgbcolor &c)
 ///
 float PUtil::decideFrictionCoef(TerrainType tt)
 {
-    if (tt == TerrainType::Tarmac)      return 1.50f;
-    if (tt == TerrainType::Gravel)      return 1.00f;
-    if (tt == TerrainType::Mud)         return 0.75f;
-    if (tt == TerrainType::Sand)        return 0.60f;
-    if (tt == TerrainType::Snow)        return 0.50f;
-    if (tt == TerrainType::Ice)         return 0.10f;
-    if (tt == TerrainType::Grass)       return 0.40f;
-    if (tt == TerrainType::Water)       return 1.10f;
+#define X(Name, RgbColor, Friction, Resistance) \
+    if (tt == TerrainType::Name) return Friction;
+    TERRAINMAP_MATERIALS
+#undef X
 
     return 1.00f; // tt == TerrainType::Unknown
 }
@@ -46,14 +38,10 @@ float PUtil::decideFrictionCoef(TerrainType tt)
 ///
 float PUtil::decideResistance(TerrainType tt)
 {
-    if (tt == TerrainType::Tarmac)      return 0.00f;
-    if (tt == TerrainType::Gravel)      return 0.00f;
-    if (tt == TerrainType::Mud)         return 0.30f;
-    if (tt == TerrainType::Sand)        return 0.40f;
-    if (tt == TerrainType::Snow)        return 0.80f;
-    if (tt == TerrainType::Ice)         return 0.00f;
-    if (tt == TerrainType::Grass)       return 0.90f;
-    if (tt == TerrainType::Water)       return 0.99f;
+#define X(Name, RgbColor, Friction, Resistance) \
+    if (tt == TerrainType::Name) return Resistance;
+    TERRAINMAP_MATERIALS
+#undef X
 
     return 0.00f; // tt == TerrainType::Unknown
 }
