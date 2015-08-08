@@ -29,7 +29,7 @@ IncludeVersionInfo=0
 SupportXPThemes=0
 CompilerSet=3
 CompilerSettings=000dg0a1c0111000000001000
-UnitCount=36
+UnitCount=37
 
 [VersionInfo]
 Major=1
@@ -404,6 +404,16 @@ BuildCmd=
 FileName=Trigger\render.cpp
 CompileCpp=1
 Folder=Trigger
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit37]
+FileName=include\terrainmap.h
+CompileCpp=1
+Folder=Headers
 Compile=1
 Link=1
 Priority=1000
