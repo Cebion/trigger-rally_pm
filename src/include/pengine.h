@@ -141,6 +141,7 @@ public:
   static float decideFrictionCoef(TerrainType tt);
   static float decideResistance(TerrainType tt);
   static const char * getTerrainInfo(TerrainType tt);
+  static rgbcolor getTerrainColor(TerrainType tt);
  
   /*! Get token and value from a string line. The token is the string
    * before first space. The value, is the remaining string

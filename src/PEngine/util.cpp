@@ -47,8 +47,7 @@ float PUtil::decideResistance(TerrainType tt)
 }
 
 ///
-/// @brief Get string with information about terrain,
-///  for debugging purposes.
+/// @brief Get string with information about terrain, for debugging purposes.
 ///
 const char * PUtil::getTerrainInfo(TerrainType tt)
 {
@@ -58,6 +57,21 @@ const char * PUtil::getTerrainInfo(TerrainType tt)
 #undef X
 
     return "Unknown 1.00 0.00";
+}
+
+///
+/// @brief Get terrainmap color of terrain, for debugging purposes.
+/// @note The user is expected to check for TerrainType::Unknown beforehand.
+/// @retval rgbcolor(0, 0, 0)   for unknown terrain
+///
+rgbcolor PUtil::getTerrainColor(TerrainType tt)
+{
+#define X(Name, RgbColor, Friction, Resistance) \
+    if (tt == TerrainType::Name) return RgbColor;
+    TERRAINMAP_MATERIALS
+#undef X
+
+    return rgbcolor(0, 0, 0);
 }
 
 /*! Get token and value from a string line. The token is the string

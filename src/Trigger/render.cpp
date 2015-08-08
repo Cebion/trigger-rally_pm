@@ -1364,11 +1364,34 @@ void MainApp::renderStateGame(float eyetranslation)
     {
         const vec3f wheelpos = vehic->part[0].wheel[0].ref_world.getPosition(); // wheel 0
         const TerrainType tt = game->terrain->getRoadSurface(wheelpos);
+        const rgbcolor c = PUtil::getTerrainColor(tt);
+        const std::string s = PUtil::getTerrainInfo(tt);
 
         glPushMatrix(); // 2
         glTranslatef(0.0f, 0.5f, 0.0f);
         glScalef(0.1f, 0.1f, 1.0f);
-        getSSRender().drawText(PUtil::getTerrainInfo(tt), PTEXT_HZA_CENTER | PTEXT_VTA_TOP);
+
+        if (tt != TerrainType::Unknown)
+        {
+            const GLfloat endx = s.length() * 8.0f / 12.0f + 0.1f;
+
+            glPushMatrix();
+            glDisable(GL_TEXTURE_2D);
+            glTranslatef(-0.5f * s.length() * 8.0f / 12.0f, 0.0f, 0.0f);
+            glTranslatef(0.0f, -1.0f, 0.0f);
+            glBegin(GL_TRIANGLE_STRIP);
+                glColor3f(c.r / 255.0f, c.g / 255.0f, c.b / 255.0f);
+                glVertex2f(-0.2f,   0.0f);
+                glVertex2f(endx,    0.0f);
+                glVertex2f(-0.2f,   1.1f);
+                glVertex2f(endx,    1.1f);
+            glEnd();
+            glEnable(GL_TEXTURE_2D);
+            glPopMatrix();
+        }
+        
+        glColor3f(1.0f, 1.0f, 1.0f);
+        getSSRender().drawText(s, PTEXT_HZA_CENTER | PTEXT_VTA_TOP);
         glPopMatrix(); // 2
     }
     #endif
