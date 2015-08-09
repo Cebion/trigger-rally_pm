@@ -896,6 +896,7 @@ void PVehicle::tick(float delta)
         wheel.spin_vel = 0.0f;
       
       wheel.spin_pos += wheel.spin_vel * delta;
+      wheel.spin_vel -= wheel.spin_vel * mf_resis * delta;
       
       wheel.turn_pos = turnfactor * typewheel.steer;
       
