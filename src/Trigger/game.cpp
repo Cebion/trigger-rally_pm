@@ -373,7 +373,7 @@ void TriggerGame::tick(float delta)
     for (unsigned int i=0; i<vehicle.size(); i++) {
       vehicle[i]->ctrl.setZero();
       vehicle[i]->ctrl.brake1 = 1.0f;
-      vehicle[i]->ctrl.brake2 = 1.0f;
+      //vehicle[i]->ctrl.brake2 = 1.0f;
     }
     
     break;
