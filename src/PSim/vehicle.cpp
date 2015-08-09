@@ -895,8 +895,7 @@ void PVehicle::tick(float delta)
       else
         wheel.spin_vel = 0.0f;
       
-      // FIXME: this doesn't feel like the right way to get the "real" speed
-      wheel.spin_pos += wheel.spin_vel * delta * (1.0f - mf_resis);
+      wheel.spin_pos += wheel.spin_vel * delta;
       
       wheel.turn_pos = turnfactor * typewheel.steer;
       
@@ -908,8 +907,6 @@ void PVehicle::tick(float delta)
         (-suspension_force -
         wheel.ride_vel * typewheel.dampening) * 0.02 * delta;
       wheel.ride_pos += wheel.ride_vel * delta;
-      
-      wheel.ride_vel -= wheel.ride_vel * mf_resis * delta;
       
       PTerrain::ContactInfo tci;
       tci.pos.x = wclip.x;
