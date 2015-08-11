@@ -32,9 +32,7 @@ private:
 public:
     PSSAudio(PApp &parentApp);
     ~PSSAudio();
-
-    // TODO: tick
-
+    void tick();
     PAudioSample *loadSample(const std::string &name, bool positional3D = true);
 };
 

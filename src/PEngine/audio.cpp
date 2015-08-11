@@ -82,6 +82,10 @@ PSSAudio::~PSSAudio()
     samplist.clear();
 }
 
+void PSSAudio::tick()
+{
+}
+
 PAudioSample::PAudioSample(const std::string &filename, bool positional3D)
 {
     buffer = 0;
@@ -161,6 +165,10 @@ PSSAudio::~PSSAudio()
     alutExit();
 }
 
+void PSSAudio::tick()
+{
+}
+
 PAudioSample::PAudioSample(const std::string &filename, bool positional3D)
 {
     buffer = 0;
@@ -222,7 +230,7 @@ PAudioInstance::PAudioInstance(PAudioSample *_samp, bool looping)
     alSourcei(source, AL_BUFFER, samp->buffer);
     alSourcei(source, AL_LOOPING, looping ? AL_TRUE : AL_FALSE);
 
-    alSourcePlay(source);
+    //alSourcePlay(source);
 }
 
 PAudioInstance::~PAudioInstance()
@@ -400,6 +408,14 @@ PSSAudio::~PSSAudio()
 }
 
 ///
+/// @brief Updates the FMOD system.
+///
+void PSSAudio::tick()
+{
+    FMOD_System_Update(fs);
+}
+
+///
 /// @brief Loads an audio sample within the FMOD audio subsystem.
 /// @param [in] filename    The filename of the audio sample.
 /// @param positional3D     Flag to load file as 3D or 2D.
@@ -413,7 +429,7 @@ PAudioSample::PAudioSample(const std::string &filename, bool positional3D):
     name = filename;
 
     FMOD_RESULT fr = FMOD_System_CreateSound(fs, filename.c_str(),
-                     FMOD_UNIQUE | (positional3D ? FMOD_3D : FMOD_2D), nullptr, &buffer);
+                     /*FMOD_UNIQUE |*/ (positional3D ? FMOD_3D : FMOD_2D), nullptr, &buffer);
 
     if (fr != FMOD_OK)
         throw MakePException("Sample load failed: " + FMOD_ErrorString(fr));
