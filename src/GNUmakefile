@@ -25,7 +25,7 @@ OPTIMS          ?= -march=native -mtune=native -Ofast
 DMACROS         := -DNDEBUG -DUNIX -DPACKAGE_VERSION=\"$(DISTVER)\"
 INCDIRS         := -I"./include"
 CXXFLAGS        := -std=c++11 $(WARNINGS) $(OPTIMS) $(DMACROS) $(INCDIRS)
-EXTRA_LIBS      := -lGL -lGLU -lGLEW -lSDL -lSDL_image -lphysfs -lopenal -lalut
+EXTRA_LIBS      := -lGL -lGLU -lGLEW -lSDL -lSDL_image -lphysfs -lopenal -lalut -lpthread
 LDFLAGS         := $(EXTRA_LIBS)
 INSTALL_PROGRAM := install --mode=0755
 INSTALL_DATA    := install --mode=0644
