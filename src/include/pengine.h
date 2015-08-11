@@ -65,6 +65,7 @@ class   PUserException;
 class   PFileException;
 class   PParseException;
 
+class PCodriverVoice;
 
 #include "exception.h"
 
@@ -177,6 +178,7 @@ public:
 #include "subsys.h"
 #include "audio.h"
 #include "render.h"
+#include <codrivervoice.h>
 
 
 #endif // PENGINE_H_INCLUDED
