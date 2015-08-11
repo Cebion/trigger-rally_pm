@@ -499,6 +499,7 @@ PVehicle::PVehicle(PSim &sim_parent, PVehicleType *_type) :
   blade_ang1 = 0.0;
   
   nextcp = 0;
+  nextcdcp = 0;
   
   wheel_angvel = 0.0f;
   

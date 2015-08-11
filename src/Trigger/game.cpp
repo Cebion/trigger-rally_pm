@@ -9,7 +9,8 @@
 #include "main.h"
 
 
-TriggerGame::TriggerGame(MainApp *parent)
+TriggerGame::TriggerGame(MainApp *parent):
+    cdvoice(parent->getCodriverWords())
 {
   app = parent;
   
@@ -386,6 +387,7 @@ void TriggerGame::tick(float delta)
   for (unsigned int i=0; i<vehicle.size(); i++) {
     
     vec2f diff = makevec2f(checkpt[vehicle[i]->nextcp].pt) - makevec2f(vehicle[i]->body->getPosition());
+
     if (diff.lengthsq() < 30.0f * 30.0f) {
       //vehicle[i]->nextcp = (vehicle[i]->nextcp + 1) % checkpt.size();
         cptime = coursetime;
@@ -393,6 +395,19 @@ void TriggerGame::tick(float delta)
         vehicle[i]->nextcp = 0;
         if (i == 0) gamestate = GS_FINISHED;
       }
+    }
+    
+    if (!codrivercheckpt.empty())
+    {
+        diff = makevec2f(codrivercheckpt[vehicle[i]->nextcdcp].pt) - makevec2f(vehicle[i]->body->getPosition());
+
+        if (diff.lengthsq() < 20.0f * 20.0f)
+        {
+            cdvoice.say(codrivercheckpt[vehicle[i]->nextcdcp].notes);
+
+            if (++vehicle[i]->nextcdcp >= (int)codrivercheckpt.size())
+                vehicle[i]->nextcdcp = 0;
+        }
     }
   }
   

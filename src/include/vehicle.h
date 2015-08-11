@@ -331,6 +331,7 @@ public:
   float blade_ang1;
   
   int nextcp;
+  int nextcdcp; ///< Next codriver checkpoint.
   
   // for vehicle resetting, after being flipped
   float reset_trigger_time;
