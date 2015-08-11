@@ -1,5 +1,6 @@
 //
 // Copyright (C) 2015 Andrei Bondor, ab396356@users.sourceforge.net
+// & value adaptations from Onsemeliot, onsemeliot@gmail.com
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -51,14 +52,14 @@ enum TerrainType
     X(CountryRoad,      RGB(140,  80, 180),     1.20,       0.00)   \
     X(SlipperyRoad,     RGB(200, 140, 255),     0.50,       0.00)   \
     X(Ice,              RGB(180, 220, 255),     0.10,       0.00)   \
-    X(DeepSnow,         RGB(255, 255, 255),     0.30,       0.70)   \
-    X(FirmSand,         RGB(255, 220,   0),     0.80,       0.20)   \
-    X(LooseSand,        RGB(255, 255, 140),     0.50,       0.50)   \
-    X(PressedEarth,     RGB(255, 200, 200),     1.00,       0.20)   \
-    X(LooseEarth,       RGB(255, 140, 140),     0.50,       0.40)   \
-    X(MoistEarth,       RGB(255,   0,   0),     0.70,       0.60)   \
-    X(Mud,              RGB(160,   0,   0),     0.40,       0.80)   \
-    X(FineGravel,       RGB(140, 140, 140),     0.70,       0.20)   \
-    X(RoughGravel,      RGB(  0,   0,   0),     0.60,       0.10)   \
+    X(DeepSnow,         RGB(255, 255, 255),     0.30,       0.40)   \
+    X(FirmSand,         RGB(255, 220,   0),     0.90,       0.05)   \
+    X(LooseSand,        RGB(255, 255, 140),     0.80,       0.20)   \
+    X(PressedEarth,     RGB(255, 200, 200),     1.00,       0.05)   \
+    X(LooseEarth,       RGB(255, 140, 140),     0.80,       0.10)   \
+    X(MoistEarth,       RGB(255,   0,   0),     1.10,       0.15)   \
+    X(Mud,              RGB(160,   0,   0),     0.80,       0.20)   \
+    X(FineGravel,       RGB(140, 140, 140),     0.90,       0.10)   \
+    X(RoughGravel,      RGB(  0,   0,   0),     0.80,       0.05)   \
     X(Grass,            RGB(  0, 180,   0),     0.40,       0.10)   \
-    X(DeepWater,        RGB(  0,   0, 255),     0.20,       0.90)
+    X(DeepWater,        RGB(  0,   0, 255),     0.20,       0.40)
