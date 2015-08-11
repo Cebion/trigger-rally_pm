@@ -907,11 +907,18 @@ void MainApp::renderStateGame(float eyetranslation)
         vec4f(0.2f, 0.8f, 0.2f, 0.4f)  // 2 = all other checkpoints
     };
 
+    // codriver checkpoints for debugging purposes
+    const vec4f cdcheckpoint_col[3] =
+    {
+        {0.0f, 0.0f, 1.0f, 0.8f},       // 0 = next checkpoint
+        {0.3f, 0.3f, 1.0f, 0.6f},       // 1 = checkpoint after next
+        {0.6f, 0.6f, 1.0f, 0.4f}        // 2 = all other checkpoints
+    };
+
     if (showcheckpoint)
     {
         for (unsigned int i=0; i<game->checkpt.size(); i++)
         {
-
             vec4f colr = checkpoint_col[2];
 
             if ((int)i == vehic->nextcp)
@@ -920,9 +927,7 @@ void MainApp::renderStateGame(float eyetranslation)
                 colr = checkpoint_col[1];
 
             glPushMatrix(); // 1
-
             glTranslatef(game->checkpt[i].pt.x, game->checkpt[i].pt.y, game->checkpt[i].pt.z);
-
             glScalef(25.0f, 25.0f, 1.0f);
 
 #if 0 // Checkpoint style one
@@ -985,9 +990,63 @@ void MainApp::renderStateGame(float eyetranslation)
             glVertex3f(1.0f, 0.0f, ht + 1.0f);
             glEnd();
 #endif
-
             glPopMatrix(); // 1
         }
+
+// codriver checkpoints rendering
+#if 1
+        for (unsigned int i=0; i<game->codrivercheckpt.size(); i++)
+        {
+            vec4f colr = cdcheckpoint_col[2];
+
+            if ((int)i == vehic->nextcdcp)
+                colr = cdcheckpoint_col[0];
+            else if ((int)i == (vehic->nextcdcp + 1) % (int)game->codrivercheckpt.size())
+                colr = cdcheckpoint_col[1];
+
+            glPushMatrix(); // 1
+            glTranslatef(game->codrivercheckpt[i].pt.x, game->codrivercheckpt[i].pt.y, game->codrivercheckpt[i].pt.z);
+            glScalef(15.0f, 15.0f, 1.0f);
+
+            glBegin(GL_TRIANGLE_STRIP);
+            float ht = sinf(cprotate * 6.0f) * 7.0f + 8.0f;
+            glColor4f(colr[0], colr[1], colr[2], 0.0f);
+            glVertex3f(1.0f, 0.0f, ht - 1.0f);
+            glColor4f(colr[0], colr[1], colr[2], colr[3]);
+            glVertex3f(1.0f, 0.0f, ht + 0.0f);
+            for (float a = PI/10.0f; a < PI*2.0f-0.01f; a += PI/10.0f)
+            {
+                glColor4f(colr[0], colr[1], colr[2], 0.0f);
+                glVertex3f(cosf(a), sinf(a), ht - 1.0f);
+                glColor4f(colr[0], colr[1], colr[2], colr[3]);
+                glVertex3f(cosf(a), sinf(a), ht + 0.0f);
+            }
+            glColor4f(colr[0], colr[1], colr[2], 0.0f);
+            glVertex3f(1.0f, 0.0f, ht - 1.0f);
+            glColor4f(colr[0], colr[1], colr[2], colr[3]);
+            glVertex3f(1.0f, 0.0f, ht + 0.0f);
+            glEnd();
+
+            glBegin(GL_TRIANGLE_STRIP);
+            glColor4f(colr[0], colr[1], colr[2], colr[3]);
+            glVertex3f(1.0f, 0.0f, ht - 0.0f);
+            glColor4f(colr[0], colr[1], colr[2], 0.0f);
+            glVertex3f(1.0f, 0.0f, ht + 1.0f);
+            for (float a = PI/10.0f; a < PI*2.0f-0.01f; a += PI/10.0f)
+            {
+                glColor4f(colr[0], colr[1], colr[2], colr[3]);
+                glVertex3f(cosf(a), sinf(a), ht - 0.0f);
+                glColor4f(colr[0], colr[1], colr[2], 0.0f);
+                glVertex3f(cosf(a), sinf(a), ht + 1.0f);
+            }
+            glColor4f(colr[0], colr[1], colr[2], colr[3]);
+            glVertex3f(1.0f, 0.0f, ht - 0.0f);
+            glColor4f(colr[0], colr[1], colr[2], 0.0f);
+            glVertex3f(1.0f, 0.0f, ht + 1.0f);
+            glEnd();
+            glPopMatrix(); // 1
+        }
+#endif
     }
 
     glEnable(GL_TEXTURE_2D);
@@ -1311,6 +1370,21 @@ void MainApp::renderStateGame(float eyetranslation)
 
           glPopMatrix(); // 2
       }
+
+#if 1
+        // show codriver checkpoint text (the pace notes)
+        if (!game->codrivercheckpt.empty() && vehic->nextcdcp != 0)
+        {
+            glColor3f(1.0f, 1.0f, 0.0f);
+            glPushMatrix();
+            glTranslatef(0.0f, 0.3f, 0.0f);
+            glScalef(0.1f, 0.1f, 1.0f);
+            getSSRender().drawText(game->codrivercheckpt[vehic->nextcdcp - 1].notes, PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
+            glPopMatrix();
+        }
+#endif
+
+        glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
       tex_fontDsmNormal->bind();
 
