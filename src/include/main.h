@@ -76,6 +76,8 @@ private:
   std::vector<CheckPoint> checkpt;
   std::vector<CodriverCP> codrivercheckpt;
   
+  PCodriverVoice cdvoice;
+  
   int gamestate;
   
   float coursetime;
@@ -347,6 +349,8 @@ private:
                *aud_gravel,
                *aud_crash1;
   
+  std::vector<PAudioSample *> aud_codriverwords;
+  
   PAudioInstance *audinst_engine, *audinst_wind, *audinst_gravel;
   std::vector<PAudioInstance *> audinst;
   
@@ -438,8 +442,10 @@ public:
   void cursorMoveEvent(int posx, int posy);
   void mouseButtonEvent(const SDL_MouseButtonEvent &mbe);
   void joyButtonEvent(int which, int button, bool down);
+
+    std::vector<PAudioSample *> getCodriverWords() const
+    {
+        return aud_codriverwords;
+    }
 };
-
-
-
 
