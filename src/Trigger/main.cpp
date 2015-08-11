@@ -821,6 +821,25 @@ bool MainApp::loadAll()
     if (!(aud_gearchange = getSSAudio().loadSample("/sounds/gear.wav", false))) return false;
     if (!(aud_gravel = getSSAudio().loadSample("/sounds/gravel.wav", false))) return false;
     if (!(aud_crash1 = getSSAudio().loadSample("/sounds/bang.wav", false))) return false;
+
+    aud_codriverwords.resize(CodriverWords::NUMBER_OF_WORDS);
+
+    if (!(aud_codriverwords[CodriverWords::Left]    = getSSAudio().loadSample("/sounds/codriver/left.wav", false))) return false;
+    if (!(aud_codriverwords[CodriverWords::Right]   = getSSAudio().loadSample("/sounds/codriver/right.wav", false))) return false;
+    if (!(aud_codriverwords[CodriverWords::Flat]    = getSSAudio().loadSample("/sounds/codriver/flat.wav", false))) return false;
+    if (!(aud_codriverwords[CodriverWords::Easy]    = getSSAudio().loadSample("/sounds/codriver/easy.wav", false))) return false;
+    if (!(aud_codriverwords[CodriverWords::Medium]  = getSSAudio().loadSample("/sounds/codriver/medium.wav", false))) return false;
+    if (!(aud_codriverwords[CodriverWords::Chicane] = getSSAudio().loadSample("/sounds/codriver/chicane.wav", false))) return false;
+    if (!(aud_codriverwords[CodriverWords::Square]  = getSSAudio().loadSample("/sounds/codriver/square.wav", false))) return false;
+    if (!(aud_codriverwords[CodriverWords::Hard]    = getSSAudio().loadSample("/sounds/codriver/hard.wav", false))) return false;
+    if (!(aud_codriverwords[CodriverWords::Hairpin] = getSSAudio().loadSample("/sounds/codriver/hairpin.wav", false))) return false;
+    if (!(aud_codriverwords[CodriverWords::Over]    = getSSAudio().loadSample("/sounds/codriver/over.wav", false))) return false;
+    if (!(aud_codriverwords[CodriverWords::Into]    = getSSAudio().loadSample("/sounds/codriver/into.wav", false))) return false;
+    if (!(aud_codriverwords[CodriverWords::Jump]    = getSSAudio().loadSample("/sounds/codriver/jump.wav", false))) return false;
+    if (!(aud_codriverwords[CodriverWords::Finish]  = getSSAudio().loadSample("/sounds/codriver/finish.wav", false))) return false;
+    if (!(aud_codriverwords[CodriverWords::Dont]    = getSSAudio().loadSample("/sounds/codriver/dont.wav", false))) return false;
+    if (!(aud_codriverwords[CodriverWords::Cut]     = getSSAudio().loadSample("/sounds/codriver/cut.wav", false))) return false;
+    if (!(aud_codriverwords[CodriverWords::Long]    = getSSAudio().loadSample("/sounds/codriver/long.wav", false))) return false;
   }
   
   if (!gui.loadColors("/menu.colors"))
@@ -1011,6 +1030,8 @@ void MainApp::calcScreenRatios()
 
 void MainApp::tick(float delta)
 {
+    getSSAudio().tick();
+
   switch (appstate) {
   case AS_LOAD_1:
     splashtimeout -= delta;
@@ -1357,7 +1378,7 @@ void MainApp::tickStateGame(float delta)
   nextcpangle = -atan2(diff.y, diff.x) - forwangle + PI*0.5f;
   
   if (cfg_enable_sound) {
-    audinst_engine->setGain(0.5f);
+    audinst_engine->setGain(0.33f);
     audinst_engine->setPitch(vehic->getEngineRPM() / 7500.0f);
     
     float windlevel = fabsf(vehic->forwardspeed) * 0.6f;
@@ -1365,7 +1386,7 @@ void MainApp::tickStateGame(float delta)
     audinst_wind->setGain(windlevel * 0.03f);
     audinst_wind->setPitch(windlevel * 0.02f + 0.9f);
     
-    audinst_gravel->setGain(vehic->getSkidLevel() * 0.2f);
+    audinst_gravel->setGain(vehic->getSkidLevel() * 0.1f);
     audinst_gravel->setPitch(1.0f);//vehic->getEngineRPM() / 7500.0f);
     
     if (vehic->getFlagGearChange()) {
