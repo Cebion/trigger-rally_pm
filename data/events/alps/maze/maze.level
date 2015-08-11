@@ -9,6 +9,7 @@
 	
 	<terrain
 		heightmap="h.png"
+		terrainmap="t.png"
 		colormap="c.jpg"
 		foliagemap="f.png"
 		hudmap="m.png"
@@ -30,8 +31,7 @@
 	<vehicleoption type="/vehicles/focus/focus.vehicle" />
 	<vehicleoption type="/vehicles/seat/seat.vehicle" />
 	
-	<race coordscale="3.2, 3.2"
-		targettime="490">
+	<race coordscale="3.2, 3.2" targettime="520">
 		
 		<startposition pos="216, 84" oridegrees="100" />
 		<checkpoint coords="106, 23" />
@@ -58,7 +58,5 @@
 		<checkpoint coords="428, 217" />
 		<checkpoint coords="374, 195" />
 		<checkpoint coords="415, 70" />
-		
 	</race>
-	
 </level>

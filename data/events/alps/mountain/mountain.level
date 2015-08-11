@@ -9,11 +9,12 @@
 	
 	<terrain
 		heightmap="h.png"
+		terrainmap="t.png"
 		colormap="c.jpg"
 		foliagemap="f.png"
 		hudmap="c.jpg"
 		tilesize="32"
-		horizontalscale="3.0"
+		horizontalscale="3"
 		verticalscale="0.15"
 		>
 		
@@ -33,18 +34,16 @@
 		fogcolor="0.4, 0.4, 0.4"
 		fogdensity="0.02"
 		fogdensitysky="0.4"
-		rain="1500.0"
+		rain="1500"
 		/>
 	
 	<vehicleoption type="/vehicles/focus/focus.vehicle" />
 	<vehicleoption type="/vehicles/evo/evo.vehicle" />
 	<vehicleoption type="/vehicles/seat/seat.vehicle" />
 	
-	<race coordscale="3.0, 3.0"
-		targettime="350.0">
+	<race coordscale="3, 3" targettime="420">
 		
 		<startposition pos="233, 234" oridegrees="160" />
-		
 		<checkpoint coords="172, 216" />
 		<checkpoint coords="169, 370" />
 		<checkpoint coords="214, 425" />
@@ -70,7 +69,5 @@
 		<checkpoint coords="241, 299" />
 		<checkpoint coords="335, 372" />
 		<checkpoint coords="410, 295" />
-		
 	</race>
-	
 </level>

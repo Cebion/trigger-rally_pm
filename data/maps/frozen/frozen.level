@@ -9,6 +9,7 @@
 	
 	<terrain
 		heightmap="h.png"
+		terrainmap="t.png"
 		colormap="c.png"
 		foliagemap="f.png"
 		hudmap="c.png"
@@ -91,7 +92,7 @@
 	<vehicleoption type="/vehicles/focus/focus.vehicle" />
 	<vehicleoption type="/vehicles/evo/evo.vehicle" />
 	
-	<race coordscale="5, 5" targettime="281">
+	<race coordscale="5, 5" targettime="406">
 		
 		<startposition pos="64, 140" oridegrees="0" />
 		<checkpoint coords="85, 277" />

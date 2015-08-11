@@ -9,6 +9,7 @@
 	
 	<terrain
 		heightmap="h.png"
+		terrainmap="t.png"
 		colormap="c.jpg"
 		foliagemap="f.png"
 		hudmap="c.jpg"
@@ -42,7 +43,7 @@
 	<race coordscale="1.8, 1.8"
 		targettime="140.0">
 		
-		<startposition pos="64, 439" oridegrees="280" />
+		<startposition pos="64, 439" oridegrees="300" />
 
 		<checkpoint coords="170, 416" />
 		<checkpoint coords="76, 234" />
