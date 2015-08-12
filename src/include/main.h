@@ -272,6 +272,10 @@ private:
   /// Search paths for the data directory, as read from the configuration.
   std::list<std::string> cfg_datadirs;
   
+  /// Name of the codriver whose words to load.
+  /// Must be a valid directory in /data/sounds/codriver/.
+  std::string cfg_codrivername;
+  
   Speedunit cfg_speed_unit;
   Speedstyle cfg_speed_style;
   float hud_speedo_start_deg;

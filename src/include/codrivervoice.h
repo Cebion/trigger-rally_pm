@@ -46,6 +46,30 @@ enum CodriverWords
 };
 
 ///
+/// @brief X-macro describing codriver words.
+/// @details
+///
+///   Word          Note
+///
+#define CODRIVERVOICE_PARAMETERS    \
+    X(Left,         "left"      )   \
+    X(Right,        "right"     )   \
+    X(Flat,         "flat"      )   \
+    X(Easy,         "easy"      )   \
+    X(Medium,       "medium"    )   \
+    X(Chicane,      "chicane"   )   \
+    X(Square,       "square"    )   \
+    X(Hard,         "hard"      )   \
+    X(Hairpin,      "hairpin"   )   \
+    X(Over,         "over"      )   \
+    X(Into,         "into"      )   \
+    X(Jump,         "jump"      )   \
+    X(Finish,       "finish"    )   \
+    X(Dont,         "dont"      )   \
+    X(Cut,          "cut"       )   \
+    X(Long,         "long"      )
+
+///
 /// @brief Gives a voice to the codriver.
 ///
 class PCodriverVoice
@@ -78,22 +102,9 @@ private:
 
         while (ssnotes >> cw)
         {
-            if (cw == "left")       speak.emplace(words[CodriverWords::Left]); else
-            if (cw == "right")      speak.emplace(words[CodriverWords::Right]); else
-            if (cw == "flat")       speak.emplace(words[CodriverWords::Flat]); else
-            if (cw == "easy")       speak.emplace(words[CodriverWords::Easy]); else
-            if (cw == "medium")     speak.emplace(words[CodriverWords::Medium]); else
-            if (cw == "chicane")    speak.emplace(words[CodriverWords::Chicane]); else
-            if (cw == "square")     speak.emplace(words[CodriverWords::Square]); else
-            if (cw == "hard")       speak.emplace(words[CodriverWords::Hard]); else
-            if (cw == "hairpin")    speak.emplace(words[CodriverWords::Hairpin]); else
-            if (cw == "over")       speak.emplace(words[CodriverWords::Over]); else
-            if (cw == "into")       speak.emplace(words[CodriverWords::Into]); else
-            if (cw == "jump")       speak.emplace(words[CodriverWords::Jump]); else
-            if (cw == "finish")     speak.emplace(words[CodriverWords::Finish]); else
-            if (cw == "dont")       speak.emplace(words[CodriverWords::Dont]); else
-            if (cw == "cut")        speak.emplace(words[CodriverWords::Cut]); else
-            if (cw == "long")       speak.emplace(words[CodriverWords::Long]);
+#define X(Word, Note)   if (cw == Note) speak.emplace(words[CodriverWords::Word]); else
+            CODRIVERVOICE_PARAMETERS (void)0;
+#undef X
         }
 
         while (!speak.empty())

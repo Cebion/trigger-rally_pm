@@ -489,6 +489,12 @@ void MainApp::loadConfig()
            hud_speedo_mps_speed_mult = MPS_KPH_SPEED_MULT;
          }
       }
+      
+      val = walk->Attribute("codriver");
+      
+      if (val != nullptr)
+        cfg_codrivername = val;
+      
     } else if (!strcmp(walk->Value(), "controls")) {
       
       for (TiXmlElement *walk2 = walk->FirstChildElement();
@@ -822,24 +828,15 @@ bool MainApp::loadAll()
     if (!(aud_gravel = getSSAudio().loadSample("/sounds/gravel.wav", false))) return false;
     if (!(aud_crash1 = getSSAudio().loadSample("/sounds/bang.wav", false))) return false;
 
-    aud_codriverwords.resize(CodriverWords::NUMBER_OF_WORDS);
-
-    if (!(aud_codriverwords[CodriverWords::Left]    = getSSAudio().loadSample("/sounds/codriver/left.wav", false))) return false;
-    if (!(aud_codriverwords[CodriverWords::Right]   = getSSAudio().loadSample("/sounds/codriver/right.wav", false))) return false;
-    if (!(aud_codriverwords[CodriverWords::Flat]    = getSSAudio().loadSample("/sounds/codriver/flat.wav", false))) return false;
-    if (!(aud_codriverwords[CodriverWords::Easy]    = getSSAudio().loadSample("/sounds/codriver/easy.wav", false))) return false;
-    if (!(aud_codriverwords[CodriverWords::Medium]  = getSSAudio().loadSample("/sounds/codriver/medium.wav", false))) return false;
-    if (!(aud_codriverwords[CodriverWords::Chicane] = getSSAudio().loadSample("/sounds/codriver/chicane.wav", false))) return false;
-    if (!(aud_codriverwords[CodriverWords::Square]  = getSSAudio().loadSample("/sounds/codriver/square.wav", false))) return false;
-    if (!(aud_codriverwords[CodriverWords::Hard]    = getSSAudio().loadSample("/sounds/codriver/hard.wav", false))) return false;
-    if (!(aud_codriverwords[CodriverWords::Hairpin] = getSSAudio().loadSample("/sounds/codriver/hairpin.wav", false))) return false;
-    if (!(aud_codriverwords[CodriverWords::Over]    = getSSAudio().loadSample("/sounds/codriver/over.wav", false))) return false;
-    if (!(aud_codriverwords[CodriverWords::Into]    = getSSAudio().loadSample("/sounds/codriver/into.wav", false))) return false;
-    if (!(aud_codriverwords[CodriverWords::Jump]    = getSSAudio().loadSample("/sounds/codriver/jump.wav", false))) return false;
-    if (!(aud_codriverwords[CodriverWords::Finish]  = getSSAudio().loadSample("/sounds/codriver/finish.wav", false))) return false;
-    if (!(aud_codriverwords[CodriverWords::Dont]    = getSSAudio().loadSample("/sounds/codriver/dont.wav", false))) return false;
-    if (!(aud_codriverwords[CodriverWords::Cut]     = getSSAudio().loadSample("/sounds/codriver/cut.wav", false))) return false;
-    if (!(aud_codriverwords[CodriverWords::Long]    = getSSAudio().loadSample("/sounds/codriver/long.wav", false))) return false;
+    if (!cfg_codrivername.empty())
+    {
+        aud_codriverwords.resize(CodriverWords::NUMBER_OF_WORDS);
+#define X(Word, Note) \
+    if (!(aud_codriverwords[CodriverWords::Word] = \
+        getSSAudio().loadSample("/sounds/codriver/" + cfg_codrivername + "/" Note ".wav", false))) return false;
+        CODRIVERVOICE_PARAMETERS
+#undef X
+    }
   }
   
   if (!gui.loadColors("/menu.colors"))
