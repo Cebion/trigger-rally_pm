@@ -510,7 +510,7 @@ public:
         int px = static_cast<int> (pos.x);
         int py = static_cast<int> (pos.y);
 #endif
-        if (px > ms)
+        if (px >= ms)
         {
             do
                 px -= ms;
@@ -524,7 +524,7 @@ public:
             while (px < 0);
         }
 
-        if (py > ms)
+        if (py >= ms)
         {
             do
                 py -= ms;
@@ -571,7 +571,7 @@ public:
         int px = static_cast<int> (pos.x);
         int py = static_cast<int> (pos.y);
 #endif
-        if (px > ms)
+        if (px >= ms)
         {
             do
                 px -= ms;
@@ -585,7 +585,7 @@ public:
             while (px < 0);
         }
 
-        if (py > ms)
+        if (py >= ms)
         {
             do
                 py -= ms;
