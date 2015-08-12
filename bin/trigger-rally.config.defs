@@ -72,10 +72,14 @@
 		drivingassist="0.55"
 		enablesound="yes"
 		speedunit="mph"
+		codriver="ab"
 		/>
 		<!-- Possible values for speedunit:
 			kph - Kilometres per hour
 			mph - Miles per hour
+
+			The chosen codriver "X" must have a valid directory as:
+			/data/sounds/codriver/X/
 		-->
 
 	<controls>
