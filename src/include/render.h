@@ -494,20 +494,52 @@ public:
     /// @todo Should check if cmap.getcc() returns at least 3?
     /// @todo Should check if cmap.getcx() == cmap.getcy()?
     /// @todo Should remove paranoid clampings?
+    /// @todo Should actually measure performance of float vs int.
     /// @param [in] pos   Position in the terrain.
     /// @returns Color in OpenGL-style RGB.
     ///
     vec3f getCmapColor(const vec3f &pos) const
     {
         vec3f r;
+#if 0
+        const float ms = getMapSize();
+        float px = pos.x;
+        float py = pos.y;
+#else
+        const int ms = static_cast<int> (getMapSize());
+        int px = static_cast<int> (pos.x);
+        int py = static_cast<int> (pos.y);
+#endif
+        if (px > ms)
+        {
+            do
+                px -= ms;
+            while (px > ms);
+        }
+        else
+        if (px < 0)
+        {
+            do
+                px += ms;
+            while (px < 0);
+        }
 
-        // Map Size and Trimmed positions
-        const unsigned int ms = static_cast<unsigned int> (getMapSize());
-        const unsigned int tx = static_cast<unsigned int> (pos.x) % ms;
-        const unsigned int ty = static_cast<unsigned int> (pos.y) % ms;
+        if (py > ms)
+        {
+            do
+                py -= ms;
+            while (py > ms);
+        }
+        else
+        if (py < 0)
+        {
+            do
+                py += ms;
+            while (py < 0);
+        }
 
-        long int x = std::lround(tx * cmap.getcx() / getMapSize());
-        long int y = std::lround(ty * cmap.getcy() / getMapSize());
+        long int x = std::lround(px * cmap.getcx() / getMapSize());
+        long int y = std::lround(py * cmap.getcy() / getMapSize());
 
         CLAMP_UPPER(x, cmap.getcx() - 1);
         CLAMP_UPPER(y, cmap.getcy() - 1);
@@ -522,23 +554,54 @@ public:
     ///  in the terrain.
     /// @note The height component Z is ignored.
     /// @todo Should remove paranoid clampings?
+    /// @todo Should actually measure performance of float vs int.
     /// @param [in] pos   Position in the terrain.
     /// @returns Terrain type.
     ///
     TerrainType getRoadSurface(const vec3f &pos) const
     {
-        rgbcolor temp;
-
         if (tmap.getData() == nullptr)
             return TerrainType::Unknown;
+#if 0
+        const float ms = getMapSize();
+        float px = pos.x;
+        float py = pos.y;
+#else
+        const int ms = static_cast<int> (getMapSize());
+        int px = static_cast<int> (pos.x);
+        int py = static_cast<int> (pos.y);
+#endif
+        if (px > ms)
+        {
+            do
+                px -= ms;
+            while (px > ms);
+        }
+        else
+        if (px < 0)
+        {
+            do
+                px += ms;
+            while (px < 0);
+        }
 
-        // Map Size and Trimmed positions
-        const unsigned int ms = static_cast<unsigned int> (getMapSize());
-        const unsigned int tx = static_cast<unsigned int> (pos.x) % ms;
-        const unsigned int ty = static_cast<unsigned int> (pos.y) % ms;
+        if (py > ms)
+        {
+            do
+                py -= ms;
+            while (py > ms);
+        }
+        else
+        if (py < 0)
+        {
+            do
+                py += ms;
+            while (py < 0);
+        }
 
-        long int x = std::lround(tx * tmap.getcx() / getMapSize());
-        long int y = std::lround(ty * tmap.getcy() / getMapSize());
+        long int x = std::lround(px * tmap.getcx() / getMapSize());
+        long int y = std::lround(py * tmap.getcy() / getMapSize());
+        rgbcolor temp;
 
         CLAMP_UPPER(x, tmap.getcx() - 1);
         CLAMP_UPPER(y, tmap.getcy() - 1);
