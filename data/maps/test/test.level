@@ -10,12 +10,30 @@
 	<terrain
 		heightmap="h.png"
 		terrainmap="t.png"
+		foliagemap="f.png"
 		colormap="c.png"
 		hudmap="c.png"
-		tilesize="32"
-		horizontalscale="4"
-		verticalscale="0.1"
+		tilesize="64"
+		horizontalscale="3"
+		verticalscale="1"
 		>
+		
+		<foliageband
+			middle="0.6"
+			range="0.3"
+			density="0.0002"
+			sprite="/textures/veg/bush.png"
+			spritecount="2"
+			/>
+		
+		<foliageband
+			middle="0.4"
+			range="0.3"
+			density="0.00002"
+			sprite="/textures/veg/birch.png"
+			spritecount="2"
+			scale="15"
+			/>
 	</terrain>
 	
 	<weather
@@ -27,19 +45,17 @@
 		/>
 
 	<water
-		height="4"
+		height="8"
+		watertexture="/textures/water/dark-water.png"
 		/>
 	
 	<vehicleoption type="/vehicles/seat/seat.vehicle" />
 	<vehicleoption type="/vehicles/focus/focus.vehicle" />
 	<vehicleoption type="/vehicles/evo/evo.vehicle" />
 	
-	<race coordscale="2, 2" targettime="1900">
+	<race coordscale="3, 3" targettime="450">
 		
-		<startposition pos="44, 59" oridegrees="0" />
-		<checkpoint coords="687, 959" />
-		<checkpoint coords="44, 59" />
-		
+		<startposition pos="0, 170" oridegrees="270" />
+		<checkpoint coords="512, 170" />
 	</race>
-	
 </level>
