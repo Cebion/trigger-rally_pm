@@ -999,9 +999,14 @@ void MainApp::renderStateGame(float eyetranslation)
         {
             vec4f colr = cdcheckpoint_col[2];
 
-            if ((int)i == vehic->nextcdcp)
-                colr = cdcheckpoint_col[0];
-            else if ((int)i == (vehic->nextcdcp + 1) % (int)game->codrivercheckpt.size())
+            if (game->cdcheckpt_ordered)
+            {
+                if ((int)i == vehic->nextcdcp)
+                    colr = cdcheckpoint_col[0];
+                else if ((int)i == (vehic->nextcdcp + 1) % (int)game->codrivercheckpt.size())
+                    colr = cdcheckpoint_col[1];
+            }
+            else
                 colr = cdcheckpoint_col[1];
 
             glPushMatrix(); // 1
