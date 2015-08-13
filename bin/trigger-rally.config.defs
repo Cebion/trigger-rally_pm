@@ -26,7 +26,7 @@
 		anisotropy="4"
 		foliage="yes"
 		weather="yes"
-		snowflaketype="point"
+		snowflaketype="textured"
 		/>
 	<!--
 		anisotropy:
@@ -49,7 +49,7 @@
 
 		snowflaketype:
 			Chooses the kind of snowflake used in levels with snowfall.
-			"point" - default, but may not work on some computers
+			"point" - fast, but may not work on some computers
 			"square" - failsafe option but rather ugly
 			"textured" - the fancy, resource-heavy option
 	-->
@@ -80,6 +80,7 @@
 
 			The chosen codriver "X" must have a valid directory as:
 			/data/sounds/codriver/X/
+			The codriver can be disabled by setting his name to "mime".
 		-->
 
 	<controls>
