@@ -9,6 +9,7 @@
 
 	<terrain
 		heightmap="h.png"
+		terrainmap="t.png"
 		colormap="c.png"
 		foliagemap="f.png"
 		hudmap="c.png"
@@ -79,5 +80,28 @@
 		<checkpoint coords="489, 295" />
 		<checkpoint coords="505, 269" />
 		<checkpoint coords="431, 233" />
+
+		<codrivercp coords="398, 228" notes="hard right into medium left long" />
+		<codrivercp coords="374, 260" notes="easy right into easy left into easy right" />
+		<codrivercp coords="327, 243" notes="medium left long into square right" />
+		<codrivercp coords="310, 195" notes="hard right into hard left long into square right" />
+		<codrivercp coords="258, 90" notes="medium right into hard right long" />
+		<codrivercp coords="202, 95" notes="square left into easy left" />
+		<codrivercp coords="188, 132" notes="square right into hard left" />
+		<codrivercp coords="168, 169" notes="medium right into medium left" />
+		<codrivercp coords="146, 199" notes="medium right" />
+		<codrivercp coords="145, 243" notes="medium right into easy right long" />
+		<codrivercp coords="246, 211" notes="square left into square left" />
+		<codrivercp coords="257, 235" notes="medium right into flat left" />
+		<codrivercp coords="266, 335" notes="square left" />
+		<codrivercp coords="228, 372" notes="easy right" />
+		<codrivercp coords="169, 404" notes="easy right" />
+		<codrivercp coords="151, 454" notes="medium right into easy left" />
+		<codrivercp coords="367, 477" notes="medium right into medium left into medium right" />
+		<codrivercp coords="450, 449" notes="flat left into flat right" />
+		<codrivercp coords="492, 395" notes="medium right" />
+		<codrivercp coords="447, 358" notes="medium left long" />
+		<codrivercp coords="451, 315" notes="square right into square left into square right into square left" />
+		<codrivercp coords="497, 278" notes="square right into easy right into finish" />
 	</race>
 </level>
