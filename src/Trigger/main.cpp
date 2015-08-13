@@ -828,7 +828,7 @@ bool MainApp::loadAll()
     if (!(aud_gravel = getSSAudio().loadSample("/sounds/gravel.wav", false))) return false;
     if (!(aud_crash1 = getSSAudio().loadSample("/sounds/bang.wav", false))) return false;
 
-    if (!cfg_codrivername.empty())
+    if (!cfg_codrivername.empty() && cfg_codrivername != "mime")
     {
         aud_codriverwords.resize(CodriverWords::NUMBER_OF_WORDS);
 #define X(Word, Note) \
