@@ -59,7 +59,12 @@ struct AIDriver {
 
 class TriggerGame {
   friend class MainApp;
-  
+
+public:
+
+    /// Sets the codriver checkpoints to "ordered" (true) or "free" (false).
+    bool cdcheckpt_ordered = true;
+
 private:
   MainApp *app;
   
