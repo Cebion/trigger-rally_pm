@@ -99,6 +99,8 @@ bool TriggerGame::loadLevel(const std::string &filename)
   water.alpha = 1.0f;
   water.fixedalpha = false;
   
+  cdcheckpt_ordered = true;
+  
   TiXmlDocument xmlfile(filename.c_str());
   TiXmlElement *rootelem = PUtil::loadRootElement(xmlfile, "level");
   if (!rootelem) return false;
@@ -161,6 +163,17 @@ bool TriggerGame::loadLevel(const std::string &filename)
       
       val = walk->Attribute("targettime");
       if (val) targettime = atof(val);
+      
+      val = walk->Attribute("codrivercpmode");
+      
+        if (val != nullptr)
+        {
+            if (!strcmp(val, "ordered"))
+                cdcheckpt_ordered = true;
+            else
+            if (!strcmp(val, "free"))
+                cdcheckpt_ordered = false;
+        }
       
       for (TiXmlElement *walk2 = walk->FirstChildElement();
         walk2; walk2 = walk2->NextSiblingElement()) {
@@ -399,14 +412,31 @@ void TriggerGame::tick(float delta)
     
     if (!codrivercheckpt.empty())
     {
-        diff = makevec2f(codrivercheckpt[vehicle[i]->nextcdcp].pt) - makevec2f(vehicle[i]->body->getPosition());
-
-        if (diff.lengthsq() < 20.0f * 20.0f)
+        if (cdcheckpt_ordered)
         {
-            cdvoice.say(codrivercheckpt[vehicle[i]->nextcdcp].notes);
+            diff = makevec2f(codrivercheckpt[vehicle[i]->nextcdcp].pt) - makevec2f(vehicle[i]->body->getPosition());
 
-            if (++vehicle[i]->nextcdcp >= (int)codrivercheckpt.size())
-                vehicle[i]->nextcdcp = 0;
+            if (diff.lengthsq() < 20.0f * 20.0f)
+            {
+                cdvoice.say(codrivercheckpt[vehicle[i]->nextcdcp].notes);
+
+                if (++vehicle[i]->nextcdcp >= (int)codrivercheckpt.size())
+                    vehicle[i]->nextcdcp = 0;
+            }
+        }
+        else
+        {
+            for (std::size_t j=0; j < codrivercheckpt.size(); ++j)
+            {
+                diff = makevec2f(codrivercheckpt[j].pt) - makevec2f(vehicle[i]->body->getPosition());
+
+                if (diff.lengthsq() < 20.0f * 20.0f && static_cast<int> (j + 1) != vehicle[i]->nextcdcp)
+                {
+                    cdvoice.say(codrivercheckpt[j].notes);
+                    vehicle[i]->nextcdcp = j + 1;
+                    break;
+                }
+            }
         }
     }
   }
