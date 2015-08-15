@@ -60,10 +60,37 @@ PTerrain::PTerrain (TiXmlElement *element, const std::string &filepath, PSSTextu
   
   val = element->Attribute("hudmap");
   if (val) hudmap = val;
-  
+
+    TiXmlNode *bfnode;
+    std::vector<std::vector<float> > blurfilter;
+
+    if ((bfnode = element->FirstChild("blurfilter")) != nullptr)
+    {
+        for (TiXmlElement *walk = bfnode->FirstChildElement(); walk; walk = walk->NextSiblingElement())
+            if (!strcmp(walk->Value(), "row"))
+            {
+                std::stringstream bfrow(std::string(walk->Attribute("data")));
+                float elem;
+                std::vector<float> row;
+
+                while (bfrow >> elem)
+                    row.push_back(elem);
+
+                blurfilter.push_back(row);
+            }
+    }
+    else
+    {
+        blurfilter = {
+            {0.03f, 0.12f, 0.03f},
+            {0.12f, 0.40f, 0.12f},
+            {0.03f, 0.12f, 0.03f}
+        };
+    }
+
   for (TiXmlElement *walk = element->FirstChildElement();
     walk; walk = walk->NextSiblingElement()) {
-    
+
     if (!strcmp(walk->Value(), "foliageband") && MainApp::cfg_foliage) {
       
       PTerrainFoliageBand tfb;
@@ -185,28 +212,14 @@ PTerrain::PTerrain (TiXmlElement *element, const std::string &filepath, PSSTextu
   int cc = img.getcc();
   uint8 *dat = img.getData();
   
-  #define FILTERSIZE      3
-  #define FILTEROFFSET    ((FILTERSIZE-1)/2)
-  float blurfilter[FILTERSIZE][FILTERSIZE] = {
-#if 1
-    { 0.03, 0.12, 0.03 },
-    { 0.12, 0.40, 0.12 },
-    { 0.03, 0.12, 0.03 }
-#else
-    { 0.05, 0.15, 0.05 },
-    { 0.15, 0.20, 0.15 },
-    { 0.05, 0.15, 0.05 }
-#endif
-  };
-  
   for (int y=0; y<totsize; ++y) {
     for (int x=0; x<totsize; ++x) {
       float accum = 0.0;
-      for (int yi=0; yi<FILTERSIZE; ++yi) {
-        for (int xi=0; xi<FILTERSIZE; ++xi) {
+      for (int yi=0; yi < static_cast<int> (blurfilter.size()); ++yi) {
+        for (int xi=0; xi < static_cast<int> (blurfilter[yi].size()); ++xi) {
           accum += (float)dat[
-            (((y + yi - FILTEROFFSET) & totmask) * totsize +
-            ((x + xi - FILTEROFFSET) & totmask)) * cc] * blurfilter[yi][xi];
+            (((y + yi - (blurfilter.size()-1)/2) & totmask) * totsize +
+            ((x + xi - (blurfilter[yi].size()-1)/2) & totmask)) * cc] * blurfilter[yi][xi];
         }
       }
       hmap[y*totsize + x] = accum * scale_vt;
