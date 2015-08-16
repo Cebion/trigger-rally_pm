@@ -54,11 +54,11 @@ enum TerrainType
     X(Ice,              RGB(180, 220, 255),     0.20,       0.00)   \
     X(DeepSnow,         RGB(255, 255, 255),     0.30,       0.50)   \
     X(FirmSand,         RGB(255, 220,   0),     0.90,       0.05)   \
-    X(LooseSand,        RGB(255, 255, 140),     0.80,       0.20)   \
+    X(LooseSand,        RGB(255, 255, 140),     0.80,       0.30)   \
     X(PressedEarth,     RGB(255, 200, 200),     1.00,       0.05)   \
-    X(LooseEarth,       RGB(255, 140, 140),     0.80,       0.10)   \
+    X(LooseEarth,       RGB(255, 140, 140),     0.80,       0.15)   \
     X(MoistEarth,       RGB(255,   0,   0),     1.10,       0.15)   \
-    X(Mud,              RGB(160,   0,   0),     0.80,       0.20)   \
+    X(Mud,              RGB(160,   0,   0),     0.80,       0.25)   \
     X(FineGravel,       RGB(140, 140, 140),     0.90,       0.10)   \
     X(RoughGravel,      RGB(  0,   0,   0),     0.80,       0.05)   \
     X(Grass,            RGB(  0, 180,   0),     0.40,       0.10)   \
