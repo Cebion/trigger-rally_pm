@@ -24,7 +24,7 @@
 #include <thread>
 #include <vector>
 
-enum CodriverWords
+enum class CodriverWords
 {
     Left,
     Right,
@@ -42,6 +42,15 @@ enum CodriverWords
     Dont,
     Cut,
     Long,
+    Tarmac,
+    Gravel,
+    Dirt,
+    Mud,
+    Sand,
+    Ice,
+    Snow,
+    Water,
+    Grass,
     NUMBER_OF_WORDS
 };
 
@@ -67,7 +76,16 @@ enum CodriverWords
     X(Finish,       "finish"    )   \
     X(Dont,         "dont"      )   \
     X(Cut,          "cut"       )   \
-    X(Long,         "long"      )
+    X(Long,         "long"      )   \
+    X(Tarmac,       "tarmac"    )   \
+    X(Gravel,       "gravel"    )   \
+    X(Dirt,         "dirt"      )   \
+    X(Mud,          "mud"       )   \
+    X(Sand,         "sand"      )   \
+    X(Ice,          "ice"       )   \
+    X(Snow,         "snow"      )   \
+    X(Water,        "water"     )   \
+    X(Grass,        "grass"     )
 
 ///
 /// @brief Gives a voice to the codriver.
@@ -85,7 +103,7 @@ public:
 
     void say(const std::string &notes) const
     {
-        if (words.empty() || words.size() != CodriverWords::NUMBER_OF_WORDS)
+        if (words.empty() || words.size() != static_cast<unsigned int> (CodriverWords::NUMBER_OF_WORDS))
             return;
 
         std::thread ts(&PCodriverVoice::asyncSay, this, notes);
@@ -102,7 +120,7 @@ private:
 
         while (ssnotes >> cw)
         {
-#define X(Word, Note)   if (cw == Note) speak.emplace(words[CodriverWords::Word]); else
+#define X(Word, Note)   if (cw == Note) speak.emplace(words[static_cast<unsigned int> (CodriverWords::Word)]); else
             CODRIVERVOICE_PARAMETERS (void)0;
 #undef X
         }
