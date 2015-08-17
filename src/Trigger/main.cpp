@@ -830,9 +830,9 @@ bool MainApp::loadAll()
 
     if (!cfg_codrivername.empty() && cfg_codrivername != "mime")
     {
-        aud_codriverwords.resize(CodriverWords::NUMBER_OF_WORDS);
+        aud_codriverwords.resize(static_cast<unsigned int> (CodriverWords::NUMBER_OF_WORDS));
 #define X(Word, Note) \
-    if (!(aud_codriverwords[CodriverWords::Word] = \
+    if (!(aud_codriverwords[static_cast<unsigned int> (CodriverWords::Word)] = \
         getSSAudio().loadSample("/sounds/codriver/" + cfg_codrivername + "/" Note ".wav", false))) return false;
         CODRIVERVOICE_PARAMETERS
 #undef X
