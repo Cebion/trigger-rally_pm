@@ -58,5 +58,51 @@
 		<checkpoint coords="428, 217" />
 		<checkpoint coords="374, 195" />
 		<checkpoint coords="415, 70" />
+
+		<codrivercp coords="195, 77" notes="flat right over dirt into square left" />
+		<codrivercp coords="102, 68" notes="medium left" />
+		<codrivercp coords="151, 37" notes="flat right" />
+		<codrivercp coords="246, 53" notes="chicane left into hairpin left" />
+		<codrivercp coords="309, 90" notes="medium left over tarmac" />
+		<codrivercp coords="283, 111" notes="flat left" />
+		<codrivercp coords="222, 113" notes="medium right" />
+		<codrivercp coords="213, 152" notes="medium left long" />
+		<codrivercp coords="244, 202" notes="square left into medium right" />
+		<codrivercp coords="176, 179" notes="easy left over dirt into flat left over tarmac" />
+		<codrivercp coords="123, 124" notes="medium right long into flat right" />
+		<codrivercp coords="43, 203" notes="flat left" />
+		<codrivercp coords="29, 346" notes="medium right long" />
+		<codrivercp coords="73, 392" notes="hairpin right over dirt" />
+		<codrivercp coords="83, 363" notes="medium left long" />
+		<codrivercp coords="77, 303" notes="easy left over tarmac" />
+		<codrivercp coords="138, 313" notes="hard right into hard left" />
+		<codrivercp coords="181, 257" notes="easy left" />
+		<codrivercp coords="181, 359" notes="square left over dirt" />
+		<codrivercp coords="140, 359" notes="easy right into square right over tarmac" />
+		<codrivercp coords="111, 393" notes="flat left" />
+		<codrivercp coords="184, 474" notes="medium right" />
+		<codrivercp coords="262, 464" notes="hairpin right over dirt" />
+		<codrivercp coords="265, 434" notes="flat right into hard left" />
+		<codrivercp coords="208, 442" notes="flat right over tarmac into flat left into hard left" />
+		<codrivercp coords="270, 395" notes="hard left into hairpin right over dirt" />
+		<codrivercp coords="306, 436" notes="easy left into medium right long" />
+		<codrivercp coords="387, 476" notes="flat left into medium right" />
+		<codrivercp coords="469, 417" notes="hard right over tarmac into medium left" />
+		<codrivercp coords="384, 415" notes="easy left into medium left over dirt" />
+		<codrivercp coords="431, 326" notes="hard right over tarmac" />
+		<codrivercp coords="393, 312" notes="easy left" />
+		<codrivercp coords="272, 279" notes="hard left" />
+		<codrivercp coords="281, 272" notes="square right" />
+		<codrivercp coords="315, 282" notes="medium right" />
+		<codrivercp coords="303, 232" notes="medium left" />
+		<codrivercp coords="269, 215" notes="easy left into chicane right" />
+		<codrivercp coords="311, 183" notes="square right" />
+		<codrivercp coords="343, 145" notes="hard left" />
+		<codrivercp coords="370, 128" notes="square right over dirt" />
+		<codrivercp coords="411, 155" notes="medium left" />
+		<codrivercp coords="465, 186" notes="easy left into hairpin left into easy right" />
+		<codrivercp coords="402, 230" notes="hard left" />
+		<codrivercp coords="374, 146" notes="medium left over dirt into flat right" />
+		<codrivercp coords="401, 112" notes="over finish" />
 	</race>
 </level>
