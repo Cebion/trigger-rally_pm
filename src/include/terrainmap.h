@@ -19,7 +19,7 @@
 
 #pragma once
 
-enum TerrainType
+enum class TerrainType
 {
     Unknown,
     RacingTarmac,
