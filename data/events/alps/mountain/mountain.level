@@ -69,5 +69,31 @@
 		<checkpoint coords="241, 299" />
 		<checkpoint coords="335, 372" />
 		<checkpoint coords="410, 295" />
+
+		<codrivercp coords="214, 198" notes="medium right over mud" />
+		<codrivercp coords="167, 295" notes="flat left into medium right" />
+		<codrivercp coords="219, 413" notes="over tarmac" />
+		<codrivercp coords="196, 242" notes="flat left into easy left" />
+		<codrivercp coords="284, 61" notes="flat left into medium left over snow" />
+		<codrivercp coords="333, 131" notes="medium right long over ice" />
+		<codrivercp coords="321, 198" notes="hard left dont cut into hard right" />
+		<codrivercp coords="418, 177" notes="easy left over tarmac" />
+		<codrivercp coords="466, 139" notes="medium right long" />
+		<codrivercp coords="427, 52" notes="over mud" />
+		<codrivercp coords="107, 52" notes="medium right over tarmac" />
+		<codrivercp coords="88, 106" notes="easy left into medium right into hard left" />
+		<codrivercp coords="101, 200" notes="medium right over snow" />
+		<codrivercp coords="40, 239" notes="hard right" />
+		<codrivercp coords="87, 251" notes="hard left over mud" />
+		<codrivercp coords="94, 321" notes="flat right" />
+		<codrivercp coords="88, 377" notes="over tarmac" />
+		<codrivercp coords="125, 459" notes="easy right" />
+		<codrivercp coords="221, 461" notes="medium left over mud into easy right" />
+		<codrivercp coords="368, 441" notes="over tarmac square right into flat left" />
+		<codrivercp coords="463, 323" notes="medium right long" />
+		<codrivercp coords="286, 254" notes="hard right over mud into easy right" />
+		<codrivercp coords="303, 376" notes="medium right over tarmac" />
+		<codrivercp coords="346, 337" notes="flat left over finish" />
+
 	</race>
 </level>
