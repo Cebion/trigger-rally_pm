@@ -61,5 +61,37 @@
 		<checkpoint coords="348, 358" />
 		<checkpoint coords="304, 438" />
 		<checkpoint coords="402, 500" />
+
+		<codrivercp coords="382, 36" notes="hairpin left over dirt" />
+		<codrivercp coords="358, 35" notes="medium right into square left" />
+		<codrivercp coords="283, 40" notes="medium right long" />
+		<codrivercp coords="227, 98" notes="medium left over tarmac" />
+		<codrivercp coords="203, 152" notes="flat right into hard right" />
+		<codrivercp coords="100, 213" notes="easy left" />
+		<codrivercp coords="140, 240" notes="medium right" />
+		<codrivercp coords="219, 243" notes="over dirt medium left" />
+		<codrivercp coords="266, 204" notes="flat left" />
+		<codrivercp coords="328, 251" notes="medium left into medium right" />
+		<codrivercp coords="370, 319" notes="hard left" />
+		<codrivercp coords="350, 363" notes="medium left into hairpin right" />
+		<codrivercp coords="292, 398" notes="easy left over tarmac" />
+		<codrivercp coords="263, 446" notes="over jump" />
+		<codrivercp coords="153, 477" notes="hard left" />
+		<codrivercp coords="100, 430" notes="hairpin right over dirt" />
+		<codrivercp coords="139, 404" notes="chicane left" />
+		<codrivercp coords="112, 366" notes="medium left" />
+		<codrivercp coords="80, 298" notes="hairpin left" />
+		<codrivercp coords="109, 286" notes="square right" />
+		<codrivercp coords="145, 292" notes="chicane right into easy left over tarmac" />
+		<codrivercp coords="204, 262" notes="easy right into square left" />
+		<codrivercp coords="280, 246" notes="medium left" />
+		<codrivercp coords="291, 311" notes="chicane right into hairpin right over dirt" />
+		<codrivercp coords="257, 344" notes="flat left into square right" />
+		<codrivercp coords="314, 349" notes="chicane left into hairpin left" />
+		<codrivercp coords="370, 319" notes="hard left" />
+		<codrivercp coords="350, 363" notes="medium left into hairpin right" />
+		<codrivercp coords="292, 398" notes="easy left into hairpin right over tarmac" />
+		<codrivercp coords="331, 438" notes="medium left long over finish" />
+
 	</race>
 </level>
