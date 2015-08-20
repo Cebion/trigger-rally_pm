@@ -106,8 +106,7 @@ public:
         if (words.empty() || words.size() != static_cast<unsigned int> (CodriverWords::NUMBER_OF_WORDS))
             return;
 
-        std::thread ts(&PCodriverVoice::asyncSay, this, notes);
-        ts.detach();
+        std::thread(&PCodriverVoice::asyncSay, this, notes).detach();
     }
 
 private:
