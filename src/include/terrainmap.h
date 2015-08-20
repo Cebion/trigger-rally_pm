@@ -36,6 +36,7 @@ enum class TerrainType
     FineGravel,
     RoughGravel,
     Grass,
+    Thick,
     DeepWater
 };
 
@@ -62,4 +63,5 @@ enum class TerrainType
     X(FineGravel,       RGB(140, 140, 140),     0.90,       0.10)   \
     X(RoughGravel,      RGB(  0,   0,   0),     0.60,       0.20)   \
     X(Grass,            RGB(  0, 180,   0),     0.40,       0.10)   \
+    X(Thick,            RGB(  0,  90,   0),     0.40,       0.70)   \
     X(DeepWater,        RGB(  0,   0, 255),     0.20,       0.60)
