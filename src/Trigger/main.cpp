@@ -259,6 +259,9 @@ void MainApp::loadConfig()
   
   cfg_drivingassist = 1.0f;
   cfg_enable_sound = true;
+  cfg_volume_engine = 0.33f;
+  cfg_volume_sfx = 1.0f;
+  cfg_volume_codriver = 1.0f;
   cfg_anisotropy = 1.0f;
   cfg_foliage = true;
   cfg_weather = true;
@@ -397,6 +400,24 @@ void MainApp::loadConfig()
       if (val) {
         setStereoEyeSeperation(atof(val) * sepMult);
       }
+    }
+    else
+    if (!strcmp(walk->Value(), "audio"))
+    {
+        val = walk->Attribute("enginevolume");
+
+        if (val != nullptr)
+            cfg_volume_engine = atof(val);
+
+        val = walk->Attribute("sfxvolume");
+
+        if (val != nullptr)
+            cfg_volume_sfx = atof(val);
+
+        val = walk->Attribute("codrivervolume");
+
+        if (val != nullptr)
+            cfg_volume_codriver = atof(val);
     }
     else
     if (!strcmp(walk->Value(), "graphics"))
@@ -1375,21 +1396,21 @@ void MainApp::tickStateGame(float delta)
   nextcpangle = -atan2(diff.y, diff.x) - forwangle + PI*0.5f;
   
   if (cfg_enable_sound) {
-    audinst_engine->setGain(0.33f);
-    audinst_engine->setPitch(vehic->getEngineRPM() / 7500.0f);
+    audinst_engine->setGain(cfg_volume_engine);
+    audinst_engine->setPitch(vehic->getEngineRPM() / 9000.0f);
     
     float windlevel = fabsf(vehic->forwardspeed) * 0.6f;
     
-    audinst_wind->setGain(windlevel * 0.03f);
+    audinst_wind->setGain(windlevel * 0.03f * cfg_volume_sfx);
     audinst_wind->setPitch(windlevel * 0.02f + 0.9f);
     
-    audinst_gravel->setGain(vehic->getSkidLevel() * 0.1f);
+    audinst_gravel->setGain(vehic->getSkidLevel() * 0.1f * cfg_volume_sfx);
     audinst_gravel->setPitch(1.0f);//vehic->getEngineRPM() / 7500.0f);
     
     if (vehic->getFlagGearChange()) {
       audinst.push_back(new PAudioInstance(aud_gearchange));
       audinst.back()->setPitch(1.0f + randm11*0.02f);
-      audinst.back()->setGain(0.3f);
+      audinst.back()->setGain(0.3f * cfg_volume_sfx);
       audinst.back()->play();
     }
     
@@ -1398,7 +1419,7 @@ void MainApp::tickStateGame(float delta)
       if (crashlevel > 0.0f) {
         audinst.push_back(new PAudioInstance(aud_crash1));
         audinst.back()->setPitch(1.0f + randm11*0.02f);
-        audinst.back()->setGain(logf(1.0f + crashlevel));
+        audinst.back()->setGain(logf(1.0f + crashlevel) * cfg_volume_sfx);
         audinst.back()->play();
       }
       crashnoise_timeout = rand01 * 0.1f + 0.01f;
