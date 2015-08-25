@@ -274,6 +274,11 @@ private:
   float cfg_drivingassist;
   bool cfg_enable_sound;
   
+  /// Basic volume control.
+  float cfg_volume_engine       = 0.33f;    ///< Engine.
+  float cfg_volume_sfx          = 1.00f;    ///< Sound effects (wind, gear change, crash, skid, etc.)
+  float cfg_volume_codriver     = 1.00f;    ///< Codriver voice.
+  
   /// Search paths for the data directory, as read from the configuration.
   std::list<std::string> cfg_datadirs;
   
@@ -420,6 +425,11 @@ protected:
 public:
   MainApp(const std::string &title, const std::string &name) : PApp(title, name) { }
   //MainApp::~MainApp(); // should not have destructor, use unload
+  
+  float getCodriverVolume() const
+  {
+      return cfg_volume_codriver;
+  }
   
   void config();
   void load();
