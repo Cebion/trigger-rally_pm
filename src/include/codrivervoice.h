@@ -96,8 +96,9 @@ public:
 
     PCodriverVoice() = delete;
 
-    explicit PCodriverVoice(const std::vector<PAudioSample *> &words):
-        words(words)
+    PCodriverVoice(const std::vector<PAudioSample *> &words, float volume):
+        words(words),
+        volume(volume)
     {
     }
 
@@ -126,7 +127,7 @@ private:
 
         while (!speak.empty())
         {
-            speak.front().setGain(1.0f);
+            speak.front().setGain(volume);
             speak.front().play();
 
             while (speak.front().isPlaying());
@@ -136,5 +137,6 @@ private:
     }
 
     std::vector<PAudioSample *> words;
+    float volume;
 };
 

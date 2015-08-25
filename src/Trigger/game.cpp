@@ -10,7 +10,7 @@
 
 
 TriggerGame::TriggerGame(MainApp *parent):
-    cdvoice(parent->getCodriverWords())
+    cdvoice(parent->getCodriverWords(), parent->getCodriverVolume())
 {
   app = parent;
   
