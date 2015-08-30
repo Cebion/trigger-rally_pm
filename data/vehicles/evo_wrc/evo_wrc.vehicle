@@ -39,13 +39,13 @@
 		model="evo_wrc.obj"
 		scale="0.01">
 		
-		<wheel drive="0.7" steer="0.7" brake1="200.0" pos="0.65, 1.3, -0.2" radius="0.3" force="40000.0" dampening="17000.0" />
-		<wheel drive="0.7" steer="0.7" brake1="200.0" pos="-0.65, 1.3, -0.2" radius="0.3" force="40000.0" dampening="17000.0" />
-		<wheel drive="1.0" steer="0.0" brake1="100.0" pos="0.65, -1.0, -0.2" radius="0.3" force="40000.0" dampening="17000.0" brake2="1000.0" />
-		<wheel drive="1.0" steer="0.0" brake1="100.0" pos="-0.65, -1.0, -0.2" radius="0.3" force="40000.0" dampening="17000.0" brake2="1000.0" />
+		<wheel drive="1.0" steer="0.85" brake1="200.0" pos="0.65, 1.3, -0.15" radius="0.3" force="75000.0" dampening="17000.0" />
+		<wheel drive="1.0" steer="0.85" brake1="200.0" pos="-0.65, 1.3, -0.15" radius="0.3" force="75000.0" dampening="17000.0" />
+		<wheel drive="1.0" steer="0.0" brake1="100.0" pos="0.65, -1.0, -0.15" radius="0.3" force="75000.0" dampening="17000.0" brake2="1000.0" />
+		<wheel drive="1.0" steer="0.0" brake1="100.0" pos="-0.65, -1.0, -0.15" radius="0.3" force="75000.0" dampening="17000.0" brake2="1000.0" />
 		
-		<clip type="body" pos="1.0, 1.5, 1.0" force="300000.0" dampening="100000.0" />
-		<clip type="body" pos="-1.0, 1.5, 1.0" force="300000.0" dampening="100000.0" />
+		<clip type="body" pos="1.0, 1.5, 1.0" force="300000.0" dampening="30000.0" />
+		<clip type="body" pos="-1.0, 1.5, 1.0" force="300000.0" dampening="30000.0" />
 		<clip type="body" pos="1.0, -1.0, 1.0" force="300000.0" dampening="100000.0" />
 		<clip type="body" pos="-1.0, -1.0, 1.0" force="300000.0" dampening="100000.0" />
 		
