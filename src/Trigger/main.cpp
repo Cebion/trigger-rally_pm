@@ -1202,14 +1202,38 @@ void MainApp::tickStateGame(float delta)
   //PULLTOWARD(vehic->ctrl.aim.y, 0.0, delta * 2.0);
   
   game->tick(delta);
-  
-  #if 1
+
+#if 1
+#define BRIGHTEN_ADD        0.20f
+
   for (unsigned int i=0; i<game->vehicle.size(); i++) {
     for (unsigned int j=0; j<game->vehicle[i]->part.size(); j++) {
+      const vec3f bodydirtpos = game->vehicle[i]->part[j].ref_world.getPosition();
+      const dirtinfo bdi = PUtil::getDirtInfo(game->terrain->getRoadSurface(bodydirtpos));
+
+    if (bdi.startsize >= 0.30f && game->vehicle[i]->forwardspeed > 30.0f)
+    {
+        const float sizemult = game->vehicle[i]->forwardspeed * 0.03f;
+        const vec3f bodydirtvec = {0, 0, 1}; // game->vehicle[i]->body->getLinearVelAtPoint(bodydirtpos);
+        vec3f bodydirtcolor = game->terrain->getCmapColor(bodydirtpos);
+
+        bodydirtcolor.x += BRIGHTEN_ADD;
+        bodydirtcolor.y += BRIGHTEN_ADD;
+        bodydirtcolor.z += BRIGHTEN_ADD;
+
+        CLAMP(bodydirtcolor.x, 0.0f, 1.0f);
+        CLAMP(bodydirtcolor.y, 0.0f, 1.0f);
+        CLAMP(bodydirtcolor.z, 0.0f, 1.0f);
+        psys_dirt->setColorStart(bodydirtcolor.x, bodydirtcolor.y, bodydirtcolor.z, 1.0f);
+        psys_dirt->setColorEnd(bodydirtcolor.x, bodydirtcolor.y, bodydirtcolor.z, 0.0f);
+        psys_dirt->setSize(bdi.startsize * sizemult, bdi.endsize * sizemult);
+        psys_dirt->setDecay(bdi.decay);
+        psys_dirt->addParticle(bodydirtpos, bodydirtvec);
+    }
+    else
       for (unsigned int k=0; k<game->vehicle[i]->part[j].wheel.size(); k++) {
         if (rand01 * 20.0f < game->vehicle[i]->part[j].wheel[k].dirtthrow)
         {
-#define BRIGHTEN_ADD        0.20f
             const vec3f dirtpos = game->vehicle[i]->part[j].wheel[k].dirtthrowpos;
             const vec3f dirtvec = game->vehicle[i]->part[j].wheel[k].dirtthrowvec;
             const dirtinfo di = PUtil::getDirtInfo(game->terrain->getRoadSurface(dirtpos));
@@ -1226,11 +1250,12 @@ void MainApp::tickStateGame(float delta)
             psys_dirt->setSize(di.startsize, di.endsize);
             psys_dirt->setDecay(di.decay);
             psys_dirt->addParticle(dirtpos, dirtvec /*+ vec3f::rand() * 10.0f*/);
-#undef BRIGHTEN_ADD
         }
       }
     }
   }
+  
+  #undef BRIGHTEN_ADD
   #endif
   
   float angtarg = 0.0f;
