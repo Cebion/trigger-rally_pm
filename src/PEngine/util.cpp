@@ -12,7 +12,7 @@
 ///
 TerrainType PUtil::decideRoadSurface(const rgbcolor &c)
 {
-#define X(Name, RgbColor, Friction, Resistance) \
+#define X(Name, RgbColor, Friction, Resistance, DirtInfo) \
     if (c == RgbColor) return TerrainType::Name;
     TERRAINMAP_MATERIALS
 #undef X
@@ -25,7 +25,7 @@ TerrainType PUtil::decideRoadSurface(const rgbcolor &c)
 ///
 float PUtil::decideFrictionCoef(TerrainType tt)
 {
-#define X(Name, RgbColor, Friction, Resistance) \
+#define X(Name, RgbColor, Friction, Resistance, DirtInfo) \
     if (tt == TerrainType::Name) return Friction;
     TERRAINMAP_MATERIALS
 #undef X
@@ -38,7 +38,7 @@ float PUtil::decideFrictionCoef(TerrainType tt)
 ///
 float PUtil::decideResistance(TerrainType tt)
 {
-#define X(Name, RgbColor, Friction, Resistance) \
+#define X(Name, RgbColor, Friction, Resistance, DirtInfo) \
     if (tt == TerrainType::Name) return Resistance;
     TERRAINMAP_MATERIALS
 #undef X
@@ -47,11 +47,24 @@ float PUtil::decideResistance(TerrainType tt)
 }
 
 ///
+/// @brief Returns the road surface maximum dirt size.
+///
+dirtinfo PUtil::getDirtInfo(TerrainType tt)
+{
+#define X(Name, RgbColor, Friction, Resistance, DirtInfo) \
+    if (tt == TerrainType::Name) return DirtInfo;
+    TERRAINMAP_MATERIALS
+#undef X
+
+    return {0.10f, 0.50f, 6.00f}; // tt == TerrainType::Unknown
+}
+
+///
 /// @brief Get string with information about terrain, for debugging purposes.
 ///
 const char * PUtil::getTerrainInfo(TerrainType tt)
 {
-#define X(Name, RgbColor, Friction, Resistance) \
+#define X(Name, RgbColor, Friction, Resistance, DirtInfo) \
     if (tt == TerrainType::Name) return #Name " " #Friction " " #Resistance;
     TERRAINMAP_MATERIALS
 #undef X
@@ -66,7 +79,7 @@ const char * PUtil::getTerrainInfo(TerrainType tt)
 ///
 rgbcolor PUtil::getTerrainColor(TerrainType tt)
 {
-#define X(Name, RgbColor, Friction, Resistance) \
+#define X(Name, RgbColor, Friction, Resistance, DirtInfo) \
     if (tt == TerrainType::Name) return RgbColor;
     TERRAINMAP_MATERIALS
 #undef X

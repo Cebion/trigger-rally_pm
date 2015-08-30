@@ -83,6 +83,25 @@ class PCodriverVoice;
 #endif
 
 ///
+/// @brief Helper structure for storing dirt information.
+///
+struct dirtinfo
+{
+    float startsize = 0.1f;
+    float endsize   = 0.5f;
+    float decay     = 6.0f;
+    
+    dirtinfo() = default;
+    
+    dirtinfo(float startsize, float endsize, float decay):
+        startsize(startsize),
+        endsize(endsize),
+        decay(decay)
+    {
+    }
+};
+
+///
 /// @brief Helper structure for storing colors.
 ///
 struct rgbcolor
@@ -142,6 +161,7 @@ public:
   static float decideFrictionCoef(TerrainType tt);
   static float decideResistance(TerrainType tt);
   static const char * getTerrainInfo(TerrainType tt);
+  static dirtinfo getDirtInfo(TerrainType tt);
   static rgbcolor getTerrainColor(TerrainType tt);
  
   /*! Get token and value from a string line. The token is the string

@@ -1212,6 +1212,7 @@ void MainApp::tickStateGame(float delta)
 #define BRIGHTEN_ADD        0.20f
             const vec3f dirtpos = game->vehicle[i]->part[j].wheel[k].dirtthrowpos;
             const vec3f dirtvec = game->vehicle[i]->part[j].wheel[k].dirtthrowvec;
+            const dirtinfo di = PUtil::getDirtInfo(game->terrain->getRoadSurface(dirtpos));
             vec3f dirtcolor = game->terrain->getCmapColor(dirtpos);
 
             dirtcolor.x += BRIGHTEN_ADD;
@@ -1222,6 +1223,8 @@ void MainApp::tickStateGame(float delta)
             CLAMP(dirtcolor.z, 0.0f, 1.0f);
             psys_dirt->setColorStart(dirtcolor.x, dirtcolor.y, dirtcolor.z, 1.0f);
             psys_dirt->setColorEnd(dirtcolor.x, dirtcolor.y, dirtcolor.z, 0.0f);
+            psys_dirt->setSize(di.startsize, di.endsize);
+            psys_dirt->setDecay(di.decay);
             psys_dirt->addParticle(dirtpos, dirtvec /*+ vec3f::rand() * 10.0f*/);
 #undef BRIGHTEN_ADD
         }
