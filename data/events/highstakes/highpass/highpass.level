@@ -76,6 +76,38 @@
 		<checkpoint coords="272, 85" />
 		<checkpoint coords="191, 186" />
 
+		<codrivercp coords="995, 52" notes="medium right into medium left long" />
+		<codrivercp coords="848, 197" notes="easy left into flat right" />
+		<codrivercp coords="662, 139" notes="easy right dont cut" />
+		<codrivercp coords="577, 175" notes="medium right dont cut" />
+		<codrivercp coords="562, 243" notes="square right" />
+		<codrivercp coords="609, 266" notes="medium left long" />
+		<codrivercp coords="711, 269" notes="easy right" />
+		<codrivercp coords="746, 403" notes="medium right" />
+		<codrivercp coords="830, 478" notes="easy left long" />
+		<codrivercp coords="977, 624" notes="easy right" />
+		<codrivercp coords="954, 844" notes="hard left" />
+		<codrivercp coords="938, 957" notes="flat right into medium left dont cut" />
+		<codrivercp coords="852, 901" notes="easy right into easy left" />
+		<codrivercp coords="741, 688" notes="medium right into square right" />
+		<codrivercp coords="672, 632" notes="medium left into medium right long" />
+		<codrivercp coords="573, 723" notes="flat left into flat right" />
+		<codrivercp coords="601, 812" notes="hard left" />
+		<codrivercp coords="596, 877" notes="flat right into easy right" />
+		<codrivercp coords="367, 860" notes="hard left long" />
+		<codrivercp coords="283, 870" notes="medium right" />
+		<codrivercp coords="176, 704" notes="easy left" />
+		<codrivercp coords="124, 574" notes="easy right" />
+		<codrivercp coords="114, 470" notes="hard left" />
+		<codrivercp coords="101, 407" notes="easy right" />
+		<codrivercp coords="170, 333" notes="medium left long" />
+		<codrivercp coords="324, 305" notes="easy left into medium right long" />
+		<codrivercp coords="490, 299" notes="chicane right long" />
+		<codrivercp coords="397, 240" notes="easy left long" />
+		<codrivercp coords="309, 145" notes="square right" />
+		<codrivercp coords="269, 84" notes="easy right" />
+		<codrivercp coords="190, 102" notes="hard right dont cut over finish" />
+
 	</race>
 
 </level>
