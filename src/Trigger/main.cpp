@@ -1211,9 +1211,9 @@ void MainApp::tickStateGame(float delta)
       const vec3f bodydirtpos = game->vehicle[i]->part[j].ref_world.getPosition();
       const dirtinfo bdi = PUtil::getDirtInfo(game->terrain->getRoadSurface(bodydirtpos));
 
-    if (bdi.startsize >= 0.30f && game->vehicle[i]->forwardspeed > 30.0f)
+    if (bdi.startsize >= 0.30f && game->vehicle[i]->forwardspeed > 23.0f)
     {
-        const float sizemult = game->vehicle[i]->forwardspeed * 0.03f;
+        const float sizemult = game->vehicle[i]->forwardspeed * 0.035f;
         const vec3f bodydirtvec = {0, 0, 1}; // game->vehicle[i]->body->getLinearVelAtPoint(bodydirtpos);
         vec3f bodydirtcolor = game->terrain->getCmapColor(bodydirtpos);
 
