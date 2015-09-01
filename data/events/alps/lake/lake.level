@@ -15,8 +15,16 @@
 		hudmap="c.jpg"
 		tilesize="32"
 		horizontalscale="2.5"
-		verticalscale="0.22"
-		>
+		verticalscale="1.2"
+		>	
+
+		<blurfilter>
+			<row data="0.01001 0.01001 0.01001 0.01001 0.01001" />
+			<row data="0.01001 0.01001 0.01001 0.01001 0.01001" />
+			<row data="0.01001 0.01001 0.01001 0.01001 0.01001" />
+			<row data="0.01001 0.01001 0.01001 0.01001 0.01001" />
+			<row data="0.01001 0.01001 0.01001 0.01001 0.01001" />
+		</blurfilter>
 		
 		<foliageband
 			middle="0.6"
@@ -37,7 +45,7 @@
 		/>
 
 	<water
-		height="1.5"
+		height="1.7"
 		watertexture="/textures/water/dark-water.png"
 		/>
 	
