@@ -9,6 +9,7 @@
 
 	<terrain
 		heightmap="h.png"
+		terrainmap="t.png"
 		colormap="c.png"
 		foliagemap="f.png"
 		hudmap="m.png"
@@ -50,13 +51,11 @@
 			/>
 	</terrain>
 
-	<weather
-		rain="600"
-		cloudtexture="/textures/sky/overcast.jpg"
-		cloudscrollrate="0.02"
-		fogcolor="0.2, 0.2, 0.25"
-		fogdensity="0.005"
-		fogdensitysky="1.3"
+	<water
+		height="1.3"
+		watertexture="/textures/water/muddy-water.png"
+		alpha="0.7"
+		fixedalpha="yes"
 		/>
 
 	<vehicleoption type="/vehicles/seat/seat.vehicle" />
