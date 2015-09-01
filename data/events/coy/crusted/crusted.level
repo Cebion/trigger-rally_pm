@@ -14,8 +14,16 @@
 		hudmap="m.png"
 		tilesize="64"
 		horizontalscale="5"
-		verticalscale="0.3"
+		verticalscale="1.2"
 		>
+
+		<blurfilter>
+			<row data="0.01001 0.01001 0.01001 0.01001 0.01001" />
+			<row data="0.01001 0.01001 0.01001 0.01001 0.01001" />
+			<row data="0.01001 0.01001 0.01001 0.01001 0.01001" />
+			<row data="0.01001 0.01001 0.01001 0.01001 0.01001" />
+			<row data="0.01001 0.01001 0.01001 0.01001 0.01001" />
+		</blurfilter>
 	</terrain>
 	
 	<weather
