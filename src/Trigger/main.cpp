@@ -268,6 +268,8 @@ void MainApp::loadConfig()
   cfg_speed_unit = mph;
   cfg_speed_style = analogue;
   cfg_snowflaketype = SnowFlakeType::point;
+  cfg_dirteffect = true;
+
   cfg_datadirs.clear();
 
   hud_speedo_start_deg = MPH_ZERO_DEG;
@@ -473,6 +475,16 @@ void MainApp::loadConfig()
                 cfg_snowflaketype = SnowFlakeType::textured;
             else // default
                 cfg_snowflaketype = SnowFlakeType::point;
+        }
+        
+        val = walk->Attribute("dirteffect");
+        
+        if (val)
+        {
+            if (!strcmp(val, "yes"))
+                cfg_dirteffect = true;
+            else
+                cfg_dirteffect = false;
         }
     }
     else
@@ -892,15 +904,20 @@ bool MainApp::loadAll()
   showcheckpoint = true;
 
   crashnoise_timeout = 0.0f;
-  
-  psys_dirt = new DirtParticleSystem();
-  psys_dirt->setColorStart(0.5f, 0.4f, 0.2f, 1.0f);
-  psys_dirt->setColorEnd(0.5f, 0.4f, 0.2f, 0.0f);
-  psys_dirt->setSize(0.1f, 0.5f);
-  psys_dirt->setDecay(6.0f);
-  psys_dirt->setTexture(tex_dirt);
-  psys_dirt->setBlend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  
+
+    if (cfg_dirteffect)
+    {
+        psys_dirt = new DirtParticleSystem();
+        psys_dirt->setColorStart(0.5f, 0.4f, 0.2f, 1.0f);
+        psys_dirt->setColorEnd(0.5f, 0.4f, 0.2f, 0.0f);
+        psys_dirt->setSize(0.1f, 0.5f);
+        psys_dirt->setDecay(6.0f);
+        psys_dirt->setTexture(tex_dirt);
+        psys_dirt->setBlend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    }
+    else
+        psys_dirt = nullptr;
+
   //
   
   choose_type = 0;
@@ -1203,7 +1220,9 @@ void MainApp::tickStateGame(float delta)
   
   game->tick(delta);
 
-#if 1
+    if (cfg_dirteffect)
+    {
+
 #define BRIGHTEN_ADD        0.20f
 
   for (unsigned int i=0; i<game->vehicle.size(); i++) {
@@ -1256,7 +1275,8 @@ void MainApp::tickStateGame(float delta)
   }
   
   #undef BRIGHTEN_ADD
-  #endif
+
+    }
   
   float angtarg = 0.0f;
   angtarg -= ctrl.map[ActionCamLeft].value;
@@ -1465,7 +1485,8 @@ void MainApp::tickStateGame(float delta)
     }
   }
   
-  psys_dirt->tick(delta);
+  if (psys_dirt != nullptr)
+    psys_dirt->tick(delta);
   
 #define RAIN_START_LIFE         0.6f
 #define RAIN_POS_RANDOM         15.0f

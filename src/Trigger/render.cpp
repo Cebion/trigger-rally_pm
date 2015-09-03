@@ -1059,7 +1059,8 @@ void MainApp::renderStateGame(float eyetranslation)
     if (game->water.enabled)
         renderWater();
 
-    getSSRender().render(psys_dirt);
+    if (psys_dirt != nullptr) // cfg_dirteffect == false
+        getSSRender().render(psys_dirt);
 
     glDepthMask(GL_TRUE);
     glBlendFunc(GL_ONE,GL_ZERO);

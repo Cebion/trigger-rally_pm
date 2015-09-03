@@ -293,6 +293,8 @@ private:
   float hud_speedo_mps_speed_mult;
 
     SnowFlakeType cfg_snowflaketype = SnowFlakeType::point;
+    
+    bool cfg_dirteffect = true;
 
   enum Action {
     ActionForward,
