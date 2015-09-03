@@ -38,6 +38,7 @@
 		foliage="yes"
 		weather="yes"
 		snowflaketype="textured"
+		dirteffect="yes"
 		/>
 	<!--
 		anisotropy:
@@ -63,6 +64,11 @@
 			"point" - fast, but may not work on some computers
 			"square" - failsafe option but rather ugly
 			"textured" - the fancy, resource-heavy option
+
+		dirteffect:
+			Chooses whether or not to show dirt thrown by the wheels of the car.
+			"yes" - enable dirt effect (may reduce framerate)
+			"no" - disable dirt effect
 	-->
 
 	<!-- The possible paths of the data directory, ordered by decreasing priority.
