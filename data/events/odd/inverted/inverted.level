@@ -74,5 +74,37 @@
 		<checkpoint coords="47, 195" />
 		<checkpoint coords="364, 140" />
 		<checkpoint coords="424, 219" />
+
+		<codrivercp coords="412, -157" notes="square left" />
+		<codrivercp coords="416, -142" notes="square left" />
+		<codrivercp coords="397, -130" notes="easy right into hairpin right" />
+		<codrivercp coords="367, -127" notes="hairpin left into square right" />
+		<codrivercp coords="365, -100" notes="chicane left" />
+		<codrivercp coords="358, -69" notes="square right over mud" />
+		<codrivercp coords="361, -47" notes="easy right over dirt" />
+		<codrivercp coords="469, -104" notes="medium right" />
+		<codrivercp coords="410, -179" notes="medium left" />
+		<codrivercp coords="385, -198" notes="square left into square right" />
+		<codrivercp coords="403, -227" notes="easy left into square left" />
+		<codrivercp coords="419, -246" notes="square left into hard right long" />
+		<codrivercp coords="427, -201" notes="easy left" />
+		<codrivercp coords="468, -202" notes="medium left" />
+		<codrivercp coords="495, -179" notes="medium right into medium left" />
+		<codrivercp coords="481, -115" notes="over jump" />
+		<codrivercp coords="428, -67" notes="medium left over mud" />
+		<codrivercp coords="352, -51" notes="medium right" />
+		<codrivercp coords="265, -34" notes="square right" />
+		<codrivercp coords="258, 6" notes="medium left over water" />
+		<codrivercp coords="279, 24" notes="square left" />
+		<codrivercp coords="211, 45" notes="easy left" />
+		<codrivercp coords="171, 45" notes="medium right" />
+		<codrivercp coords="95, 80" notes="easy left" />
+		<codrivercp coords="55, 123" notes="medium right" />
+		<codrivercp coords="65, 209" notes="flat left into easy right" />
+		<codrivercp coords="231, 274" notes="hard right" />
+		<codrivercp coords="284, 264" notes="easy left" />
+		<codrivercp coords="323, 200" notes="easy right dont cut into hard left" />
+		<codrivercp coords="373, 137" notes="hard left" />
+		<codrivercp coords="417, 139" notes="flat right over mud over finish" />
 	</race>
 </level>
