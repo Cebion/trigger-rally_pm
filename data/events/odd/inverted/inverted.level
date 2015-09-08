@@ -61,7 +61,7 @@
 		/>
 
 	<water
-		height="1.3"
+		height="0.3"
 		watertexture="/textures/water/muddy-water.png"
 		alpha="0.7"
 		fixedalpha="yes"
