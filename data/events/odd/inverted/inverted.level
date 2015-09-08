@@ -50,6 +50,15 @@
 			spritecount="1"
 			/>
 	</terrain>
+	
+	<weather
+		cloudtexture="/textures/sky/overcast.jpg"
+		rain="300"
+		cloudscrollrate="0.01"
+		fogcolor="0.19, 0.2, 0.29"
+		fogdensity="0.008"
+		fogdensitysky="0.9"
+		/>
 
 	<water
 		height="1.3"
