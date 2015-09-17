@@ -9,21 +9,65 @@
 
 	<terrain
 		heightmap="h.png"
+		terrainmap="t.png"
 		colormap="c.png"
 		foliagemap="f.png"
 		hudmap="m.png"
 		tilesize="64"
 		horizontalscale="5"
-		verticalscale="0.5"
+		verticalscale="2"
 		>
 
 		<foliageband
-			middle="0.65"
-			range="0.3"
-			density="0.001"
+			middle="0.5"
+			range="0.47"
+			density="0.002"
 			sprite="/textures/veg/bush.png"
 			spritecount="2"
 			/>
+
+		<foliageband
+			middle="0.7"
+			range="0.26"
+			density="0.001"
+			sprite="/textures/veg/ivy.png"
+			spritecount="2"
+			/>
+
+		<foliageband
+			middle="0.45"
+			range="0.35"
+			density="0.000015"
+			sprite="/textures/veg/birch.png"
+			spritecount="2"
+			scale="11"
+			/>
+
+		<foliageband
+			middle="0.35"
+			range="0.32"
+			density="0.000012"
+			sprite="/textures/veg/wide-tree.png"
+			spritecount="2"
+			scale="7"
+			/>
+
+		<foliageband
+			middle="0.45"
+			range="0.4"
+			density="0.00003"
+			sprite="/textures/veg/spruce.png"
+			spritecount="2"
+			scale="8"
+			/>
+
+		<blurfilter>
+			<row data="0.01001 0.01001 0.01001 0.01001 0.01001" />
+			<row data="0.01001 0.01001 0.01001 0.01001 0.01001" />
+			<row data="0.01001 0.01001 0.01001 0.01001 0.01001" />
+			<row data="0.01001 0.01001 0.01001 0.01001 0.01001" />
+			<row data="0.01001 0.01001 0.01001 0.01001 0.01001" />
+		</blurfilter>
 	</terrain>
 
 	<weather
@@ -39,7 +83,7 @@
 
 	<race coordscale="1.25, 1.25" targettime="174">
 
-		<startposition pos="673, 905" oridegrees="235" />
+		<startposition pos="673, 905" oridegrees="215" />
 		<checkpoint coords="867, 698" />
 		<checkpoint coords="514, 817" />
 		<checkpoint coords="85, 789" />
