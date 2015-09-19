@@ -71,7 +71,40 @@
 		<checkpoint coords="317, 439" />
 		<checkpoint coords="400, 476" />
 		<checkpoint coords="405, 570" />
-		
+
+		<codrivercp coords="394, 16" notes="flat right into hairpin left over mud" />
+		<codrivercp coords="389, 62" notes="easy right" />
+		<codrivercp coords="330, 47" notes="flat left into easy right" />
+		<codrivercp coords="274, 67" notes="square left" />
+		<codrivercp coords="233, 83" notes="flat right" />
+		<codrivercp coords="176, 65" notes="easy left" />
+		<codrivercp coords="105, 53" notes="medium right" />
+		<codrivercp coords="48, 49" notes="square right into chicane right long" />
+		<codrivercp coords="94, 106" notes="flat right" />
+		<codrivercp coords="139, 117" notes="flat left into flat right" />
+		<codrivercp coords="200, 131" notes="medium left into medium right cut over tarmac" />
+		<codrivercp coords="261, 183" notes="flat left" />
+		<codrivercp coords="302, 248" notes="medium right" />
+		<codrivercp coords="350, 284" notes="medium right" />
+		<codrivercp coords="374, 184" notes="hairpin left into flat right" />
+		<codrivercp coords="408, 126" notes="square left" />
+		<codrivercp coords="457, 104" notes="medium left" />
+		<codrivercp coords="457, 145" notes="square right" />
+		<codrivercp coords="446, 196" notes="medium left into chicane right long" />
+		<codrivercp coords="477, 274" notes="medium left" />
+		<codrivercp coords="441, 305" notes="flat right into flat left" />
+		<codrivercp coords="281, 315" notes="hard left over mud" />
+		<codrivercp coords="224, 287" notes="easy right into square right over tarmac" />
+		<codrivercp coords="222, 237" notes="medium left into flat right" />
+		<codrivercp coords="148, 204" notes="medium right" />
+		<codrivercp coords="64, 258" notes="easy right into medium right" />
+		<codrivercp coords="96, 365" notes="medium left" />
+		<codrivercp coords="149, 390" notes="medium right" />
+		<codrivercp coords="241, 454" notes="flat left into easy right cut over mud" />
+		<codrivercp coords="334, 427" notes="easy right into square left" />
+		<codrivercp coords="386, 436" notes="easy left cut over tarmac" />
+		<codrivercp coords="397, 484" notes="flat right over finish" />
+
 	</race>
 	
 </level>
