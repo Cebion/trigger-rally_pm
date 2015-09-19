@@ -55,7 +55,34 @@
 		<checkpoint coords="193, 450" />
 		<checkpoint coords="356, 476" />
 		<checkpoint coords="483, 430" />
-		
+
+		<codrivercp coords="483, 406" notes="hard right long dont cut" />
+		<codrivercp coords="437, 374" notes="hard left" />
+		<codrivercp coords="405, 416" notes="medium left" />
+		<codrivercp coords="375, 368" notes="medium right long" />
+		<codrivercp coords="316, 315" notes="easy left dont cut" />
+		<codrivercp coords="230, 324" notes="easy left long" />
+		<codrivercp coords="195, 241" notes="medium left" />
+		<codrivercp coords="228, 213" notes="medium right long" />
+		<codrivercp coords="286, 183" notes="hairpin left dont cut" />
+		<codrivercp coords="307, 169" notes="easy right into hairpin left dont cut" />
+		<codrivercp coords="385, 181" notes="medium right long into flat left" />
+		<codrivercp coords="454, 208" notes="medium right" />
+		<codrivercp coords="457, 72" notes="hairpin right" />
+		<codrivercp coords="422, 55" notes="hard left long" />
+		<codrivercp coords="359, 73" notes="medium right" />
+		<codrivercp coords="312, 38" notes="easy left" />
+		<codrivercp coords="244, 41" notes="easy right over jump" />
+		<codrivercp coords="104, 31" notes="easy right long" />
+		<codrivercp coords="44, 104" notes="flat left over jump" />
+		<codrivercp coords="74, 191" notes="easy right long" />
+		<codrivercp coords="96, 298" notes="medium left" />
+		<codrivercp coords="105, 358" notes="medium right dont cut" />
+		<codrivercp coords="113, 443" notes="chicane right long" />
+		<codrivercp coords="228, 462" notes="easy right into chicane left" />
+		<codrivercp coords="390, 474" notes="medium right dont cut" />
+		<codrivercp coords="461, 464" notes="over finish" />
+
 	</race>
 	
 </level>
