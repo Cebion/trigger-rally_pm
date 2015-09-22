@@ -54,5 +54,13 @@
 		<checkpoint coords="280, 447" />
 		<checkpoint coords="294, 384" />
 		<checkpoint coords="372, 327" />
+
+		<codrivercp coords="218, 153" notes="easy left" />
+		<codrivercp coords="203, 308" notes="hard right into hairpin left" />
+		<codrivercp coords="200, 414" notes="easy left" />
+		<codrivercp coords="243, 449" notes="hard left into hard right" />
+		<codrivercp coords="304, 382" notes="medium left long" />
+		<codrivercp coords="400, 364" notes="over finish" />
+
 	</race>
 </level>
