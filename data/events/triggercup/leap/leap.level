@@ -46,8 +46,7 @@
 		<codrivercp coords="110, 274" notes="medium left" />
 		<codrivercp coords="195, 334" notes="square left into square right" />
 		<codrivercp coords="221, 263" notes="flat left" />
-		<codrivercp coords="242, 219" notes="over jump" />
-		<codrivercp coords="229, 80" notes="flat left over finish" />
+		<codrivercp coords="242, 219" notes="over jump into flat left over finish" />
 
 	</race>
 </level>
