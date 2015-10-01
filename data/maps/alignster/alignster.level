@@ -11,6 +11,7 @@
 		heightmap="h.jpg"
 		colormap="c.jpg"
 		foliagemap="f.jpg"
+		terrainmap="t.png"
 		hudmap="c.jpg"
 		tilesize="16"
 		horizontalscale="4.0"
