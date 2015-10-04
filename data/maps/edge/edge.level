@@ -12,6 +12,7 @@
 		colormap="c.png"
 		foliagemap="f.png"
 		hudmap="m.png"
+		terrainmap="t.png"
 		tilesize="32"
 		horizontalscale="3"
 		verticalscale="0.3"
