@@ -9,9 +9,9 @@
 	
 	<terrain
 		heightmap="h.png"
-		colormap="c.jpg"
+		colormap="c.png"
 		foliagemap="f.png"
-		hudmap="c.jpg"
+		hudmap="c.png"
 		tilesize="16"
 		horizontalscale="3"
 		verticalscale="0.1"
