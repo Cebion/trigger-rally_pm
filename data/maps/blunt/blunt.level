@@ -75,5 +75,37 @@
 		<checkpoint coords="1207, 429" />
 		<checkpoint coords="1144, 360" />
 		<checkpoint coords="1159, 312" />
+
+		<codrivercp coords="189, 96" notes="flat left into easy right" />
+		<codrivercp coords="230, 103" notes="easy left into medium left" />
+		<codrivercp coords="295, 124" notes="medium right cut" />
+		<codrivercp coords="291, 161" notes="easy left long" />
+		<codrivercp coords="298, 249" notes="chicane right into square right" />
+		<codrivercp coords="312, 322" notes="medium left" />
+		<codrivercp coords="363, 359" notes="medium right" />
+		<codrivercp coords="399, 418" notes="chicane right into easy right" />
+		<codrivercp coords="520, 407" notes="medium right" />
+		<codrivercp coords="545, 320" notes="chicane right long" />
+		<codrivercp coords="542, 233" notes="hard left dont cut" />
+		<codrivercp coords="577, 199" notes="over jump into medium right" />
+		<codrivercp coords="570, 264" notes="hairpin right into square left" />
+		<codrivercp coords="610, 274" notes="square right" />
+		<codrivercp coords="646, 245" notes="easy left into easy left" />
+		<codrivercp coords="689, 174" notes="flat left" />
+		<codrivercp coords="739, 175" notes="hairpin left into easy right" />
+		<codrivercp coords="770, 211" notes="over jump into easy right" />
+		<codrivercp coords="747, 340" notes="easy right" />
+		<codrivercp coords="813, 492" notes="easy left into medium right" />
+		<codrivercp coords="831, 546" notes="chicane left long" />
+		<codrivercp coords="866, 599" notes="easy left long dont cut into hard right" />
+		<codrivercp coords="874, 657" notes="chicane left" />
+		<codrivercp coords="924, 672" notes="medium right" />
+		<codrivercp coords="1017, 648" notes="chicane right cut" />
+		<codrivercp coords="1092, 585" notes="easy left" />
+		<codrivercp coords="1145, 583" notes="square right" />
+		<codrivercp coords="1189, 589" notes="chicane right into medium right" />
+		<codrivercp coords="1204, 515" notes="hard left" />
+		<codrivercp coords="1171, 483" notes="easy right into medium right" />
+		<codrivercp coords="1174, 394" notes="medium left dont cut over finish" />
 	</race>
 </level>
