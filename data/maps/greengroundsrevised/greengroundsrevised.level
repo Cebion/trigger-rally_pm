@@ -55,9 +55,9 @@
 	</terrain>
 	
 	<weather
-		cloudtexture="/textures/sky/overcast-blue.jpg"
-		fogcolor="0.15, 0.15, 0.2"
-		fogdensity="0.005"
+		cloudtexture="/textures/sky/light-clouds.jpg"
+		fogcolor="0.3, 0.4, 0.5"
+		fogdensity="0.003"
 		fogdensitysky="0.07"
 		/>
 
