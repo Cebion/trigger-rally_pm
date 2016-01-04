@@ -58,7 +58,22 @@
 		<checkpoint coords="167, 88" />
 		<checkpoint coords="117, 103" />
 		<checkpoint coords="132, 149" />
-		
+
+		<codrivercp coords="136, 172" notes="medium right long" />
+		<codrivercp coords="185, 164" notes="medium left into easy left" />
+		<codrivercp coords="240, 188" notes="easy left into square left" />
+		<codrivercp coords="210, 228" notes="square right into easy right" />
+		<codrivercp coords="166, 213" notes="hard left long" />
+		<codrivercp coords="120, 222" notes="hard right" />
+		<codrivercp coords="100, 200" notes="easy left into medium right" />
+		<codrivercp coords="54, 199" notes="hard left long into easy right" />
+		<codrivercp coords="30, 171" notes="easy left long into easy right long" />
+		<codrivercp coords="44, 94" notes="hard left into easy right" />
+		<codrivercp coords="81, 49" notes="medium left into square right" />
+		<codrivercp coords="158, 32" notes="medium left long" />
+		<codrivercp coords="195, 60" notes="easy left" />
+		<codrivercp coords="155, 91" notes="medium right long over finish" />
+
 	</race>
 	
 </level>
