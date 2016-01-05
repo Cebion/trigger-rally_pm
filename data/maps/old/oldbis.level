@@ -4,8 +4,8 @@
 	comment="Git offa my land! (variation)"
 	author="Richard Langridge"
 	description="fast, narrow road, don't spin over!"
-	screenshot="bis.png"
-	minimap="mm.png">
+	screenshot="ss_bis.png"
+	minimap="mm_bis.png">
 	
 	<terrain
 		heightmap="h.png"

@@ -4,8 +4,8 @@
 	comment="Git offa my land! (variation)"
 	author="Richard Langridge"
 	description="precision and control essential"
-	screenshot="quinquies.png"
-	minimap="mm.png">
+	screenshot="ss_quinquies.png"
+	minimap="mm_quinquies.png">
 	
 	<terrain
 		heightmap="h.png"

@@ -4,8 +4,8 @@
 	comment="Git offa my land! (variation)"
 	author="Richard Langridge"
 	description="plain road, but dangerous roadside"
-	screenshot="sexies.png"
-	minimap="mm.png">
+	screenshot="ss_sexies.png"
+	minimap="mm_sexies.png">
 	
 	<terrain
 		heightmap="h.png"
