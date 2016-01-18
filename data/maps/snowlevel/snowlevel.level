@@ -36,20 +36,30 @@
 	<vehicleoption type="/vehicles/focus/focus.vehicle" />
 	<vehicleoption type="/vehicles/evo/evo.vehicle" />
 	
-	<race coordscale="3, 3" targettime="155">
+	<race coordscale="3, -3" targettime="155">
 		
-		<startposition pos="80, 137" oridegrees="0" />
-		<checkpoint coords="80, 212" />
-		<checkpoint coords="95, 262" />
-		<checkpoint coords="128, 372" />
-		<checkpoint coords="212, 305" />
-		<checkpoint coords="230, 212" />
-		<checkpoint coords="235, 112" />
-		<checkpoint coords="355, 67" />
-		<checkpoint coords="460, 167" />
-		<checkpoint coords="393, 242" />
-		<checkpoint coords="400, 372" />
-		<checkpoint coords="315, 202" />
-		<checkpoint coords="350, 142" />
+		<startposition pos="80, 375" oridegrees="0" />
+		<checkpoint coords="80, 300" />
+		<checkpoint coords="95, 250" />
+		<checkpoint coords="128, 140" />
+		<checkpoint coords="212, 207" />
+		<checkpoint coords="230, 300" />
+		<checkpoint coords="235, 400" />
+		<checkpoint coords="355, 445" />
+		<checkpoint coords="460, 345" />
+		<checkpoint coords="393, 270" />
+		<checkpoint coords="400, 140" />
+		<checkpoint coords="315, 310" />
+		<checkpoint coords="350, 370" />
+
+		<codrivercp coords="78, 355" notes="chicane right long into easy right" />
+		<codrivercp coords="91, 220" notes="hard right" />
+		<codrivercp coords="164, 157" notes="flat right" />
+		<codrivercp coords="244, 347" notes="square left" />
+		<codrivercp coords="328, 442" notes="easy left long long" />
+		<codrivercp coords="438, 315" notes="chicane left" />
+		<codrivercp coords="413, 218" notes="medium left long long" />
+		<codrivercp coords="323, 263" notes="easy left over finish" />
+
 	</race>
 </level>
