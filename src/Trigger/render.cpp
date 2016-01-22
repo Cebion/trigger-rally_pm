@@ -907,14 +907,6 @@ void MainApp::renderStateGame(float eyetranslation)
         vec4f(0.2f, 0.8f, 0.2f, 0.4f)  // 2 = all other checkpoints
     };
 
-    // codriver checkpoints for debugging purposes
-    const vec4f cdcheckpoint_col[3] =
-    {
-        {0.0f, 0.0f, 1.0f, 0.8f},       // 0 = next checkpoint
-        {0.3f, 0.3f, 1.0f, 0.6f},       // 1 = checkpoint after next
-        {0.6f, 0.6f, 1.0f, 0.4f}        // 2 = all other checkpoints
-    };
-
     if (showcheckpoint)
     {
         for (unsigned int i=0; i<game->checkpt.size(); i++)
@@ -994,7 +986,16 @@ void MainApp::renderStateGame(float eyetranslation)
         }
 
 // codriver checkpoints rendering
-#if 1
+#ifdef INDEVEL
+
+    // codriver checkpoints for debugging purposes
+    const vec4f cdcheckpoint_col[3] =
+    {
+        {0.0f, 0.0f, 1.0f, 0.8f},       // 0 = next checkpoint
+        {0.3f, 0.3f, 1.0f, 0.6f},       // 1 = checkpoint after next
+        {0.6f, 0.6f, 1.0f, 0.4f}        // 2 = all other checkpoints
+    };
+
         for (unsigned int i=0; i<game->codrivercheckpt.size(); i++)
         {
             vec4f colr = cdcheckpoint_col[2];
@@ -1377,7 +1378,7 @@ void MainApp::renderStateGame(float eyetranslation)
           glPopMatrix(); // 2
       }
 
-#if 1
+#ifdef INDEVEL
         // show codriver checkpoint text (the pace notes)
         if (!game->codrivercheckpt.empty() && vehic->nextcdcp != 0)
         {
@@ -1440,7 +1441,7 @@ void MainApp::renderStateGame(float eyetranslation)
     tex_fontDsmShadowed->bind();
 
     // draw terrain info for debugging
-    #if 1
+    #ifdef INDEVEL
     {
         const vec3f wheelpos = vehic->part[0].wheel[0].ref_world.getPosition(); // wheel 0
         const TerrainType tt = game->terrain->getRoadSurface(wheelpos);
