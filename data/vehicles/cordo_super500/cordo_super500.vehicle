@@ -1,0 +1,53 @@
+<?xml version="1.0" ?>
+<vehicle
+	name="Martorell Cordo (Super500)"
+	type="car">
+	
+	<genparams
+		mass="1650.0"
+		dimensions="1.6, 2.3, 1.2"
+		wheelmodel="cordo_super500_wheel.obj"
+		wheelscale="0.033" />
+	
+	<ctrlparams
+		speedrate="15.0"
+		turnspeedrate="0.0, 0.0, 10.0" />
+	
+	<drivesystem>
+		<engine powerscale="30000">
+			<powerpoint rpm="2000" power="0.4" />
+			<powerpoint rpm="5000" power="0.7" />
+			<powerpoint rpm="8000" power="1.0" />
+			<powerpoint rpm="11000" power="0.6" />
+			<powerpoint rpm="12000" power="0.0" />
+		</engine>
+		
+		<gearbox>
+			<gear absolute="0.11" />
+			<gear relative="1.35" />
+			<gear relative="1.32" />
+			<gear relative="1.28" />
+			<gear relative="1.25" />
+		</gearbox>
+	</drivesystem>
+	
+	<part
+		name="body"
+		pos="0.0, 0.2, 0.1"
+		orientation="1.0, 0.0, 0.0, 0.0"
+		model="cordo_super500.obj"
+		scale="0.01">
+		
+		<wheel drive="1.0" steer="0.85" brake1="350.0" pos="0.63, 0.87, -0.14" radius="0.3" force="70000.0" dampening="20000.0" />
+		<wheel drive="1.0" steer="0.85" brake1="350.0" pos="-0.63, 0.87, -0.14" radius="0.3" force="70000.0" dampening="20000.0" />
+		<wheel drive="1.0" steer="0.0" brake1="200.0" pos="0.63, -1.27, -0.14" radius="0.3" force="70000.0" dampening="20000.0" brake2="2500.0" />
+		<wheel drive="1.0" steer="0.0" brake1="200.0" pos="-0.63, -1.27, -0.14" radius="0.3" force="70000.0" dampening="20000.0" brake2="2500.0" />
+		
+		<clip type="body" pos="1.0, 1.5, 1.0" force="500000.0" dampening="35000.0" />
+		<clip type="body" pos="-1.0, 1.5, 1.0" force="500000.0" dampening="35000.0" />
+		<clip type="body" pos="1.0, -1.0, 1.0" force="500000.0" dampening="150000.0" />
+		<clip type="body" pos="-1.0, -1.0, 1.0" force="500000.0" dampening="150000.0" />
+		
+	</part>
+	
+</vehicle>
