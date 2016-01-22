@@ -8,6 +8,7 @@ How to build Trigger Rally
 4. Windows users - the hard way
 5. Packaging for Windows
 A. Appendix
+   A0. Developer aids
    A1. List of software used to build Trigger Rally (Windows)
 
 --------------
@@ -403,6 +404,23 @@ The pack contains the following:
   Emsisoft Emergency Kit            https://www.emsisoft.com/en/software/eek/
   Dr.Web CureIt!                    http://www.freedrweb.com/cureit/?lng=en
   --------------------------------------------------------
+
+##################
+A0. Developer aids
+##################
+
+The release version of Trigger Rally suppresses terrain information and codriver checkpoint visuals.
+Developers can turn these on by defining the INDEVEL macro before building.
+
+Linux:
+
+  $ cd trigger-rally-0.6.3/src/
+  $ OPTIMS="-DINDEVEL" make
+
+Windows (Dev-C++):
+
+  Project -> Project Options... -> Parameters -> C++ compiler:
+  (add "-DINDEVEL" to the list, without the quotes)
 
 ##########################################################
 A1. List of software used to build Trigger Rally (Windows)
