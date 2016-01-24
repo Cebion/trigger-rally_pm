@@ -88,6 +88,7 @@
 	<parameters
 		drivingassist="0.55"
 		enablesound="yes"
+		enablecodriversigns="yes"
 		speedunit="mph"
 		codriver="ab"
 		/>
