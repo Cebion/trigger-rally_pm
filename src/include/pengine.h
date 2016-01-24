@@ -199,6 +199,7 @@ public:
 #include "audio.h"
 #include "render.h"
 #include <codrivervoice.h>
+#include <codriversigns.h>
 
 
 #endif // PENGINE_H_INCLUDED
