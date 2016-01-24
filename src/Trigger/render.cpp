@@ -1088,6 +1088,8 @@ void MainApp::renderStateGame(float eyetranslation)
 
     if (showui)
     {
+        game->renderCodriverSigns();
+
       glPushMatrix(); // 1
       // position of rpm dial and needle
       //glTranslatef( hratio * (1.f - (5.75f/50.f)) - 0.3f, -vratio * (40.f/50.f) + 0.22f, 0.0f);

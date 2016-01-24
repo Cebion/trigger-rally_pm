@@ -10,7 +10,8 @@
 
 
 TriggerGame::TriggerGame(MainApp *parent):
-    cdvoice(parent->getCodriverWords(), parent->getCodriverVolume())
+    cdvoice(parent->getCodriverWords(), parent->getCodriverVolume()),
+    cdsigns(parent->getCodriverSigns())
 {
   app = parent;
   
@@ -419,6 +420,7 @@ void TriggerGame::tick(float delta)
             if (diff.lengthsq() < 20.0f * 20.0f)
             {
                 cdvoice.say(codrivercheckpt[vehicle[i]->nextcdcp].notes);
+                cdsigns.set(codrivercheckpt[vehicle[i]->nextcdcp].notes, coursetime);
 
                 if (++vehicle[i]->nextcdcp >= (int)codrivercheckpt.size())
                     vehicle[i]->nextcdcp = 0;
@@ -433,6 +435,7 @@ void TriggerGame::tick(float delta)
                 if (diff.lengthsq() < 20.0f * 20.0f && static_cast<int> (j + 1) != vehicle[i]->nextcdcp)
                 {
                     cdvoice.say(codrivercheckpt[j].notes);
+                    cdsigns.set(codrivercheckpt[j].notes, coursetime);
                     vehicle[i]->nextcdcp = j + 1;
                     break;
                 }
