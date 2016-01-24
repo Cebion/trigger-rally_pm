@@ -10,6 +10,9 @@
 
 #include <SDL/SDL_thread.h>
 
+#include <cctype>
+#include <regex>
+
 GLfloat MainApp::cfg_anisotropy = 1.0f;
 bool MainApp::cfg_foliage = true;
 bool MainApp::cfg_weather = true;
@@ -259,6 +262,7 @@ void MainApp::loadConfig()
   
   cfg_drivingassist = 1.0f;
   cfg_enable_sound = true;
+  cfg_enable_codriversigns = true;
   cfg_volume_engine = 0.33f;
   cfg_volume_sfx = 1.0f;
   cfg_volume_codriver = 1.0f;
@@ -506,6 +510,17 @@ void MainApp::loadConfig()
         else if (!strcmp(val, "no"))
           cfg_enable_sound = false;
       }
+
+        val = walk->Attribute("enablecodriversigns");
+
+        if (val != nullptr)
+        {
+            if (strcmp(val, "yes") == 0)
+                cfg_enable_codriversigns = true;
+            else
+            if (strcmp(val, "no") == 0)
+                cfg_enable_codriversigns = false;
+        }
 
       val = walk->Attribute("speedunit");
       if (val) {
@@ -853,6 +868,39 @@ bool MainApp::loadAll()
   if (!(tex_waterdefault = getSSTexture().loadTexture("/textures/water/default.png"))) return false;
   
   if (!(tex_snowflake = getSSTexture().loadTexture("/textures/snowflake.png"))) return false;
+
+    if (cfg_enable_codriversigns)
+    {
+        const std::string origdir("/textures/CodriverSigns");
+
+        char **rc = PHYSFS_enumerateFiles(origdir.c_str());
+        
+        for (char **fname = rc; *fname != nullptr; ++fname)
+        {
+            PTexture *tex_cdsign = getSSTexture().loadTexture(origdir + '/' + *fname);
+
+            if (tex_cdsign != nullptr) // failed loads are ignored
+            {
+                // remove the extension from the filename
+                std::smatch mr; // Match Results
+                std::regex pat(R"(^(\w+)(\..+)$)"); // Pattern
+
+                if (!std::regex_search(std::string(*fname), mr, pat))
+                    continue;
+
+                std::string basefname = mr[1];
+
+                // make the base filename lowercase
+                for (char &c: basefname)
+                    c = std::tolower(static_cast<unsigned char> (c));
+
+                tex_codriversigns[basefname] = tex_cdsign;
+                //PUtil::outLog() << "Loaded codriver sign for: \"" << basefname << '"' << std::endl;
+            }
+        };
+
+        PHYSFS_freeList(rc);
+    }
 
   if (cfg_enable_sound) {
     if (!(aud_engine = getSSAudio().loadSample("/sounds/engine.wav", false))) return false;
