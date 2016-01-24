@@ -10,6 +10,7 @@
 
 #include <psim.h>
 
+#include <unordered_map>
 
 
 // Forward declaration for TriggerGame to use
@@ -82,6 +83,7 @@ private:
   std::vector<CodriverCP> codrivercheckpt;
   
   PCodriverVoice cdvoice;
+  PCodriverSigns cdsigns;
   
   int gamestate;
   
@@ -131,6 +133,11 @@ public:
 public:
   TriggerGame(MainApp *parent);
   ~TriggerGame();
+  
+  void renderCodriverSigns()
+  {
+      cdsigns.render(coursetime);
+  }
   
   bool loadVehicles();
   
@@ -273,6 +280,7 @@ private:
   
   float cfg_drivingassist;
   bool cfg_enable_sound;
+  bool cfg_enable_codriversigns;
   
   /// Basic volume control.
   float cfg_volume_engine       = 0.33f;    ///< Engine.
@@ -356,6 +364,8 @@ private:
            *tex_race_no_minimap,
            *tex_button_next,
            *tex_button_prev;
+  
+  std::unordered_map<std::string, PTexture *> tex_codriversigns;
   
   DirtParticleSystem *psys_dirt;
   
@@ -467,6 +477,11 @@ public:
     std::vector<PAudioSample *> getCodriverWords() const
     {
         return aud_codriverwords;
+    }
+    
+    std::unordered_map<std::string, PTexture *> getCodriverSigns() const
+    {
+        return tex_codriversigns;
     }
 };
 
