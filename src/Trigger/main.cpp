@@ -897,7 +897,7 @@ bool MainApp::loadAll()
                 tex_codriversigns[basefname] = tex_cdsign;
                 //PUtil::outLog() << "Loaded codriver sign for: \"" << basefname << '"' << std::endl;
             }
-        };
+        }
 
         PHYSFS_freeList(rc);
     }

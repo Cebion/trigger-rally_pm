@@ -28,6 +28,9 @@ namespace
 {
 // how many seconds until the codriver signs start fading
 const float signlife = 3.0f;
+
+// scale of the codriver signs
+const float signscale = 0.2f;
 }
 
 ///
@@ -112,8 +115,8 @@ public:
         glPushMatrix();
         glLoadIdentity();
         glColor4f(1.0f, 1.0f, 1.0f, alpha);
-        glTranslatef(-0.5f * cpsigns.size() * 0.4f + 0.20f, 0.45f, 0.0f);
-        glScalef(0.20f, 0.20f, 1.0f);
+        glTranslatef(-0.5f * cpsigns.size() * 2 * signscale + signscale, 0.45f, 0.0f);
+        glScalef(signscale, signscale, 1.0f);
 
         for (PTexture *cptex: cpsigns)
         {
