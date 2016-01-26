@@ -39,7 +39,7 @@
 	<vehicleoption type="/vehicles/seat/seat.vehicle" />
 	<vehicleoption type="/vehicles/evo/evo.vehicle" />
 	
-	<race coordscale="4, 4" targettime="420">
+	<race coordscale="4, 4" targettime="420" codrivercpmode="ordered">
 		
 		<startposition pos="203, -93" oridegrees="-28" />
 		<checkpoint coords="275, 28" />

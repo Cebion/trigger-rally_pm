@@ -40,7 +40,7 @@
 	<vehicleoption type="/vehicles/evo/evo.vehicle" />
 	
 	<race coordscale="4.0, 4.0"
-		targettime="420.0">
+		targettime="420.0" codrivercpmode="ordered">
 		
 		<startposition pos="41, 116, 4.0" oridegrees="220" />
 		<checkpoint coords="136, 153" />

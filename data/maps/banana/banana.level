@@ -41,7 +41,7 @@
 	<vehicleoption type="/vehicles/focus/focus.vehicle" />
 	
 	<race coordscale="4.0, -4.0"
-		targettime="300.0">
+		targettime="300.0" codrivercpmode="ordered">
 		
 		<startposition pos="202, 114, 4.0" oridegrees="210" />
 
