@@ -64,7 +64,7 @@ class TriggerGame {
 public:
 
     /// Sets the codriver checkpoints to "ordered" (true) or "free" (false).
-    bool cdcheckpt_ordered = true;
+    bool cdcheckpt_ordered = false;
 
 private:
   MainApp *app;

@@ -100,7 +100,7 @@ bool TriggerGame::loadLevel(const std::string &filename)
   water.alpha = 1.0f;
   water.fixedalpha = false;
   
-  cdcheckpt_ordered = true;
+  cdcheckpt_ordered = false;
   
   TiXmlDocument xmlfile(filename.c_str());
   TiXmlElement *rootelem = PUtil::loadRootElement(xmlfile, "level");
