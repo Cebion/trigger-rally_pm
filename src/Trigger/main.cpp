@@ -542,7 +542,12 @@ void MainApp::loadConfig()
       
       if (val != nullptr)
         cfg_codrivername = val;
-      
+
+      val = walk->Attribute("codriversigns");
+
+      if (val != nullptr)
+        cfg_codriversigns = val;
+
     } else if (!strcmp(walk->Value(), "controls")) {
       
       for (TiXmlElement *walk2 = walk->FirstChildElement();
@@ -869,12 +874,12 @@ bool MainApp::loadAll()
   
   if (!(tex_snowflake = getSSTexture().loadTexture("/textures/snowflake.png"))) return false;
 
-    if (cfg_enable_codriversigns)
+    if (cfg_enable_codriversigns && !cfg_codriversigns.empty())
     {
-        const std::string origdir("/textures/CodriverSigns");
+        const std::string origdir(std::string("/textures/CodriverSigns/") + cfg_codriversigns);
 
         char **rc = PHYSFS_enumerateFiles(origdir.c_str());
-        
+
         for (char **fname = rc; *fname != nullptr; ++fname)
         {
             PTexture *tex_cdsign = getSSTexture().loadTexture(origdir + '/' + *fname);

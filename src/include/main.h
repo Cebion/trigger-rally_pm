@@ -293,7 +293,11 @@ private:
   /// Name of the codriver whose words to load.
   /// Must be a valid directory in /data/sounds/codriver/.
   std::string cfg_codrivername;
-  
+
+  /// Name of the codriver icon set to load.
+  /// Must be a valid directory in /data/textures/CodriverSigns/.
+  std::string cfg_codriversigns;
+
   Speedunit cfg_speed_unit;
   Speedstyle cfg_speed_style;
   float hud_speedo_start_deg;
