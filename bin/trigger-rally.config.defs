@@ -91,6 +91,7 @@
 		enablecodriversigns="yes"
 		speedunit="mph"
 		codriver="ab"
+		codriversigns="plain"
 		/>
 		<!-- Possible values for speedunit:
 			kph - Kilometres per hour
@@ -99,6 +100,9 @@
 			The chosen codriver "X" must have a valid directory as:
 			/data/sounds/codriver/X/
 			The codriver can be disabled by setting his name to "mime".
+
+			The chosen codriver sign set "S" must have a valid directory as:
+			/data/textures/CodriverSigns/S/
 		-->
 
 	<controls>
