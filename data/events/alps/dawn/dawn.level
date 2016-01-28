@@ -30,7 +30,7 @@
 	<vehicleoption type="/vehicles/focus/focus.vehicle" />
 	<vehicleoption type="/vehicles/seat/seat.vehicle" />
 	
-	<race coordscale="3, 3" targettime="355.0">
+	<race coordscale="3, 3" targettime="355.0" codrivercpmode="ordered">
 		
 		<startposition pos="400, 5" oridegrees="20" />
 		<checkpoint coords="352, 27" />
