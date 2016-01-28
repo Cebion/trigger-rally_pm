@@ -94,7 +94,7 @@
 		<codrivercp coords="546, -38" notes="easy left" />
 		<codrivercp coords="525, -19" notes="easy right long into square right" />
 		<codrivercp coords="493, 2" notes="square left into flat left" />
-		<codrivercp coords="493, 33" notes="hard left chicane" />
+		<codrivercp coords="493, 33" notes="chicane left" />
 		<codrivercp coords="471, 44" notes="easy left" />
 		<codrivercp coords="461, 70" notes="medium right into square left" />
 		<codrivercp coords="455, 115" notes="medium left into medium right" />
@@ -139,7 +139,7 @@
 		<codrivercp coords="330, 335" notes="hard left long into medium right" />
 		<codrivercp coords="280, 316" notes="medium right long" />
 		<codrivercp coords="231, 352" notes="hard right" />
-		<codrivercp coords="241, 390" notes="flat left into hard chicane right" />
+		<codrivercp coords="241, 390" notes="flat left into chicane right" />
 		<codrivercp coords="303, 398" notes="flat right into easy left" />
 		<codrivercp coords="370, 421" notes="over jump into hard left" />
 		<codrivercp coords="391, 438" notes="hard left long into hard right" />
