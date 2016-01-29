@@ -551,14 +551,8 @@ Onsemeliot
 	maps/dry/h.png (GPL)
 	maps/dry/mm.png (GPL)
 	maps/dry/ss.png (GPL)
-	maps/dusty/c.png (GPL)
-	maps/dusty/dusty.level (GPL)
-	maps/dusty/f.png (GPL)
-	maps/dusty/h.png (GPL)
-	maps/dusty/m.png (GPL)
-	maps/dusty/mm.png (GPL)
-	maps/dusty/ss.png (GPL)
-	maps/dusty/t.png (GPL)
+	maps/duned/* (GPL)
+	maps/dusty/* (GPL)
 	maps/edge/c.png (GPL)
 	maps/edge/f.png (GPL)
 	maps/edge/h.png (GPL)
@@ -820,6 +814,7 @@ Onsemeliot
 	textures/veg/bush-ash.png (CC0, PD)
 	textures/veg/bush-dry.png (CC0, PD)
 	textures/veg/bush.png (CC0, PD), source: http://opengameart.org/content/bush-0
+	textures/veg/dusty-bush.png (CC0, PD)
 	textures/veg/grain.png (CC0, PD)
 	textures/veg/ivy.png (CC0, PD), source: http://opengameart.org/content/ivy
 	textures/veg/mais.png (CC0, PD), source: http://opengameart.org/content/corn-resp-maize
