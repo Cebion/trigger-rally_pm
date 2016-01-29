@@ -107,7 +107,7 @@ installdirs:
 dist: clean
 	@printf "\ntar -> \"../../%s\"\n" "$(DISTARC)"
 	@cd ../..; \
-		tar --create --file="$(DISTARC)" --auto-compress "$(DISTDIR)"
+		tar --owner=root --group=root --create --file="$(DISTARC)" --auto-compress "$(DISTDIR)"
 	@printf "md5sum -> \"../../%s.md5\"\n\n" "$(DISTARC)"
 	@cd ../..; \
 		md5sum "$(DISTARC)" > "$(DISTARC).md5"
