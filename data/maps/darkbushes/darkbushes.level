@@ -99,7 +99,7 @@
 		<checkpoint coords="92, 512" />
 
 		<codrivercp coords="105, 15" notes="flat right into easy left" />
-		<codrivercp coords="211, 124" notes="flat right into hard right" />
+		<codrivercp coords="211, 124" notes="flat right over jump into hard right" />
 		<codrivercp coords="300, 181" notes="medium left long dont cut" />
 		<codrivercp coords="395, 226" notes="medium right" />
 		<codrivercp coords="423, 323" notes="medium left long" />
