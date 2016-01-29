@@ -3,7 +3,7 @@
 	name="Snowdrift"
 	comment="Climb the fridge!"
 	author="Onsemeliot"
-	description="Fast on ice, crvy on snow and tarmac; bad visibility"
+	description="Ice, snow and tarmac; bad visibility"
 	screenshot="ss.png"
 	minimap="mm.png">
 	
@@ -25,15 +25,6 @@
 			<row data="0.01001 0.01001 0.01001 0.01001 0.01001" />
 			<row data="0.01001 0.01001 0.01001 0.01001 0.01001" />
 		</blurfilter>
-
-		<foliageband
-			middle="0.85"
-			range="0.03"
-			density="0.000002"
-			sprite="/textures/veg/snowy-tree.png"
-			spritecount="3"
-			scale="6"
-			/>
 
 		<foliageband
 			middle="0.72"
