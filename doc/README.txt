@@ -36,6 +36,8 @@ Space   Handbrake
 C       Change camera view
 M       Toggle map
 N       Toggle user interface
+K       Toggle checkpoints
+R       Recover car
 < >     Rotate camera when in 3rd person cam
 F12     Save a screenshot to ~/.trigger/
 
@@ -231,6 +233,14 @@ http://sourceforge.net/projects/trigger-rally/support
 /////////////////////
 // Version history //
 /////////////////////
+
+30/01/2016 - Trigger 0.6.3
+  - Improve menu and in-race OSD
+  - Add codriver for 75% of maps
+  - Tweak terrain physics
+  - Add many new maps
+  - Change vehicle skins and presets
+  - Made various minor code improvements
 
 05/05/2015 - Trigger 0.6.2
   - Fix several Windows bugs and compilation issues
