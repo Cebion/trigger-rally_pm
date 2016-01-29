@@ -537,6 +537,7 @@ Onsemeliot
 	maps/cracks/ss.png (GPL)
 	maps/crossmountain/mm.png (GPL)
 	maps/crossmountain/ss.png (GPL)
+	maps/darkbushes/* (GPL)
 	maps/deltarevised/c.png (GPL)
 	maps/deltarevised/f.png (GPL)
 	maps/deltarevised/h.png (GPL)
@@ -829,6 +830,7 @@ Onsemeliot
 	textures/veg/red-tree.png (CC0, PD)
 	textures/veg/snowy-tree.png (CC0, PD)
 	textures/veg/spruce.png (CC0, PD), source: https://openclipart.org/detail/227626/spruce
+	textures/veg/thick-leafes.png (CC0, PD)
 	textures/veg/wide-tree.png (CC0, PD)
 	textures/water/black-water.png (CC0, PD)
 	textures/water/dark-ice-water.png (CC0, PD)
