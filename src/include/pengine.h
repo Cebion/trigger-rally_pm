@@ -198,8 +198,7 @@ public:
 #include "subsys.h"
 #include "audio.h"
 #include "render.h"
-#include <codrivervoice.h>
-#include <codriversigns.h>
+#include <codriver.h>
 
 
 #endif // PENGINE_H_INCLUDED
