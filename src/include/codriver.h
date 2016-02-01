@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2016 Andrei Bondor, ab396356@users.sourceforge.net
+// Copyright (C) 2015-2016 Andrei Bondor, ab396356@users.sourceforge.net
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -18,9 +18,12 @@
 
 #pragma once
 
+#include <cstddef>
+#include <forward_list>
 #include <iterator>
 #include <sstream>
 #include <string>
+#include <thread>
 #include <unordered_map>
 #include <vector>
 
@@ -31,6 +34,13 @@ const float signlife = 3.0f;
 
 // scale of the codriver signs
 const float signscale = 0.2f;
+
+// maximum number of characters for a note
+// e.g.: "hard left over jump" has 19 characters
+//
+// NOTE: this isn't a hard limit and it can be exceeded by the game safely
+//  but at the cost of one or more memory reallocations
+const std::size_t note_maxlength = 128;
 }
 
 ///
@@ -45,6 +55,8 @@ public:
     PCodriverSigns(const std::unordered_map<std::string, PTexture *> &signs):
         signs(signs)
     {
+        cpsigns.reserve(note_maxlength);
+        tempnote.reserve(note_maxlength);
     }
 
     ///
@@ -54,21 +66,22 @@ public:
     ///
     void set(const std::string &notes, float time)
     {
-        std::stringstream ssnotes(notes);
+        std::istringstream ssnotes(notes);
         std::istream_iterator<std::string> itnotes_begin(ssnotes);
         std::istream_iterator<std::string> itnotes_end;
-        std::vector<std::string> vnotes(itnotes_begin, itnotes_end);
+        std::forward_list<std::string> flnotes(itnotes_begin, itnotes_end);
 
         cpsigns.clear();
         cptime = time;
 
-        while (!vnotes.empty())
+        while (!flnotes.empty())
         {
             PTexture *cptex = nullptr;
-            std::string tempnote;
-            auto cut_end = vnotes.cbegin();
+            auto cut_end = flnotes.cbegin();
 
-            for (auto ci = vnotes.cbegin(); ci != vnotes.cend(); ++ci)
+            tempnote.clear();
+
+            for (auto ci = flnotes.cbegin(); ci != flnotes.cend(); ++ci)
             {
                 tempnote += *ci;
 
@@ -82,7 +95,7 @@ public:
             if (cptex != nullptr)
                 cpsigns.push_back(cptex);
 
-            vnotes.erase(vnotes.cbegin(), cut_end + 1);
+            flnotes.erase_after(flnotes.cbefore_begin(), std::next(cut_end));
         }
     }
 
@@ -139,8 +152,85 @@ public:
 
 private:
 
-    std::unordered_map<std::string, PTexture *> signs;
+    std::unordered_map<std::string, PTexture *> signs; ///< MainApp::tex_codriversigns
     std::vector<PTexture *> cpsigns;
+    std::string tempnote; ///< Temporary string for performance.
     float cptime;
+};
+
+///
+/// @brief Gives a voice to the codriver.
+///
+class PCodriverVoice
+{
+public:
+
+    PCodriverVoice() = delete;
+
+    PCodriverVoice(const std::unordered_map<std::string, PAudioSample *> &words, float volume):
+        words(words),
+        volume(volume)
+    {
+        tempnote.reserve(note_maxlength);
+    }
+
+    void say(const std::string &notes)
+    {
+        if (words.empty())
+            return;
+
+        std::vector<PAudioSample *> cpwords;
+        std::istringstream ssnotes(notes);
+        std::istream_iterator<std::string> itnotes_begin(ssnotes);
+        std::istream_iterator<std::string> itnotes_end;
+        std::forward_list<std::string> flnotes(itnotes_begin, itnotes_end);
+
+        cpwords.reserve(note_maxlength);
+
+        while (!flnotes.empty())
+        {
+            PAudioSample *cpaud = nullptr;
+            auto cut_end = flnotes.cbegin();
+
+            tempnote.clear();
+
+            for (auto ci = flnotes.cbegin(); ci != flnotes.cend(); ++ci)
+            {
+                tempnote += *ci;
+
+                if (words.count(tempnote) != 0)
+                {
+                    cpaud = words.at(tempnote);
+                    cut_end = ci;
+                }
+            }
+
+            if (cpaud != nullptr)
+                cpwords.push_back(cpaud);
+
+            flnotes.erase_after(flnotes.cbefore_begin(), std::next(cut_end));
+        }
+
+        std::thread(&PCodriverVoice::asyncSay, this, cpwords).detach();
+    }
+
+private:
+
+    void asyncSay(std::vector<PAudioSample *> cpwords) const
+    {
+        for (auto w: cpwords)
+        {
+            PAudioInstance voice(w);
+
+            voice.setGain(volume);
+            voice.play();
+
+            while (voice.isPlaying());
+        }
+    }
+
+    std::unordered_map<std::string, PAudioSample *> words; ///< MainApp::aud_codriverwords
+    std::string tempnote; ///< Temporary string for performance.
+    float volume;
 };
 
