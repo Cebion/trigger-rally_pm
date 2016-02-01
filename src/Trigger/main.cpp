@@ -916,12 +916,35 @@ bool MainApp::loadAll()
 
     if (!cfg_codrivername.empty() && cfg_codrivername != "mime")
     {
-        aud_codriverwords.resize(static_cast<unsigned int> (CodriverWords::NUMBER_OF_WORDS));
-#define X(Word, Note) \
-    if (!(aud_codriverwords[static_cast<unsigned int> (CodriverWords::Word)] = \
-        getSSAudio().loadSample("/sounds/codriver/" + cfg_codrivername + "/" Note ".wav", false))) return false;
-        CODRIVERVOICE_PARAMETERS
-#undef X
+        const std::string origdir(std::string("/sounds/codriver/") + cfg_codrivername);
+
+        char **rc = PHYSFS_enumerateFiles(origdir.c_str());
+
+        for (char **fname = rc; *fname != nullptr; ++fname)
+        {
+            PAudioSample *aud_cdword = getSSAudio().loadSample(origdir + '/' + *fname, false);
+
+            if (aud_cdword != nullptr) // failed loads are ignored
+            {
+                // remove the extension from the filename
+                std::smatch mr; // Match Results
+                std::regex pat(R"(^(\w+)(\..+)$)"); // Pattern
+
+                if (!std::regex_search(std::string(*fname), mr, pat))
+                    continue;
+
+                std::string basefname = mr[1];
+
+                // make the base filename lowercase
+                for (char &c: basefname)
+                    c = std::tolower(static_cast<unsigned char> (c));
+
+                aud_codriverwords[basefname] = aud_cdword;
+                //PUtil::outLog() << "Loaded codriver word for: \"" << basefname << '"' << std::endl;
+            }
+        }
+
+        PHYSFS_freeList(rc);
     }
   }
   

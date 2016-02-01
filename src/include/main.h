@@ -370,7 +370,8 @@ private:
            *tex_button_prev;
   
   std::unordered_map<std::string, PTexture *> tex_codriversigns;
-  
+  std::unordered_map<std::string, PAudioSample *> aud_codriverwords;
+
   DirtParticleSystem *psys_dirt;
   
   PAudioSample *aud_engine,
@@ -378,8 +379,6 @@ private:
                *aud_gearchange,
                *aud_gravel,
                *aud_crash1;
-  
-  std::vector<PAudioSample *> aud_codriverwords;
   
   PAudioInstance *audinst_engine, *audinst_wind, *audinst_gravel;
   std::vector<PAudioInstance *> audinst;
@@ -478,7 +477,7 @@ public:
   void mouseButtonEvent(const SDL_MouseButtonEvent &mbe);
   void joyButtonEvent(int which, int button, bool down);
 
-    std::vector<PAudioSample *> getCodriverWords() const
+    std::unordered_map<std::string, PAudioSample *> getCodriverWords() const
     {
         return aud_codriverwords;
     }
