@@ -55,7 +55,7 @@ public:
     PCodriverSigns(const std::unordered_map<std::string, PTexture *> &signs):
         signs(signs)
     {
-        cpsigns.reserve(note_maxlength);
+        cpsigns.reserve(8); // FIXME: magic number
         tempnote.reserve(note_maxlength);
     }
 
