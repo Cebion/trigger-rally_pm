@@ -10,7 +10,7 @@
 
 # standard GNU and custom variables
 DISTNAME        := trigger-rally
-DISTVER         := 0.6.3
+DISTVER         := 0.6.4
 DISTDIR         := $(DISTNAME)-$(DISTVER)
 DISTARC         := $(DISTDIR).zip
 TR_BINDIR       := ../bin
