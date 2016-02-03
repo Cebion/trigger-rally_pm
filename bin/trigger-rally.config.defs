@@ -23,8 +23,8 @@
 		-->
 
 	<audio
-		enginevolume="0.3"
-		sfxvolume="1.0"
+		enginevolume="0.1"
+		sfxvolume="0.7"
 		codrivervolume="1.0"
 		/>
 		<!-- Possible range of volumes: 0 to 1.
@@ -86,7 +86,7 @@
 	</datadirectory>
 
 	<parameters
-		drivingassist="0.55"
+		drivingassist="0.33"
 		enablesound="yes"
 		enablecodriversigns="yes"
 		speedunit="mph"
