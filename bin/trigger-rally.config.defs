@@ -23,7 +23,7 @@
 		-->
 
 	<audio
-		enginevolume="0.1"
+		enginevolume="0.2"
 		sfxvolume="0.7"
 		codrivervolume="1.0"
 		/>
