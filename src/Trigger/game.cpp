@@ -181,16 +181,28 @@ bool TriggerGame::loadLevel(const std::string &filename)
         
         if (!strcmp(walk2->Value(), "checkpoint")) {
           val = walk2->Attribute("coords");
-          if (val) {
+
             vec2f coords;
+
+          if (val) {
             if (sscanf(val, "%f , %f", &coords.x, &coords.y) == 2) {
               coords.x *= coordscale.x;
               coords.y *= coordscale.y;
-              checkpt.push_back(vec3f(coords.x, coords.y, terrain->getHeight(coords.x, coords.y)));
             } else
               PUtil::outLog() << "Error reading checkpoint coords\n";
           } else {
             PUtil::outLog() << "Warning: checkpoint has no coords\n";
+          }
+
+          val = walk2->Attribute("notes");
+
+          if (val != nullptr) // is a codriver checkpoint
+          {
+            codrivercheckpt.push_back({{coords.x, coords.y, terrain->getHeight(coords.x, coords.y)}, val});
+          }
+          else // is a mandatory regular checkpoint
+          {
+            checkpt.push_back(vec3f(coords.x, coords.y, terrain->getHeight(coords.x, coords.y)));
           }
         } else if (!strcmp(walk2->Value(), "startposition")) {
           
