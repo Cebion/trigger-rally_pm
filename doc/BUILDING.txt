@@ -17,7 +17,7 @@ A. Appendix
 
 To build Trigger Rally, your system must satisfy the following requirements:
 
-* have a C++ compiler (preferably g++ v.4.8+) and related binutils
+* have a C++ compiler (preferably g++ v.4.9+) and related binutils
 * have the GNU Make utility
 * have these development libraries installed:
 
@@ -283,7 +283,7 @@ Some libraries have non-standard makefiles which expect non-standard variables.
   $ make \
   > POPT="-march=native -mtune=native -Ofast" \
   > CFLAGS.EXTRA="-m32" \
-  > LDFLAFS.EXTRA="-m32"
+  > LDFLAGS.EXTRA="-m32"
   $ make GLEW_DEST="" DESTDIR="/local" install
 
 Next up are the SDL and SDL_image libraries, the build process of which requires
@@ -385,7 +385,7 @@ The pack contains the following:
 1. Copy the Trigger Rally build that you wish to distribute to the "dist" folder.
 2. Run the batch file "generate_DelFilesRmDirs.cmd" to generate the "DelFiles.nsh"
    and "RmDirs.nsh" NSIS headers. These headers are needed by the "TriggerRally.nsi"
-   to create a proper uninstaller.
+   NSIS script to create a proper uninstaller.
 3. Open "TriggerRally.nsi" and check that the version information is correct:
    !define COMP_NAME "Packager Name (and Username)"
    !define VERSION "X.X.X"
