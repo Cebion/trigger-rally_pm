@@ -29,7 +29,7 @@ IncludeVersionInfo=0
 SupportXPThemes=0
 CompilerSet=3
 CompilerSettings=000dg0a1c0111000000001000
-UnitCount=38
+UnitCount=39
 
 [VersionInfo]
 Major=1
@@ -422,6 +422,16 @@ BuildCmd=
 
 [Unit38]
 FileName=include\codriver.h
+CompileCpp=1
+Folder=Headers
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit39]
+FileName=include\hiscore1.h
 CompileCpp=1
 Folder=Headers
 Compile=1
