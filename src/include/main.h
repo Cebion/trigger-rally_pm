@@ -275,6 +275,8 @@ private:
   
   // Config settings
   
+  std::string cfg_playername;
+  
   int cfg_video_cx, cfg_video_cy;
   bool cfg_video_fullscreen;
   
@@ -339,10 +341,13 @@ private:
   
   // for level screen
   Gui gui;
+public:
   LevelState lss;
-  
+private:
   //
   
+  HiScore1 best_times;
+  RaceData race_data;
   TriggerGame *game;
   
   PVehicleType *vt_tank;
@@ -438,7 +443,11 @@ protected:
   void finishRace(int gamestate, float coursetime);
   
 public:
-  MainApp(const std::string &title, const std::string &name) : PApp(title, name) { }
+  MainApp(const std::string &title, const std::string &name):
+    PApp(title, name),
+    best_times("/players")
+  {
+  }
   //MainApp::~MainApp(); // should not have destructor, use unload
   
   float getCodriverVolume() const
@@ -450,6 +459,7 @@ public:
   void load();
   void unload();
   
+  void copyDefaultPlayers() const;
   void loadConfig();
   bool loadAll();
   bool loadLevelsAndEvents();
