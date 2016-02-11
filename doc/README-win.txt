@@ -68,3 +68,13 @@ If you have questions on configuring the game, or if you experience bugs,
 please join the Discussion forums at:
 
     https://sourceforge.net/p/trigger-rally/discussion/
+
+If you experience crashes you may be asked to provide a run log.
+You can create a run log by starting the RunLog batch file:
+
+    trigger-rally.RUNLOG.cmd
+
+which is located in the "bin" folder of Trigger Rally.
+
+It will run the game and save a text file named "trigger-rally.log"
+in your Trigger Rally game configuration folder (see 2. above).
