@@ -175,6 +175,12 @@ int PApp::run(int argc, char *argv[])
           << "PhysFS: " << PHYSFS_getLastError() << std::endl;
     }
     
+    if (PHYSFS_mkdir("/players") == 0)
+    {
+        PUtil::outLog() << "Failed to create directory \"/players\"" << std::endl
+            << "PhysFS: " << PHYSFS_getLastError() << std::endl;
+    }
+    
     // Adding "." to the search path seems to add more trouble than it's worth
 #if 0
     if (PHYSFS_addToSearchPath(".", 1) == 0) {

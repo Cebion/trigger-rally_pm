@@ -608,7 +608,7 @@ void MainApp::renderStateChoose(float eyetranslation)
 
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
-    getSSRender().drawText(vtype->proper_name, PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
+    getSSRender().drawText(vtype->proper_name + " (" + vtype->proper_class + ')', PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
 
     glPopMatrix(); // 1
 
