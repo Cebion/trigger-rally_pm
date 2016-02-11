@@ -119,6 +119,7 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
   // defaults
 
   proper_name = "Vehicle";
+  proper_class = "Unknown";
   
   mass = 1.0;
   dims = vec3f(1.0,1.0,1.0);
@@ -156,6 +157,11 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
   
   val = rootelem->Attribute("name");
   if (val) proper_name = val;
+  
+  val = rootelem->Attribute("class");
+  
+  if (val != nullptr)
+    proper_class = val;
   
   val = rootelem->Attribute("allscale");
   if (val) allscale = atof(val);

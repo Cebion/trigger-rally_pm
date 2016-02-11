@@ -232,6 +232,7 @@ struct PVehicleTypePart {
 class PVehicleType : public PResource {
 public:
   std::string proper_name;
+  std::string proper_class;
   
   int coretype;
   
