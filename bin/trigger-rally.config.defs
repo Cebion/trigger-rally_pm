@@ -1,5 +1,14 @@
 <?xml version="1.0" ?>
 <config>
+	<player
+		name="Player"
+		/>
+		<!-- Valid player names are alphanumerical "a-z A-Z 0-9"
+			with underscore "_" and space " ". Using wacky symbols
+			may seem to work at first but the resulting player profile
+			won't be loaded at game start.
+		-->
+
 	<video
 		width="800"
 		height="600"
