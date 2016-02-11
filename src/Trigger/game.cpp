@@ -390,7 +390,7 @@ void TriggerGame::tick(float delta)
   case GS_RACING:
     coursetime += delta;
     
-    if (coursetime > targettime) {
+    if (coursetime > targettime && app->lss.state == AM_TOP_EVT_PREP) {
       gamestate = GS_FINISHED;
     }
     break;
@@ -398,7 +398,7 @@ void TriggerGame::tick(float delta)
     othertime -= delta;
     
     for (unsigned int i=0; i<vehicle.size(); i++) {
-      vehicle[i]->ctrl.setZero();
+      //vehicle[i]->ctrl.setZero();
       vehicle[i]->ctrl.brake1 = 1.0f;
       //vehicle[i]->ctrl.brake2 = 1.0f;
     }
