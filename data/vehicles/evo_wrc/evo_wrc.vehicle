@@ -1,6 +1,7 @@
 <?xml version="1.0" ?>
 <vehicle
-	name="Zaibatsu Evo (WRC)"
+	name="Zaibatsu Evo"
+	class="WRC"
 	type="car">
 	
 	<genparams
@@ -19,12 +20,12 @@
 			<powerpoint rpm="5000" power="0.7" />
 			<powerpoint rpm="8000" power="1.0" />
 			<powerpoint rpm="8500" power="0.8" />
-			<powerpoint rpm="9000" power="0.4" />
+			<powerpoint rpm="10000" power="0.7" />
 			<powerpoint rpm="12000" power="0.0" />
 		</engine>
 		
 		<gearbox>
-			<gear absolute="0.06" />
+			<gear absolute="0.07" />
 			<gear relative="1.36" />
 			<gear relative="1.33" />
 			<gear relative="1.30" />

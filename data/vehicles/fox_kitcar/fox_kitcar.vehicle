@@ -1,6 +1,7 @@
 <?xml version="1.0" ?>
 <vehicle
-	name="FMC Fox (Kit-Car)"
+	name="FMC Fox"
+	class="Kit-Car"
 	type="car">
 	
 	<genparams

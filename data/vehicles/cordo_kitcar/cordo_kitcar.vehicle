@@ -1,6 +1,7 @@
 <?xml version="1.0" ?>
 <vehicle
-	name="Martorell Cordo (Kit-Car)"
+	name="Martorell Cordo"
+	class="Kit-Car"
 	type="car">
 	
 	<genparams

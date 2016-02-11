@@ -1,6 +1,7 @@
 <?xml version="1.0" ?>
 <vehicle
-	name="Zaibatsu Evo (Kit-Car)"
+	name="Zaibatsu Evo"
+	class="Kit-Car"
 	type="car">
 	
 	<genparams

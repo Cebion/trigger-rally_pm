@@ -1,6 +1,7 @@
 <?xml version="1.0" ?>
 <vehicle
-	name="Martorell Cordo (Super500)"
+	name="Martorell Cordo"
+	class="Super 500"
 	type="car">
 	
 	<genparams

@@ -1,6 +1,7 @@
 <?xml version="1.0" ?>
 <vehicle
-	name="Zaibatsu Evo (Super500)"
+	name="Zaibatsu Evo"
+	class="Super 500"
 	type="car">
 	
 	<genparams

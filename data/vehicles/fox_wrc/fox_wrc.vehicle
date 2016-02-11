@@ -1,6 +1,7 @@
 <?xml version="1.0" ?>
 <vehicle
-	name="FMC Fox (WRC)"
+	name="FMC Fox"
+	class="WRC"
 	type="car">
 	
 	<genparams
@@ -17,13 +18,14 @@
 		<engine powerscale="10000">
 			<powerpoint rpm="2000" power="0.4" />
 			<powerpoint rpm="5000" power="0.7" />
-			<powerpoint rpm="8500" power="1.0" />
-			<powerpoint rpm="9500" power="0.6" />
+			<powerpoint rpm="8000" power="1.0" />
+			<powerpoint rpm="8500" power="0.8" />
+			<powerpoint rpm="10000" power="0.7" />
 			<powerpoint rpm="12000" power="0.0" />
 		</engine>
 		
 		<gearbox>
-			<gear absolute="0.06" />
+			<gear absolute="0.07" />
 			<gear relative="1.33" />
 			<gear relative="1.30" />
 			<gear relative="1.27" />
