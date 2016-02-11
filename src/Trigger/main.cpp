@@ -39,6 +39,8 @@ void MainApp::config()
         PUtil::outLog() << "Main game data directory datadir=\"" << datadir << "\"" << std::endl;
         break;
     }
+
+    best_times.loadAllTimes();
 }
 
 void MainApp::load()
@@ -250,11 +252,47 @@ SDLKey getSdlKeySym(const std::string &s)
 
 }
 
+///
+/// @brief Copies default players from data to user directory.
+///
+void MainApp::copyDefaultPlayers() const
+{
+    const std::string dppsearchdir = "/defplayers"; // Default Player Profiles Search Directory
+    const std::string dppdestdir = "/players"; // Default Player Profiles Destination Directory
+
+    char **rc = PHYSFS_enumerateFiles(dppsearchdir.c_str());
+
+    for (char **fname = rc; *fname != nullptr; ++fname)
+    {
+        // reject files that are already in the user directory
+        if (PHYSFS_exists(*fname))
+            continue;
+
+        // reject files without .PLAYER extension (lowercase)
+        std::smatch mr; // Match Results
+        std::regex pat(R"(^([\s\w]+)(\.player)$)"); // Pattern
+
+        if (!std::regex_search(std::string(*fname), mr, pat))
+            continue;
+
+        if (!PUtil::copyFile(dppsearchdir + '/' + *fname, dppdestdir + '/' + *fname))
+            PUtil::outLog() << "Couldn't copy default player \"" << *fname << "\"." << std::endl;
+    }
+
+    PHYSFS_freeList(rc);
+}
+
+///
+/// @todo Since C++11 introduced default members initializers, the defaults could
+///  be set in the class declaration directly rather than in this function.
+///
 void MainApp::loadConfig()
 {
   PUtil::outLog() << "Loading game configuration" << std::endl;
   
   // Set defaults
+  
+  cfg_playername = "Player";
   
   cfg_video_cx = 640;
   cfg_video_cy = 480;
@@ -332,7 +370,18 @@ void MainApp::loadConfig()
   
   for (TiXmlElement *walk = rootelem->FirstChildElement();
     walk; walk = walk->NextSiblingElement()) {
-    
+
+    if (strcmp(walk->Value(), "player") == 0)
+    {
+        val = walk->Attribute("name");
+
+        if (val != nullptr)
+        {
+            cfg_playername = val;
+            best_times.setPlayerName(val);
+        }
+    }
+    else
     if (!strcmp(walk->Value(), "video")) {
       
       val = walk->Attribute("width");
@@ -947,7 +996,9 @@ bool MainApp::loadAll()
         PHYSFS_freeList(rc);
     }
   }
-  
+
+  copyDefaultPlayers();
+
   if (!gui.loadColors("/menu.colors"))
     PUtil::outLog() << "Couldn't load (all) menu colors, continuing with defaults" << std::endl;
   
@@ -1029,6 +1080,8 @@ bool MainApp::startGame(const std::string &filename)
     return false;
   }
   
+  race_data.playername  = cfg_playername; // TODO: move to a better place
+  race_data.mapname     = filename;
   choose_type = game->vehiclechoices.size() - 1;
   
   if (game->vehiclechoices.size() > 1) {
@@ -1081,6 +1134,17 @@ void MainApp::startGame2()
 void MainApp::endGame(int gamestate)
 {
   float coursetime = (gamestate == GF_NOT_FINISHED) ? 0.0f : game->coursetime;
+  
+    if (gamestate != GF_NOT_FINISHED)
+    {
+        race_data.carname   = game->vehicle.front()->type->proper_name;
+        race_data.carclass  = game->vehicle.front()->type->proper_class;
+        race_data.totaltime = game->coursetime;
+        race_data.maxspeed  = 0.0f; // TODO: measure this too
+        best_times.addNewTime(race_data);
+        //PUtil::outLog() << race_data;
+        best_times.savePlayerTimes(); // FIXME: this will get very expensive in time
+    }
   
   if (audinst_engine) {
     delete audinst_engine;
@@ -1761,10 +1825,13 @@ void MainApp::keyEvent(const SDL_KeyboardEvent &ke)
       
       switch (ke.keysym.sym) {
       case SDLK_ESCAPE:
+          endGame(game->getFinishState());
+/*
           if (game->getFinishState() == GF_PASS)
             endGame(GF_PASS);
           else // GF_FAIL or GF_NOT_FINISHED
             endGame(GF_FAIL);
+*/
         return;
       default:
         break;
