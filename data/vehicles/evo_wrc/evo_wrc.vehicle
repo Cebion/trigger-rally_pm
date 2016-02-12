@@ -25,7 +25,7 @@
 		</engine>
 		
 		<gearbox>
-			<gear absolute="0.07" />
+			<gear absolute="0.065" />
 			<gear relative="1.36" />
 			<gear relative="1.33" />
 			<gear relative="1.30" />
