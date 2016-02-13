@@ -108,6 +108,7 @@ struct LevelState {
   
   int currentevent;
   int currentlevel;
+  int currentplayer; // current player in the best times list
   
   int livesleft;
   float totaltime;
