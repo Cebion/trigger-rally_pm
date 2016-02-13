@@ -438,7 +438,7 @@ void MainApp::levelScreenAction(int action, int index)
         gui.addLabel(100.0f,462.5f,
             std::string("by ") + levels[lss.currentlevel].author,
             PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, LabelStyle::Weak);
-        gui.addLabel(700.0f, 462.5f, levels[lss.currentlevel].targettimeshort, PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 20.0f);
+        gui.addLabel(700.0f, 462.5f, levels[lss.currentlevel].targettime, PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 20.0f);
         gui.makeClickable(
             gui.addLabel(10.0f, 10.0f, "back", PTEXT_HZA_LEFT | PTEXT_VTA_BOTTOM, 40.0f),
             AA_PICK_LVL, lss.currentlevel);
@@ -496,7 +496,7 @@ void MainApp::levelScreenAction(int action, int index)
         gui.addLabel(100.0f,462.5f,
             std::string("by ") + events[lss.currentevent].levels[lss.currentlevel].author,
             PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, LabelStyle::Weak);
-        gui.addLabel(700.0f, 462.5f, events[lss.currentevent].levels[lss.currentlevel].targettimeshort,
+        gui.addLabel(700.0f, 462.5f, events[lss.currentevent].levels[lss.currentlevel].targettime,
             PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 20.0f);
         gui.makeClickable(
             gui.addLabel(10.0f, 10.0f, "back", PTEXT_HZA_LEFT | PTEXT_VTA_BOTTOM, 40.0f),
@@ -776,7 +776,7 @@ void MainApp::handleLevelScreenKey(const SDL_KeyboardEvent &ke)
 
             case AM_TOP_LVL:
             {
-                if (levels.size() - lss.currentlevel < MAX_RACES_ON_SCREEN)
+                if (levels.size() - lss.currentlevel <= MAX_RACES_ON_SCREEN)
                     break;
 
                 nidx = (lss.currentlevel / MAX_RACES_ON_SCREEN + 1) * MAX_RACES_ON_SCREEN;
@@ -787,7 +787,7 @@ void MainApp::handleLevelScreenKey(const SDL_KeyboardEvent &ke)
 
             case AM_TOP_EVT:
             {
-                if (events.size() - lss.currentevent < MAX_RACES_ON_SCREEN)
+                if (events.size() - lss.currentevent <= MAX_RACES_ON_SCREEN)
                     break;
 
                 nidx = (lss.currentevent / MAX_RACES_ON_SCREEN + 1) * MAX_RACES_ON_SCREEN;
@@ -798,7 +798,7 @@ void MainApp::handleLevelScreenKey(const SDL_KeyboardEvent &ke)
 
             case AM_TOP_PRAC:
             {
-                if (events.size() - lss.currentevent < MAX_RACES_ON_SCREEN)
+                if (events.size() - lss.currentevent <= MAX_RACES_ON_SCREEN)
                     break;
 
                 nidx = (lss.currentevent / MAX_RACES_ON_SCREEN + 1) * MAX_RACES_ON_SCREEN;
