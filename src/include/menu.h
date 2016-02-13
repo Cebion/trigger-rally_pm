@@ -13,6 +13,8 @@ the game. Ick.
 
 */
 
+// TODO: use enums instead of macros
+
 // menus
 #define AM_TOP                21  // Event / Practice / Single race / Quit
 #define AM_TOP_EVT            22  // Choose event to race
@@ -24,6 +26,8 @@ the game. Ick.
 #define AM_TOP_LVL            28  // Choose single race
 #define AM_TOP_LVL_PREP       29  // Show track info (single race)
 #define AM_TOP_QUIT           30  // Are you sure you want to quit?
+#define AM_TOP_LVL_TIMES      31  // Show best times for Single level
+#define AM_TOP_PRAC_TIMES     32  // Show best times for Practice level
 
 // actions
 #define AA_INIT               1
@@ -43,6 +47,8 @@ the game. Ick.
 #define AA_START_LVL          43
 #define AA_GO_QUIT            51
 #define AA_QUIT_CONFIRM       52
+#define AA_SHOWTIMES_LVL      61
+#define AA_SHOWTIMES_PRAC     62
 
 /// used to determine which colors to use for the GuiWidget label
 enum class LabelStyle

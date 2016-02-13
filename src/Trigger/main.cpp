@@ -1135,7 +1135,7 @@ void MainApp::endGame(int gamestate)
 {
   float coursetime = (gamestate == GF_NOT_FINISHED) ? 0.0f : game->coursetime;
   
-    if (gamestate != GF_NOT_FINISHED)
+    if (gamestate != GF_NOT_FINISHED && lss.state != AM_TOP_EVT_PREP)
     {
         race_data.carname   = game->vehicle.front()->type->proper_name;
         race_data.carclass  = game->vehicle.front()->type->proper_class;
@@ -1144,6 +1144,14 @@ void MainApp::endGame(int gamestate)
         best_times.addNewTime(race_data);
         //PUtil::outLog() << race_data;
         best_times.savePlayerTimes(); // FIXME: this will get very expensive in time
+        current_times = best_times.getCurrentTimes(race_data.mapname, HISCORE1_SORT::BY_TOTALTIME_ASC);
+
+        // show the best times
+        if (lss.state == AM_TOP_LVL_PREP)
+            lss.state = AM_TOP_LVL_TIMES;
+        else
+        if (lss.state == AM_TOP_PRAC_SEL_PREP)
+            lss.state = AM_TOP_PRAC_TIMES;
     }
   
   if (audinst_engine) {

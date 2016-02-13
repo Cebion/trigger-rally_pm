@@ -348,6 +348,8 @@ private:
   
   HiScore1 best_times;
   RaceData race_data;
+  std::vector<RaceData> current_times;
+
   TriggerGame *game;
   
   PVehicleType *vt_tank;
