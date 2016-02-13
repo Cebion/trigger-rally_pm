@@ -346,9 +346,10 @@ public:
 private:
   //
   
-  HiScore1 best_times;
+  HiScore1 best_times; // FIXME: this belongs in PApp as a protected member
   RaceData race_data;
   std::vector<RaceData> current_times;
+  std::vector<RaceDataHL> current_times_hl;
 
   TriggerGame *game;
   

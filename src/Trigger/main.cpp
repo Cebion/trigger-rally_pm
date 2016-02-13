@@ -1141,10 +1141,9 @@ void MainApp::endGame(int gamestate)
         race_data.carclass  = game->vehicle.front()->type->proper_class;
         race_data.totaltime = game->coursetime;
         race_data.maxspeed  = 0.0f; // TODO: measure this too
-        best_times.addNewTime(race_data);
         //PUtil::outLog() << race_data;
+        current_times_hl = best_times.insertAndGetCurrentTimesHL(race_data);
         best_times.savePlayerTimes(); // FIXME: this will get very expensive in time
-        current_times = best_times.getCurrentTimes(race_data.mapname, HISCORE1_SORT::BY_TOTALTIME_ASC);
 
         // show the best times
         if (lss.state == AM_TOP_LVL_PREP)
