@@ -91,9 +91,11 @@ void MainApp::levelScreenAction(int action, int index)
     return;
 
     case AA_SHOWTIMES_LVL:
+        lss.currentplayer = index;
         break;
 
     case AA_SHOWTIMES_PRAC:
+        lss.currentplayer = index;
         break;
   
   default:
@@ -449,7 +451,7 @@ void MainApp::levelScreenAction(int action, int index)
         if (first_time_index > 0)
             gui.makeClickable(prevbutton, AA_SHOWTIMES_LVL, first_time_index - MAX_TIMES_ON_SCREEN);
 
-        int times_on_screen_count = current_times.size() - first_time_index;
+        int times_on_screen_count = current_times_hl.size() - first_time_index;
 
         if (times_on_screen_count > MAX_TIMES_ON_SCREEN)
         {
@@ -460,21 +462,28 @@ void MainApp::levelScreenAction(int action, int index)
         std::stringstream times_count_msg;
 
         times_count_msg << "best times " << first_time_index + 1 << '-'
-            << first_time_index + times_on_screen_count << '/' << current_times.size();
+            << first_time_index + times_on_screen_count << '/' << current_times_hl.size();
         gui.addLabel(790.0f, 570.0f, times_count_msg.str(), PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20.0f, LabelStyle::Weak);
 
         for (int i = first_time_index; i < first_time_index + times_on_screen_count; ++i)
         {
+            LabelStyle ls;
+
+            if (current_times_hl[i].second)
+                ls = LabelStyle::Marked; // highlighted
+            else
+                ls = LabelStyle::List;
+
             gui.addLabel(145.0f, 420.0f - (float)(i - first_time_index) * 25.0f,
-                std::to_string(i + 1) + ". ", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 20.0f, LabelStyle::List);
+                std::to_string(i + 1) + ". ", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 20.0f, ls);
             gui.addLabel(145.0f, 420.0f - (float)(i - first_time_index) * 25.0f,
-                current_times[i].playername, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, LabelStyle::List);
+                current_times_hl[i].first.playername, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, ls);
             gui.addLabel(400.0f, 420.0f - (float)(i - first_time_index) * 25.0f,
-                current_times[i].carname, PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 20.0f, LabelStyle::List);
+                current_times_hl[i].first.carname, PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 20.0f, ls);
             gui.addLabel(530.0f, 420.0f - (float)(i - first_time_index) * 25.0f,
-                current_times[i].carclass, PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 20.0f, LabelStyle::List);
+                current_times_hl[i].first.carclass, PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 20.0f, ls);
             gui.addLabel(700.0f, 420.0f - (float)(i - first_time_index) * 25.0f,
-                PUtil::formatTime(current_times[i].totaltime), PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 20.0f, LabelStyle::List);
+                PUtil::formatTime(current_times_hl[i].first.totaltime), PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 20.0f, ls);
         }
 
         break;
@@ -501,7 +510,7 @@ void MainApp::levelScreenAction(int action, int index)
         if (first_time_index > 0)
             gui.makeClickable(prevbutton, AA_SHOWTIMES_PRAC, first_time_index - MAX_TIMES_ON_SCREEN);
 
-        int times_on_screen_count = current_times.size() - first_time_index;
+        int times_on_screen_count = current_times_hl.size() - first_time_index;
 
         if (times_on_screen_count > MAX_TIMES_ON_SCREEN)
         {
@@ -512,21 +521,28 @@ void MainApp::levelScreenAction(int action, int index)
         std::stringstream times_count_msg;
 
         times_count_msg << "best times " << first_time_index + 1 << '-'
-            << first_time_index + times_on_screen_count << '/' << current_times.size();
+            << first_time_index + times_on_screen_count << '/' << current_times_hl.size();
         gui.addLabel(790.0f, 570.0f, times_count_msg.str(), PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20.0f, LabelStyle::Weak);
 
         for (int i = first_time_index; i < first_time_index + times_on_screen_count; ++i)
         {
+            LabelStyle ls;
+
+            if (current_times_hl[i].second)
+                ls = LabelStyle::Marked; // highlighted
+            else
+                ls = LabelStyle::List;
+
             gui.addLabel(145.0f, 420.0f - (float)(i - first_time_index) * 25.0f,
-                std::to_string(i + 1) + ". ", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 20.0f, LabelStyle::List);
+                std::to_string(i + 1) + ". ", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 20.0f, ls);
             gui.addLabel(145.0f, 420.0f - (float)(i - first_time_index) * 25.0f,
-                current_times[i].playername, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, LabelStyle::List);
+                current_times_hl[i].first.playername, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, ls);
             gui.addLabel(400.0f, 420.0f - (float)(i - first_time_index) * 25.0f,
-                current_times[i].carname, PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 20.0f, LabelStyle::List);
+                current_times_hl[i].first.carname, PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 20.0f, ls);
             gui.addLabel(530.0f, 420.0f - (float)(i - first_time_index) * 25.0f,
-                current_times[i].carclass, PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 20.0f, LabelStyle::List);
+                current_times_hl[i].first.carclass, PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 20.0f, ls);
             gui.addLabel(700.0f, 420.0f - (float)(i - first_time_index) * 25.0f,
-                PUtil::formatTime(current_times[i].totaltime), PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 20.0f, LabelStyle::List);
+                PUtil::formatTime(current_times_hl[i].first.totaltime), PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 20.0f, ls);
         }
 
         break;
@@ -723,6 +739,22 @@ void MainApp::handleLevelScreenKey(const SDL_KeyboardEvent &ke)
                 levelScreenAction(AA_PICK_PRAC_LVL, pidx);
                 break;
             }
+
+            case AM_TOP_LVL_TIMES:
+            {
+                pidx = (lss.currentplayer / MAX_TIMES_ON_SCREEN - 1) * MAX_TIMES_ON_SCREEN;
+                CLAMP_LOWER(pidx, 0);
+                levelScreenAction(AA_SHOWTIMES_LVL, pidx);
+                break;
+            }
+
+            case AM_TOP_PRAC_TIMES:
+            {
+                pidx = (lss.currentplayer / MAX_TIMES_ON_SCREEN - 1) * MAX_TIMES_ON_SCREEN;
+                CLAMP_LOWER(pidx, 0);
+                levelScreenAction(AA_SHOWTIMES_PRAC, pidx);
+                break;
+            }
         }
 
         break;
@@ -780,6 +812,28 @@ void MainApp::handleLevelScreenKey(const SDL_KeyboardEvent &ke)
                 nidx = lss.currentlevel + 1;
                 CLAMP_UPPER(nidx, static_cast<int> (events[lss.currentevent].levels.size() - 1));
                 levelScreenAction(AA_PICK_PRAC_LVL, nidx);
+                break;
+            }
+
+            case AM_TOP_LVL_TIMES:
+            {
+                if (current_times_hl.size() - lss.currentplayer <= MAX_TIMES_ON_SCREEN)
+                    break;
+
+                nidx = (lss.currentplayer / MAX_TIMES_ON_SCREEN + 1) * MAX_TIMES_ON_SCREEN;
+                CLAMP_UPPER(nidx, static_cast<int> (current_times_hl.size() - 1));
+                levelScreenAction(AA_SHOWTIMES_LVL, nidx);
+                break;
+            }
+
+            case AM_TOP_PRAC_TIMES:
+            {
+                if (current_times_hl.size() - lss.currentplayer <= MAX_TIMES_ON_SCREEN)
+                    break;
+
+                nidx = (lss.currentplayer / MAX_TIMES_ON_SCREEN + 1) * MAX_TIMES_ON_SCREEN;
+                CLAMP_UPPER(nidx, static_cast<int> (current_times_hl.size() - 1));
+                levelScreenAction(AA_SHOWTIMES_PRAC, nidx);
                 break;
             }
         }
