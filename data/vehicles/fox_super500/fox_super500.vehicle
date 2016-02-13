@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <vehicle
 	name="FMC Fox"
-	class="Super 500"
+	class="S500"
 	type="car">
 	
 	<genparams
