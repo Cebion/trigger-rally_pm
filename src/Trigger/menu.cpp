@@ -105,6 +105,8 @@ void MainApp::levelScreenAction(int action, int index)
 
     case AA_SORT_BY_PLAYERNAME:
     {
+        lss.currentplayer = 0;
+
         if (hs_sort_method == HISCORE1_SORT::BY_PLAYERNAME_ASC)
             hs_sort_method = HISCORE1_SORT::BY_PLAYERNAME_DESC;
         else
@@ -115,6 +117,8 @@ void MainApp::levelScreenAction(int action, int index)
 
     case AA_SORT_BY_CARNAME:
     {
+        lss.currentplayer = 0;
+
         if (hs_sort_method == HISCORE1_SORT::BY_CARNAME_ASC)
             hs_sort_method = HISCORE1_SORT::BY_CARNAME_DESC;
         else
@@ -125,6 +129,8 @@ void MainApp::levelScreenAction(int action, int index)
 
     case AA_SORT_BY_CARCLASS:
     {
+        lss.currentplayer = 0;
+
         if (hs_sort_method == HISCORE1_SORT::BY_CARCLASS_ASC)
             hs_sort_method = HISCORE1_SORT::BY_CARCLASS_DESC;
         else
@@ -135,6 +141,8 @@ void MainApp::levelScreenAction(int action, int index)
 
     case AA_SORT_BY_TOTALTIME:
     {
+        lss.currentplayer = 0;
+
         if (hs_sort_method == HISCORE1_SORT::BY_TOTALTIME_ASC)
             hs_sort_method = HISCORE1_SORT::BY_TOTALTIME_DESC;
         else
