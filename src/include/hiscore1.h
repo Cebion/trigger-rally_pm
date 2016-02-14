@@ -552,14 +552,13 @@ public:
             return a.first.totaltime < b.first.totaltime;
         };
 
-        alltimes.insert({rd.mapname, rd});
         currenttimesHL.clear();
 
         for (auto i = range.first; i != range.second; ++i)
             currenttimesHL.push_back({i->second, false});
 
         currenttimesHL.push_back({rd, true}); // the newest, highlighted time
-
+        alltimes.insert({rd.mapname, rd});
         std::sort(currenttimesHL.begin(), currenttimesHL.end(), cmpfunc);
         return currenttimesHL;
     }
