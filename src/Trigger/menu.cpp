@@ -7,8 +7,8 @@
 #include <sstream>
 #include "main.h"
 
-const int MAX_RACES_ON_SCREEN = 12;
-const int MAX_TIMES_ON_SCREEN = 14;
+const int MAX_RACES_ON_SCREEN   = 12;
+const int MAX_TIMES_ON_SCREEN   = 13;
 
 // X coordinate values for Best Times table labels
 const float XTIMES_PLAYERNAME   = 145.0f;
@@ -102,6 +102,46 @@ void MainApp::levelScreenAction(int action, int index)
     case AA_SHOWTIMES_PRAC:
         lss.currentplayer = index;
         break;
+
+    case AA_SORT_BY_PLAYERNAME:
+    {
+        if (hs_sort_method == HISCORE1_SORT::BY_PLAYERNAME_ASC)
+            hs_sort_method = HISCORE1_SORT::BY_PLAYERNAME_DESC;
+        else
+            hs_sort_method = HISCORE1_SORT::BY_PLAYERNAME_ASC;
+
+        break;
+    }
+
+    case AA_SORT_BY_CARNAME:
+    {
+        if (hs_sort_method == HISCORE1_SORT::BY_CARNAME_ASC)
+            hs_sort_method = HISCORE1_SORT::BY_CARNAME_DESC;
+        else
+            hs_sort_method = HISCORE1_SORT::BY_CARNAME_ASC;
+
+        break;
+    }
+
+    case AA_SORT_BY_CARCLASS:
+    {
+        if (hs_sort_method == HISCORE1_SORT::BY_CARCLASS_ASC)
+            hs_sort_method = HISCORE1_SORT::BY_CARCLASS_DESC;
+        else
+            hs_sort_method = HISCORE1_SORT::BY_CARCLASS_ASC;
+
+        break;
+    }
+
+    case AA_SORT_BY_TOTALTIME:
+    {
+        if (hs_sort_method == HISCORE1_SORT::BY_TOTALTIME_ASC)
+            hs_sort_method = HISCORE1_SORT::BY_TOTALTIME_DESC;
+        else
+            hs_sort_method = HISCORE1_SORT::BY_TOTALTIME_ASC;
+
+        break;
+    }
   
   default:
     PUtil::outLog() << "ERROR: invalid action code " << action << std::endl;
@@ -448,6 +488,8 @@ void MainApp::levelScreenAction(int action, int index)
             gui.addLabel(10.0f, 10.0f, "back", PTEXT_HZA_LEFT | PTEXT_VTA_BOTTOM, 40.0f),
             AA_PICK_LVL, lss.currentlevel);
 
+        current_times_hl = best_times.getCurrentTimesHL(hs_sort_method);
+
         int first_time_index = index;
 
         const int prevbutton = gui.addGraphic(20.0f, 275.0f, 50.0f, 50.0f, tex_button_prev, GraphicStyle::Button);
@@ -470,6 +512,20 @@ void MainApp::levelScreenAction(int action, int index)
             << first_time_index + times_on_screen_count << '/' << current_times_hl.size();
         gui.addLabel(790.0f, 570.0f, times_count_msg.str(), PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20.0f, LabelStyle::Weak);
 
+        // column buttons
+        gui.makeClickable(
+            gui.addLabel(XTIMES_PLAYERNAME, 420.0f, "player", PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f),
+            AA_SORT_BY_PLAYERNAME, 0);
+        gui.makeClickable(
+            gui.addLabel(XTIMES_CARNAME, 420.0f, "car", PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f),
+            AA_SORT_BY_CARNAME, 0);
+        gui.makeClickable(
+            gui.addLabel(XTIMES_CARCLASS, 420.0f, "class", PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f),
+            AA_SORT_BY_CARCLASS, 0);
+        gui.makeClickable(
+            gui.addLabel(XTIMES_TOTALTIME, 420.0f, "time", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 20.0f),
+            AA_SORT_BY_TOTALTIME, 0);
+
         for (int i = first_time_index; i < first_time_index + times_on_screen_count; ++i)
         {
             LabelStyle ls;
@@ -479,15 +535,15 @@ void MainApp::levelScreenAction(int action, int index)
             else
                 ls = LabelStyle::List;
 
-            gui.addLabel(XTIMES_PLAYERNAME, 420.0f - (float)(i - first_time_index) * 25.0f,
+            gui.addLabel(XTIMES_PLAYERNAME, 395.0f - (float)(i - first_time_index) * 25.0f,
                 std::to_string(i + 1) + ". ", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 20.0f, ls);
-            gui.addLabel(XTIMES_PLAYERNAME, 420.0f - (float)(i - first_time_index) * 25.0f,
+            gui.addLabel(XTIMES_PLAYERNAME, 395.0f - (float)(i - first_time_index) * 25.0f,
                 current_times_hl[i].first.playername, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, ls);
-            gui.addLabel(XTIMES_CARNAME, 420.0f - (float)(i - first_time_index) * 25.0f,
+            gui.addLabel(XTIMES_CARNAME, 395.0f - (float)(i - first_time_index) * 25.0f,
                 current_times_hl[i].first.carname, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, ls);
-            gui.addLabel(XTIMES_CARCLASS, 420.0f - (float)(i - first_time_index) * 25.0f,
+            gui.addLabel(XTIMES_CARCLASS, 395.0f - (float)(i - first_time_index) * 25.0f,
                 current_times_hl[i].first.carclass, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, ls);
-            gui.addLabel(XTIMES_TOTALTIME, 420.0f - (float)(i - first_time_index) * 25.0f,
+            gui.addLabel(XTIMES_TOTALTIME, 395.0f - (float)(i - first_time_index) * 25.0f,
                 PUtil::formatTime(current_times_hl[i].first.totaltime), PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 20.0f, ls);
         }
 
@@ -506,6 +562,8 @@ void MainApp::levelScreenAction(int action, int index)
         gui.makeClickable(
             gui.addLabel(10.0f, 10.0f, "back", PTEXT_HZA_LEFT | PTEXT_VTA_BOTTOM, 40.0f),
             AA_PICK_PRAC_LVL, lss.currentlevel);
+
+        current_times_hl = best_times.getCurrentTimesHL(hs_sort_method);
 
         int first_time_index = index;
 
@@ -529,6 +587,20 @@ void MainApp::levelScreenAction(int action, int index)
             << first_time_index + times_on_screen_count << '/' << current_times_hl.size();
         gui.addLabel(790.0f, 570.0f, times_count_msg.str(), PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20.0f, LabelStyle::Weak);
 
+        // column buttons
+        gui.makeClickable(
+            gui.addLabel(XTIMES_PLAYERNAME, 420.0f, "player", PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f),
+            AA_SORT_BY_PLAYERNAME, 0);
+        gui.makeClickable(
+            gui.addLabel(XTIMES_CARNAME, 420.0f, "car", PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f),
+            AA_SORT_BY_CARNAME, 0);
+        gui.makeClickable(
+            gui.addLabel(XTIMES_CARCLASS, 420.0f, "class", PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f),
+            AA_SORT_BY_CARCLASS, 0);
+        gui.makeClickable(
+            gui.addLabel(XTIMES_TOTALTIME, 420.0f, "time", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 20.0f),
+            AA_SORT_BY_TOTALTIME, 0);
+
         for (int i = first_time_index; i < first_time_index + times_on_screen_count; ++i)
         {
             LabelStyle ls;
@@ -538,15 +610,15 @@ void MainApp::levelScreenAction(int action, int index)
             else
                 ls = LabelStyle::List;
 
-            gui.addLabel(XTIMES_PLAYERNAME, 420.0f - (float)(i - first_time_index) * 25.0f,
+            gui.addLabel(XTIMES_PLAYERNAME, 395.0f - (float)(i - first_time_index) * 25.0f,
                 std::to_string(i + 1) + ". ", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 20.0f, ls);
-            gui.addLabel(XTIMES_PLAYERNAME, 420.0f - (float)(i - first_time_index) * 25.0f,
+            gui.addLabel(XTIMES_PLAYERNAME, 395.0f - (float)(i - first_time_index) * 25.0f,
                 current_times_hl[i].first.playername, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, ls);
-            gui.addLabel(XTIMES_CARNAME, 420.0f - (float)(i - first_time_index) * 25.0f,
+            gui.addLabel(XTIMES_CARNAME, 395.0f - (float)(i - first_time_index) * 25.0f,
                 current_times_hl[i].first.carname, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, ls);
-            gui.addLabel(XTIMES_CARCLASS, 420.0f - (float)(i - first_time_index) * 25.0f,
+            gui.addLabel(XTIMES_CARCLASS, 395.0f - (float)(i - first_time_index) * 25.0f,
                 current_times_hl[i].first.carclass, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, ls);
-            gui.addLabel(XTIMES_TOTALTIME, 420.0f - (float)(i - first_time_index) * 25.0f,
+            gui.addLabel(XTIMES_TOTALTIME, 395.0f - (float)(i - first_time_index) * 25.0f,
                 PUtil::formatTime(current_times_hl[i].first.totaltime), PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 20.0f, ls);
         }
 

@@ -50,6 +50,13 @@ the game. Ick.
 #define AA_SHOWTIMES_LVL      61
 #define AA_SHOWTIMES_PRAC     62
 
+// best times table actions for columns
+#define AA_SORT_BY_PLAYERNAME       1001
+#define AA_SORT_BY_CARNAME          1002
+#define AA_SORT_BY_CARCLASS         1003
+#define AA_SORT_BY_TOTALTIME        1004
+
+
 /// used to determine which colors to use for the GuiWidget label
 enum class LabelStyle
 {
