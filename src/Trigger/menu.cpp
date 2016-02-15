@@ -546,11 +546,11 @@ void MainApp::levelScreenAction(int action, int index)
             gui.addLabel(XTIMES_PLAYERNAME, 395.0f - (float)(i - first_time_index) * 25.0f,
                 std::to_string(i + 1) + ". ", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 20.0f, ls);
             gui.addLabel(XTIMES_PLAYERNAME, 395.0f - (float)(i - first_time_index) * 25.0f,
-                current_times_hl[i].first.playername, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, ls);
+                current_times_hl[i].first.playername.substr(0, 15), PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, ls);
             gui.addLabel(XTIMES_CARNAME, 395.0f - (float)(i - first_time_index) * 25.0f,
-                current_times_hl[i].first.carname, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, ls);
+                current_times_hl[i].first.carname.substr(0, 9), PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, ls);
             gui.addLabel(XTIMES_CARCLASS, 395.0f - (float)(i - first_time_index) * 25.0f,
-                current_times_hl[i].first.carclass, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, ls);
+                current_times_hl[i].first.carclass.substr(0, 8), PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, ls);
             gui.addLabel(XTIMES_TOTALTIME, 395.0f - (float)(i - first_time_index) * 25.0f,
                 PUtil::formatTime(current_times_hl[i].first.totaltime), PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 20.0f, ls);
         }
@@ -621,11 +621,11 @@ void MainApp::levelScreenAction(int action, int index)
             gui.addLabel(XTIMES_PLAYERNAME, 395.0f - (float)(i - first_time_index) * 25.0f,
                 std::to_string(i + 1) + ". ", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 20.0f, ls);
             gui.addLabel(XTIMES_PLAYERNAME, 395.0f - (float)(i - first_time_index) * 25.0f,
-                current_times_hl[i].first.playername, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, ls);
+                current_times_hl[i].first.playername.substr(0, 15), PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, ls);
             gui.addLabel(XTIMES_CARNAME, 395.0f - (float)(i - first_time_index) * 25.0f,
-                current_times_hl[i].first.carname, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, ls);
+                current_times_hl[i].first.carname.substr(0, 9), PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, ls);
             gui.addLabel(XTIMES_CARCLASS, 395.0f - (float)(i - first_time_index) * 25.0f,
-                current_times_hl[i].first.carclass, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, ls);
+                current_times_hl[i].first.carclass.substr(0, 8), PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, ls);
             gui.addLabel(XTIMES_TOTALTIME, 395.0f - (float)(i - first_time_index) * 25.0f,
                 PUtil::formatTime(current_times_hl[i].first.totaltime), PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 20.0f, ls);
         }
