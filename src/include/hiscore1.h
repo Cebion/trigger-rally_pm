@@ -275,6 +275,7 @@ public:
     /// @param [in] mapname         Map for which to get the times.
     /// @param sortmethod           How to sort the times.
     /// @see `HISCORE1_SORT` enum.
+    /// @note For `mapname == ""` the current results list will be re-sorted.
     /// @returns Sorted list of results.
     ///
     const std::vector<RaceData> & getCurrentTimes(const std::string &mapname, HISCORE1_SORT sortmethod)
@@ -395,12 +396,15 @@ public:
                 break;
         }
 
-        const auto range = alltimes.equal_range(mapname);
+        if (!mapname.empty())
+        {
+            const auto range = alltimes.equal_range(mapname);
 
-        currenttimes.clear();
+            currenttimes.clear();
 
-        for (auto i = range.first; i != range.second; ++i)
-            currenttimes.push_back(i->second);
+            for (auto i = range.first; i != range.second; ++i)
+                currenttimes.push_back(i->second);
+        }
 
         std::sort(currenttimes.begin(), currenttimes.end(), cmpfunc);
         return currenttimes;
