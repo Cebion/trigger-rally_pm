@@ -28,6 +28,8 @@ the game. Ick.
 #define AM_TOP_QUIT           30  // Are you sure you want to quit?
 #define AM_TOP_LVL_TIMES      31  // Show best times for Single level
 #define AM_TOP_PRAC_TIMES     32  // Show best times for Practice level
+#define AM_TOP_LVL_BTIMES     33  // Show best times for Single level (button)
+#define AM_TOP_PRAC_BTIMES    34  // Show best times for Practice level (button)
 
 // actions
 #define AA_INIT               1
@@ -49,6 +51,8 @@ the game. Ick.
 #define AA_QUIT_CONFIRM       52
 #define AA_SHOWTIMES_LVL      61
 #define AA_SHOWTIMES_PRAC     62
+#define AA_BSHOWTIMES_LVL     63  // "Best Times" button pressed: show times with no highlight
+#define AA_BSHOWTIMES_PRAC    64
 
 // best times table actions for columns
 #define AA_SORT_BY_PLAYERNAME       1001
