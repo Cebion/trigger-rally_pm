@@ -30,7 +30,7 @@ PTerrain::PTerrain (TiXmlElement *element, const std::string &filepath, PSSTextu
 {
   unload();
   
-  std::string heightmap, colormap, terrainmap, foliagemap, hudmap;
+  std::string heightmap, colormap, terrainmap, roadmap, foliagemap, hudmap;
   
   scale_hz = 1.0;
   scale_vt = 1.0;
@@ -54,6 +54,9 @@ PTerrain::PTerrain (TiXmlElement *element, const std::string &filepath, PSSTextu
   
   val = element->Attribute("terrainmap");
   if (val != nullptr) terrainmap = val;
+  
+  val = element->Attribute("roadmap");
+  if (val != nullptr) roadmap = val;
   
   val = element->Attribute("foliagemap");
   if (val && MainApp::cfg_foliage) foliagemap = val;
@@ -263,6 +266,29 @@ PTerrain::PTerrain (TiXmlElement *element, const std::string &filepath, PSSTextu
 
   if (tmap.getData() != nullptr && tmap.getcx() != tmap.getcy())
     throw MakePException("Load failed: terrainmap not square");
+
+    PImage rmap_img;
+
+    // load road map image
+    try
+    {
+        if (!roadmap.empty())
+            rmap_img.load(PUtil::assemblePath(roadmap, filepath));
+    }
+    catch (...)
+    {
+        PUtil::outLog() << "Load failed: couldn't open roadmap \"" << roadmap << "\"\n";
+        throw;
+    }
+
+    if (rmap_img.getData() != nullptr)
+    {
+        if (rmap_img.getcx() != rmap_img.getcy())
+            throw MakePException("Load failed: roadmap not square");
+        else
+        if (!rmap.load(rmap_img))
+            throw MakePException("Load failed: bad roadmap image");
+    }
 
   // calculate foliage try counts for tile size
   

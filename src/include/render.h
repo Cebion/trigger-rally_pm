@@ -404,6 +404,105 @@ struct PTerrainTile {
   std::vector<PTerrainFoliageSet> foliage;
 };
 
+///
+/// @brief Loads road information.
+///
+class RoadMap
+{
+public:
+
+    RoadMap() = default;
+
+    bool load(const PImage &img)
+    {
+        if (img.getData() == nullptr)
+            return false;
+
+        bx = img.getcx();
+        by = img.getcy();
+        bitmap.clear();
+        bitmap.reserve(img.getcx() * img.getcy());
+
+        const std::size_t tb = img.getcx() * img.getcy() * img.getcc(); // Total Bytes
+
+        for (auto pb = img.getData(); pb != img.getData() + tb; pb += img.getcc())
+        {
+            bool is_road = true;
+
+            for (int i=0; i < img.getcc(); ++i)
+                if (pb[i] != 0xFF) // the road is white
+                {
+                    is_road = false;
+                    break;
+                }
+
+            bitmap.push_back(is_road);
+        }
+
+        return true;
+    }
+
+    bool is_loaded() const
+    {
+        return !bitmap.empty();
+    }
+
+    ///
+    /// @brief Decides if provided point is on the road.
+    /// @param px           X coordinate of the point.
+    /// @param py           Y coordinate of the point.
+    /// @param ms           Map size.
+    /// @see `getMapSize()`.
+    /// @returns Whether or not the point is on the road.
+    /// @retval true        If no roadmap was loaded.
+    ///
+    bool isOnRoad(float px, float py, float ms) const
+    {
+        if (bitmap.empty())
+            return true;
+
+        if (px >= ms)
+        {
+            do
+                px -= ms;
+            while (px > ms);
+        }
+        else
+        if (px < 0)
+        {
+            do
+                px += ms;
+            while (px < 0);
+        }
+
+        if (py >= ms)
+        {
+            do
+                py -= ms;
+            while (py > ms);
+        }
+        else
+        if (py < 0)
+        {
+            do
+                py += ms;
+            while (py < 0);
+        }
+
+        long int x = std::lround(px * bx / ms);
+        long int y = std::lround(py * by / ms);
+
+        CLAMP_UPPER(x, bx - 1);
+        CLAMP_UPPER(y, by - 1);
+        return bitmap.at(y * bx + x);
+    }
+
+private:
+
+    std::vector<bool> bitmap;
+    int bx;
+    int by;
+};
 
 class PTerrain // TODO: make this RAII conformant
 {
@@ -421,6 +520,7 @@ protected:
   
   PImage cmap;
   PImage tmap; ///< Terrain map.
+  RoadMap rmap; ///< Road map.
   
   std::vector<float> fmap;
   std::vector<PTerrainFoliageBand> foliageband;
@@ -486,6 +586,18 @@ public:
     vec3f pos;
     vec3f normal;
   };
+  
+    ///
+    /// @brief Returns whether or not the given position is on road.
+    /// @param [in] pos         Position to be checked.
+    /// @returns Whether or not `pos` is on the road.
+    /// @retval true            If no roadmap was loaded.
+    /// @see `RoadMap`.
+    ///
+    bool getRmapOnRoad(const vec3f &pos) const
+    {
+        return rmap.isOnRoad(pos.x, pos.y, getMapSize());
+    }
   
     ///
     /// @brief Returns the color of the pixel in the colormap that corresponds

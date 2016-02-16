@@ -1479,6 +1479,48 @@ void MainApp::renderStateGame(float eyetranslation)
     }
     #endif
 
+    // draw if we're on road for debugging
+    #ifdef INDEVEL
+    {
+        const vec3f wheelpos = vehic->part[0].wheel[0].ref_world.getPosition(); // wheel 0
+        std::string s;
+        rgbcolor c;
+
+        if (game->terrain->getRmapOnRoad(wheelpos))
+        {
+            c = rgbcolor(0xFF, 0xFF, 0xFF);
+            s = "on the road";
+        }
+        else
+        {
+            c = rgbcolor(0x00, 0x00, 0x00);
+            s = "off-road";
+        }
+
+        const GLfloat endx = s.length() * 8.0f / 12.0f + 0.1f;
+
+        glPushMatrix(); // 2
+        glTranslatef(0.0f, 0.25f, 0.0f);
+        glScalef(0.1f, 0.1f, 1.0f);
+        glPushMatrix();
+        glDisable(GL_TEXTURE_2D);
+        glTranslatef(-0.5f * s.length() * 8.0f / 12.0f, 0.0f, 0.0f);
+        glTranslatef(0.0f, -1.0f, 0.0f);
+        glBegin(GL_TRIANGLE_STRIP);
+            glColor3f(c.r / 255.0f, c.g / 255.0f, c.b / 255.0f);
+            glVertex2f(-0.2f,   0.0f);
+            glVertex2f(endx,    0.0f);
+            glVertex2f(-0.2f,   1.1f);
+            glVertex2f(endx,    1.1f);
+        glEnd();
+        glEnable(GL_TEXTURE_2D);
+        glPopMatrix();
+        glColor3f(1.0f, 1.0f, 1.0f);
+        getSSRender().drawText(s, PTEXT_HZA_CENTER | PTEXT_VTA_TOP);
+        glPopMatrix(); // 2
+    }
+    #endif
+
       tex_fontDsmOutlined->bind();
 
       glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
