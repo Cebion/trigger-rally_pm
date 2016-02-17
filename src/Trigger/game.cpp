@@ -390,7 +390,7 @@ void TriggerGame::tick(float delta)
   case GS_RACING:
     coursetime += delta;
     
-    if (coursetime > targettime && app->lss.state == AM_TOP_EVT_PREP) {
+    if (coursetime + offroadtime_total * offroadtime_penalty_multiplier > targettime && app->lss.state == AM_TOP_EVT_PREP) {
       gamestate = GS_FINISHED;
     }
     break;
@@ -413,6 +413,32 @@ void TriggerGame::tick(float delta)
   for (unsigned int i=0; i<vehicle.size(); i++) {
     
     vec2f diff = makevec2f(checkpt[vehicle[i]->nextcp].pt) - makevec2f(vehicle[i]->body->getPosition());
+
+    static bool offroad_earlier = false;
+
+    const vec3f bodypos = vehicle[i]->body->getPosition();
+    const bool offroad_now = !terrain->getRmapOnRoad(bodypos);
+
+    //
+    // TODO: the offroad penalty code is bad because it accumulates
+    //  time for all cars (this will be a problem in the future if
+    //  multiplayer races or AI drivers are implemented.)
+    //
+    if (offroad_earlier)
+    {
+        if (!offroad_now)
+        {
+            offroad_earlier     = false;
+            offroadtime_end     = coursetime;
+            offroadtime_total   += offroadtime_end - offroadtime_begin;
+        }
+    }
+    else
+    if (offroad_now)
+    {
+        offroad_earlier     = true;
+        offroadtime_begin   = coursetime;
+    }
 
     if (diff.lengthsq() < 30.0f * 30.0f) {
       //vehicle[i]->nextcp = (vehicle[i]->nextcp + 1) % checkpt.size();
