@@ -1377,7 +1377,8 @@ void MainApp::tickStateGame(float delta)
 
   for (unsigned int i=0; i<game->vehicle.size(); i++) {
     for (unsigned int j=0; j<game->vehicle[i]->part.size(); j++) {
-      const vec3f bodydirtpos = game->vehicle[i]->part[j].ref_world.getPosition();
+      //const vec3f bodydirtpos = game->vehicle[i]->part[j].ref_world.getPosition();
+      const vec3f bodydirtpos = game->vehicle[i]->body->getPosition();
       const dirtinfo bdi = PUtil::getDirtInfo(game->terrain->getRoadSurface(bodydirtpos));
 
     if (bdi.startsize >= 0.30f && game->vehicle[i]->forwardspeed > 23.0f)
