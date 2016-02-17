@@ -1440,7 +1440,56 @@ void MainApp::renderStateGame(float eyetranslation)
       glPopMatrix(); // 2
   #endif
 
+#ifndef NDEBUG
+    // draw real time penalty for debugging
+    glPushMatrix();
+    glScalef(0.1f, 0.1f, 1.0f);
+    glTranslatef(0.0f, -4.0f, 0.0f);
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    tex_fontDsmOutlined->bind();
+    getSSRender().drawText(std::string("true time penalty: ") +
+        std::to_string(game->offroadtime_total * game->offroadtime_penalty_multiplier),
+        PTEXT_HZA_CENTER | PTEXT_VTA_TOP);
+    glPopMatrix();
+#endif
+
     tex_fontDsmShadowed->bind();
+
+    // draw "off road" warning sign and text
+    {
+        //const vec3f bodypos = vehic->part[0].ref_world.getPosition();
+        const vec3f bodypos = vehic->body->getPosition();
+
+        if (!game->terrain->getRmapOnRoad(bodypos))
+        {
+            glPushMatrix();
+            glLoadIdentity();
+            glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+            glScalef(0.25f, 0.25f, 1.0f);
+            tex_hud_offroad->bind();
+            glBegin(GL_QUADS);
+                glTexCoord2f(   1.0f,   1.0f);
+                glVertex2f(     1.0f,   1.0f);
+                glTexCoord2f(   0.0f,   1.0f);
+                glVertex2f(    -1.0f,   1.0f);
+                glTexCoord2f(   0.0f,   0.0f);
+                glVertex2f(    -1.0f,  -1.0f);
+                glTexCoord2f(   1.0f,   0.0f);
+                glVertex2f(     1.0f,  -1.0f);
+            glEnd();
+            glPopMatrix();
+            glPushMatrix();
+            glScalef(0.1f, 0.1f, 1.0f);
+            glTranslatef(0.0f, -2.0f, 0.0f);
+            glColor4f(1.0f, 1.0f, 0.0f, 1.0f);
+            tex_fontDsmOutlined->bind();
+            getSSRender().drawText(
+                std::to_string(static_cast<int> (game->getOffroadTime() * game->offroadtime_penalty_multiplier)) +
+                " seconds",
+                PTEXT_HZA_CENTER | PTEXT_VTA_TOP);
+            glPopMatrix();
+        }
+    }
 
     // draw terrain info for debugging
     #ifdef INDEVEL
