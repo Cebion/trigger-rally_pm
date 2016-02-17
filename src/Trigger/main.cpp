@@ -912,6 +912,8 @@ bool MainApp::loadAll()
   
   if (!(tex_hud_revs = getSSTexture().loadTexture("/textures/dial_rev.png"))) return false;
   
+  if (!(tex_hud_offroad = getSSTexture().loadTexture("/textures/offroad.png"))) return false;
+  
   if (!(tex_race_no_screenshot = getSSTexture().loadTexture("/textures/no_screenshot.png"))) return false;
   
   if (!(tex_race_no_minimap = getSSTexture().loadTexture("/textures/no_minimap.png"))) return false;
@@ -1133,13 +1135,14 @@ void MainApp::startGame2()
 
 void MainApp::endGame(int gamestate)
 {
-  float coursetime = (gamestate == GF_NOT_FINISHED) ? 0.0f : game->coursetime;
+  float coursetime = (gamestate == GF_NOT_FINISHED) ? 0.0f :
+    game->coursetime + game->offroadtime_total * game->offroadtime_penalty_multiplier;
   
     if (gamestate != GF_NOT_FINISHED && lss.state != AM_TOP_EVT_PREP)
     {
         race_data.carname   = game->vehicle.front()->type->proper_name;
         race_data.carclass  = game->vehicle.front()->type->proper_class;
-        race_data.totaltime = game->coursetime;
+        race_data.totaltime = game->coursetime + game->offroadtime_total * game->offroadtime_penalty_multiplier;
         race_data.maxspeed  = 0.0f; // TODO: measure this too
         //PUtil::outLog() << race_data;
         current_times_hl = best_times.insertAndGetCurrentTimesHL(race_data);

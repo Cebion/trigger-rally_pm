@@ -84,7 +84,25 @@ private:
   
   PCodriverVoice cdvoice;
   PCodriverSigns cdsigns;
-  
+
+  float offroadtime_begin   = 0.0f;
+  float offroadtime_end     = 0.0f;
+  float offroadtime_total   = 0.0f;
+
+public:
+
+    const float offroadtime_penalty_multiplier = 2.5f;
+
+    ///
+    /// @brief Used for "real-time" counting of seconds, to scare the player.
+    ///
+    float getOffroadTime() const
+    {
+        return offroadtime_total + (coursetime - offroadtime_begin);
+    }
+
+private:
+
   int gamestate;
   
   float coursetime;
@@ -150,7 +168,7 @@ public:
   bool isFinished() { return (gamestate == GS_FINISHED) && (othertime <= 0.0f); }
   int getFinishState() {
     if (gamestate != GS_FINISHED) return GF_NOT_FINISHED;
-    if (coursetime <= targettime) return GF_PASS;
+    if (coursetime + offroadtime_total * offroadtime_penalty_multiplier <= targettime) return GF_PASS;
     else return GF_FAIL;
   }
 };
@@ -370,6 +388,7 @@ private:
            *tex_hud_revs,
            *tex_hud_revneedle,
            *tex_hud_life,
+           *tex_hud_offroad,
            *tex_loading_screen,
            *tex_splash_screen,
            *tex_end_screen,
