@@ -220,10 +220,13 @@ void MainApp::levelScreenAction(int action, int index)
         gui.addLabel(700, 470, "races (timelimit)", PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20);
 
     for (int i = firstraceindex; i < firstraceindex + racesonscreencount; i++) {
-      gui.makeClickable(
-        gui.addLabel(100.0f,440.0f - (float)(i - firstraceindex) * 30.0f,
-        events[i].name, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 25.0f, LabelStyle::List), AA_PICK_EVT, i);
         
+        const int eventlabel = gui.addLabel(100.0f,440.0f - (float)(i - firstraceindex) * 30.0f,
+            events[i].name, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 25.0f, LabelStyle::List);
+
+        if (!events[i].locked || player_unlocks.count(events[i].filename) != 0)
+            gui.makeClickable(eventlabel, AA_PICK_EVT, i);
+
       gui.addLabel(700.0f, 440.0f - (float)(i - firstraceindex) * 30.0f,
             PUtil::formatInt(events[i].levels.size()) + " (" + events[i].totaltime + ')',
             PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 25.0f, LabelStyle::List);
@@ -326,10 +329,13 @@ void MainApp::levelScreenAction(int action, int index)
       gui.addLabel(700, 470, "races (timelimit)", PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20);
 
     for (int i = firstraceindex; i < firstraceindex + racesonscreencount; i++) {
-      gui.makeClickable(
-        gui.addLabel(100.0f,440.0f - (float)(i - firstraceindex) * 30.0f,
-        events[i].name, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 25.0f, LabelStyle::List), AA_PICK_PRAC, i);
         
+        const int eventlabel = gui.addLabel(100.0f,440.0f - (float)(i - firstraceindex) * 30.0f,
+            events[i].name, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 25.0f, LabelStyle::List);
+
+        if (!events[i].locked || player_unlocks.count(events[i].filename) != 0)
+            gui.makeClickable(eventlabel, AA_PICK_PRAC, i);
+
       gui.addLabel(700.0f, 440.0f - (float)(i - firstraceindex) * 30.0f,
             PUtil::formatInt(events[i].levels.size()) + " (" + events[i].totaltime + ')',
             PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 25.0f, LabelStyle::List);
@@ -825,6 +831,17 @@ void MainApp::finishRace(int gamestate, float coursetime)
       lss.leveltimes[lss.currentlevel] += coursetime;
       lss.totaltime += coursetime;
       lss.currentlevel++;
+
+        // event was completed so save unlock data
+        if (lss.currentlevel >= (int)events[lss.currentevent].levels.size())
+        {
+            for (const std::string &s: events[lss.currentevent].unlocks)
+                best_times.addNewUnlock(s);
+
+            player_unlocks = best_times.getUnlockData();
+            best_times.savePlayer(); // FIXME: expensive with time
+        }
+
       break;
     case GF_FAIL:
       lss.totaltime += coursetime;

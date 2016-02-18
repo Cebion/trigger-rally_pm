@@ -198,6 +198,9 @@ struct TriggerLevel {
 
 struct TriggerEvent {
   std::string filename, name, comment, author, totaltime;
+
+  bool locked = false;
+  UnlockData unlocks; ///< @see `HiScore1`
   
   // Note that levels are not linked to... they are
   // stored in the event because an event may have
@@ -290,6 +293,8 @@ private:
   // TODO: type should be GLdouble instead of double
   double hratio; ///< Horizontal ratio.
   double vratio; ///< Vertical ratio.
+  
+  UnlockData player_unlocks; ///< Unlocks for current player, see `HiScore1`.
   
   // Config settings
   
