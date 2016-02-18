@@ -1,8 +1,11 @@
 <?xml version="1.0" ?>
 <event
-	name="Trigger Cup"
-	author="Richard Langridge">
-	
+	name="01. Trigger Cup"
+	author="Richard Langridge"
+	locked="no">
+
+	<unlocks file="/events/alps/alps.event" />
+
 	<level file="warmup/warmup.level" />
 	<level file="operation/operation.level" />
 	<level file="far/far.level" />
