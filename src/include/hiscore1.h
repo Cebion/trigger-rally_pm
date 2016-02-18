@@ -22,15 +22,26 @@
 #include <functional>
 #include <iomanip>
 #include <istream>
+#include <limits>
 #include <ostream>
 #include <regex>
 #include <sstream>
 #include <string>
 #include <tuple>
 #include <unordered_map>
+#include <unordered_set>
 #include <utility>
 #include <vector>
 #include <physfs.h>
+
+#define GETLINE_SKIP_EMPTY_LINES(InputStream, String)   if (true) { \
+    while (std::getline(InputStream, String)) {                     \
+        if (!String.empty())                                        \
+            break;                                                  \
+    }                                                               \
+    if (String.empty())                                             \
+        return InputStream;                                         \
+} else (void)0
 
 ///
 /// @brief Basic structure to load and save race results.
@@ -101,15 +112,6 @@ inline std::istream & operator >> (std::istream &is, RaceData &rd)
 {
     std::string ts; // Temporary String
 
-#define GETLINE_SKIP_EMPTY_LINES(InputStream, String)   if (true) { \
-    while (std::getline(InputStream, String)) {                     \
-        if (!String.empty())                                        \
-            break;                                                  \
-    }                                                               \
-    if (String.empty())                                             \
-        return InputStream;                                         \
-} else (void)0
-
     GETLINE_SKIP_EMPTY_LINES(is, rd.mapname);
     GETLINE_SKIP_EMPTY_LINES(is, rd.carname);
     GETLINE_SKIP_EMPTY_LINES(is, rd.carclass);
@@ -117,7 +119,6 @@ inline std::istream & operator >> (std::istream &is, RaceData &rd)
     rd.totaltime = std::stof(ts);
     GETLINE_SKIP_EMPTY_LINES(is, ts);
     rd.maxspeed = std::stof(ts);
-#undef GETLINE_SKIP_EMPTY_LINES
     return is;
 }
 
@@ -153,7 +154,8 @@ enum class HISCORE1_SORT
     BY_CARCLASS_DESC
 };
 
-using RaceDataHL = std::pair<RaceData, bool>;
+using RaceDataHL    = std::pair<RaceData, bool>;
+using UnlockData    = std::unordered_set<std::string>;
 
 ///
 /// @brief Loads and saves the player's best times.
@@ -242,9 +244,50 @@ public:
     /// @brief Saves the player's race data.
     /// @todo Should use `HiScore1::writePlayerData()` directly?
     ///
-    void savePlayerTimes() const
+    void savePlayer() const
     {
         writePlayerData(playername);
+    }
+
+    ///
+    /// @brief Adds new unlock data for the current player.
+    /// @param [in] udata       Unlock data.
+    ///
+    void addNewUnlock(const std::string &udata)
+    {
+        addNewUnlock(playername, udata);
+    }
+
+    ///
+    /// @brief Adds new unlock data for the player.
+    /// @param [in] pname       Player name.
+    /// @param [in] udata       Unlock data.
+    ///
+    void addNewUnlock(const std::string &pname, const std::string &udata)
+    {
+        allunlocks[pname].insert(udata);
+    }
+
+    ///
+    /// @brief Retrieves unlock data for the current player.
+    /// @returns Unlock data.
+    ///
+    UnlockData getUnlockData() const
+    {
+        return getUnlockData(playername);
+    }
+
+    ///
+    /// @brief Retrieves unlock data for a player.
+    /// @param [in] pname       Player name.
+    /// @returns Unlock data.
+    ///
+    UnlockData getUnlockData(const std::string &pname) const
+    {
+        if (allunlocks.count(pname) == 0)
+            return UnlockData {};
+
+        return allunlocks.at(pname);
     }
 
     ///
@@ -253,6 +296,7 @@ public:
     /// @returns The best time.
     /// @retval -1.0f               If no best time is available.
     /// @note Check for above like `(x < 0)` instead of `(x == -1)`.
+    /// @todo Use `auto` parameters for lambda after C++17.
     ///
     float getBestTime(const std::string &mapname)
     {
@@ -268,6 +312,42 @@ public:
             });
 
         return rdi->second.totaltime;
+    }
+
+    ///
+    /// @brief Retrieves the best class time for `mapname`, if available.
+    /// @param [in] mapname         Map for which to get the best class time.
+    /// @param [in] carclass        Car class for which to retrieve the time.
+    /// @returns The best class time.
+    /// @retval -1.0f               If no best class time is available.
+    /// @note Check for above like `(x < 0)` instead of `(x == -1)`.
+    ///
+    float getBestClassTime(const std::string &mapname, const std::string &carclass)
+    {
+        if (alltimes.count(mapname) == 0)
+            return -1.0f;
+
+        const auto range = alltimes.equal_range(mapname);
+
+        bool found_a_time = false;
+        float bct; // Best Class Time
+
+        if (std::numeric_limits<float>::has_infinity) // "usually true"
+            bct = std::numeric_limits<float>::infinity();
+        else // maximum is good enough
+            bct = std::numeric_limits<float>::max();
+
+        for (auto i = range.first; i != range.second; ++i)
+            if (i->second.carclass == carclass)
+            {
+                bct = std::min(bct, i->second.totaltime);
+                found_a_time = true;
+            }
+
+        if (!found_a_time)
+            return -1.0f;
+
+        return bct;
     }
 
     ///
@@ -587,7 +667,49 @@ public:
         os << "***" << std::endl;
     }
 
-    // TODO: implement `printCurrentTimesHL()`
+    ///
+    /// @brief Debug printing of current highlighted times.
+    /// @param [in,out] os      Output stream to print to.
+    ///
+    void printCurrentTimesHL(std::ostream &os) const
+    {
+        for (const auto &p: currenttimesHL)
+        {
+            if (p.second)
+                os << std::setw(12) << "> " + p.first.playername << ' ';
+            else
+                os << std::setw(12) << p.first.playername << ' ';
+
+            os << std::setw(12) << p.first.carname << ' ';
+            os << std::setw(12) << p.first.carclass << ' ';
+            os << std::setw(6) << p.first.maxspeed << " SU ";
+            os << std::setw(6) << p.first.totaltime;
+
+            if (p.second)
+                os << " <\n";
+            else
+                os << '\n';
+        }
+
+        os << "***" << std::endl;
+    }
+
+    ///
+    /// @brief Debug printing of current unlocks for all players.
+    /// @param [in,out] os      Output stream to print to.
+    ///
+    void printCurrentUnlocks(std::ostream &os) const
+    {
+        for (const auto &p: allunlocks)
+        {
+            os << p.first << ":\n";
+
+            for (const std::string &s: p.second)
+                os << '\t' << s << '\n';
+        }
+
+        os << "***" << std::endl;
+    }
 
 #endif
 
@@ -675,19 +797,32 @@ private:
 
     ///
     /// @brief Reads the player name and race data into the `alltimes` collection.
-    /// @todo Should return `bool` and check for stream errors.
     /// @param [in] pname       Player name.
     /// @param [in] pdata       Player data.
     ///
-    void readPlayerData(const std::string &pname, const std::string &pdata)
+    bool readPlayerData(const std::string &pname, const std::string &pdata)
     {
+        unsigned long int nu = 0; // Number of Unlocks
+        std::string ts; // Temporary String
         RaceData rd(pname);
+
 #define decrypt encrypt
         std::istringstream sspdata(decrypt(pdata));
 #undef decrypt
 
+        GETLINE_SKIP_EMPTY_LINES(sspdata, ts);
+        nu = stoul(ts);
+
+        while (nu-- != 0)
+        {
+            GETLINE_SKIP_EMPTY_LINES(sspdata, ts);
+            allunlocks[pname].insert(ts);
+        }
+
         while (sspdata >> rd)
             alltimes.insert({rd.mapname, rd});
+
+        return sspdata;
     }
 
     ///
@@ -698,15 +833,29 @@ private:
     ///
     void writePlayerData(const std::string &pname) const
     {
-        if (playername.empty())
+        if (pname.empty())
             return;
 
         if (PHYSFS_isInit() == 0)
             return;
 
-        std::string pfname = searchdir + '/' + playername + ".player"; // Player Filename
+        std::string pfname = searchdir + '/' + pname + ".player"; // Player Filename
         std::ostringstream sspdata;
 
+        // save unlock data
+        if (allunlocks.count(pname) != 0)
+        {
+            sspdata << allunlocks.at(pname).size() << '\n';
+
+            for (const std::string &s: allunlocks.at(pname))
+                sspdata << s << '\n';
+        }
+        else
+            sspdata << 0 << '\n';
+
+        sspdata << '\n';
+
+        // save race data
         for (const auto &p: alltimes)
             if (p.second.playername == pname)
                 sspdata << p.second;
@@ -729,9 +878,12 @@ private:
     }
 
     std::unordered_multimap<std::string, RaceData> alltimes;    ///< All times for all maps.
+    std::unordered_map<std::string, UnlockData> allunlocks;     ///< All unlock data for all players.
     std::vector<RaceData> currenttimes;                         ///< Selected times, for current map.
     std::vector<RaceDataHL> currenttimesHL;                     ///< Selected times with highlighted newest.
     std::string searchdir;                                      ///< Directory where player profiles are.
     std::string playername;                                     ///< Name of the current player.
 };
+
+#undef GETLINE_SKIP_EMPTY_LINES
 
