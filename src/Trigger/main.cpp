@@ -41,6 +41,14 @@ void MainApp::config()
     }
 
     best_times.loadAllTimes();
+    player_unlocks = best_times.getUnlockData();
+
+#ifndef NDEBUG
+    PUtil::outLog() << "Player \"" cfg_playername << "\" unlocks:\n";
+
+    for (const auto &s: player_unlocks)
+        PUtil::outLog() << '\t' << s << '\n';
+#endif
 }
 
 void MainApp::load()
@@ -826,6 +834,8 @@ bool MainApp::loadLevelsAndEvents()
     
     TriggerEvent te;
     
+    te.filename = *i;
+    
     TiXmlDocument xmlfile(i->c_str());
     TiXmlElement *rootelem = PUtil::loadRootElement(xmlfile, "event");
     if (!rootelem) {
@@ -842,11 +852,31 @@ bool MainApp::loadLevelsAndEvents()
     val = rootelem->Attribute("author");
     if (val) te.author = val;
     
+    val = rootelem->Attribute("locked");
+    
+    if (val != nullptr && strcmp(val, "yes") == 0)
+        te.locked = true;
+    else
+        te.locked = false; // FIXME: redundant but clearer?
+    
     float evtotaltime = 0.0f;
     
     for (TiXmlElement *walk = rootelem->FirstChildElement();
       walk; walk = walk->NextSiblingElement()) {
       
+      if (strcmp(walk->Value(), "unlocks") == 0)
+      {
+          val = walk->Attribute("file");
+
+          if (val == nullptr)
+          {
+              PUtil::outLog() << "Warning: Event has empty unlock" << std::endl;
+              continue;
+          }
+
+          te.unlocks.insert(val);
+      }
+      else
       if (!strcmp(walk->Value(), "level")) {
         
         TriggerLevel tl;
@@ -1146,7 +1176,7 @@ void MainApp::endGame(int gamestate)
         race_data.maxspeed  = 0.0f; // TODO: measure this too
         //PUtil::outLog() << race_data;
         current_times_hl = best_times.insertAndGetCurrentTimesHL(race_data);
-        best_times.savePlayerTimes(); // FIXME: this will get very expensive in time
+        best_times.savePlayer(); // FIXME: this will get very expensive in time
 
         // show the best times
         if (lss.state == AM_TOP_LVL_PREP)
