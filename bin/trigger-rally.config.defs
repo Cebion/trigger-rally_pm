@@ -122,6 +122,7 @@
 			<key action="right" id="SDLK_RIGHT" />
 			<key action="handbrake" id="SDLK_SPACE" />
 			<key action="recover" id="SDLK_r" />
+			<key action="recoveratcheckpoint" id="SDLK_q" />
 			<key action="cammode" id="SDLK_c" />
 			<key action="camleft" id="SDLK_PERIOD" />
 			<key action="camright" id="SDLK_COMMA" />
