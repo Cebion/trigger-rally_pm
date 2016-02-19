@@ -1345,6 +1345,20 @@ void MainApp::renderStateGame(float eyetranslation)
       glTranslatef(0.0f, -0.8f, 0.0f);
       getSSRender().drawText(PUtil::formatTime(game->targettime), PTEXT_HZA_LEFT | PTEXT_VTA_TOP);
 
+    {
+        // show the time penalty if there is any
+        const float timepen = game->offroadtime_total * game->offroadtime_penalty_multiplier;
+
+        // FIXME: why do glPushMatrix() and glPopMatrix() not work for me?
+        if (timepen >= 0.1f)
+        {
+            glColor4f(1.0f, 1.0f, 0.5f, 1.0f);
+            glTranslatef(0.0f, -1.60f, 0.0f);
+            getSSRender().drawText(PUtil::formatTime(timepen) + '+', PTEXT_HZA_LEFT | PTEXT_VTA_TOP);
+            glTranslatef(0.0f, +1.60f, 0.0f);
+        }
+    }
+
       // time label
 
       glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
