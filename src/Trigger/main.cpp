@@ -332,6 +332,7 @@ void MainApp::loadConfig()
   ctrl.action_name[ActionRight] = std::string("right");
   ctrl.action_name[ActionHandbrake] = std::string("handbrake");
   ctrl.action_name[ActionRecover] = std::string("recover");
+  ctrl.action_name[ActionRecoverAtCheckpoint] = std::string("recoveratcheckpoint");
   ctrl.action_name[ActionCamMode] = std::string("cammode");
   ctrl.action_name[ActionCamLeft] = std::string("camleft");
   ctrl.action_name[ActionCamRight] = std::string("camright");
@@ -1840,6 +1841,12 @@ void MainApp::keyEvent(const SDL_KeyboardEvent &ke)
         game->vehicle[0]->doReset();
         return;
       }
+      if (ctrl.map[ActionRecoverAtCheckpoint].type == UserControl::TypeKey &&
+        ctrl.map[ActionRecoverAtCheckpoint].key.sym == ke.keysym.sym)
+      {
+          game->resetAtCheckpoint(game->vehicle[0]);
+          return;
+      }
       if (ctrl.map[ActionCamMode].type == UserControl::TypeKey &&
         ctrl.map[ActionCamMode].key.sym == ke.keysym.sym) {
         cameraview = (cameraview + 1) % 5;
@@ -1939,6 +1946,12 @@ void MainApp::joyButtonEvent(int which, int button, bool down)
         ctrl.map[ActionRecover].joybutton.button == button) {
         game->vehicle[0]->doReset();
         return;
+      }
+      if (ctrl.map[ActionRecoverAtCheckpoint].type == UserControl::TypeJoyButton &&
+        ctrl.map[ActionRecoverAtCheckpoint].joybutton.button == button)
+      {
+          game->resetAtCheckpoint(game->vehicle[0]);
+          return;
       }
       if (ctrl.map[ActionCamMode].type == UserControl::TypeJoyButton &&
         ctrl.map[ActionCamMode].joybutton.button == button) {

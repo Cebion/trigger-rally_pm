@@ -114,7 +114,11 @@ private:
   
   vec3f start_pos;
   quatf start_ori;
-  
+
+    // used to reset vehicle at last passed checkpoint
+    vec3f lastCkptPos;
+    quatf lastCkptOri;
+
   struct {
     struct {
       std::string texname;
@@ -151,6 +155,11 @@ public:
 public:
   TriggerGame(MainApp *parent);
   ~TriggerGame();
+  
+  void resetAtCheckpoint(PVehicle *veh)
+  {
+      veh->doReset2(lastCkptPos, lastCkptOri);
+  }
   
   void renderCodriverSigns()
   {
@@ -386,6 +395,7 @@ private:
     ActionRight,
     ActionHandbrake,
     ActionRecover,
+    ActionRecoverAtCheckpoint,
     ActionCamMode,
     ActionCamLeft,
     ActionCamRight,

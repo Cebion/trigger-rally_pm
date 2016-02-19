@@ -574,6 +574,44 @@ void PVehicle::doReset()
   state.setZero();
 }
 
+void PVehicle::doReset2(const vec3f &pos, const quatf &ori)
+{
+  if (reset_time != 0.0f) return;
+
+  reset_pos = pos;
+
+  quatf temp = ori; // FIXME: laziness and fear of breaking copy-pasted code
+
+  if (body->ori.dot(temp) < 0.0f) temp = temp * -1.0f;
+
+  reset_ori = temp;
+
+  reset_time = 3.0f;
+
+  crunch_level = 0.0f;
+  crunch_level_prev = 0.0f;
+
+  for (unsigned int i=0; i<part.size(); i++) {
+    for (unsigned int j=0; j<part[i].wheel.size(); j++) {
+      part[i].wheel[j].spin_vel = 0.0f;
+      part[i].wheel[j].spin_pos = 0.0f;
+      part[i].wheel[j].ride_vel = 0.0f;
+      part[i].wheel[j].ride_pos = 0.0f;
+      part[i].wheel[j].turn_pos = 0.0f;
+      part[i].wheel[j].skidding = 0.0f;
+      part[i].wheel[j].dirtthrow = 0.0f;
+    }
+  }
+
+  forwardspeed = 0.0f;
+  wheel_angvel = 0.0f;
+  wheel_speed = 0.0f;
+
+  dsysi.doReset();
+
+  state.setZero();
+}
+
 void PVehicle::tick(float delta)
 {
   // ensure control values are in valid range

@@ -380,6 +380,7 @@ public:
   void updateParts();
   
   void doReset();
+  void doReset2(const vec3f &pos, const quatf &ori);
   
   float getEngineRPM() { return dsysi.getEngineRPM(); }
   int getCurrentGear() { return dsysi.getCurrentGear(); }

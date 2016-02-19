@@ -218,10 +218,13 @@ bool TriggerGame::loadLevel(const std::string &filename)
           start_pos.x *= coordscale.x;
           start_pos.y *= coordscale.y;
           
+          lastCkptPos = start_pos + vec3f(0.0f, 0.0f, 2.0f);
+          
           val = walk2->Attribute("oridegrees");
           if (val) {
             float deg = atof(val);
             start_ori.fromZAngle(-RADIANS(deg));
+            lastCkptOri = start_ori;
           }
           
           val = walk2->Attribute("ori");
@@ -448,6 +451,8 @@ void TriggerGame::tick(float delta)
 
     if (diff.lengthsq() < 30.0f * 30.0f) {
       //vehicle[i]->nextcp = (vehicle[i]->nextcp + 1) % checkpt.size();
+        lastCkptPos = checkpt[vehicle[i]->nextcp].pt + vec3f(0.0f, 0.0f, 2.0f);
+        lastCkptOri = vehicle[i]->body->getOrientation();
         cptime = coursetime;
       if (++vehicle[i]->nextcp >= (int)checkpt.size()) {
         vehicle[i]->nextcp = 0;
@@ -465,6 +470,8 @@ void TriggerGame::tick(float delta)
             {
                 cdvoice.say(codrivercheckpt[vehicle[i]->nextcdcp].notes);
                 cdsigns.set(codrivercheckpt[vehicle[i]->nextcdcp].notes, coursetime);
+                lastCkptPos = codrivercheckpt[vehicle[i]->nextcdcp].pt + vec3f(0.0f, 0.0f, 2.0f);
+                lastCkptOri = vehicle[i]->body->getOrientation();
 
                 if (++vehicle[i]->nextcdcp >= (int)codrivercheckpt.size())
                     vehicle[i]->nextcdcp = 0;
@@ -480,6 +487,8 @@ void TriggerGame::tick(float delta)
                 {
                     cdvoice.say(codrivercheckpt[j].notes);
                     cdsigns.set(codrivercheckpt[j].notes, coursetime);
+                    lastCkptPos = codrivercheckpt[j].pt + vec3f(0.0f, 0.0f, 2.0f);
+                    lastCkptOri = vehicle[i]->body->getOrientation();
                     vehicle[i]->nextcdcp = j + 1;
                     break;
                 }
