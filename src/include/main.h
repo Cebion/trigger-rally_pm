@@ -301,7 +301,47 @@ private:
   double vratio; ///< Vertical ratio.
   
   UnlockData player_unlocks; ///< Unlocks for current player, see `HiScore1`.
-  
+
+public:
+
+    ///
+    /// @brief Checks if the given data was unlocked by the current player.
+    /// @param [in] udata       Unlock data to be checked.
+    /// @retval true            The player has unlocked the data.
+    /// @retval false           The player has not unlocked the data.
+    ///
+    bool isUnlockedByPlayer(const std::string &udata) const
+    {
+        return player_unlocks.count(udata) != 0;
+    }
+
+    ///
+    /// @brief Checks if the given vehicle is locked.
+    /// @param [in] vefi        Filename of the vehicle.
+    /// @retval true            Vehicle is marked as locked.
+    /// @retval false           Vehicle is not marked as locked.
+    ///
+    bool isVehicleLocked(const std::string &vefi) const
+    {
+        TiXmlDocument xmlfile(vefi.c_str());
+        TiXmlElement *rootelem = PUtil::loadRootElement(xmlfile, "vehicle");
+
+        if (rootelem == nullptr)
+        {
+            PUtil::outLog() << "Couldn't read vehicle \"" << vefi << "\"" << std::endl;
+            return false;
+        }
+
+        const char *val = rootelem->Attribute("locked");
+
+        if (val != nullptr && std::string(val) == "yes")
+            return true;
+
+        return false;
+    }
+
+private:
+
   // Config settings
   
   std::string cfg_playername;

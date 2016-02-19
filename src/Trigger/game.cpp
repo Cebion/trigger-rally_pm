@@ -52,6 +52,12 @@ bool TriggerGame::loadVehicles()
         {
             PUtil::outLog() << "Found vehicle: \"" << vefi << "\"\n";
 
+            if (app->isVehicleLocked(vefi) && !app->isUnlockedByPlayer(vefi))
+            {
+                PUtil::outLog() << "Vehicle \"" << vefi << "\" is locked\n";
+                continue;
+            }
+
             PVehicleType *vt = sim->loadVehicleType(vefi, app->getSSModel());
 
             if (vt != nullptr)
