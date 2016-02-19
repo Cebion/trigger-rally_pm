@@ -296,11 +296,15 @@ void MainApp::renderStateLoading(float eyetranslation)
 
 const char *creditstext[] =
 {
-    "Trigger " PACKAGE_VERSION,
+    "Trigger Rally " PACKAGE_VERSION,
     "",
     "Copyright (C) 2004-2006",
     "Jasmine Langridge and Richard Langridge",
     "Posit Interactive",
+    "",
+    "Copyright (C) 2006-2016",
+    "Various Contributors",
+    "(see DATA_AUTHORS.txt)",
     "",
     "",
     "",
