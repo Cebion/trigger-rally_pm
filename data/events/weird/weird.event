@@ -1,5 +1,7 @@
 <?xml version="1.0" ?>
-<event name="Weird Dare" author="Onsemeliot">
+<event name="05. Weird Dare" author="Onsemeliot" locked="yes">
+
+	<unlocks file="/events/picturesque/picturesque.event" />
 
 	<level file="china/china.level" />
 	<level file="frisky/frisky.level" />

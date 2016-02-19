@@ -1,5 +1,7 @@
 <?xml version="1.0" ?>
-<event name="Picturesque Tournament" author="Onsemeliot">
+<event name="06. Picturesque Tournament" author="Onsemeliot" locked="yes">
+
+	<unlocks file="/events/odd/odd.event" />
 	
 	<level file="fields/fields.level" />
 	<level file="canyon/canyon.level" />

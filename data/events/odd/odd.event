@@ -1,5 +1,7 @@
 <?xml version="1.0" ?>
-<event name="Odd Coincidence" author="Onsemeliot">
+<event name="07. Odd Coincidence" author="Onsemeliot" locked="yes">
+
+	<unlocks file="/events/coy/coy.event" />
 	
 	<level file="scale/scale.level" />
 	<level file="rotated/rotated.level" />

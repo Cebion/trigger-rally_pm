@@ -1,5 +1,7 @@
 <?xml version="1.0" ?>
-<event name="Chasing Shadows" author="Onsemeliot">
+<event name="04. Chasing Shadows" author="Onsemeliot" locked="yes">
+
+	<unlocks file="/events/weird/weird.event" />
 	
 	<level file="oldquarry/oldquarry.level" />
 	<level file="softbumps/softbumps.level" />

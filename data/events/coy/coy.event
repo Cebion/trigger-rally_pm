@@ -1,5 +1,7 @@
 <?xml version="1.0" ?>
-<event name="Coy Goblet" author="Onsemeliot">
+<event name="08. Coy Goblet" author="Onsemeliot" locked="yes">
+
+	<unlocks file="/events/marathon/marathon.event" />
 
 	<level file="grasshopper/grasshopper.level" />
 	<level file="cut/cut.level" />

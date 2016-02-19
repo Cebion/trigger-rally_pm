@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<event name="Marathon" author="Onsemeliot">
+<event name="09. Marathon" author="Onsemeliot" locked="yes">
 	
 	<level file="marathon/marathon.level" />
 	<level file="marathon/midnight.level" />

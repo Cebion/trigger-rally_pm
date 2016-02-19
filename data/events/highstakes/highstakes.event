@@ -1,5 +1,7 @@
 <?xml version="1.0" ?>
-<event name="High Stakes" author="Onsemeliot">
+<event name="03. High Stakes" author="Onsemeliot" locked="yes">
+
+	<unlocks file="/events/chasing/chasing.event" />
 
 	<level file="sky/sky.level" />
 	<level file="crossing/crossing.level" />
