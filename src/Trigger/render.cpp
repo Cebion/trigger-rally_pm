@@ -1456,6 +1456,7 @@ void MainApp::renderStateGame(float eyetranslation)
     tex_fontDsmShadowed->bind();
 
     // draw "off road" warning sign and text
+    if (game->isRacing())
     {
         //const vec3f bodypos = vehic->part[0].ref_world.getPosition();
         const vec3f bodypos = vehic->body->getPosition();

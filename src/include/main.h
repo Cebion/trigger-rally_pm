@@ -166,6 +166,12 @@ public:
   void tick(float delta);
   
   bool isFinished() { return (gamestate == GS_FINISHED) && (othertime <= 0.0f); }
+  
+  bool isRacing() const
+  {
+      return gamestate == GS_RACING;
+  }
+  
   int getFinishState() {
     if (gamestate != GS_FINISHED) return GF_NOT_FINISHED;
     if (coursetime + offroadtime_total * offroadtime_penalty_multiplier <= targettime) return GF_PASS;
