@@ -9,6 +9,7 @@
 
 	<terrain
 		heightmap="h.png"
+		roadmap="t.png"
 		colormap="c.png"
 		foliagemap="f.png"
 		hudmap="c.png"
