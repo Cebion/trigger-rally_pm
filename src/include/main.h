@@ -402,6 +402,7 @@ private:
     ActionShowMap,
     ActionShowUi,
     ActionShowCheckpoint,
+    ActionPauseRace,
     ActionCount
   };
   struct {
@@ -491,6 +492,8 @@ private:
   
   bool showmap;
 
+    bool pauserace;
+
   bool showui;
   
   bool showcheckpoint;
@@ -513,6 +516,7 @@ protected:
   void renderSky(const mat44f &cammat);
   
   bool startGame(const std::string &filename);
+  void toggleSounds(bool to);
   void startGame2();
   void endGame(int gamestate);
   

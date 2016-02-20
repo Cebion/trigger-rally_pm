@@ -337,6 +337,7 @@ void MainApp::loadConfig()
   ctrl.action_name[ActionCamLeft] = std::string("camleft");
   ctrl.action_name[ActionCamRight] = std::string("camright");
   ctrl.action_name[ActionShowMap] = std::string("showmap");
+  ctrl.action_name[ActionPauseRace] = std::string("pauserace");
   ctrl.action_name[ActionShowUi] = std::string("showui");
   ctrl.action_name[ActionShowCheckpoint] = std::string("showcheckpoint");
   
@@ -1059,6 +1060,8 @@ bool MainApp::loadAll()
   
   showmap = true;
 
+  pauserace = false;
+
   showui = true;
   
   showcheckpoint = true;
@@ -1145,6 +1148,44 @@ bool MainApp::startGame(const std::string &filename)
     tex_water = tex_waterdefault;
   
   return true;
+}
+
+///
+/// @brief Turns game sound effects on or off.
+/// @note Codriver voice unaffected.
+/// @param to       State to switch to (true is on, false is off).
+///
+void MainApp::toggleSounds(bool to)
+{
+    if (cfg_enable_sound)
+    {
+        if (audinst_engine != nullptr)
+        {
+            if (!to)
+            {
+                audinst_engine->setGain(0.0f);
+                audinst_engine->play();
+            }
+        }
+
+        if (audinst_wind != nullptr)
+        {
+            if (!to)
+            {
+                audinst_wind->setGain(0.0f);
+                audinst_wind->play();
+            }
+        }
+
+        if (audinst_gravel != nullptr)
+        {
+            if (!to)
+            {
+                audinst_gravel->setGain(0.0f);
+                audinst_gravel->play();
+            }
+        }
+    }
 }
 
 void MainApp::startGame2()
@@ -1277,7 +1318,8 @@ void MainApp::tick(float delta)
     break;
   
   case AS_IN_GAME:
-    tickStateGame(delta);
+      if (!pauserace)
+        tickStateGame(delta);
     break;
   
   case AS_END_SCREEN:
@@ -1858,6 +1900,13 @@ void MainApp::keyEvent(const SDL_KeyboardEvent &ke)
         showmap = !showmap;
         return;
       }
+      if (ctrl.map[ActionPauseRace].type == UserControl::TypeKey &&
+        ctrl.map[ActionPauseRace].key.sym == ke.keysym.sym)
+      {
+          toggleSounds(pauserace);
+          pauserace = !pauserace;
+          return;
+      }
       if (ctrl.map[ActionShowUi].type == UserControl::TypeKey &&
         ctrl.map[ActionShowUi].key.sym == ke.keysym.sym) {
         showui = !showui;
@@ -1965,6 +2014,13 @@ void MainApp::joyButtonEvent(int which, int button, bool down)
         showmap = !showmap;
         return;
       }
+      if (ctrl.map[ActionPauseRace].type == UserControl::TypeJoyButton &&
+        ctrl.map[ActionPauseRace].joybutton.button == button)
+        {
+            toggleSounds(pauserace);
+            pauserace = !pauserace;
+            return;
+        }
       if (ctrl.map[ActionShowUi].type == UserControl::TypeJoyButton &&
         ctrl.map[ActionShowUi].joybutton.button == button) {
         showui = !showui;

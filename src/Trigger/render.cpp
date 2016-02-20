@@ -1648,6 +1648,15 @@ void MainApp::renderStateGame(float eyetranslation)
           glPopMatrix(); // 2
       }
 
+        if (pauserace)
+        {
+            glPushMatrix(); // 2
+            glColor4f(0.25f, 0.25f, 1.0f, 1.0f);
+            glScalef(0.25f, 0.25f, 1.0f);
+            getSSRender().drawText("PAUSED", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
+            glPopMatrix(); // 2
+        }
+
       glPopMatrix(); // 1
 
     }
