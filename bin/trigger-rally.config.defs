@@ -127,6 +127,7 @@
 			<key action="camleft" id="SDLK_PERIOD" />
 			<key action="camright" id="SDLK_COMMA" />
 			<key action="showmap" id="SDLK_m" />
+			<key action="pauserace" id="SDLK_p" />
 			<key action="showui" id="SDLK_n" />
 			<key action="showcheckpoint" id="SDLK_k" />
 		</keyboard>
