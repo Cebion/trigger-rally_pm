@@ -218,7 +218,7 @@ bool TriggerGame::loadLevel(const std::string &filename)
           start_pos.x *= coordscale.x;
           start_pos.y *= coordscale.y;
           
-          lastCkptPos = start_pos + vec3f(0.0f, 0.0f, 2.0f);
+          lastCkptPos = vec3f(start_pos.x, start_pos.y, terrain->getHeight(start_pos.x, start_pos.y) + 2.0f);
           
           val = walk2->Attribute("oridegrees");
           if (val) {
