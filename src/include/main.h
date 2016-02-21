@@ -429,8 +429,7 @@ private:
   HISCORE1_SORT hs_sort_method = HISCORE1_SORT::BY_TOTALTIME_ASC;
   HiScore1 best_times; // FIXME: this belongs in PApp as a protected member
   RaceData race_data;
-  std::vector<RaceData> current_times;
-  std::vector<RaceDataHL> current_times_hl;
+  std::vector<TimeEntry> current_times;
 
   TriggerGame *game;
   

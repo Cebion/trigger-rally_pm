@@ -1217,7 +1217,7 @@ void MainApp::endGame(int gamestate)
         race_data.totaltime = game->coursetime + game->offroadtime_total * game->offroadtime_penalty_multiplier;
         race_data.maxspeed  = 0.0f; // TODO: measure this too
         //PUtil::outLog() << race_data;
-        current_times_hl = best_times.insertAndGetCurrentTimesHL(race_data);
+        current_times = best_times.insertAndGetCurrentTimesHL(race_data);
         best_times.savePlayer(); // FIXME: this will get very expensive in time
 
         // show the best times

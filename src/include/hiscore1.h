@@ -27,10 +27,8 @@
 #include <regex>
 #include <sstream>
 #include <string>
-#include <tuple>
 #include <unordered_map>
 #include <unordered_set>
-#include <utility>
 #include <vector>
 #include <physfs.h>
 
@@ -80,23 +78,6 @@ struct RaceData
         totaltime(totaltime),
         maxspeed(maxspeed)
     {
-    }
-
-    RaceData(std::tuple<
-        std::string,
-        std::string,
-        std::string,
-        std::string,
-        float,
-        float> rdt)
-    {
-        std::tie(
-            playername,
-            mapname,
-            carname,
-            carclass,
-            totaltime,
-            maxspeed) = rdt;
     }
 };
 
@@ -154,8 +135,28 @@ enum class HISCORE1_SORT
     BY_CARCLASS_DESC
 };
 
-using RaceDataHL    = std::pair<RaceData, bool>;
-using UnlockData    = std::unordered_set<std::string>;
+using UnlockData = std::unordered_set<std::string>;
+
+///
+/// @brief Used to display the best times information.
+///
+struct TimeEntry
+{
+    unsigned long int place = 0;    ///< True place, depending on time.
+    RaceData rd;                    ///< Race data.
+    bool highlighted = false;       ///< Highlight flag.
+
+    TimeEntry(
+        unsigned long int place,
+        const RaceData &rd,
+        bool highlighted
+        ):
+        place(place),
+        rd(rd),
+        highlighted(highlighted)
+    {
+    }
+};
 
 ///
 /// @brief Loads and saves the player's best times.
@@ -180,7 +181,6 @@ public:
         playername(playername)
     {
         currenttimes.reserve(16);
-        currenttimesHL.reserve(16);
     }
 
     ///
@@ -358,124 +358,8 @@ public:
     /// @note For `mapname == ""` the current results list will be re-sorted.
     /// @returns Sorted list of results.
     ///
-    const std::vector<RaceData> & getCurrentTimes(const std::string &mapname, HISCORE1_SORT sortmethod)
+    const std::vector<TimeEntry> & getCurrentTimes(const std::string &mapname, HISCORE1_SORT sortmethod)
     {
-        std::function<bool (const RaceData &, const RaceData &)> cmpfunc; // Comparison Function
-
-        switch (sortmethod)
-        {
-            // case HISCORE1_SORT::BY_TOTALTIME_ASC: // later, this is the default
-
-            case HISCORE1_SORT::BY_TOTALTIME_DESC:
-
-                cmpfunc = [](const RaceData &a, const RaceData &b) -> bool
-                {
-                    return a.totaltime > b.totaltime;
-                };
-
-                break;
-
-            case HISCORE1_SORT::BY_MAXSPEED_ASC:
-
-                cmpfunc = [](const RaceData &a, const RaceData &b) -> bool
-                {
-                    return a.maxspeed > b.maxspeed;
-                };
-
-                break;
-
-            case HISCORE1_SORT::BY_MAXSPEED_DESC:
-
-                cmpfunc = [](const RaceData &a, const RaceData &b) -> bool
-                {
-                    return a.maxspeed < b.maxspeed;
-                };
-
-                break;
-
-            case HISCORE1_SORT::BY_PLAYERNAME_ASC:
-
-                cmpfunc = [](const RaceData &a, const RaceData &b) -> bool
-                {
-                    if (a.playername == b.playername)
-                        return a.totaltime < b.totaltime;
-
-                    return a.playername < b.playername;
-                };
-
-                break;
-
-            case HISCORE1_SORT::BY_PLAYERNAME_DESC:
-
-                cmpfunc = [](const RaceData &a, const RaceData &b) -> bool
-                {
-                    if (a.playername == b.playername)
-                        return a.totaltime < b.totaltime;
-
-                    return a.playername > b.playername;
-                };
-
-                break;
-
-            case HISCORE1_SORT::BY_CARNAME_ASC:
-
-                cmpfunc = [](const RaceData &a, const RaceData &b) -> bool
-                {
-                    if (a.carname == b.carname)
-                        return a.totaltime < b.totaltime;
-
-                    return a.carname < b.carname;
-                };
-
-                break;
-
-            case HISCORE1_SORT::BY_CARNAME_DESC:
-
-                cmpfunc = [](const RaceData &a, const RaceData &b) -> bool
-                {
-                    if (a.carname == b.carname)
-                        return a.totaltime < b.totaltime;
-
-                    return a.carname > b.carname;
-                };
-
-                break;
-
-            case HISCORE1_SORT::BY_CARCLASS_ASC:
-
-                cmpfunc = [](const RaceData &a, const RaceData &b) -> bool
-                {
-                    if (a.carclass == b.carclass)
-                        return a.totaltime < b.totaltime;
-
-                    return a.carclass < b.carclass;
-                };
-
-                break;
-
-            case HISCORE1_SORT::BY_CARCLASS_DESC:
-
-                cmpfunc = [](const RaceData &a, const RaceData &b) -> bool
-                {
-                    if (a.carclass == b.carclass)
-                        return a.totaltime < b.totaltime;
-
-                    return a.carclass > b.carclass;
-                };
-
-                break;
-
-            case HISCORE1_SORT::BY_TOTALTIME_ASC:
-            default:
-
-                cmpfunc = [](const RaceData &a, const RaceData &b) -> bool
-                {
-                    return a.totaltime < b.totaltime;
-                };
-
-                break;
-        }
-
         if (!mapname.empty())
         {
             const auto range = alltimes.equal_range(mapname);
@@ -483,10 +367,12 @@ public:
             currenttimes.clear();
 
             for (auto i = range.first; i != range.second; ++i)
-                currenttimes.push_back(i->second);
+                currenttimes.push_back({0, i->second, false});
+
+            sortAndUpdatePlaces();
         }
 
-        std::sort(currenttimes.begin(), currenttimes.end(), cmpfunc);
+        sortCurrentTimes(sortmethod);
         return currenttimes;
     }
 
@@ -496,126 +382,10 @@ public:
     /// @see `HISCORE1_SORT` enum.
     /// @returns Sorted list of highlighted results.
     ///
-    const std::vector<RaceDataHL> & getCurrentTimesHL(HISCORE1_SORT sortmethod)
+    const std::vector<TimeEntry> & getCurrentTimesHL(HISCORE1_SORT sortmethod)
     {
-        std::function<bool (const RaceDataHL &, const RaceDataHL &)> cmpfunc; // Comparison Function
-
-        switch (sortmethod)
-        {
-            // case HISCORE1_SORT::BY_TOTALTIME_ASC: // later, this is the default
-
-            case HISCORE1_SORT::BY_TOTALTIME_DESC:
-
-                cmpfunc = [](const RaceDataHL &a, const RaceDataHL &b) -> bool
-                {
-                    return a.first.totaltime > b.first.totaltime;
-                };
-
-                break;
-
-            case HISCORE1_SORT::BY_MAXSPEED_ASC:
-
-                cmpfunc = [](const RaceDataHL &a, const RaceDataHL &b) -> bool
-                {
-                    return a.first.maxspeed > b.first.maxspeed;
-                };
-
-                break;
-
-            case HISCORE1_SORT::BY_MAXSPEED_DESC:
-
-                cmpfunc = [](const RaceDataHL &a, const RaceDataHL &b) -> bool
-                {
-                    return a.first.maxspeed < b.first.maxspeed;
-                };
-
-                break;
-
-            case HISCORE1_SORT::BY_PLAYERNAME_ASC:
-
-                cmpfunc = [](const RaceDataHL &a, const RaceDataHL &b) -> bool
-                {
-                    if (a.first.playername == b.first.playername)
-                        return a.first.totaltime < b.first.totaltime;
-
-                    return a.first.playername < b.first.playername;
-                };
-
-                break;
-
-            case HISCORE1_SORT::BY_PLAYERNAME_DESC:
-
-                cmpfunc = [](const RaceDataHL &a, const RaceDataHL &b) -> bool
-                {
-                    if (a.first.playername == b.first.playername)
-                        return a.first.totaltime < b.first.totaltime;
-
-                    return a.first.playername > b.first.playername;
-                };
-
-                break;
-
-            case HISCORE1_SORT::BY_CARNAME_ASC:
-
-                cmpfunc = [](const RaceDataHL &a, const RaceDataHL &b) -> bool
-                {
-                    if (a.first.carname == b.first.carname)
-                        return a.first.totaltime < b.first.totaltime;
-
-                    return a.first.carname < b.first.carname;
-                };
-
-                break;
-
-            case HISCORE1_SORT::BY_CARNAME_DESC:
-
-                cmpfunc = [](const RaceDataHL &a, const RaceDataHL &b) -> bool
-                {
-                    if (a.first.carname == b.first.carname)
-                        return a.first.totaltime < b.first.totaltime;
-
-                    return a.first.carname > b.first.carname;
-                };
-
-                break;
-
-            case HISCORE1_SORT::BY_CARCLASS_ASC:
-
-                cmpfunc = [](const RaceDataHL &a, const RaceDataHL &b) -> bool
-                {
-                    if (a.first.carclass == b.first.carclass)
-                        return a.first.totaltime < b.first.totaltime;
-
-                    return a.first.carclass < b.first.carclass;
-                };
-
-                break;
-
-            case HISCORE1_SORT::BY_CARCLASS_DESC:
-
-                cmpfunc = [](const RaceDataHL &a, const RaceDataHL &b) -> bool
-                {
-                    if (a.first.carclass == b.first.carclass)
-                        return a.first.totaltime < b.first.totaltime;
-
-                    return a.first.carclass > b.first.carclass;
-                };
-
-                break;
-
-            case HISCORE1_SORT::BY_TOTALTIME_ASC:
-            default:
-
-                cmpfunc = [](const RaceDataHL &a, const RaceDataHL &b) -> bool
-                {
-                    return a.first.totaltime < b.first.totaltime;
-                };
-
-                break;
-        }
-
-        std::sort(currenttimesHL.begin(), currenttimesHL.end(), cmpfunc);
-        return currenttimesHL;
+        sortCurrentTimes(sortmethod);
+        return currenttimes;
     }
 
     ///
@@ -625,26 +395,20 @@ public:
     /// @param [in] rd              Race data to be inserted and highlighted.
     /// @returns Sorted list of highlighted results.
     ///
-    const std::vector<RaceDataHL> & insertAndGetCurrentTimesHL(const RaceData &rd)
+    const std::vector<TimeEntry> & insertAndGetCurrentTimesHL(const RaceData &rd)
     {
         // get old times before inserting newest one
         const auto range = alltimes.equal_range(rd.mapname);
 
-        // Comparison Function
-        auto cmpfunc = [](const RaceDataHL &a, const RaceDataHL &b) -> bool
-        {
-            return a.first.totaltime < b.first.totaltime;
-        };
-
-        currenttimesHL.clear();
+        currenttimes.clear();
 
         for (auto i = range.first; i != range.second; ++i)
-            currenttimesHL.push_back({i->second, false});
+            currenttimes.push_back({0, i->second, false});
 
-        currenttimesHL.push_back({rd, true}); // the newest, highlighted time
+        currenttimes.push_back({0, rd, true}); // the newest, highlighted time
+        sortAndUpdatePlaces();
         alltimes.insert({rd.mapname, rd});
-        std::sort(currenttimesHL.begin(), currenttimesHL.end(), cmpfunc);
-        return currenttimesHL;
+        return currenttimes;
     }
 
 #ifndef NDEBUG
@@ -655,37 +419,20 @@ public:
     ///
     void printCurrentTimes(std::ostream &os) const
     {
-        for (const RaceData &rd: currenttimes)
+        for (const TimeEntry &te: currenttimes)
         {
-            os << std::setw(12) << rd.playername << ' ';
-            os << std::setw(12) << rd.carname << ' ';
-            os << std::setw(12) << rd.carclass << ' ';
-            os << std::setw(6) << rd.maxspeed << " SU ";
-            os << std::setw(6) << rd.totaltime << '\n';
-        }
-
-        os << "***" << std::endl;
-    }
-
-    ///
-    /// @brief Debug printing of current highlighted times.
-    /// @param [in,out] os      Output stream to print to.
-    ///
-    void printCurrentTimesHL(std::ostream &os) const
-    {
-        for (const auto &p: currenttimesHL)
-        {
-            if (p.second)
-                os << std::setw(12) << "> " + p.first.playername << ' ';
+            if (te.highlighted)
+                os << std::setw(5) << "> " + std::to_string(te.place) << ' ';
             else
-                os << std::setw(12) << p.first.playername << ' ';
+                os << std::setw(5) << te.place << ' ';
 
-            os << std::setw(12) << p.first.carname << ' ';
-            os << std::setw(12) << p.first.carclass << ' ';
-            os << std::setw(6) << p.first.maxspeed << " SU ";
-            os << std::setw(6) << p.first.totaltime;
+            os << std::setw(12) << te.rd.playername << ' ';
+            os << std::setw(12) << te.rd.carname << ' ';
+            os << std::setw(12) << te.rd.carclass << ' ';
+            os << std::setw(6) << te.rd.maxspeed << " SU ";
+            os << std::setw(6) << te.rd.totaltime;
 
-            if (p.second)
+            if (te.highlighted)
                 os << " <\n";
             else
                 os << '\n';
@@ -714,6 +461,146 @@ public:
 #endif
 
 private:
+
+    ///
+    /// @brief Sorts the current times list by time and updates places data.
+    ///
+    void sortAndUpdatePlaces()
+    {
+        sortCurrentTimes(HISCORE1_SORT::BY_TOTALTIME_ASC);
+
+        unsigned long int p = 1; // Place
+
+        for (TimeEntry &te: currenttimes)
+            te.place = p++;
+    }
+
+    ///
+    /// @brief Sorts the current times list.
+    /// @remarks Helper function for internal use.
+    /// @param sortmethod           How to sort the times.
+    /// @see `HISCORE1_SORT` enum.
+    ///
+    void sortCurrentTimes(HISCORE1_SORT sortmethod)
+    {
+        std::function<bool (const TimeEntry &, const TimeEntry &)> cmpfunc; // Comparison Function
+
+        switch (sortmethod)
+        {
+            // case HISCORE1_SORT::BY_TOTALTIME_ASC: // later, this is the default
+
+            case HISCORE1_SORT::BY_TOTALTIME_DESC:
+
+                cmpfunc = [](const TimeEntry &a, const TimeEntry &b) -> bool
+                {
+                    return a.rd.totaltime > b.rd.totaltime;
+                };
+
+                break;
+
+            case HISCORE1_SORT::BY_MAXSPEED_ASC:
+
+                cmpfunc = [](const TimeEntry &a, const TimeEntry &b) -> bool
+                {
+                    return a.rd.maxspeed > b.rd.maxspeed;
+                };
+
+                break;
+
+            case HISCORE1_SORT::BY_MAXSPEED_DESC:
+
+                cmpfunc = [](const TimeEntry &a, const TimeEntry &b) -> bool
+                {
+                    return a.rd.maxspeed < b.rd.maxspeed;
+                };
+
+                break;
+
+            case HISCORE1_SORT::BY_PLAYERNAME_ASC:
+
+                cmpfunc = [](const TimeEntry &a, const TimeEntry &b) -> bool
+                {
+                    if (a.rd.playername == b.rd.playername)
+                        return a.rd.totaltime < b.rd.totaltime;
+
+                    return a.rd.playername < b.rd.playername;
+                };
+
+                break;
+
+            case HISCORE1_SORT::BY_PLAYERNAME_DESC:
+
+                cmpfunc = [](const TimeEntry &a, const TimeEntry &b) -> bool
+                {
+                    if (a.rd.playername == b.rd.playername)
+                        return a.rd.totaltime < b.rd.totaltime;
+
+                    return a.rd.playername > b.rd.playername;
+                };
+
+                break;
+
+            case HISCORE1_SORT::BY_CARNAME_ASC:
+
+                cmpfunc = [](const TimeEntry &a, const TimeEntry &b) -> bool
+                {
+                    if (a.rd.carname == b.rd.carname)
+                        return a.rd.totaltime < b.rd.totaltime;
+
+                    return a.rd.carname < b.rd.carname;
+                };
+
+                break;
+
+            case HISCORE1_SORT::BY_CARNAME_DESC:
+
+                cmpfunc = [](const TimeEntry &a, const TimeEntry &b) -> bool
+                {
+                    if (a.rd.carname == b.rd.carname)
+                        return a.rd.totaltime < b.rd.totaltime;
+
+                    return a.rd.carname > b.rd.carname;
+                };
+
+                break;
+
+            case HISCORE1_SORT::BY_CARCLASS_ASC:
+
+                cmpfunc = [](const TimeEntry &a, const TimeEntry &b) -> bool
+                {
+                    if (a.rd.carclass == b.rd.carclass)
+                        return a.rd.totaltime < b.rd.totaltime;
+
+                    return a.rd.carclass < b.rd.carclass;
+                };
+
+                break;
+
+            case HISCORE1_SORT::BY_CARCLASS_DESC:
+
+                cmpfunc = [](const TimeEntry &a, const TimeEntry &b) -> bool
+                {
+                    if (a.rd.carclass == b.rd.carclass)
+                        return a.rd.totaltime < b.rd.totaltime;
+
+                    return a.rd.carclass > b.rd.carclass;
+                };
+
+                break;
+
+            case HISCORE1_SORT::BY_TOTALTIME_ASC:
+            default:
+
+                cmpfunc = [](const TimeEntry &a, const TimeEntry &b) -> bool
+                {
+                    return a.rd.totaltime < b.rd.totaltime;
+                };
+
+                break;
+        }
+
+        std::sort(currenttimes.begin(), currenttimes.end(), cmpfunc);
+    }
 
     ///
     /// @brief Encryption and decryption key, or rather pad.
@@ -879,8 +766,7 @@ private:
 
     std::unordered_multimap<std::string, RaceData> alltimes;    ///< All times for all maps.
     std::unordered_map<std::string, UnlockData> allunlocks;     ///< All unlock data for all players.
-    std::vector<RaceData> currenttimes;                         ///< Selected times, for current map.
-    std::vector<RaceDataHL> currenttimesHL;                     ///< Selected times with highlighted newest.
+    std::vector<TimeEntry> currenttimes;                        ///< Selected times, for current map.
     std::string searchdir;                                      ///< Directory where player profiles are.
     std::string playername;                                     ///< Name of the current player.
 };
