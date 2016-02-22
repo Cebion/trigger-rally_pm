@@ -660,14 +660,14 @@ private:
     };
 
     ///
-    /// @brief Encrypts the player data.
+    /// @brief Encrypts or decrypts the player data.
     /// @details The idea behind encrypting player data is not about stopping serious
     ///  cheaters from doing their thing. It's about discouraging otherwise honest
     ///  players from editing a very tempting text file.
-    /// @param pdata        Player data.
-    /// @returns Encrypted player data.
+    /// @param pdata        Encrypted/decrypted player data.
+    /// @returns Decrypted/encrypted player data.
     ///
-    std::string encrypt(std::string pdata) const
+    std::string xorcrypt(std::string pdata) const
     {
         auto ki = edkey.cbegin(); // Key Iterator
 
@@ -693,12 +693,12 @@ private:
         std::string ts; // Temporary String
         RaceData rd(pname);
 
-#define decrypt encrypt
+#define decrypt xorcrypt
         std::istringstream sspdata(decrypt(pdata));
 #undef decrypt
 
         GETLINE_SKIP_EMPTY_LINES(sspdata, ts);
-        nu = stoul(ts);
+        nu = std::stoul(ts);
 
         while (nu-- != 0)
         {
@@ -747,7 +747,9 @@ private:
             if (p.second.playername == pname)
                 sspdata << p.second;
 
+#define encrypt xorcrypt
         sspdata.str(encrypt(sspdata.str()));
+#undef encrypt
 
         PHYSFS_File *pfile = PHYSFS_openWrite(pfname.c_str());
 
