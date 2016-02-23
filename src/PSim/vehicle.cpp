@@ -1072,6 +1072,40 @@ void PVehicle::tick(float delta)
   skid_level *= type->wheel_speed_multiplier;
 }
 
+///
+/// @brief Checks if vehicle can have a dust trail.
+/// @todo Use a dynamic height?
+///
+bool PVehicle::canHaveDustTrail()
+{
+    for (unsigned int i=0; i<part.size(); ++i)
+    {
+        for (unsigned int j=0; j<type->part[i].wheel.size(); ++j)
+        {
+            PVehicleWheel &wheel = part[i].wheel[j];
+            PVehicleTypeWheel &typewheel = type->part[i].wheel[j];
+            vec3f wclip = wheel.ref_world.getPosition();
+
+            // TODO: calc wclip along wheel plane instead of just straight down
+            wclip.z -= typewheel.radius;
+
+            wclip.z += INTERP(wheel.bumplast, wheel.bumpnext, wheel.bumptravel);
+
+            PTerrain::ContactInfo tci;
+
+            tci.pos.x = wclip.x;
+            tci.pos.y = wclip.y;
+            sim.getTerrain()->getContactInfo(tci);
+
+#define MAX_HEIGHT 1.5f
+            if (wclip.z - tci.pos.z <= MAX_HEIGHT)
+                return true;
+#undef MAX_HEIGHT
+        }
+    }
+
+    return false;
+}
 
 void PVehicle::updateParts()
 {

@@ -1457,22 +1457,25 @@ void MainApp::tickStateGame(float delta)
 
     if (bdi.startsize >= 0.30f && game->vehicle[i]->forwardspeed > 23.0f)
     {
-        const float sizemult = game->vehicle[i]->forwardspeed * 0.035f;
-        const vec3f bodydirtvec = {0, 0, 1}; // game->vehicle[i]->body->getLinearVelAtPoint(bodydirtpos);
-        vec3f bodydirtcolor = game->terrain->getCmapColor(bodydirtpos);
+        if (game->vehicle[i]->canHaveDustTrail())
+        {
+            const float sizemult = game->vehicle[i]->forwardspeed * 0.035f;
+            const vec3f bodydirtvec = {0, 0, 1}; // game->vehicle[i]->body->getLinearVelAtPoint(bodydirtpos);
+            vec3f bodydirtcolor = game->terrain->getCmapColor(bodydirtpos);
 
-        bodydirtcolor.x += BRIGHTEN_ADD;
-        bodydirtcolor.y += BRIGHTEN_ADD;
-        bodydirtcolor.z += BRIGHTEN_ADD;
+            bodydirtcolor.x += BRIGHTEN_ADD;
+            bodydirtcolor.y += BRIGHTEN_ADD;
+            bodydirtcolor.z += BRIGHTEN_ADD;
 
-        CLAMP(bodydirtcolor.x, 0.0f, 1.0f);
-        CLAMP(bodydirtcolor.y, 0.0f, 1.0f);
-        CLAMP(bodydirtcolor.z, 0.0f, 1.0f);
-        psys_dirt->setColorStart(bodydirtcolor.x, bodydirtcolor.y, bodydirtcolor.z, 1.0f);
-        psys_dirt->setColorEnd(bodydirtcolor.x, bodydirtcolor.y, bodydirtcolor.z, 0.0f);
-        psys_dirt->setSize(bdi.startsize * sizemult, bdi.endsize * sizemult);
-        psys_dirt->setDecay(bdi.decay);
-        psys_dirt->addParticle(bodydirtpos, bodydirtvec);
+            CLAMP(bodydirtcolor.x, 0.0f, 1.0f);
+            CLAMP(bodydirtcolor.y, 0.0f, 1.0f);
+            CLAMP(bodydirtcolor.z, 0.0f, 1.0f);
+            psys_dirt->setColorStart(bodydirtcolor.x, bodydirtcolor.y, bodydirtcolor.z, 1.0f);
+            psys_dirt->setColorEnd(bodydirtcolor.x, bodydirtcolor.y, bodydirtcolor.z, 0.0f);
+            psys_dirt->setSize(bdi.startsize * sizemult, bdi.endsize * sizemult);
+            psys_dirt->setDecay(bdi.decay);
+            psys_dirt->addParticle(bodydirtpos, bodydirtvec);
+        }
     }
     else
       for (unsigned int k=0; k<game->vehicle[i]->part[j].wheel.size(); k++) {

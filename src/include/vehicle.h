@@ -377,6 +377,8 @@ public:
   
   void tick(float delta);
   
+  bool canHaveDustTrail();
+  
   void updateParts();
   
   void doReset();
