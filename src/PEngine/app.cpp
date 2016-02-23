@@ -237,12 +237,7 @@ int PApp::run(int argc, char *argv[])
       }
     }
   }
-  
-  PUtil::outLog() << "Initialising SDL" << std::endl;
-  
-  SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_JOYSTICK | SDL_INIT_NOPARACHUTE);
-  //SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_JOYSTICK);
-  
+
   srand(SDL_GetTicks());
   
   SDL_WM_SetCaption(apptitle.c_str(), nullptr);

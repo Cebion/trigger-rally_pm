@@ -885,10 +885,10 @@ void MainApp::cursorMoveEvent(int posx, int posy)
 {
   if (appstate != AS_LEVEL_SCREEN) return;
   
-  const GLdouble margin = (800.0 - 600.0 * cfg_video_cx / cfg_video_cy) / 2.0;
+  const GLdouble margin = (800.0 - 600.0 * cx / cy) / 2.0;
   
   gui.setCursorPos(
-    (float)posx / (float)getWidth() * (600.0 * cfg_video_cx / cfg_video_cy) + margin,
+    (float)posx / (float)getWidth() * (600.0 * cx / cy) + margin,
     (1.0f - (float)posy / (float)getHeight()) * 600.0f);
 }
 
@@ -908,7 +908,7 @@ void MainApp::mouseButtonEvent(const SDL_MouseButtonEvent &mbe)
   
   // TODO: fix this code
   
-  const GLdouble margin = (800.0 - 600.0 * cfg_video_cx / cfg_video_cy) / 2.0;
+  const GLdouble margin = (800.0 - 600.0 * cx / cy) / 2.0;
 
   int action, index;
   
@@ -917,7 +917,7 @@ void MainApp::mouseButtonEvent(const SDL_MouseButtonEvent &mbe)
   levelScreenAction(action, index);
 
   gui.setCursorPos(
-    (float)mbe.x / (float)getWidth() * (600.0 * cfg_video_cx / cfg_video_cy) + margin,
+    (float)mbe.x / (float)getWidth() * (600.0 * cx / cy) + margin,
     (1.0f - (float)mbe.y / (float)getHeight()) * 600.0f);
 }
 
@@ -1172,9 +1172,9 @@ void MainApp::renderStateLevel(float eyetranslation)
   glPushMatrix();
   glLoadIdentity();
 
-  const GLdouble margin = (800.0 - 600.0 * cfg_video_cx / cfg_video_cy) / 2.0;
+  const GLdouble margin = (800.0 - 600.0 * cx / cy) / 2.0;
 
-  glOrtho(margin, 600.0 * cfg_video_cx / cfg_video_cy + margin, 0.0, 600.0, -1.0, 1.0);
+  glOrtho(margin, 600.0 * cx / cy + margin, 0.0, 600.0, -1.0, 1.0);
 
   glPushMatrix();
   glLoadIdentity();

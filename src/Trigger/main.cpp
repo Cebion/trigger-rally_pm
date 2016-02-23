@@ -394,7 +394,14 @@ void MainApp::loadConfig()
     }
     else
     if (!strcmp(walk->Value(), "video")) {
-      
+
+        val = walk->Attribute("automatic");
+
+        if (val != nullptr && std::string(val) == "yes")
+            automaticVideoMode(true);
+        else
+            automaticVideoMode(false);
+
       val = walk->Attribute("width");
       if (val) cfg_video_cx = atoi(val);
       

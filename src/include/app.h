@@ -44,7 +44,16 @@ class PApp
         std::string appname, apptitle;
 
         SDL_Surface *screen;
+        
+        /// Attempts to set fullscreen at native resolution.
+        bool autoVideo = false;
+
+    protected:
+
         int cx, cy, bpp;
+
+    private:
+
         bool fullscr, noframe;
         bool reqRGB, reqAlpha, reqDepth, reqStencil;
         bool grabinput;
@@ -78,6 +87,9 @@ class PApp
             appname(name), // for ~/.name
             apptitle(title) // for window title
         {
+            //PUtil::outLog() << "Initialising SDL" << std::endl;
+            SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_JOYSTICK | SDL_INIT_NOPARACHUTE);
+
             cx = cy = 0;
             bpp = 0;
             fullscr = false;
@@ -201,19 +213,41 @@ class PApp
 
         void setScreenMode(int w, int h, bool fullScreen = false, bool hideFrame = false)
         {
-            cx = w;
-            cy = h;
-            fullscr = fullScreen;
-            noframe = hideFrame;
+            // use automatic video mode
+            if (autoVideo)
+            {
+                const SDL_VideoInfo *info = SDL_GetVideoInfo();
+
+                cx      = info->current_w;
+                cy      = info->current_h;
+                bpp     = info->vfmt->BitsPerPixel;
+                fullscr = true;
+                noframe = hideFrame;
+            }
+            else
+            {
+                cx = w;
+                cy = h;
+                fullscr = fullScreen;
+                noframe = hideFrame;
+            }
         }
 
         void setScreenBPP(int _bpp)
         {
+            if (autoVideo)
+                return;
+
             bpp = _bpp;
         }
 
         void setScreenModeAutoWindow();
         void setScreenModeFastFullScreen();
+
+        void automaticVideoMode(bool av = false)
+        {
+            autoVideo = av;
+        }
 
         void requireRGB(bool req = true)
         {
