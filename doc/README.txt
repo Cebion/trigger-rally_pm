@@ -38,6 +38,8 @@ M       Toggle map
 N       Toggle user interface
 K       Toggle checkpoints
 R       Recover car
+Q       Recover car at previous checkpoint
+P       Pause race
 < >     Rotate camera when in 3rd person cam
 F12     Save a screenshot to ~/.trigger/
 

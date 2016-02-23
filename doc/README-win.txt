@@ -19,6 +19,8 @@ Trigger Rally ReadMe for Windows
     Right Arrow     steer right
     Space           handbrake
     R               recover car
+    Q               recover car at last checkpoint
+    P               pause race
     C               change camera view
     K               toggle checkpoints
     M               toggle map
