@@ -130,6 +130,7 @@
 			<key action="pauserace" id="SDLK_p" />
 			<key action="showui" id="SDLK_n" />
 			<key action="showcheckpoint" id="SDLK_k" />
+			<key action="next" id="SDLK_COMMA" />
 		</keyboard>
 		<!-- For a list of SDLKey ID's visit:
 			http://www.libsdl.org/release/SDL-1.2.15/docs/html/sdlkey.html
@@ -142,8 +143,9 @@
 			<axis action="right" index="0" direction="+" deadzone="0.10" maxrange="1.00" />
 			<axis action="left" index="0" direction="-" deadzone="0.10" maxrange="1.00" />
 			<button action="handbrake" index="0" />
+			<button action="next" index="0" />
 		</joystick>
-		
+
 		<!-- Typical joypad configuration -->
 		<joystick enable="no">
 			<button action="forward" index="0" />
@@ -151,6 +153,7 @@
 			<axis action="right" index="0" direction="+" deadzone="0.10" maxrange="1.00" />
 			<axis action="left" index="0" direction="-" deadzone="0.10" maxrange="1.00" />
 			<button action="handbrake" index="2" />
+			<button action="next" index="0" />
 		</joystick>
 	</controls>
 </config>
