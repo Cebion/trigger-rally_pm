@@ -335,6 +335,7 @@ const char *creditstext[] =
     "Iwan 'qubodup' Gabovitch",
     "Farrer",
     "Andrei Bondor",
+    "Nikolay Orlyuk",
     "",
     "New levels",
     "Tim Wintle",
