@@ -10,6 +10,7 @@
 		-->
 
 	<video
+		automatic="yes"
 		width="800"
 		height="600"
 		bpp="0"
@@ -22,6 +23,10 @@
 		stereoeyeseparation="0.07"
 		stereoswapeyes="no"
 		/>
+		<!-- Automatic video mode ("automatic"):
+			yes - ignore user values and run fullscreen at native resolution and color depth
+			no - run with user-provided values for width, height and bpp
+		-->
 		<!-- Possible values for stereo:
 			none
 			quadbuffer - use hardware stereo support
