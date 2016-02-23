@@ -403,6 +403,7 @@ private:
     ActionShowUi,
     ActionShowCheckpoint,
     ActionPauseRace,
+    ActionNext,
     ActionCount
   };
   struct {

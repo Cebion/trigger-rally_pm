@@ -340,6 +340,7 @@ void MainApp::loadConfig()
   ctrl.action_name[ActionPauseRace] = std::string("pauserace");
   ctrl.action_name[ActionShowUi] = std::string("showui");
   ctrl.action_name[ActionShowCheckpoint] = std::string("showcheckpoint");
+  ctrl.action_name[ActionNext] = std::string("next");
   
   for (int i = 0; i < ActionCount; i++) {
     ctrl.map[i].type = UserControl::TypeUnassigned;
@@ -1855,8 +1856,10 @@ void MainApp::keyEvent(const SDL_KeyboardEvent &ke)
           choose_type = (int)game->vehiclechoices.size()-1;
         return;
       }
-      if (ctrl.map[ActionRight].type == UserControl::TypeKey &&
-        ctrl.map[ActionRight].key.sym == ke.keysym.sym) {
+      if ((ctrl.map[ActionRight].type == UserControl::TypeKey &&
+        ctrl.map[ActionRight].key.sym == ke.keysym.sym) ||
+        (ctrl.map[ActionNext].type == UserControl::TypeKey &&
+        ctrl.map[ActionNext].key.sym == ke.keysym.sym)) {
         if (++choose_type >= (int)game->vehiclechoices.size())
           choose_type = 0;
         return;
@@ -1980,8 +1983,10 @@ void MainApp::joyButtonEvent(int which, int button, bool down)
           choose_type = (int)game->vehiclechoices.size()-1;
         return;
       }
-      if (ctrl.map[ActionRight].type == UserControl::TypeJoyButton &&
-        ctrl.map[ActionRight].joybutton.button == button) {
+      if ((ctrl.map[ActionRight].type == UserControl::TypeJoyButton &&
+        ctrl.map[ActionRight].joybutton.button == button) ||
+        (ctrl.map[ActionNext].type == UserControl::TypeJoyButton &&
+        ctrl.map[ActionNext].joybutton.button == button)) {
         if (++choose_type >= (int)game->vehiclechoices.size())
           choose_type = 0;
         return;
