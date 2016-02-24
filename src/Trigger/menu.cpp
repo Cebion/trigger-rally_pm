@@ -844,7 +844,7 @@ void MainApp::finishRace(int gamestate, float coursetime)
                 best_times.addNewUnlock(s);
 
             player_unlocks = best_times.getUnlockData();
-            best_times.savePlayer(); // FIXME: expensive with time
+            best_times.skipSavePlayer();
         }
 
       break;

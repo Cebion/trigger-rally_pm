@@ -241,12 +241,38 @@ public:
     }
 
     ///
+    /// @brief Sets how many saves to skip.
+    /// @param sk       New value for skipped saves.
+    ///
+    void setSkipSaves(unsigned long int sk)
+    {
+        skipSaves = sk;
+        sc = 0; // reset Skip Counter
+    }
+
+    ///
     /// @brief Saves the player's race data.
-    /// @todo Should use `HiScore1::writePlayerData()` directly?
     ///
     void savePlayer() const
     {
         writePlayerData(playername);
+    }
+
+    ///
+    /// @brief Saves the player's race data with possible skipping.
+    /// @details The purpose of this function is to cut down on the expensive
+    ///  file output operations by skipping calls to `writePlayerData()`.
+    ///
+    void skipSavePlayer() const
+    {
+        if (skipSaves <= -1) // save only by destructor
+            return;
+
+        if (sc++ == skipSaves)
+        {
+            writePlayerData(playername);
+            sc = 0;
+        }
     }
 
     ///
@@ -771,6 +797,8 @@ private:
     std::vector<TimeEntry> currenttimes;                        ///< Selected times, for current map.
     std::string searchdir;                                      ///< Directory where player profiles are.
     std::string playername;                                     ///< Name of the current player.
+    long int skipSaves = 5;                                     ///< Number of saves to skip, -1 means "save all by dtor".
+    mutable long int sc = 0;                                    ///< Skip counter.
 };
 
 #undef GETLINE_SKIP_EMPTY_LINES

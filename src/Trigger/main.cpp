@@ -309,6 +309,7 @@ void MainApp::loadConfig()
   cfg_drivingassist = 1.0f;
   cfg_enable_sound = true;
   cfg_enable_codriversigns = true;
+  cfg_skip_saves = 5;
   cfg_volume_engine = 0.33f;
   cfg_volume_sfx = 1.0f;
   cfg_volume_codriver = 1.0f;
@@ -391,6 +392,13 @@ void MainApp::loadConfig()
             cfg_playername = val;
             best_times.setPlayerName(val);
         }
+
+        val = walk->Attribute("skipsaves");
+
+        if (val != nullptr)
+            cfg_skip_saves = std::stol(val);
+
+        best_times.setSkipSaves(cfg_skip_saves);
     }
     else
     if (!strcmp(walk->Value(), "video")) {
@@ -1246,7 +1254,7 @@ void MainApp::endGame(int gamestate)
         race_data.maxspeed  = 0.0f; // TODO: measure this too
         //PUtil::outLog() << race_data;
         current_times = best_times.insertAndGetCurrentTimesHL(race_data);
-        best_times.savePlayer(); // FIXME: this will get very expensive in time
+        best_times.skipSavePlayer();
 
         // show the best times
         if (lss.state == AM_TOP_LVL_PREP)
