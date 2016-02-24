@@ -362,6 +362,8 @@ private:
   bool cfg_enable_sound;
   bool cfg_enable_codriversigns;
   
+  long int cfg_skip_saves;
+  
   /// Basic volume control.
   float cfg_volume_engine       = 0.33f;    ///< Engine.
   float cfg_volume_sfx          = 1.00f;    ///< Sound effects (wind, gear change, crash, skid, etc.)
@@ -431,7 +433,6 @@ private:
   //
   
   HISCORE1_SORT hs_sort_method = HISCORE1_SORT::BY_TOTALTIME_ASC;
-  HiScore1 best_times; // FIXME: this belongs in PApp as a protected member
   RaceData race_data;
   std::vector<TimeEntry> current_times;
 
@@ -535,8 +536,7 @@ protected:
   
 public:
   MainApp(const std::string &title, const std::string &name):
-    PApp(title, name),
-    best_times("/players")
+    PApp(title, name)
   {
   }
   //MainApp::~MainApp(); // should not have destructor, use unload
