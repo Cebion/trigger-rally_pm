@@ -615,6 +615,26 @@ void MainApp::loadConfig()
       if (val != nullptr)
         cfg_codriversigns = val;
 
+        val = walk->Attribute("codriversignslife");
+
+        if (val != nullptr)
+            cfg_codriveruserconfig.life = std::stof(val);
+
+        val = walk->Attribute("codriversignsposx");
+
+        if (val != nullptr)
+            cfg_codriveruserconfig.posx = std::stof(val);
+
+        val = walk->Attribute("codriversignsposy");
+
+        if (val != nullptr)
+            cfg_codriveruserconfig.posy = std::stof(val);
+
+        val = walk->Attribute("codriversignsscale");
+
+        if (val != nullptr)
+            cfg_codriveruserconfig.scale = std::stof(val);
+
     } else if (!strcmp(walk->Value(), "controls")) {
       
       for (TiXmlElement *walk2 = walk->FirstChildElement();

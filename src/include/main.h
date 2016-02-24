@@ -378,6 +378,9 @@ private:
   /// Must be a valid directory in /data/textures/CodriverSigns/.
   std::string cfg_codriversigns;
 
+  /// User settings for codriver signs: position, scale, fade start time.
+  PCodriverUserConfig cfg_codriveruserconfig;
+
   Speedunit cfg_speed_unit;
   Speedstyle cfg_speed_style;
   float hud_speedo_start_deg;
@@ -583,6 +586,11 @@ public:
     std::unordered_map<std::string, PTexture *> getCodriverSigns() const
     {
         return tex_codriversigns;
+    }
+    
+    PCodriverUserConfig getCodriverUserConfig() const
+    {
+        return cfg_codriveruserconfig;
     }
 };
 

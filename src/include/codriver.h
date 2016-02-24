@@ -27,21 +27,20 @@
 #include <unordered_map>
 #include <vector>
 
-namespace
-{
-// how many seconds until the codriver signs start fading
-const float signlife = 3.0f;
-
-// scale of the codriver signs
-const float signscale = 0.2f;
-
 // maximum number of characters for a note
 // e.g.: "hard left over jump" has 19 characters
 //
 // NOTE: this isn't a hard limit and it can be exceeded by the game safely
 //  but at the cost of one or more memory reallocations
 const std::size_t note_maxlength = 128;
-}
+
+struct PCodriverUserConfig
+{
+    float life  = 3.00f;    ///< How many seconds until the codriver signs start fading.
+    float scale = 0.20f;    ///< Scale of the codriver signs.
+    float posx  = 0.00f;    ///< X scale centering.
+    float posy  = 0.45f;    ///< Y scale centering.
+};
 
 ///
 /// @brief Draws the codriver signs for the driver.
@@ -52,8 +51,12 @@ public:
 
     PCodriverSigns() = delete;
 
-    PCodriverSigns(const std::unordered_map<std::string, PTexture *> &signs):
-        signs(signs)
+    PCodriverSigns(
+        const std::unordered_map<std::string, PTexture *> &signs,
+        const PCodriverUserConfig &uc
+        ):
+        signs(signs),
+        uc(uc)
     {
         cpsigns.reserve(8); // FIXME: magic number
         tempnote.reserve(note_maxlength);
@@ -110,14 +113,14 @@ public:
 
         float alpha;
 
-        if (coursetime - cptime < signlife)
+        if (coursetime - cptime < uc.life)
         {
             alpha = 1.0f;
         }
         else
-        if (coursetime - cptime < signlife + 1.0f)
+        if (coursetime - cptime < uc.life + 1.0f)
         {
-            alpha = (signlife + 1.0f) - (coursetime - cptime);
+            alpha = (uc.life + 1.0f) - (coursetime - cptime);
         }
         else
         {
@@ -127,9 +130,11 @@ public:
 
         glPushMatrix();
         glLoadIdentity();
+        glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
+        glTranslatef(uc.posx, uc.posy, 0.0f);
+        glScalef(uc.scale, uc.scale, 1.0f);
+        glTranslatef(-0.5f * cpsigns.size() * 2 + 1.0f, 0.0f, 0.0f);
         glColor4f(1.0f, 1.0f, 1.0f, alpha);
-        glTranslatef(-0.5f * cpsigns.size() * 2 * signscale + signscale, 0.45f, 0.0f);
-        glScalef(signscale, signscale, 1.0f);
 
         for (PTexture *cptex: cpsigns)
         {
@@ -153,6 +158,7 @@ public:
 private:
 
     std::unordered_map<std::string, PTexture *> signs; ///< MainApp::tex_codriversigns
+    PCodriverUserConfig uc; ///< User configuration.
     std::vector<PTexture *> cpsigns;
     std::string tempnote; ///< Temporary string for performance.
     float cptime;
