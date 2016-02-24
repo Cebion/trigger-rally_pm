@@ -680,6 +680,8 @@ int PApp::run(int argc, char *argv[])
   
   SDL_Quit();
   
+  best_times.savePlayer();
+  
   if (PHYSFS_deinit() == 0) {
     PUtil::outLog() << "PhysFS: " << PHYSFS_getLastError() << std::endl;
   }
