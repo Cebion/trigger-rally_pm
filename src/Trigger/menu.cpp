@@ -10,8 +10,13 @@
 const int MAX_RACES_ON_SCREEN   = 12;
 const int MAX_TIMES_ON_SCREEN   = 13;
 
+// Best Times table font information, must be kept updated
+const float fa      = 8.0f / 12.0f;     // Font Aspect
+const float fs      = 20.0f;            // Font Size
+const float fw      = fa * fs;          // Font Width
+
 // X coordinate values for Best Times table labels
-const float XTIMES_PLAYERNAME   = 145.0f;
+const float XTIMES_PLAYERNAME   = 100.0f + 4 * fw; // 150.0f;
 const float XTIMES_CARNAME      = 350.0f;
 const float XTIMES_CARCLASS     = 475.0f;
 const float XTIMES_TOTALTIME    = 700.0f;
@@ -577,7 +582,7 @@ void MainApp::levelScreenAction(int action, int index)
             gui.addLabel(XTIMES_PLAYERNAME, 395.0f - (float)(i - first_time_index) * 25.0f,
                 std::to_string(current_times[i].place) + ". ", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 20.0f, ls);
             gui.addLabel(XTIMES_PLAYERNAME, 395.0f - (float)(i - first_time_index) * 25.0f,
-                current_times[i].rd.playername.substr(0, 15), PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, ls);
+                current_times[i].rd.playername.substr(0, 14), PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, ls);
             gui.addLabel(XTIMES_CARNAME, 395.0f - (float)(i - first_time_index) * 25.0f,
                 current_times[i].rd.carname.substr(0, 9), PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, ls);
             gui.addLabel(XTIMES_CARCLASS, 395.0f - (float)(i - first_time_index) * 25.0f,
@@ -649,7 +654,7 @@ void MainApp::levelScreenAction(int action, int index)
             gui.addLabel(XTIMES_PLAYERNAME, 395.0f - (float)(i - first_time_index) * 25.0f,
                 std::to_string(current_times[i].place) + ". ", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 20.0f, LabelStyle::List);
             gui.addLabel(XTIMES_PLAYERNAME, 395.0f - (float)(i - first_time_index) * 25.0f,
-                current_times[i].rd.playername.substr(0, 15), PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, LabelStyle::List);
+                current_times[i].rd.playername.substr(0, 14), PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, LabelStyle::List);
             gui.addLabel(XTIMES_CARNAME, 395.0f - (float)(i - first_time_index) * 25.0f,
                 current_times[i].rd.carname.substr(0, 9), PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, LabelStyle::List);
             gui.addLabel(XTIMES_CARCLASS, 395.0f - (float)(i - first_time_index) * 25.0f,
@@ -724,7 +729,7 @@ void MainApp::levelScreenAction(int action, int index)
             gui.addLabel(XTIMES_PLAYERNAME, 395.0f - (float)(i - first_time_index) * 25.0f,
                 std::to_string(current_times[i].place) + ". ", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 20.0f, ls);
             gui.addLabel(XTIMES_PLAYERNAME, 395.0f - (float)(i - first_time_index) * 25.0f,
-                current_times[i].rd.playername.substr(0, 15), PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, ls);
+                current_times[i].rd.playername.substr(0, 14), PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, ls);
             gui.addLabel(XTIMES_CARNAME, 395.0f - (float)(i - first_time_index) * 25.0f,
                 current_times[i].rd.carname.substr(0, 9), PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, ls);
             gui.addLabel(XTIMES_CARCLASS, 395.0f - (float)(i - first_time_index) * 25.0f,
@@ -798,7 +803,7 @@ void MainApp::levelScreenAction(int action, int index)
             gui.addLabel(XTIMES_PLAYERNAME, 395.0f - (float)(i - first_time_index) * 25.0f,
                 std::to_string(current_times[i].place) + ". ", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 20.0f, LabelStyle::List);
             gui.addLabel(XTIMES_PLAYERNAME, 395.0f - (float)(i - first_time_index) * 25.0f,
-                current_times[i].rd.playername.substr(0, 15), PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, LabelStyle::List);
+                current_times[i].rd.playername.substr(0, 14), PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, LabelStyle::List);
             gui.addLabel(XTIMES_CARNAME, 395.0f - (float)(i - first_time_index) * 25.0f,
                 current_times[i].rd.carname.substr(0, 9), PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 20.0f, LabelStyle::List);
             gui.addLabel(XTIMES_CARCLASS, 395.0f - (float)(i - first_time_index) * 25.0f,
