@@ -1500,7 +1500,7 @@ void MainApp::renderStateGame(float eyetranslation)
             glPopMatrix();
             glPushMatrix();
             glScalef(0.1f, 0.1f, 1.0f);
-            glTranslatef(0.0f, -2.0f, 0.0f);
+            glTranslatef(0.0f, -2.5f, 0.0f);
             glColor4f(1.0f, 1.0f, 0.0f, 1.0f);
             tex_fontDsmOutlined->bind();
             getSSRender().drawText(
@@ -1549,7 +1549,8 @@ void MainApp::renderStateGame(float eyetranslation)
     #endif
 
     // draw if we're on road for debugging
-    #ifdef INDEVEL
+    //#ifdef INDEVEL
+    #if 0
     {
         const vec3f wheelpos = vehic->part[0].wheel[0].ref_world.getPosition(); // wheel 0
         std::string s;
