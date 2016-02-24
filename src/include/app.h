@@ -51,6 +51,7 @@ class PApp
     protected:
 
         int cx, cy, bpp;
+        HiScore1 best_times;
 
     private:
 
@@ -85,7 +86,8 @@ class PApp
 
         PApp(const std::string &title = "PGame", const std::string &name = ".pgame"):
             appname(name), // for ~/.name
-            apptitle(title) // for window title
+            apptitle(title), // for window title
+            best_times("/players")
         {
             //PUtil::outLog() << "Initialising SDL" << std::endl;
             SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_JOYSTICK | SDL_INIT_NOPARACHUTE);

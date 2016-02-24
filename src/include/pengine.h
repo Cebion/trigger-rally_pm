@@ -194,12 +194,12 @@ public:
 
 
 
+#include <hiscore1.h>
 #include "app.h"
 #include "subsys.h"
 #include "audio.h"
 #include "render.h"
 #include <codriver.h>
-#include <hiscore1.h>
 
 
 #endif // PENGINE_H_INCLUDED
