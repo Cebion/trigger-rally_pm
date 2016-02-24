@@ -2,11 +2,27 @@
 <config>
 	<player
 		name="Player"
+		skipsaves="4"
 		/>
 		<!-- Valid player names are alphanumerical "a-z A-Z 0-9"
 			with underscore "_" and space " ". Using wacky symbols
 			may seem to work at first but the resulting player profile
 			won't be loaded at game start.
+		-->
+		<!-- The "skipsaves" number sets how many saves are skipped
+			before data is actually written to the player profile,
+			thereby reducing disk access.
+
+			Setting "skipsaves" to 0 will cause the game to re-save the
+			player profile each time a race is successfully completed.
+
+			Setting "skipsaves" to -1 will cause the game to only save
+			the player profile at game exit.
+			WARNING: if the game crashes with this setting, all player
+			progress may be lost!
+
+			Default value is 4, meaning: save at game end or at every
+			fifth race finished, whichever comes first.
 		-->
 
 	<video
