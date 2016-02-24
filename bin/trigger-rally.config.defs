@@ -106,6 +106,10 @@
 		speedunit="mph"
 		codriver="ab"
 		codriversigns="plain"
+		codriversignslife="3.0"
+		codriversignsposx="0.0"
+		codriversignsposy="0.45"
+		codriversignsscale="0.2"
 		/>
 		<!-- Possible values for speedunit:
 			kph - Kilometres per hour
@@ -117,6 +121,20 @@
 
 			The chosen codriver sign set "S" must have a valid directory as:
 			/data/textures/CodriverSigns/S/
+
+			codriversignslife:
+				How many seconds before the codriver signs start fading.
+				Default: 3.0
+
+			codriversignsposx, codriversignsposy:
+				Coordinates of the codriver signs' center.
+				The coordinates pair (0, 0) represents the middle of the screen.
+				Default: (0, 0.45)
+
+			codriversignsscale:
+				The scale of the codriver signs.
+				A scale of 1.0 will cover the entire screen.
+				Default: 0.2
 		-->
 
 	<controls>
