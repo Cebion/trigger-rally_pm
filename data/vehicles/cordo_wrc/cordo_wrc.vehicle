@@ -2,7 +2,8 @@
 <vehicle
 	name="Cordo"
 	class="WRC"
-	type="car">
+	type="car"
+	locked="yes">
 	
 	<genparams
 		mass="1350.0"
