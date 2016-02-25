@@ -1160,6 +1160,17 @@ bool MainApp::startGame(const std::string &filename)
     appstate = AS_CHOOSE_VEHICLE;
   } else {
     game->chooseVehicle(game->vehiclechoices[choose_type]);
+    
+    if (lss.state != AM_TOP_EVT_PREP)
+    {
+        const float bct = best_times.getBestClassTime(
+            filename,
+            game->vehicle.front()->type->proper_class);
+
+        if (bct >= 0.0f)
+            game->targettime = bct;
+    }
+
     startGame2();
     appstate = AS_IN_GAME;
   }
@@ -1906,10 +1917,23 @@ void MainApp::keyEvent(const SDL_KeyboardEvent &ke)
       switch (ke.keysym.sym) {
       case SDLK_RETURN:
       case SDLK_KP_ENTER:
+      {
         startGame2();
         game->chooseVehicle(game->vehiclechoices[choose_type]);
+
+        if (lss.state != AM_TOP_EVT_PREP)
+        {
+            const float bct = best_times.getBestClassTime(
+                race_data.mapname,
+                game->vehicle.front()->type->proper_class);
+
+            if (bct >= 0.0f)
+                game->targettime = bct;
+        }
+
         appstate = AS_IN_GAME;
         return;
+      }
       case SDLK_ESCAPE:
         endGame(GF_NOT_FINISHED);
         return;
