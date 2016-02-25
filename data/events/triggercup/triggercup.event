@@ -5,6 +5,7 @@
 	locked="no">
 
 	<unlocks file="/events/alps/alps.event" />
+	<unlocks file="/vehicles/cordo_wrc/cordo_wrc.vehicle" />
 
 	<level file="warmup/warmup.level" />
 	<level file="operation/operation.level" />
