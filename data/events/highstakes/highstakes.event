@@ -2,6 +2,7 @@
 <event name="03. High Stakes" author="Onsemeliot" locked="yes">
 
 	<unlocks file="/events/chasing/chasing.event" />
+	<unlocks file="/vehicles/evo_wrc/evo_wrc.vehicle" />
 
 	<level file="sky/sky.level" />
 	<level file="crossing/crossing.level" />
