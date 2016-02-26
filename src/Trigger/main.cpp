@@ -1161,7 +1161,7 @@ bool MainApp::startGame(const std::string &filename)
   } else {
     game->chooseVehicle(game->vehiclechoices[choose_type]);
     
-    if (lss.state != AM_TOP_EVT_PREP)
+    if (lss.state == AM_TOP_LVL_PREP)
     {
         const float bct = best_times.getBestClassTime(
             filename,
@@ -1921,7 +1921,7 @@ void MainApp::keyEvent(const SDL_KeyboardEvent &ke)
         startGame2();
         game->chooseVehicle(game->vehiclechoices[choose_type]);
 
-        if (lss.state != AM_TOP_EVT_PREP)
+        if (lss.state == AM_TOP_LVL_PREP)
         {
             const float bct = best_times.getBestClassTime(
                 race_data.mapname,
