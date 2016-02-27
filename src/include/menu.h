@@ -193,6 +193,14 @@ public:
   Gui() : cursor(vec2f::zero()), defflash(0.0f) { }
   
   bool loadColors(const std::string &filename);
+
+    ///
+    /// @brief Returns the Gui's colors.
+    ///
+    GuiWidgetColors getColors() const
+    {
+        return colors;
+    }
   
   void setSSRender(PSSRender &render) { ssRender = &render; }
   void setFont(PTexture *tex) { fonttex = tex; }

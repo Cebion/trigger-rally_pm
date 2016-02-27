@@ -234,6 +234,12 @@ public:
   std::string proper_name;
   std::string proper_class;
   
+  // Pseudo Statistics
+  std::string pstat_weightkg;
+  std::string pstat_enginebhp;
+  std::string pstat_wheeldrive;
+  std::string pstat_handling;
+  
   int coretype;
   
   float mass;

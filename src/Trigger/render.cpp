@@ -498,6 +498,58 @@ void MainApp::renderStateChoose(float eyetranslation)
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+glMatrixMode(GL_PROJECTION);
+
+  glPushMatrix();
+  glLoadIdentity();
+  glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
+
+    glMatrixMode(GL_MODELVIEW);
+
+  // draw background image
+
+  glBlendFunc(GL_ONE, GL_ZERO);
+  glDisable(GL_DEPTH_TEST);
+  glDisable(GL_FOG);
+  glDisable(GL_LIGHTING);
+
+  tex_splash_screen->bind();
+
+  //glColor4f(0.0f, 0.0f, 0.2f, 1.0f); // make image dark blue
+  glColor4f(1.0f, 1.0f, 1.0f, 1.0f); // use image's normal colors
+  //glColor4f(0.5f, 0.5f, 0.5f, 1.0f); // make image darker
+
+    glBegin(GL_QUADS);
+    // the background image is square and cut out a piece based on aspect ratio
+    // -------- if aspect ratio is larger than 4:3
+    // if aspect ratio is larger than 1:1
+    if ((float)getWidth()/(float)getHeight() > 1.0f)
+    {
+
+      // lower and upper offset based on aspect ratio
+      float off_l = (1 - ((float)getHeight() / (float)getWidth())) / 2.f;
+      float off_u = 1 - off_l;
+      glTexCoord2f(1.0f,off_u); glVertex2f(1.0f, 1.0f);
+      glTexCoord2f(0.0f,off_u); glVertex2f(-1.0f, 1.0f);
+      glTexCoord2f(0.0f,off_l); glVertex2f(-1.0f, -1.0f);
+      glTexCoord2f(1.0f,off_l); glVertex2f(1.0f, -1.0f);
+    }
+    // other cases (including 4:3, in which case off_l and off_u are = 1)
+    else
+    {
+
+      float off_l = (1 - ((float)getWidth() / (float)getHeight())) / 2.f;
+      float off_u = 1 - off_l;
+      glTexCoord2f(off_u,1.0f); glVertex2f(1.0f, 1.0f);
+      glTexCoord2f(off_l,1.0f); glVertex2f(-1.0f, 1.0f);
+      glTexCoord2f(off_l,0.0f); glVertex2f(-1.0f, -1.0f);
+      glTexCoord2f(off_u,0.0f); glVertex2f(1.0f, -1.0f);
+    }
+    glEnd();
+
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
@@ -510,11 +562,13 @@ void MainApp::renderStateChoose(float eyetranslation)
 
     glPushMatrix(); // 0
 
-    glTranslatef(-eyetranslation, -0.5f, -4.0f);
-    //glTranslatef(-eyetranslation, -0.3f, -3.0f);
+//    glTranslatef(-eyetranslation, 0.5f, -5.0f);
+    glTranslatef(-eyetranslation, 0.6f, -5.0f);
+    glRotatef(25.0f, 1.0f, 0.0f, 0.0f);
 
     glDisable(GL_FOG);
     glEnable(GL_LIGHTING);
+    glEnable(GL_DEPTH_TEST);
 
     vec4f lpos = vec4f(0.0f, 1.0f, 0.0f, 0.0f);
     glLightfv(GL_LIGHT0, GL_POSITION, lpos);
@@ -578,10 +632,13 @@ void MainApp::renderStateChoose(float eyetranslation)
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
-    glOrtho(0 - hratio, hratio, 0 - vratio, vratio, 0 - 1.0, 1.0);
+    glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
     glMatrixMode(GL_MODELVIEW);
 
-    tex_fontDsmOutlined->bind();
+    // use the same colors as the menu
+    const GuiWidgetColors gwc = gui.getColors();
+
+    tex_fontDsmShadowed->bind();
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glDisable(GL_DEPTH_TEST);
@@ -589,32 +646,109 @@ void MainApp::renderStateChoose(float eyetranslation)
 
     glPushMatrix(); // 0
 
+    const GLdouble margin = (800.0 - 600.0 * cx / cy) / 2.0;
+
+    glOrtho(margin, 600.0 * cx / cy + margin, 0.0, 600.0, -1.0, 1.0);
+
     glPushMatrix(); // 1
-    glTranslatef(0.0f, 0.8f, 0.0f);
-    glScalef(0.1f, 0.1f, 1.0f);
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-    getSSRender().drawText("Choose Vehicle", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
+    glTranslatef(10.0f, 570.0f, 0.0f);
+    glScalef(30.0f, 30.0f, 1.0f);
+    glColor4f(gwc.weak.x, gwc.weak.y, gwc.weak.z, gwc.weak.w);
+    getSSRender().drawText("Trigger Rally", PTEXT_HZA_LEFT | PTEXT_VTA_CENTER);
     glPopMatrix(); // 1
 
     glPushMatrix(); // 1
-    glTranslatef(0.0f, 0.7f, 0.0f);
-    glScalef(0.1f, 0.1f, 1.0f);
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glTranslatef(790.0f, 570.0f, 0.0f);
+    glScalef(20.0f, 20.0f, 1.0f);
+    glColor4f(gwc.weak.x, gwc.weak.y, gwc.weak.z, gwc.weak.w);
     getSSRender().drawText(
-        PUtil::formatInt(choose_type + 1, 2) + " of " +
-        PUtil::formatInt(game->vehiclechoices.size(), 2),
-        PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
+        "car selection " + std::to_string(choose_type + 1) + '/' + std::to_string(game->vehiclechoices.size()),
+        PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER);
     glPopMatrix(); // 1
 
     glPushMatrix(); // 1
+    glTranslatef(100.0f, 230.0f, 0.0f);
+    glScalef(30.0f, 30.0f, 1.0f);
+    glColor4f(gwc.header.x, gwc.header.y, gwc.header.z, gwc.header.w);
+    getSSRender().drawText(vtype->proper_name, PTEXT_HZA_LEFT | PTEXT_VTA_CENTER);
+    glPopMatrix(); // 1
 
-    glTranslatef(0.0f, -0.8f, 0.0f);
-    glScalef(0.1f, 0.1f, 1.0f);
+    glPushMatrix(); // 1
+    glTranslatef(100.0f, 200.0f, 0.0f);
+    glScalef(20.0f, 20.0f, 1.0f);
+    glColor4f(gwc.strong.x, gwc.strong.y, gwc.strong.z, gwc.strong.w);
+    getSSRender().drawText(vtype->proper_class, PTEXT_HZA_LEFT | PTEXT_VTA_CENTER);
+    glPopMatrix(); // 1
 
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glPushMatrix(); // 1
+    glTranslatef(500.0f, 230.0f, 0.0f);
+    glScalef(20.0f, 20.0f, 1.0f);
+    glColor4f(gwc.weak.x, gwc.weak.y, gwc.weak.z, gwc.weak.w);
+    getSSRender().drawText("Weight (Kg)", PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER);
+    glPopMatrix(); // 1
 
-    getSSRender().drawText(vtype->proper_name + " (" + vtype->proper_class + ')', PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
+    glPushMatrix(); // 1
+    glTranslatef(500.0f, 190.0f, 0.0f);
+    glScalef(20.0f, 20.0f, 1.0f);
+    glColor4f(gwc.weak.x, gwc.weak.y, gwc.weak.z, gwc.weak.w);
+    getSSRender().drawText("Engine (BHP)", PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER);
+    glPopMatrix(); // 1
 
+    glPushMatrix(); // 1
+    glTranslatef(500.0f, 150.0f, 0.0f);
+    glScalef(20.0f, 20.0f, 1.0f);
+    glColor4f(gwc.weak.x, gwc.weak.y, gwc.weak.z, gwc.weak.w);
+    getSSRender().drawText("Wheel drive", PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER);
+    glPopMatrix(); // 1
+
+    glPushMatrix(); // 1
+    glTranslatef(500.0f, 110.0f, 0.0f);
+    glScalef(20.0f, 20.0f, 1.0f);
+    glColor4f(gwc.weak.x, gwc.weak.y, gwc.weak.z, gwc.weak.w);
+    getSSRender().drawText("Handling", PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER);
+    glPopMatrix(); // 1
+
+    glPushMatrix(); // 1
+    glTranslatef(520.0f, 230.0f, 0.0f);
+    glScalef(30.0f, 30.0f, 1.0f);
+    glColor4f(gwc.strong.x, gwc.strong.y, gwc.strong.z, gwc.strong.w);
+    getSSRender().drawText(vtype->pstat_weightkg, PTEXT_HZA_LEFT | PTEXT_VTA_CENTER);
+    glPopMatrix(); // 1
+
+    glPushMatrix(); // 1
+    glTranslatef(520.0f, 190.0f, 0.0f);
+    glScalef(30.0f, 30.0f, 1.0f);
+    glColor4f(gwc.strong.x, gwc.strong.y, gwc.strong.z, gwc.strong.w);
+    getSSRender().drawText(vtype->pstat_enginebhp, PTEXT_HZA_LEFT | PTEXT_VTA_CENTER);
+    glPopMatrix(); // 1
+
+    glPushMatrix(); // 1
+    glTranslatef(520.0f, 150.0f, 0.0f);
+    glScalef(30.0f, 30.0f, 1.0f);
+    glColor4f(gwc.strong.x, gwc.strong.y, gwc.strong.z, gwc.strong.w);
+    getSSRender().drawText(vtype->pstat_wheeldrive, PTEXT_HZA_LEFT | PTEXT_VTA_CENTER);
+    glPopMatrix(); // 1
+
+    glPushMatrix(); // 1
+    glTranslatef(520.0f, 110.0f, 0.0f);
+    glScalef(30.0f, 30.0f, 1.0f);
+    glColor4f(gwc.strong.x, gwc.strong.y, gwc.strong.z, gwc.strong.w);
+    getSSRender().drawText(vtype->pstat_handling, PTEXT_HZA_LEFT | PTEXT_VTA_CENTER);
+    glPopMatrix(); // 1
+
+    std::string racename;
+
+    if (lss.state == AM_TOP_EVT_PREP || lss.state == AM_TOP_PRAC_SEL_PREP)
+        racename = events[lss.currentevent].name + ": " + events[lss.currentevent].levels[lss.currentlevel].name;
+    else
+    if (lss.state == AM_TOP_LVL_PREP)
+        racename = levels[lss.currentlevel].name;
+
+    glPushMatrix(); // 1
+    glTranslatef(400.0f, 30.0f, 0.0f);
+    glScalef(20.0f, 20.0f, 1.0f);
+    glColor4f(gwc.weak.x, gwc.weak.y, gwc.weak.z, gwc.weak.w);
+    getSSRender().drawText(racename, PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
     glPopMatrix(); // 1
 
     glPopMatrix(); // 0

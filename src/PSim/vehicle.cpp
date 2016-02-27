@@ -121,6 +121,11 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
   proper_name = "Vehicle";
   proper_class = "Unknown";
   
+    pstat_weightkg = "N/A";
+    pstat_enginebhp = "N/A";
+    pstat_wheeldrive = "N/A";
+    pstat_handling = "N/A";
+  
   mass = 1.0;
   dims = vec3f(1.0,1.0,1.0);
   
@@ -191,6 +196,18 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
     walk; walk = walk->NextSiblingElement()) {
 
     if (false) {
+    } else if (!strcmp(walk->Value(), "pstats")) {
+        val = walk->Attribute("weightkg");
+        if (val != nullptr) pstat_weightkg = val;
+
+        val = walk->Attribute("enginebhp");
+        if (val != nullptr) pstat_enginebhp = val;
+
+        val = walk->Attribute("wheeldrive");
+        if (val != nullptr) pstat_wheeldrive = val;
+
+        val = walk->Attribute("handling");
+        if (val != nullptr) pstat_handling = val;
     } else if (!strcmp(walk->Value(), "genparams")) {
 
       val = walk->Attribute("mass");
