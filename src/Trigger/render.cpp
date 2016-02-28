@@ -563,8 +563,8 @@ glMatrixMode(GL_PROJECTION);
     glPushMatrix(); // 0
 
 //    glTranslatef(-eyetranslation, 0.5f, -5.0f);
-    glTranslatef(-eyetranslation, 0.6f, -5.0f);
-    glRotatef(25.0f, 1.0f, 0.0f, 0.0f);
+    glTranslatef(-eyetranslation, 0.9f, -5.0f);
+    glRotatef(28.0f, 1.0f, 0.0f, 0.0f);
 
     glDisable(GL_FOG);
     glEnable(GL_LIGHTING);
