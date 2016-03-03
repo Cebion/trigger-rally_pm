@@ -350,7 +350,7 @@ void MainApp::loadConfig()
   
   // Do config file management
   
-  std::string cfgfilename = "trigger-rally.config";
+  std::string cfgfilename = "trigger-rally-" PACKAGE_VERSION ".config";
   
   if (!PHYSFS_exists(cfgfilename.c_str())) {
     
