@@ -12,6 +12,7 @@
 		colormap="c.png"
 		hudmap="c.png"
 		terrainmap="t.png"
+		roadmap="r.png"
 		tilesize="64"
 		horizontalscale="7"
 		verticalscale="0.4"

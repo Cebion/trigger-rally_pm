@@ -13,6 +13,7 @@
 		foliagemap="f.png"
 		hudmap="c.png"
 		terrainmap="t.png"
+		roadmap="r.png"
 		tilesize="32"
 		horizontalscale="4.0"
 		verticalscale="0.25"
