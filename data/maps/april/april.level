@@ -3,7 +3,7 @@
 	name="April Dusk"
 	comment="Appreciate the last light rays!"
 	author="Onsemeliot"
-	description="2 rounds: slow, uneven, changing terrain, dark"
+	description="2 laps: slow, uneven, changing terrain, dark"
 	screenshot="ss.png"
 	minimap="mm.png">
 	
@@ -95,28 +95,8 @@
 	<vehicleoption type="/vehicles/focus/focus.vehicle" />
 	<vehicleoption type="/vehicles/evo/evo.vehicle" />
 	
-	<race coordscale="3, 3" targettime="680">
+	<race coordscale="3, 3" targettime="680" laps="2">
 		<startposition pos="397, 99" oridegrees="123" />
-		<checkpoint coords="217, 11"/>
-		<checkpoint coords="181, 124"/>
-		<checkpoint coords="88, 56"/>
-		<checkpoint coords="19, 99"/>
-		<checkpoint coords="36, 252"/>
-		<checkpoint coords="83, 242"/>
-		<checkpoint coords="13, 456"/>
-		<checkpoint coords="81, 363"/>
-		<checkpoint coords="230, 391"/>
-		<checkpoint coords="213, 446"/>
-		<checkpoint coords="418, 475"/>
-		<checkpoint coords="472, 340"/>
-		<checkpoint coords="371, 369"/>
-		<checkpoint coords="255, 201"/>
-		<checkpoint coords="436, 211"/>
-		<checkpoint coords="444, 143"/>
-		<checkpoint coords="397, 100"/>
-
-<!-- second identical round  with codriver notes -->
-
 		<checkpoint coords="343, 60" notes="chicane right long into hard right over dirt"/>
 		<checkpoint coords="217, 11"/>
 		<checkpoint coords="214, 21" notes="chicane right"/>

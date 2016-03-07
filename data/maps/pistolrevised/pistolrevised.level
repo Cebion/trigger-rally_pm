@@ -109,7 +109,7 @@
 	<vehicleoption type="/vehicles/focus/focus.vehicle" />
 	<vehicleoption type="/vehicles/evo/evo.vehicle" />
 
-	<race coordscale="3, 3" targettime="320">
+	<race coordscale="3, 3" targettime="320" laps="3">
 		<startposition pos="353, 153" oridegrees="22" />
 		<checkpoint coords="321, 204" notes="hard left" />
 		<checkpoint coords="295, 243" />
@@ -129,26 +129,6 @@
 		<checkpoint coords="375, 256" notes="medium right"/>
 		<checkpoint coords="440, 154" />
 		<checkpoint coords="414, 133" notes="hairpin right into flat left over finish"/>
-		<checkpoint coords="353, 153" />
-
-<!-- lap 2 -->
-		<checkpoint coords="295, 243" />
-		<checkpoint coords="205, 296" />
-		<checkpoint coords="71, 317" />
-		<checkpoint coords="70, 375" />
-		<checkpoint coords="410, 360" />
-		<checkpoint coords="365, 281" />
-		<checkpoint coords="440, 154" />
-		<checkpoint coords="353, 153" />
-
-<!-- lap 3 -->
-		<checkpoint coords="295, 243" />
-		<checkpoint coords="205, 296" />
-		<checkpoint coords="71, 317" />
-		<checkpoint coords="70, 375" />
-		<checkpoint coords="410, 360" />
-		<checkpoint coords="365, 281" />
-		<checkpoint coords="440, 154" />
 		<checkpoint coords="353, 153" />
 	</race>
 </level>
