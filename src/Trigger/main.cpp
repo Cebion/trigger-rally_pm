@@ -1988,6 +1988,7 @@ void MainApp::keyEvent(const SDL_KeyboardEvent &ke)
       switch (ke.keysym.sym) {
       case SDLK_ESCAPE:
           endGame(game->getFinishState());
+          pauserace = false;
 /*
           if (game->getFinishState() == GF_PASS)
             endGame(GF_PASS);
