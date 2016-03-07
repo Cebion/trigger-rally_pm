@@ -523,6 +523,7 @@ PVehicle::PVehicle(PSim &sim_parent, PVehicleType *_type) :
   
   nextcp = 0;
   nextcdcp = 0;
+  currentlap = 1;
   
   wheel_angvel = 0.0f;
   

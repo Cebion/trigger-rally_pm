@@ -339,6 +339,7 @@ public:
   
   int nextcp;
   int nextcdcp; ///< Next codriver checkpoint.
+  int currentlap; ///< Current lap, counted from 1.
   
   // for vehicle resetting, after being flipped
   float reset_trigger_time;

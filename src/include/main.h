@@ -81,7 +81,8 @@ private:
   
   std::vector<CheckPoint> checkpt;
   std::vector<CodriverCP> codrivercheckpt;
-  
+  int number_of_laps = 1;
+
   PCodriverVoice cdvoice;
   PCodriverSigns cdsigns;
 

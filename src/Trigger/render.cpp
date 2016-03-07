@@ -1521,17 +1521,44 @@ void MainApp::renderStateGame(float eyetranslation)
           glTranslatef( hratio - hratio * (2.5f/50.f), vratio - vratio * (5.5f/50.f), 0.0f);
           glScalef(0.125f, 0.125f, 1.0f);
 
-          getSSRender().drawText( ((game->getFinishState() == GF_PASS) ? totalcp : nextcp) + '/' + totalcp, PTEXT_HZA_RIGHT | PTEXT_VTA_TOP);
+            if (game->getFinishState() != GF_NOT_FINISHED)
+                getSSRender().drawText(totalcp + '/' + totalcp, PTEXT_HZA_RIGHT | PTEXT_VTA_TOP);
+            else
+                getSSRender().drawText(nextcp + '/' + totalcp, PTEXT_HZA_RIGHT | PTEXT_VTA_TOP);
 
           // checkpoint label
           
-          glPushMatrix(); // 2
+          //glPushMatrix(); // 3
           glTranslatef(0, 0.52f, 0.0f);
           glScalef(0.65f, 0.65f, 1.0f);
           getSSRender().drawText("CKPT", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP);
 
+          //glPopMatrix(); // 3
           glPopMatrix(); // 2
       }
+
+        // show Current/Total laps
+        if (game->number_of_laps > 1)
+        {
+            const std::string currentlap = std::to_string(vehic->currentlap);
+            const std::string number_of_laps = std::to_string(game->number_of_laps);
+
+            glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+            glPushMatrix(); // 2
+            glTranslatef( hratio - hratio * (2.5f/50.f), vratio - vratio * (5.5f/50.f) - 0.20f, 0.0f);
+            glScalef(0.125f, 0.125f, 1.0f);
+
+            if (game->getFinishState() != GF_NOT_FINISHED)
+                getSSRender().drawText(number_of_laps + '/' + number_of_laps, PTEXT_HZA_RIGHT | PTEXT_VTA_TOP);
+            else
+                getSSRender().drawText(currentlap + '/' + number_of_laps, PTEXT_HZA_RIGHT | PTEXT_VTA_TOP);
+
+            glTranslatef(0, 0.52f, 0.0f);
+            glScalef(0.65f, 0.65f, 1.0f);
+            getSSRender().drawText("LAP", PTEXT_HZA_RIGHT | PTEXT_VTA_TOP);
+
+            glPopMatrix(); // 2
+        }
 
 #ifdef INDEVEL
         // show codriver checkpoint text (the pace notes)

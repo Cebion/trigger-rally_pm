@@ -89,6 +89,7 @@ bool TriggerGame::loadLevel(const std::string &filename)
   start_pos = vec3f::zero();
   start_ori = quatf::identity();
   
+  number_of_laps = 1;
   targettime = 754.567f;
   
   weather.cloud.texname = std::string("");
@@ -180,6 +181,16 @@ bool TriggerGame::loadLevel(const std::string &filename)
             else
             if (!strcmp(val, "free"))
                 cdcheckpt_ordered = false;
+        }
+      
+      val = walk->Attribute("laps");
+      
+        if (val != nullptr)
+        {
+            number_of_laps = std::stoi(val);
+
+            if (number_of_laps < 1)
+                number_of_laps = 1;
         }
       
       for (TiXmlElement *walk2 = walk->FirstChildElement();
@@ -456,7 +467,8 @@ void TriggerGame::tick(float delta)
         cptime = coursetime;
       if (++vehicle[i]->nextcp >= (int)checkpt.size()) {
         vehicle[i]->nextcp = 0;
-        if (i == 0) gamestate = GS_FINISHED;
+        ++vehicle[i]->currentlap;
+        if (i == 0 && vehicle[i]->currentlap > number_of_laps) gamestate = GS_FINISHED;
       }
     }
     
