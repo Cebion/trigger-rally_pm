@@ -215,8 +215,9 @@ public:
             // remove the extension from the filename
             std::smatch mr; // Match Results
             std::regex pat(R"(^([\s\w]+)(\.player)$)"); // Pattern
+            std::string fn(*fname); // Filename
 
-            if (!std::regex_search(std::string(*fname), mr, pat))
+            if (!std::regex_search(fn, mr, pat))
                 continue;
 
             std::string pname = mr[1]; // Player Name

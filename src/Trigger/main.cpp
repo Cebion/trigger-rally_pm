@@ -279,8 +279,9 @@ void MainApp::copyDefaultPlayers() const
         // reject files without .PLAYER extension (lowercase)
         std::smatch mr; // Match Results
         std::regex pat(R"(^([\s\w]+)(\.player)$)"); // Pattern
+        std::string fn(*fname); // Filename
 
-        if (!std::regex_search(std::string(*fname), mr, pat))
+        if (!std::regex_search(fn, mr, pat))
             continue;
 
         if (!PUtil::copyFile(dppsearchdir + '/' + *fname, dppdestdir + '/' + *fname))
@@ -1008,8 +1009,9 @@ bool MainApp::loadAll()
                 // remove the extension from the filename
                 std::smatch mr; // Match Results
                 std::regex pat(R"(^(\w+)(\..+)$)"); // Pattern
+                std::string fn(*fname); // Filename
 
-                if (!std::regex_search(std::string(*fname), mr, pat))
+                if (!std::regex_search(fn, mr, pat))
                     continue;
 
                 std::string basefname = mr[1];
@@ -1048,8 +1050,9 @@ bool MainApp::loadAll()
                 // remove the extension from the filename
                 std::smatch mr; // Match Results
                 std::regex pat(R"(^(\w+)(\..+)$)"); // Pattern
+                std::string fn(*fname); // Filename
 
-                if (!std::regex_search(std::string(*fname), mr, pat))
+                if (!std::regex_search(fn, mr, pat))
                     continue;
 
                 std::string basefname = mr[1];
