@@ -36,12 +36,12 @@ void MainApp::levelScreenAction(int action, int index)
     lss.state = AM_TOP;
     break;
   case AA_GO_EVT:
-    //lss.currentevent = index;
     if (lss.state == AM_TOP_EVT_PREP &&
       lss.currentlevel > 0 &&
       lss.currentlevel < (int)events[lss.currentevent].levels.size()) {
       lss.state = AM_TOP_EVT_ABANDON;
     } else {
+      lss.currentevent = index;
       lss.state = AM_TOP_EVT;
     }
     break;
