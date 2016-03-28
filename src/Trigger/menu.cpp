@@ -278,13 +278,12 @@ void MainApp::levelScreenAction(int action, int index)
     gui.addLabel(700.0f,430.0f - (float)events[lss.currentevent].levels.size() * 30.0f,
       "Total: " + PUtil::formatTime(lss.totaltime), PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 25.0f, LabelStyle::Strong);
     if (lss.livesleft <= 0) {
-      gui.addLabel(400.0f,150.0f, "No tries remaining", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER, 30.0f);
+      gui.addLabel(400.0f, 10.0f, "no tries remaining", PTEXT_HZA_CENTER | PTEXT_VTA_BOTTOM, 20.0f, LabelStyle::Strong);
       gui.makeClickable(
-        gui.addLabel(400.0f,100.0f, "Restart Event", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER, 30.0f),
+        gui.addLabel(790.0f,10.0f, "restart", PTEXT_HZA_RIGHT | PTEXT_VTA_BOTTOM, 40.0f),
         AA_RESTART_EVT, 0);
     } else if (lss.currentlevel >= (int)events[lss.currentevent].levels.size()) {
-      gui.addLabel(400.0f,150.0f, "CONGRATULATIONS!", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER, 40.0f);
-      gui.addLabel(400.0f,100.0f, "EVENT COMPLETED", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER, 40.0f, LabelStyle::Marked);
+      gui.addLabel(400.0f,10.0f, "EVENT COMPLETED!", PTEXT_HZA_CENTER | PTEXT_VTA_BOTTOM, 30.0f, LabelStyle::Marked);
     } else {
       gui.addLabel(400.0f,10.0f, PUtil::formatInt(lss.livesleft) + " tries remaining",
         PTEXT_HZA_CENTER | PTEXT_VTA_BOTTOM, 20.0f, LabelStyle::Strong);
