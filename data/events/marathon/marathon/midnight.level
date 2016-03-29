@@ -54,7 +54,7 @@
 	<vehicleoption type="/vehicles/seat/seat.vehicle" />
 	
 	<race coordscale="5, 5"
-		targettime="333">
+		targettime="400">
 		
 		<startposition pos="591, 472" oridegrees="187" />
 		<checkpoint coords="631, 445" />
