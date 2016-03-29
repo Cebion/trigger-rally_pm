@@ -10,7 +10,6 @@
 	<terrain
 		heightmap="h.png"
 		terrainmap="t.png"
-		roadmap="r-beyond.png"
 		colormap="c.png"
 		foliagemap="f.png"
 		hudmap="c.png"
@@ -56,7 +55,7 @@
 	<race coordscale="4.5, 4.5"
 		targettime="413">
 		
-		<startposition pos="172, 549" oridegrees="260" />
+		<startposition pos="172, 549" oridegrees="300" />
 		<checkpoint coords="233, 529" />
 		<checkpoint coords="286, 507" />
 		<checkpoint coords="328, 469" />
