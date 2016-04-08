@@ -336,13 +336,16 @@ FMOD_RESULT F_CALLBACK fmod_file_read(void *handle, void *buffer, unsigned int s
 {
     UNREFERENCED_PARAMETER(userdata);
 
-    if (PHYSFS_read(reinterpret_cast<PHYSFS_File *> (handle), buffer, sizebytes, 1) == -1)
+    PHYSFS_File *hfile = reinterpret_cast<PHYSFS_File *> (handle);
+    PHYSFS_sint64 numbytes = PHYSFS_read(hfile, buffer, sizeof (char), sizebytes);
+
+    if (numbytes == -1)
     {
         PUtil::outLog() << "PhysFS: " << PHYSFS_getLastError() << std::endl;
         return FMOD_ERR_FILE_ENDOFDATA;
     }
 
-    *bytesread = sizebytes;
+    *bytesread = numbytes;
     return FMOD_OK;
 }
 
