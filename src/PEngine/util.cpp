@@ -136,7 +136,7 @@ char* PUtil::fgets2(char *s, int size, PHYSFS_file *pfile)
     // check for EOF
     if (PHYSFS_eof(pfile)) return nullptr;
     
-    int ret = PHYSFS_read(pfile, s + i, 1, 1);
+    int ret = PHYSFS_read(pfile, s + i, sizeof (char), 1);
     
     if (s[i] == '\n') break;
     
@@ -230,7 +230,7 @@ TiXmlElement *PUtil::loadRootElement(TiXmlDocument &doc, const char *rootName)
   
   char *xmlbuffer = new char[filesize + 1];
   
-  PHYSFS_read(pfile, xmlbuffer, filesize, 1);
+  PHYSFS_read(pfile, xmlbuffer, sizeof (char), filesize);
   PHYSFS_close(pfile);
   
   xmlbuffer[filesize] = '\0';
@@ -305,9 +305,9 @@ bool PUtil::copyFile(const std::string &fileFrom, const std::string &fileTo)
   int readcount;  
   do {
     
-    readcount = PHYSFS_read(pfile_from, block, 1, blocksize);
+    readcount = PHYSFS_read(pfile_from, block, sizeof (char), blocksize);
     
-    PHYSFS_write(pfile_to, block, 1, readcount);
+    PHYSFS_write(pfile_to, block, sizeof (char), readcount);
     
   } while (readcount == blocksize);
   

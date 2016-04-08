@@ -191,7 +191,7 @@ PAudioSample::PAudioSample(const std::string &filename, bool positional3D)
 
     char *wavbuffer = new char[filesize];
 
-    PHYSFS_read(pfile, wavbuffer, filesize, 1);
+    PHYSFS_read(pfile, wavbuffer, sizeof (char), filesize);
     PHYSFS_close(pfile);
 
     /* create the alut buffer from memory contents */
