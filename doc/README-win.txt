@@ -86,6 +86,6 @@ in your Trigger Rally game configuration folder (see 2. above).
 5. Miscellaneous notes
 ----------------------
 
-In the Windows Setup release of Trigger Rally, the contents of the "data" folder
-are distributed in a .ZIP file named "data-VERSION.zip". Apparently the game files
+In the Windows release of Trigger Rally, the contents of the "data" folder are
+distributed in a .ZIP file named "data-VERSION.zip". Apparently the game files
 will load faster if they are stored in an uncompressed .ZIP archive.
