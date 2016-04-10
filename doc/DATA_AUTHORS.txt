@@ -3,6 +3,13 @@ Author and licence info for files under data/ directory.
 GPL = GNU General Public License v2 or later ( http://www.gnu.org/licenses/gpl.txt )
 CC0 (PD) = Creative Commons Zero 1.0 Universal Public Domain Dedication ( http://creativecommons.org/publicdomain/zero/1.0/ )
 
+DATA OPTIMIZATION NOTICE:
+	Starting from version 0.6.4, the released game data is optimized for smaller size and faster loading.
+	For textures, this is achieved by recompressing certain .PNG files and/or converting them to the JPEG format.
+	This process is automated with scripts and is redone by the "release technician" for each new release.
+	The authorship documented below is valid for both the original data and the script-optimized data,
+	even if the corresponding files have a different name, e.g.: "mm.png" and "mm.jpg".
+
 Structure:
 # ------------------------
 # Authors

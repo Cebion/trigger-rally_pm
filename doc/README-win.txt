@@ -6,6 +6,7 @@ Trigger Rally ReadMe for Windows
 2. Game configuration
 3. Installing plugins
 4. Getting help
+5. Miscellaneous notes
 
 --------------------
 1. Default game keys
@@ -46,7 +47,7 @@ This is also where it saves screenshots and your own player profile.
     (Windows Vista and later)
     C:\Users\UserName\.trigger-rally\
 
-In this folder you will find a text file named "trigger-rally.config" which
+In this folder you will find a text file named "trigger-rally-VERSION.config" which
 can be edited with Notepad in order to change the game settings.
 
 ---------------------
@@ -80,3 +81,11 @@ which is located in the "bin" folder of Trigger Rally.
 
 It will run the game and save a text file named "trigger-rally.log"
 in your Trigger Rally game configuration folder (see 2. above).
+
+----------------------
+5. Miscellaneous notes
+----------------------
+
+In the Windows Setup release of Trigger Rally, the contents of the "data" folder
+are distributed in a .ZIP file named "data-VERSION.zip". Apparently the game files
+will load faster if they are stored in an uncompressed .ZIP archive.

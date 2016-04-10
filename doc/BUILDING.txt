@@ -427,6 +427,26 @@ A1. List of software used to build Trigger Rally (Windows)
 ##########################################################
 
 -------------------------
+Trigger Rally 0.6.4 Win32
+-------------------------
+
+  SOFTWARE                      VERSION
+  -------------------------------------
+  Orwell Dev-C++                5.11
+  MinGW/MSYS                    N/A
+  CMake                         3.4.3
+  NSIS                          2.51
+  GLEW                          1.13.0
+  SDL                           1.2.15
+  SDL_image                     1.2.12
+  libjpeg                       9b
+  libpng                        1.6.21
+  PhysFS                        2.0.3
+  zlib                          1.2.8
+  FMOD Studio API Windows       1.06.19
+  -------------------------------------
+
+-------------------------
 Trigger Rally 0.6.3 Win32
 -------------------------
 
