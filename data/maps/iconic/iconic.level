@@ -4,14 +4,14 @@
 	comment="Beat the best time!"
 	author="Onsemeliot"
 	description="fast and smooth on gravel"
-	screenshot="ss.jpg"
-	minimap="mm.jpg">
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"
-		colormap="c.jpg"
+		colormap="c.png"
 		foliagemap="f.png"
-		hudmap="m.jpg"
+		hudmap="m.png"
 		terrainmap="t.png"
 		roadmap="r.png"
 		tilesize="32"
