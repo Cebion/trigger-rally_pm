@@ -2,12 +2,17 @@
 <config>
 	<player
 		name="Player"
+		copydefplayers="yes"
 		skipsaves="4"
 		/>
 		<!-- Valid player names are alphanumerical "a-z A-Z 0-9"
 			with underscore "_" and space " ". Using wacky symbols
 			may seem to work at first but the resulting player profile
 			won't be loaded at game start.
+		-->
+		<!-- The "copydefplayers" setting can be "yes" or "no".
+			If copying is enabled, default players from the game's "data/defplayers/"
+			directory will be copied to the user's home if they are missing.
 		-->
 		<!-- The "skipsaves" number sets how many saves are skipped
 			before data is actually written to the player profile,

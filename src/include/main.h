@@ -355,6 +355,7 @@ private:
   // Config settings
   
   std::string cfg_playername;
+  bool cfg_copydefplayers;
   
   int cfg_video_cx, cfg_video_cy;
   bool cfg_video_fullscreen;

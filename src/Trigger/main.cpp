@@ -302,6 +302,7 @@ void MainApp::loadConfig()
   // Set defaults
   
   cfg_playername = "Player";
+  cfg_copydefplayers = true;
   
   cfg_video_cx = 640;
   cfg_video_cy = 480;
@@ -393,6 +394,13 @@ void MainApp::loadConfig()
             cfg_playername = val;
             best_times.setPlayerName(val);
         }
+
+        val = walk->Attribute("copydefplayers");
+
+        if (val != nullptr && std::string(val) == "no")
+            cfg_copydefplayers = false;
+        else
+            cfg_copydefplayers = true;
 
         val = walk->Attribute("skipsaves");
 
@@ -1070,7 +1078,8 @@ bool MainApp::loadAll()
     }
   }
 
-  copyDefaultPlayers();
+    if (cfg_copydefplayers)
+        copyDefaultPlayers();
 
   if (!gui.loadColors("/menu.colors"))
     PUtil::outLog() << "Couldn't load (all) menu colors, continuing with defaults" << std::endl;
