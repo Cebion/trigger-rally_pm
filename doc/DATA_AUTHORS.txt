@@ -75,6 +75,7 @@ Andrei Bondor
 	maps/zone/t.png (GPL)
 	menu.colors (GPL)
 	plugins/map-pistol.zip (GPL)
+	plugins/map-marsspirit.zip (GPL)
 	sounds/codriver/ab/* (GPL)
 	textures/no_minimap.png (GPL)
 	textures/no_screenshot.png (GPL)
