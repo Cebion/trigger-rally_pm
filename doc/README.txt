@@ -150,6 +150,18 @@ http://sourceforge.net/projects/trigger-rally/support
 // Version history //
 /////////////////////
 
+22/04/2016 - Trigger 0.6.4
+  - Added recording of best times
+  - Added unlocking of vehicles and events
+  - Optimized game data for smaller size and faster loading
+  - Added "Pause" key (default `P`)
+  - Added "Recover At Checkpoint" key (default `Q`)
+  - Added multiple laps option for map creators
+  - Added time penalty for offroad driving
+  - Improved the "AB" codriver voice
+  - Fixed sound bug in the Windows version
+  - Changed default resolution to native fullscreen
+
 30/01/2016 - Trigger 0.6.3
   - Improve menu and in-race OSD
   - Add codriver for 75% of maps
