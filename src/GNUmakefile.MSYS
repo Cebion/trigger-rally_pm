@@ -16,12 +16,13 @@ DISTARC         := $(DISTDIR).zip
 TR_BINDIR       := ../bin
 TR_EXENAME      := trigger-rally.exe
 TR_EXEFILE      := $(TR_BINDIR)/$(TR_EXENAME)
-TR_DLLFILES     :=              \
-    $(TR_BINDIR)/fmod.dll       \
-    $(TR_BINDIR)/glew32.dll     \
-    $(TR_BINDIR)/libjpeg-9.dll  \
-    $(TR_BINDIR)/libphysfs.dll  \
-    $(TR_BINDIR)/SDL.dll        \
+TR_DLLFILES     :=                  \
+    $(TR_BINDIR)/fmod.dll           \
+    $(TR_BINDIR)/glew32.dll         \
+    $(TR_BINDIR)/libjpeg-9.dll      \
+    $(TR_BINDIR)/libphysfs.dll      \
+    $(TR_BINDIR)/libpng16-16.dll    \
+    $(TR_BINDIR)/SDL.dll            \
     $(TR_BINDIR)/SDL_image.dll
 FMODAPIDIR      := /c/Program Files/FMOD SoundSystem/FMOD Studio API Windows/api/lowlevel
 PROJDIRS        := PEngine PSim TinyXML Trigger
@@ -32,12 +33,12 @@ WARNINGS        ?= -Wall -Wextra -pedantic
 OPTIMS          ?= -march=native -mtune=native -Ofast
 MODENV          ?= -m32
 DMACROS         := -DNDEBUG -DWIN32 -DPACKAGE_VERSION=\"$(DISTVER)\"
-INCDIRS         :=              \
-    -I"./include"               \
-    -I"/local/include"          \
+INCDIRS         :=                  \
+    -I"./include"                   \
+    -I"/local/include"              \
     -I"$(FMODAPIDIR)/inc"
-LIBDIRS         :=              \
-    -L"/local/lib"              \
+LIBDIRS         :=                  \
+    -L"/local/lib"                  \
     -L"$(FMODAPIDIR)/lib"
 CXXFLAGS        := -std=c++11 $(MODENV) $(WARNINGS) $(OPTIMS) $(DMACROS) $(INCDIRS)
 EXTRA_LIBS      := -lopengl32 -lglu32 -lglew32 -lSDL -lSDL_image -lphysfs -lfmod
@@ -165,6 +166,9 @@ $(TR_BINDIR)/libjpeg-9.dll:
 
 $(TR_BINDIR)/libphysfs.dll:
 	@cp --verbose /local/bin/libphysfs.dll $(TR_BINDIR)
+
+$(TR_BINDIR)/libpng16-16.dll:
+	@cp --verbose /local/bin/libpng16-16.dll $(TR_BINDIR)
 
 $(TR_BINDIR)/SDL.dll:
 	@cp --verbose /local/bin/SDL.dll $(TR_BINDIR)
