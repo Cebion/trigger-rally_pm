@@ -216,7 +216,7 @@ A quick reminder about optimizations, depending on who it is you are building fo
 For each of the libraries you are supposed to read their README files to figure
 out how to properly build them on your own. However, I will now provide a complete
 build walkthrough to illustrate the diversity of quirks in the build process of
-Trigger Rally 0.6.3 for Win32.
+Trigger Rally 0.6.4 for Win32.
 
 Note to Win32 users: because modern versions of Dev-C++ use a "tdm64" compiler
 you also need to pass the "-m32" switch to ensure that the compiler doesn't generate
@@ -232,7 +232,7 @@ generate a proper "Makefile" that you can then use to build and install.
   $ #
   $ # building libjpeg
   $ #
-  $ cd jpeg-9a/
+  $ cd jpeg-9b/
   $ ./configure CFLAGS="-march=native -mtune=native -Ofast -m32"
   $ make
   $ make install-strip
@@ -249,11 +249,13 @@ Because of the aforementioned 64-bit issue, things can get a bit nasty.
   $ #
   $ cd zlib-1.2.8/
   $ make \
+  > SHARED_MODE=1 \
   > CFLAGS="-march=native -mtune=native -Ofast -m32" \
   > LDFLAGS="-m32" \
   > RCFLAGS="--define GCC_WINDRES -F pe-i386" \
   > -f win32/Makefile.gcc
   $ make \
+  > SHARED_MODE=1 \
   > INCLUDE_PATH="/local/include" \
   > LIBRARY_PATH="/local/lib" \
   > BINARY_PATH="/local/bin" \
@@ -266,7 +268,7 @@ tell them to search those directories.
   $ #
   $ # building libpng
   $ #
-  $ cd libpng-1.6.17/
+  $ cd libpng-1.6.21/
   $ ./configure \
   > CFLAGS="-march=native -mtune=native -Ofast -m32" \
   > CPPFLAGS="-I/local/include" \
@@ -279,7 +281,7 @@ Some libraries have non-standard makefiles which expect non-standard variables.
   $ #
   $ # building GLEW
   $ #
-  $ cd glew-1.12.0/
+  $ cd glew-1.13.0/
   $ make \
   > POPT="-march=native -mtune=native -Ofast" \
   > CFLAGS.EXTRA="-m32" \
@@ -352,7 +354,7 @@ Now we're finally ready to build Trigger Rally, and it is the easiest bit.
   $ #
   $ # building Trigger Rally
   $ #
-  $ cd trigger-rally-0.6.3/src/
+  $ cd trigger-rally-0.6.4/src/
   $ make -f GNUmakefile.MSYS
 
 ------------------------
@@ -365,7 +367,7 @@ To rebuild that package you need to download and install the following software:
 
   SOFTWARE NAME                 OFFICIAL DOWNLOAD LINK
   ----------------------------------------------------
-  NSIS 2.46                     http://nsis.sourceforge.net/Download
+  NSIS 2.51                     http://nsis.sourceforge.net/Download
   Trigger Rally NSIS pack       http://sourceforge.net/projects/trigger-rally/files/devkit/TR_NSIS/
   ----------------------------------------------------
 
@@ -414,7 +416,7 @@ Developers can turn these on by defining the INDEVEL macro before building.
 
 Linux:
 
-  $ cd trigger-rally-0.6.3/src/
+  $ cd trigger-rally-0.6.4/src/
   $ OPTIMS="-DINDEVEL" make
 
 Windows (Dev-C++):
@@ -443,7 +445,7 @@ Trigger Rally 0.6.4 Win32
   libpng                        1.6.21
   PhysFS                        2.0.3
   zlib                          1.2.8
-  FMOD Studio API Windows       1.06.19
+  FMOD Studio API Windows       1.06.20
   -------------------------------------
 
 -------------------------
