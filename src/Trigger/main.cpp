@@ -40,6 +40,9 @@ void MainApp::config()
         break;
     }
 
+    if (cfg_copydefplayers)
+        copyDefaultPlayers();
+
     best_times.loadAllTimes();
     player_unlocks = best_times.getUnlockData();
 
@@ -1077,9 +1080,6 @@ bool MainApp::loadAll()
         PHYSFS_freeList(rc);
     }
   }
-
-    if (cfg_copydefplayers)
-        copyDefaultPlayers();
 
   if (!gui.loadColors("/menu.colors"))
     PUtil::outLog() << "Couldn't load (all) menu colors, continuing with defaults" << std::endl;
