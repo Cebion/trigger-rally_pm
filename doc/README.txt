@@ -150,7 +150,7 @@ http://sourceforge.net/projects/trigger-rally/support
 // Version history //
 /////////////////////
 
-22/04/2016 - Trigger 0.6.4
+23/04/2016 - Trigger 0.6.4
   - Added recording of best times
   - Added unlocking of vehicles and events
   - Optimized game data for smaller size and faster loading
