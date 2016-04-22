@@ -276,8 +276,11 @@ void MainApp::copyDefaultPlayers() const
     for (char **fname = rc; *fname != nullptr; ++fname)
     {
         // reject files that are already in the user directory
-        if (PHYSFS_exists(*fname))
+        if (PHYSFS_exists((dppdestdir + '/' + *fname).c_str()))
+        {
+            PUtil::outLog() << "Skipping copy of default player \"" << *fname << "\"" << std::endl;
             continue;
+        }
 
         // reject files without .PLAYER extension (lowercase)
         std::smatch mr; // Match Results
@@ -288,7 +291,7 @@ void MainApp::copyDefaultPlayers() const
             continue;
 
         if (!PUtil::copyFile(dppsearchdir + '/' + *fname, dppdestdir + '/' + *fname))
-            PUtil::outLog() << "Couldn't copy default player \"" << *fname << "\"." << std::endl;
+            PUtil::outLog() << "Couldn't copy default player \"" << *fname << "\"" << std::endl;
     }
 
     PHYSFS_freeList(rc);
