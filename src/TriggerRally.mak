@@ -3,7 +3,7 @@
 # its purpose is to conveniently copy .DLL files to the binary folder.
 #
 # Written for Trigger Rally 0.6.3
-# Updated for Trigger Rally 0.6.4, 2016-04-21
+# Updated for Trigger Rally 0.6.4, 2016-04-22
 #
 
 LIBWINPATH      = ..\..\libraries-win32\bin
@@ -16,7 +16,8 @@ TR_DLLFILES     =                   \
     $(TR_BINDIR)\libphysfs.dll      \
     $(TR_BINDIR)\libpng16-16.dll    \
     $(TR_BINDIR)\SDL.dll            \
-    $(TR_BINDIR)\SDL_image.dll
+    $(TR_BINDIR)\SDL_image.dll      \
+    $(TR_BINDIR)\zlib1.dll
 
 all-after: $(TR_DLLFILES)
 
@@ -40,3 +41,6 @@ $(TR_BINDIR)\SDL.dll:
 
 $(TR_BINDIR)\SDL_image.dll:
 	@xcopy "$(LIBWINPATH)\SDL_image.dll" "$(TR_BINDIR)"
+
+$(TR_BINDIR)\zlib1.dll:
+	@xcopy "$(LIBWINPATH)\zlib1.dll" "$(TR_BINDIR)"
