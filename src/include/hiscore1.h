@@ -38,7 +38,7 @@
             break;                                                  \
     }                                                               \
     if (String.empty())                                             \
-        return InputStream;                                         \
+        return (bool)InputStream;                                   \
 } else (void)0
 
 ///
@@ -736,7 +736,7 @@ private:
         while (sspdata >> rd)
             alltimes.insert({rd.mapname, rd});
 
-        return sspdata;
+        return (bool)sspdata;
     }
 
     ///
