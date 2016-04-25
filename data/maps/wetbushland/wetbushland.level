@@ -4,14 +4,14 @@
 	comment="Drowning is no option."
 	author="Onsemeliot"
 	description="Dirt and gravel, slow, bad visibility"
-	screenshot="ss.jpg"
-	minimap="mm.jpg">
+	screenshot="ss.png"
+	minimap="mm.png">
 	
 	<terrain
 		heightmap="h.png"
-		colormap="c.jpg"
+		colormap="c.png"
 		foliagemap="f.png"
-		hudmap="c.jpg"
+		hudmap="c.png"
 		terrainmap="t.png"
 		roadmap="r.png"
 		tilesize="32"
