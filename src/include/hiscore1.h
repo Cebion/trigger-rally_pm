@@ -41,6 +41,17 @@
         return InputStream;                                         \
 } else (void)0
 
+
+// TODO: remove duplicate code
+#define GETLINE_SKIP_EMPTY_LINES_B(InputStream, String) if (true) { \
+    while (std::getline(InputStream, String)) {                     \
+        if (!String.empty())                                        \
+            break;                                                  \
+    }                                                               \
+    if (String.empty())                                             \
+        return static_cast<bool> (InputStream);                     \
+} else (void)0
+
 ///
 /// @brief Basic structure to load and save race results.
 ///
@@ -724,19 +735,19 @@ private:
         std::istringstream sspdata(decrypt(pdata));
 #undef decrypt
 
-        GETLINE_SKIP_EMPTY_LINES(sspdata, ts);
+        GETLINE_SKIP_EMPTY_LINES_B(sspdata, ts);
         nu = std::stoul(ts);
 
         while (nu-- != 0)
         {
-            GETLINE_SKIP_EMPTY_LINES(sspdata, ts);
+            GETLINE_SKIP_EMPTY_LINES_B(sspdata, ts);
             allunlocks[pname].insert(ts);
         }
 
         while (sspdata >> rd)
             alltimes.insert({rd.mapname, rd});
 
-        return sspdata;
+        return static_cast<bool> (sspdata);
     }
 
     ///
