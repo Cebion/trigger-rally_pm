@@ -10,7 +10,7 @@
 
 # standard GNU and custom variables
 DISTNAME        := trigger-rally
-DISTVER         := 0.6.4
+DISTVER         := 0.6.5
 DISTDIR         := $(DISTNAME)-$(DISTVER)
 DISTARC         := $(DISTDIR).zip
 TR_BINDIR       := ../bin
@@ -23,8 +23,7 @@ TR_DLLFILES     :=                  \
     $(TR_BINDIR)/libphysfs.dll      \
     $(TR_BINDIR)/libpng16-16.dll    \
     $(TR_BINDIR)/SDL.dll            \
-    $(TR_BINDIR)/SDL_image.dll      \
-    $(TR_BINDIR)/zlib1.dll
+    $(TR_BINDIR)/SDL_image.dll
 FMODAPIDIR      := /c/Program Files/FMOD SoundSystem/FMOD Studio API Windows/api/lowlevel
 PROJDIRS        := PEngine PSim TinyXML Trigger
 SRCFILES        := $(shell find $(PROJDIRS) -type f -name "*.cpp")
@@ -176,6 +175,3 @@ $(TR_BINDIR)/SDL.dll:
 
 $(TR_BINDIR)/SDL_image.dll:
 	@cp --verbose /local/bin/SDL_image.dll $(TR_BINDIR)
-
-$(TR_BINDIR)/zlib1.dll:
-	@cp --verbose /local/bin/zlib1.dll $(TR_BINDIR)
