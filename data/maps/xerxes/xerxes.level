@@ -99,9 +99,7 @@
 		<codrivercp coords="54, 79" notes="hairpin left into flat right" />
 		<codrivercp coords="106, 64" notes="easy left into square right into square left" />
 		<codrivercp coords="189, 38" notes="flat right" />
-		<codrivercp coords="315, 56" notes="easy left long long" />
+		<codrivercp coords="315, 56" notes="easy left long" />
 		<codrivercp coords="429, 149" notes="medium right over finish" />
-
 	</race>
-	
 </level>
