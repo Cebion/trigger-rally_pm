@@ -2,6 +2,7 @@ Author and licence info for files under data/ directory.
 
 GPL = GNU General Public License v2 or later ( http://www.gnu.org/licenses/gpl.txt )
 CC0 (PD) = Creative Commons Zero 1.0 Universal Public Domain Dedication ( http://creativecommons.org/publicdomain/zero/1.0/ )
+CCBY 3.0 = Creative Commons Attribution 3.0 Unported ( http://creativecommons.org/licenses/by/3.0/ )
 
 DATA OPTIMIZATION NOTICE:
 	Starting from version 0.6.4, the released game data is optimized for smaller size and faster loading.
@@ -83,6 +84,11 @@ Andrei Bondor
 	
 Andrei Bondor, Onsemeliot
 	textures/CodriverSigns/abon/* (CC0, PD)
+	
+Bleed - http://remusprites.carbonmade.com
+	textures/veg/brown-tree.png (CCBY 3.0), source: http://opengameart.org/content/tree-collection-v26-bleeds-game-art
+	textures/veg/fine-tree.png (CCBY 3.0), source: http://opengameart.org/content/tree-collection-v26-bleeds-game-art
+	
 
 Bruno "Fuddl" Kleinert, Andrei Bondor, Onsemeliot
 	plugins/map-banana.zip (unlicensed)
@@ -274,6 +280,7 @@ Onsemeliot
 	events/coy/undergrowth/mm.png (GPL)
 	events/coy/undergrowth/ss.png (GPL)
 	events/coy/undergrowth/t.png (GPL)
+	events/flood/* (GPL)
 	events/highstakes/crossing/c.png (GPL)
 	events/highstakes/crossing/f.png (GPL)
 	events/highstakes/crossing/h.png (GPL)
