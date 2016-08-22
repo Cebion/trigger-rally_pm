@@ -67,7 +67,6 @@
 	
 	<race coordscale="4, 4" targettime="284">
 		<startposition pos="44, 176" oridegrees="27" />
-		<checkpoint coords="42, 179" notes="medium right into flat left" />
 		<checkpoint coords="44, 216" notes="square right into square left" />
 		<checkpoint coords="57, 249" notes="hard right into hard left" />
 		<checkpoint coords="86, 271" notes="medium right into medium left" />
