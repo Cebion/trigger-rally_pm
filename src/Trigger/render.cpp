@@ -670,14 +670,14 @@ glMatrixMode(GL_PROJECTION);
     glTranslatef(100.0f, 230.0f, 0.0f);
     glScalef(30.0f, 30.0f, 1.0f);
     glColor4f(gwc.header.x, gwc.header.y, gwc.header.z, gwc.header.w);
-    getSSRender().drawText(vtype->proper_name, PTEXT_HZA_LEFT | PTEXT_VTA_CENTER);
+    getSSRender().drawText(vtype->proper_name.substr(0, 9), PTEXT_HZA_LEFT | PTEXT_VTA_CENTER);
     glPopMatrix(); // 1
 
     glPushMatrix(); // 1
     glTranslatef(100.0f, 200.0f, 0.0f);
     glScalef(20.0f, 20.0f, 1.0f);
     glColor4f(gwc.strong.x, gwc.strong.y, gwc.strong.z, gwc.strong.w);
-    getSSRender().drawText(vtype->proper_class, PTEXT_HZA_LEFT | PTEXT_VTA_CENTER);
+    getSSRender().drawText(vtype->proper_class.substr(0, 8), PTEXT_HZA_LEFT | PTEXT_VTA_CENTER);
     glPopMatrix(); // 1
 
     glPushMatrix(); // 1
