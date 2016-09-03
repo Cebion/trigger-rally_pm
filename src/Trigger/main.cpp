@@ -361,7 +361,18 @@ void MainApp::loadConfig()
   std::string cfgfilename = "trigger-rally-" PACKAGE_VERSION ".config";
   
   if (!PHYSFS_exists(cfgfilename.c_str())) {
-    
+#ifdef UNIX
+    const std::vector<std::string> cfghidingplaces {
+        "/usr/share/games/trigger-rally/"
+    };
+
+    for (const std::string &cfgpath: cfghidingplaces)
+        if (PHYSFS_addToSearchPath(cfgpath.c_str(), 1) == 0)
+        {
+            PUtil::outLog() << "Failed to add PhysFS search directory \"" <<
+                cfgpath << "\"\nPhysFS: " << PHYSFS_getLastError() << std::endl;
+        }
+#endif
     PUtil::outLog() << "No user config file, copying over defaults" << std::endl;
     
     std::string cfgdefaults = "trigger-rally.config.defs";
