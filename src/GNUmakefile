@@ -23,10 +23,11 @@ DEPFILES        := $(patsubst %.cpp, %.d, $(SRCFILES))
 WARNINGS        ?= -Wall -Wextra -pedantic
 OPTIMS          ?= -march=native -mtune=native -Ofast
 DMACROS         := -DNDEBUG -DUNIX -DPACKAGE_VERSION=\"$(DISTVER)\"
-INCDIRS         := -I"./include"
-CXXFLAGS        := -std=c++11 $(WARNINGS) $(OPTIMS) $(DMACROS) $(INCDIRS)
+INCDIRS         := -I'./include'
+CXXFLAGS        += -std=c++11 $(WARNINGS) $(OPTIMS)
+CPPFLAGS        += $(DMACROS) $(INCDIRS)
 EXTRA_LIBS      := -lGL -lGLU -lGLEW -lSDL -lSDL_image -lphysfs -lopenal -lalut -lpthread
-LDFLAGS         := $(EXTRA_LIBS)
+LDFLAGS         += $(EXTRA_LIBS)
 INSTALL_PROGRAM := install --mode=0755
 INSTALL_DATA    := install --mode=0644
 
@@ -67,6 +68,11 @@ printvars:
 	@printf "\texec_prefix  ?= %s\n" "$(exec_prefix)"
 	@printf "\tOPTIMS       ?= %s\n" "$(OPTIMS)"
 	@printf "\tWARNINGS     ?= %s\n" "$(WARNINGS)"
+	@printf "\n"
+	@printf "resulting values of build variables:\n"
+	@printf "\tCXXFLAGS     += %s\n" "$(CXXFLAGS)"
+	@printf "\tCPPFLAGS     += %s\n" "$(CPPFLAGS)"
+	@printf "\tLDFLAGS      += %s\n" "$(LDFLAGS)"
 	@printf "\n"
 
 # installs the software (executable, data files and documentation)
@@ -149,4 +155,4 @@ clean:
 #
 %.o: %.cpp GNUmakefile
 	@printf "%s\t%s -> %s\n" $(CXX) $< $@
-	@$(CXX) $(CXXFLAGS) -MMD -MP -c $< -o $@
+	@$(CXX) $(CXXFLAGS) $(CPPFLAGS) -MMD -MP -c $< -o $@

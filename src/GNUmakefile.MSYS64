@@ -1,8 +1,7 @@
 #
-# Trigger Rally GNUmakefile.MSYS for MSYS2 users
+# Trigger Rally GNUmakefile.MSYS64 for MSYS2 users
 #
-# This is a watered-down version of the "real" GNUmakefile and it
-# doesn't support the `install` and `uninstall` targets.
+# This is a modified version of GNUmakefile.MSYS for Windows 64-bit builds.
 #
 # TODO:
 #   * beautify printing of copied .DLL files
@@ -14,10 +13,10 @@ DISTVER         := 0.6.5
 DISTDIR         := $(DISTNAME)-$(DISTVER)
 DISTARC         := $(DISTDIR).zip
 TR_BINDIR       := ../bin
-TR_EXENAME      := trigger-rally.exe
+TR_EXENAME      := trigger-rally-x64.exe
 TR_EXEFILE      := $(TR_BINDIR)/$(TR_EXENAME)
 TR_DLLFILES     :=                  \
-    $(TR_BINDIR)/fmod.dll           \
+    $(TR_BINDIR)/fmod64.dll         \
     $(TR_BINDIR)/glew32.dll         \
     $(TR_BINDIR)/libjpeg-9.dll      \
     $(TR_BINDIR)/libphysfs.dll      \
@@ -25,25 +24,25 @@ TR_DLLFILES     :=                  \
     $(TR_BINDIR)/SDL.dll            \
     $(TR_BINDIR)/SDL_image.dll      \
     $(TR_BINDIR)/zlib1.dll
-FMODAPIDIR      := /c/Program Files/FMOD SoundSystem/FMOD Studio API Windows/api/lowlevel
+FMODAPIDIR      := /c/Program Files (x86)/FMOD SoundSystem/FMOD Studio API Windows/api/lowlevel
 PROJDIRS        := PEngine PSim TinyXML Trigger
 SRCFILES        := $(shell find $(PROJDIRS) -type f -name "*.cpp")
 OBJFILES        := $(patsubst %.cpp, %.o, $(SRCFILES))
 DEPFILES        := $(patsubst %.cpp, %.d, $(SRCFILES))
 WARNINGS        ?= -Wall -Wextra -pedantic
 OPTIMS          ?= -march=native -mtune=native -Ofast
-MODENV          ?= -m32
+MODENV          ?= -m64
 DMACROS         := -DNDEBUG -DWIN32 -DPACKAGE_VERSION=\"$(DISTVER)\"
 INCDIRS         :=                  \
     -I'./include'                   \
-    -I'/local/include'              \
+    -I'/usr/local/include'          \
     -I'$(FMODAPIDIR)/inc'
 LIBDIRS         :=                  \
-    -L'/local/lib'                  \
+    -L'/usr/local/lib'              \
     -L'$(FMODAPIDIR)/lib'
 CXXFLAGS        += -std=c++11 $(MODENV) $(WARNINGS) $(OPTIMS)
 CPPFLAGS        += $(DMACROS) $(INCDIRS)
-EXTRA_LIBS      := -lopengl32 -lglu32 -lglew32 -lSDL -lSDL_image -lphysfs -lfmod
+EXTRA_LIBS      := -lopengl32 -lglu32 -lglew32 -lSDL -lSDL_image -lphysfs -lfmod64
 LDFLAGS         += $(MODENV) $(LIBDIRS) $(EXTRA_LIBS)
 
 #
@@ -162,8 +161,8 @@ winclean:
 
 copydlls: $(TR_DLLFILES)
 
-$(TR_BINDIR)/fmod.dll:
-	@cp --verbose "$(FMODAPIDIR)/lib/fmod.dll" $(TR_BINDIR)
+$(TR_BINDIR)/fmod64.dll:
+	@cp --verbose "$(FMODAPIDIR)/lib/fmod64.dll" $(TR_BINDIR)
 
 $(TR_BINDIR)/glew32.dll:
 	@cp --verbose /usr/local/bin/glew32.dll $(TR_BINDIR)
