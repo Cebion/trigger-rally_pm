@@ -264,8 +264,8 @@ PTerrain::PTerrain (TiXmlElement *element, const std::string &filepath, PSSTextu
     throw;
   }
 
-  if (tmap.getData() != nullptr && tmap.getcx() != tmap.getcy())
-    throw MakePException("Load failed: terrainmap not square");
+    if (tmap.getData() != nullptr && tmap.getcx() != tmap.getcy())
+        throw MakePException("Load failed: terrainmap not square");
 
     PImage rmap_img;
 

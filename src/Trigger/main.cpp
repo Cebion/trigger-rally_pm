@@ -19,26 +19,26 @@ bool MainApp::cfg_weather = true;
 
 void MainApp::config()
 {
-  PUtil::setDebugLevel(DEBUGLEVEL_DEVELOPER);
-  
-  loadConfig();
-  setScreenMode(cfg_video_cx, cfg_video_cy, cfg_video_fullscreen);
-  calcScreenRatios();
-  
-  if (cfg_datadirs.empty())
-    throw MakePException("Data directory paths are empty: check your trigger-rally.config file.");
+    PUtil::setDebugLevel(DEBUGLEVEL_DEVELOPER);
 
-  for (const std::string &datadir: cfg_datadirs)
-    if (PHYSFS_addToSearchPath(datadir.c_str(), 1) == 0)
-    {
-      PUtil::outLog() << "Failed to add PhysFS search directory \"" << datadir << "\"" << std::endl
-          << "PhysFS: " << PHYSFS_getLastError() << std::endl;
-    }
-    else
-    {
-        PUtil::outLog() << "Main game data directory datadir=\"" << datadir << "\"" << std::endl;
-        break;
-    }
+    loadConfig();
+    setScreenMode(cfg_video_cx, cfg_video_cy, cfg_video_fullscreen);
+    calcScreenRatios();
+
+    if (cfg_datadirs.empty())
+        throw MakePException("Data directory paths are empty: check your trigger-rally.config file.");
+
+    for (const std::string &datadir: cfg_datadirs)
+        if (PHYSFS_addToSearchPath(datadir.c_str(), 1) == 0)
+        {
+            PUtil::outLog() << "Failed to add PhysFS search directory \"" << datadir << "\"" << std::endl
+                << "PhysFS: " << PHYSFS_getLastError() << std::endl;
+        }
+        else
+        {
+            PUtil::outLog() << "Main game data directory datadir=\"" << datadir << "\"" << std::endl;
+            break;
+        }
 
     if (cfg_copydefplayers)
         copyDefaultPlayers();
@@ -635,8 +635,8 @@ void MainApp::loadConfig()
 
       val = walk->Attribute("codriversigns");
 
-      if (val != nullptr)
-        cfg_codriversigns = val;
+        if (val != nullptr)
+            cfg_codriversigns = val;
 
         val = walk->Attribute("codriversignslife");
 
