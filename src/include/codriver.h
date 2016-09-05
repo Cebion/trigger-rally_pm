@@ -166,6 +166,8 @@ private:
 
 ///
 /// @brief Gives a voice to the codriver.
+/// @todo Re-code without making use of C++11 threads to be in line with
+///  the rest of the game logic, which is implemented with `tick()` functions.
 ///
 class PCodriverVoice
 {
@@ -231,7 +233,8 @@ private:
             voice.setGain(volume);
             voice.play();
 
-            while (voice.isPlaying());
+            while (voice.isPlaying())
+                std::this_thread::sleep_for(std::chrono::milliseconds(100));
         }
     }
 
