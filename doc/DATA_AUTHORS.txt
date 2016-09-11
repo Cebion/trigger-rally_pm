@@ -641,6 +641,7 @@ Onsemeliot
 	maps/kraut/h.png (GPL)
 	maps/kraut/mm.png (GPL)
 	maps/kraut/ss.png (GPL)
+	maps/leaves (GPL)
 	maps/littleisland/c.png (GPL)
 	maps/littleisland/f.png (GPL)
 	maps/littleisland/h.png (GPL)
