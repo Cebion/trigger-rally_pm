@@ -289,7 +289,7 @@ void PModel::loadOBJ(const std::string &filename, float globalScale)
          }
          else
          {
-            PUtil::outLog () << "Warning: unknow token \"" << tok
+            PUtil::outLog () << "Warning: unknown token \"" << tok
                << "\" in file \"" << filename << "\"" << std::endl;
          }
       }
