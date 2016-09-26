@@ -11,7 +11,7 @@
 DISTNAME        := trigger-rally
 DISTVER         := 0.6.5
 DISTDIR         := $(DISTNAME)-$(DISTVER)
-DISTARC         := $(DISTDIR).zip
+DISTARC         := $(DISTDIR)-win64.zip
 TR_BINDIR       := ../bin
 TR_EXENAME      := trigger-rally-x64.exe
 TR_EXEFILE      := $(TR_BINDIR)/$(TR_EXENAME)
