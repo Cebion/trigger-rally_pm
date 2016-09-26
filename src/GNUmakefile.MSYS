@@ -25,7 +25,7 @@ TR_DLLFILES     :=                  \
     $(TR_BINDIR)/SDL.dll            \
     $(TR_BINDIR)/SDL_image.dll      \
     $(TR_BINDIR)/zlib1.dll
-FMODAPIDIR      := /c/Program Files/FMOD SoundSystem/FMOD Studio API Windows/api/lowlevel
+FMODAPIDIR      := /c/Program Files (x86)/FMOD SoundSystem/FMOD Studio API Windows/api/lowlevel
 PROJDIRS        := PEngine PSim TinyXML Trigger
 SRCFILES        := $(shell find $(PROJDIRS) -type f -name "*.cpp")
 OBJFILES        := $(patsubst %.cpp, %.o, $(SRCFILES))
@@ -36,10 +36,10 @@ MODENV          ?= -m32
 DMACROS         := -DNDEBUG -DWIN32 -DPACKAGE_VERSION=\"$(DISTVER)\"
 INCDIRS         :=                  \
     -I'./include'                   \
-    -I'/local/include'              \
+    -I'/usr/local/include'          \
     -I'$(FMODAPIDIR)/inc'
 LIBDIRS         :=                  \
-    -L'/local/lib'                  \
+    -L'/usr/local/lib'              \
     -L'$(FMODAPIDIR)/lib'
 CXXFLAGS        += -std=c++11 $(MODENV) $(WARNINGS) $(OPTIMS)
 CPPFLAGS        += $(DMACROS) $(INCDIRS)
