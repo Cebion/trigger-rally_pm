@@ -145,10 +145,10 @@ winclean:
 #
 # compiles source files to object files
 #
-# GNUmakefile.MSYS was added as a dependency in order to trigger a rebuild
+# GNUmakefile.MSYS64 was added as a dependency in order to trigger a rebuild
 # if this makefile is edited
 #
-%.o: %.cpp GNUmakefile.MSYS
+%.o: %.cpp GNUmakefile.MSYS64
 	@printf "%s\t%s -> %s\n" $(CXX) $< $@
 	@$(CXX) $(CXXFLAGS) $(CPPFLAGS) -MMD -MP -c $< -o $@
 
