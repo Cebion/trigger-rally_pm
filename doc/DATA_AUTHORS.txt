@@ -624,6 +624,7 @@ Onsemeliot
 	maps/highland/mm.png (GPL)
 	maps/highland/ss.png (GPL)
 	maps/holiday (GPL)
+	maps/humid (GPL)
 	maps/iced/c.png (GPL)
 	maps/iced/h.png (GPL)
 	maps/iced/mm.png (GPL)
