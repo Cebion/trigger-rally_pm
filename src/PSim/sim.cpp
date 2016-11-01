@@ -45,53 +45,53 @@ PRigidBody *PSim::createRigidBody()
   return newbody;
 }
 
-PVehicle *PSim::createVehicle(TiXmlElement *element, const std::string &filepath, PSSModel &ssModel)
+PVehicle *PSim::createVehicle(XMLElement *element, const std::string &filepath, PSSModel &ssModel)
 {
   const char *val;
-  
+
   const char *type = element->Attribute("type");
   if (!type) {
     PUtil::outLog() << "Vehicle has no type\n";
     return nullptr;
   }
-  
+
   vec3f pos = vec3f::zero();
-  
+
   val = element->Attribute("pos");
   if (val) sscanf(val, "%f , %f , %f", &pos.x, &pos.y, &pos.z);
-  
+
   quatf ori = quatf::identity();
-  
+
   val = element->Attribute("ori");
   if (val) sscanf(val, "%f , %f , %f , %f", &ori.w, &ori.x, &ori.y, &ori.z);
-  
+
   return createVehicle(type, pos, ori, filepath, ssModel);
 }
 
 PVehicle *PSim::createVehicle(const std::string &type, const vec3f &pos, const quatf &ori, const std::string &filepath, PSSModel &ssModel)
 {
   PVehicleType *vtype = loadVehicleType(PUtil::assemblePath(type, filepath), ssModel);
-  
+
   return createVehicle(vtype, pos, ori, ssModel);
 }
 
 PVehicle *PSim::createVehicle(PVehicleType *type, const vec3f &pos, const quatf &ori, PSSModel &ssModel)
 {
   PSSModel *unused = &ssModel; unused = unused;
-  
+
   if (!type) return nullptr;
-  
+
   PVehicle *newvehicle = new PVehicle(*this, type);
-  
+
   vec3f vpos = pos;
   if (terrain) vpos.z += terrain->getHeight(vpos.x, vpos.y);
   newvehicle->getBody().setPosition(vpos);
-  
+
   newvehicle->getBody().setOrientation(ori);
   newvehicle->getBody().updateMatrices();
-  
+
   newvehicle->updateParts();
-  
+
   vehicle.push_back(newvehicle);
   return newvehicle;
 }

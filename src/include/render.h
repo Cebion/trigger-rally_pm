@@ -92,13 +92,13 @@ private:
 public:
   PSSRender(PApp &parentApp);
   ~PSSRender();
-  
+
   void tick(float delta, const vec3f &eyepos, const mat44f &eyeori, const vec3f &eyevel);
-  
+
   void render(PParticleSystem *psys);
-  
+
   void drawModel(PModel &model, PSSEffect &ssEffect, PSSTexture &ssTexture);
-  
+
   void drawText(const std::string &text, uint32 flags);
   vec2f getTextDims(const std::string &text);
 };
@@ -127,11 +127,11 @@ public:
   PImage (const std::string &filename) : data (nullptr) { load (filename); }
   PImage (int _cx, int _cy, int _cc) : data (nullptr) { load (_cx, _cy, _cc); }
   ~PImage ();
-  
+
   void load (const std::string &filename);
   void load (int _cx, int _cy, int _cc);
   void unload ();
-  
+
   void expandChannels();
 
   int getcx() const { return cx; }
@@ -148,12 +148,12 @@ public:
   {
       return data[i];
   }
-  
+
   uint8 getByte(int i) const
   {
       return data[i];
   }
-  
+
   void swap (PImage &other) throw ()
   {
     { uint8 *tmp = data; data = other.data; other.data = tmp; }
@@ -168,13 +168,13 @@ class PTexture : public PResource {
 private:
   GLuint texid;
   GLenum textarget;
-  
+
 public:
   PTexture () : texid (0) { }
   PTexture (const std::string &filename, bool genMipmaps, bool clamp) : texid (0) { load (filename, genMipmaps, clamp); }
   PTexture (PImage &img, bool genMipmaps, bool clamp) : texid (0) { load (img, genMipmaps, clamp); }
   ~PTexture() { unload (); }
-  
+
   void load (const std::string &filename, bool genMipmaps, bool clamp);
   void load(PImage &img, bool genMipmaps = true, bool clamp = false);
   void loadPiece(PImage &img, int offx, int offy, int sizex, int sizey, bool genMipmaps = true, bool clamp = false);
@@ -354,7 +354,7 @@ public:
 
 public:
   PModel (const std::string &filename, float globalScale = 1.0);
-  
+
 private:
   void loadASE (const std::string &filename, float globalScale);
   void loadOBJ (const std::string &filename, float globalScale);
@@ -370,7 +370,7 @@ struct PTerrainFoliageBand {
   float scalemin;
   float scalemax;
   */
-  
+
   PTexture *sprite_tex;
   int sprite_count;
 };
@@ -383,7 +383,7 @@ struct PTerrainFoliage {
 
 struct PTerrainFoliageSet {
   std::vector<PTerrainFoliage> inst;
-  
+
   PVBuffer buff[2];
   int numvert, numelem;
 };
@@ -391,16 +391,16 @@ struct PTerrainFoliageSet {
 struct PTerrainTile {
   int posx, posy;
   int lru_counter;
-  
+
   PVBuffer vert;
   int numverts;
-  
+
   PTexture tex;
-  
+
   vec3f mins,maxs; // AABB
-  
+
   //
-  
+
   std::vector<PTerrainFoliageSet> foliage;
 };
 
@@ -508,50 +508,50 @@ class PTerrain // TODO: make this RAII conformant
 {
 protected:
   bool loaded;
-  
+
   int tilesize, tilecount, totsize, totmask, totsizesq;
-  
+
   float scale_hz, scale_vt, scale_hz_inv, scale_vt_inv, scale_tile_inv;
-  
+
   int cmaptotsize, cmaptilesize, cmaptotmask;
-  
+
   //std::vector<uint8> hmap;
   std::vector<float> hmap;
-  
+
   PImage cmap;
   PImage tmap; ///< Terrain map.
   RoadMap rmap; ///< Road map.
-  
+
   std::vector<float> fmap;
   std::vector<PTerrainFoliageBand> foliageband;
-  
+
   std::list<PTerrainTile> tile;
-  
+
   // tiles share index buffers
   PVBuffer ind;
   int numinds;
-  
+
   PTexture *tex_hud_map;
-  
+
 protected:
-  
+
   PTerrainTile *getTile(int x, int y);
-  
+
   float getInterp(float x, float y, float *data) {
     x *= scale_hz_inv;
     int xi = (int)x;
     if (x < 0.0) xi--;
     x -= (float)xi;
     int xiw = xi & totmask, xiw2 = (xiw+1) & totmask;
-    
+
     y *= scale_hz_inv;
     int yi = (int)y;
     if (y < 0.0) yi--;
     y -= (float)yi;
     int yiw = yi & totmask, yiw2 = (yiw+1) & totmask;
-    
+
     const int cx = totsize;
-    
+
     float xv1,xv2;
     if (y > 0.0) {
       if (y < 1.0) {
@@ -572,21 +572,21 @@ protected:
   }
 
 public:
-  PTerrain(TiXmlElement *element, const std::string &filepath, PSSTexture &ssTexture);
+  PTerrain(XMLElement *element, const std::string &filepath, PSSTexture &ssTexture);
   ~PTerrain();
-  
+
   void unload();
-  
+
   void render(const vec3f &campos, const mat44f &camorim);
-  
+
   void drawSplat(float x, float y, float scale, float angle);
-  
-  
+
+
   struct ContactInfo {
     vec3f pos;
     vec3f normal;
   };
-  
+
     ///
     /// @brief Returns whether or not the given position is on road.
     /// @param [in] pos         Position to be checked.
@@ -598,7 +598,7 @@ public:
     {
         return rmap.isOnRoad(pos.x, pos.y, getMapSize());
     }
-  
+
     ///
     /// @brief Returns the color of the pixel in the colormap that corresponds
     ///  to the given position in the terrain.
@@ -660,7 +660,7 @@ public:
         r.z = cmap.getByte((y * cmap.getcx() + x) * cmap.getcc() + 2) / 255.0f;
         return r;
     }
-  
+
     ///
     /// @brief Returns the road surface type corresponding to the given position
     ///  in the terrain.
@@ -729,16 +729,16 @@ public:
     if (x < 0.0) xi--;
     x -= (float)xi;
     int xiw = xi & totmask, xiw2 = (xi+1) & totmask;
-    
+
     float y = tci.pos.y * scale_hz_inv;
     int yi = (int)y;
     if (y < 0.0) yi--;
     y -= (float)yi;
     int yiw = yi & totmask, yiw2 = (yi+1) & totmask;
-    
+
     float *data = &hmap[0];
     const int cx = totsize;
-    
+
     float xv1,xv2;
     if (y > 0.0) {
       if (y < 1.0) {
@@ -767,17 +767,17 @@ public:
     tci.normal.z = scale_hz;
     tci.normal.normalize();
   }
-  
+
   float getHeight(float x, float y) {
     return getInterp(x, y, &hmap[0]);
   }
-  
+
   float getFoliageLevel(float x, float y) {
     return getInterp(x, y, &fmap[0]);
   }
-  
+
   PTexture *getHUDMapTexture() { return tex_hud_map; }
-  
+
   float getMapSize() const { return totsize * scale_hz; }
 };
 

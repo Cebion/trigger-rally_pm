@@ -21,7 +21,7 @@ class MainApp;
 
 struct CheckPoint {
   vec3f pt;
-  
+
   CheckPoint(const vec3f &_pt) : pt(_pt) { }
 };
 
@@ -43,7 +43,7 @@ struct CodriverCP
 /*
 struct AIDriver {
   int vehic;
-  
+
   AIDriver(int v) : vehic(v) { }
 };
 */
@@ -68,17 +68,17 @@ public:
 
 private:
   MainApp *app;
-  
+
   PSim *sim;
-  
+
   int randomseed;
-  
+
   std::vector<PVehicle *> vehicle;
-  
+
   //std::vector<AIDriver> aid;
-  
+
   PTerrain *terrain;
-  
+
   std::vector<CheckPoint> checkpt;
   std::vector<CodriverCP> codrivercheckpt;
   int number_of_laps = 1;
@@ -105,14 +105,14 @@ public:
 private:
 
   int gamestate;
-  
+
   float coursetime;
   float othertime; // used pre and post race
   float cptime; // checkpoint time
   float targettime; // the time needed to win
-  
+
   std::string comment; // level comment string
-  
+
   vec3f start_pos;
   quatf start_ori;
 
@@ -152,36 +152,36 @@ private:
 
 public:
   std::vector<PVehicleType *> vehiclechoices;
-  
+
 public:
   TriggerGame(MainApp *parent);
   ~TriggerGame();
-  
+
   void resetAtCheckpoint(PVehicle *veh)
   {
       veh->doReset2(lastCkptPos, lastCkptOri);
   }
-  
+
   void renderCodriverSigns()
   {
       cdsigns.render(coursetime);
   }
-  
+
   bool loadVehicles();
-  
+
   bool loadLevel(const std::string &filename);
-  
+
   void chooseVehicle(PVehicleType *type);
-  
+
   void tick(float delta);
-  
+
   bool isFinished() { return (gamestate == GS_FINISHED) && (othertime <= 0.0f); }
-  
+
   bool isRacing() const
   {
       return gamestate == GS_RACING;
   }
-  
+
   int getFinishState() {
     if (gamestate != GS_FINISHED) return GF_NOT_FINISHED;
     if (coursetime + offroadtime_total * offroadtime_penalty_multiplier <= targettime) return GF_PASS;
@@ -205,9 +205,9 @@ public:
 
 struct TriggerLevel {
   std::string filename, name, description, comment, author, targettime, targettimeshort;
-  
+
   float targettimefloat;
-  
+
   PTexture *tex_minimap = nullptr;
   PTexture *tex_screenshot = nullptr;
 };
@@ -217,11 +217,11 @@ struct TriggerEvent {
 
   bool locked = false;
   UnlockData unlocks; ///< @see `HiScore1`
-  
+
   // Note that levels are not linked to... they are
   // stored in the event because an event may have
   // "hidden" levels not otherwise available
-  
+
   std::vector<TriggerLevel> levels;
 };
 
@@ -229,9 +229,9 @@ struct TriggerEvent {
 class DirtParticleSystem : public PParticleSystem {
 public:
   void tick(float delta) {
-    
+
     PParticleSystem::tick(delta);
-    
+
     for (unsigned int i=0; i<part.size(); i++) {
       PULLTOWARD(part[i].linvel, vec3f::zero(), delta * 25.0f);
     }
@@ -273,7 +273,7 @@ struct UserControl {
       float maxrange;
     } joyaxis; // more like half-axis, really
   };
-  
+
   float value; // from 0.0 to 1.0 depending on activation level
 };
 
@@ -302,14 +302,14 @@ public:
   static bool       cfg_weather;        ///< Weather on/off flag.
 
 private:
-  
+
   int appstate;
-  
+
   // TODO: use `aspect` instead of these?
   // TODO: type should be GLdouble instead of double
   double hratio; ///< Horizontal ratio.
   double vratio; ///< Vertical ratio.
-  
+
   UnlockData player_unlocks; ///< Unlocks for current player, see `HiScore1`.
 
 public:
@@ -333,8 +333,8 @@ public:
     ///
     bool isVehicleLocked(const std::string &vefi) const
     {
-        TiXmlDocument xmlfile(vefi.c_str());
-        TiXmlElement *rootelem = PUtil::loadRootElement(xmlfile, "vehicle");
+        XMLDocument xmlfile;
+        XMLElement *rootelem = PUtil::loadRootElement(xmlfile, vefi, "vehicle");
 
         if (rootelem == nullptr)
         {
@@ -353,27 +353,27 @@ public:
 private:
 
   // Config settings
-  
+
   std::string cfg_playername;
   bool cfg_copydefplayers;
-  
+
   int cfg_video_cx, cfg_video_cy;
   bool cfg_video_fullscreen;
-  
+
   float cfg_drivingassist;
   bool cfg_enable_sound;
   bool cfg_enable_codriversigns;
-  
+
   long int cfg_skip_saves;
-  
+
   /// Basic volume control.
   float cfg_volume_engine       = 0.33f;    ///< Engine.
   float cfg_volume_sfx          = 1.00f;    ///< Sound effects (wind, gear change, crash, skid, etc.)
   float cfg_volume_codriver     = 1.00f;    ///< Codriver voice.
-  
+
   /// Search paths for the data directory, as read from the configuration.
   std::list<std::string> cfg_datadirs;
-  
+
   /// Name of the codriver whose words to load.
   /// Must be a valid directory in /data/sounds/codriver/.
   std::string cfg_codrivername;
@@ -392,7 +392,7 @@ private:
   float hud_speedo_mps_speed_mult;
 
     SnowFlakeType cfg_snowflaketype = SnowFlakeType::point;
-    
+
     bool cfg_dirteffect = true;
 
   enum Action {
@@ -417,35 +417,35 @@ private:
     std::string action_name[ActionCount];
     UserControl map[ActionCount];
   } ctrl;
-  
+
   //
-  
+
   float splashtimeout;
-  
+
   //
-  
+
   std::vector<TriggerLevel> levels;
   std::vector<TriggerEvent> events;
-  
+
   // for level screen
   Gui gui;
 public:
   LevelState lss;
 private:
   //
-  
+
   HISCORE1_SORT hs_sort_method = HISCORE1_SORT::BY_TOTALTIME_ASC;
   RaceData race_data;
   std::vector<TimeEntry> current_times;
 
   TriggerGame *game;
-  
+
   PVehicleType *vt_tank;
-  
+
   PTexture *tex_fontDsmNormal,
            *tex_fontDsmOutlined,
            *tex_fontDsmShadowed;
-  
+
   PTexture *tex_detail,
            *tex_sky[1],
            *tex_water,
@@ -464,107 +464,107 @@ private:
            *tex_race_no_minimap,
            *tex_button_next,
            *tex_button_prev;
-  
+
   std::unordered_map<std::string, PTexture *> tex_codriversigns;
   std::unordered_map<std::string, PAudioSample *> aud_codriverwords;
 
   DirtParticleSystem *psys_dirt;
-  
+
   PAudioSample *aud_engine,
                *aud_wind,
                *aud_gearchange,
                *aud_gravel,
                *aud_crash1;
-  
+
   PAudioInstance *audinst_engine, *audinst_wind, *audinst_gravel;
   std::vector<PAudioInstance *> audinst;
-  
+
   float cloudscroll;
-  
+
   vec3f campos, campos_prev;
   quatf camori;
-  
+
   vec3f camvel;
-  
+
   float nextcpangle;
-  
+
   float cprotate;
-  
+
   int cameraview;
   float camera_angle;
   float camera_user_angle;
-  
+
   bool renderowncar; // this is determined from cameraview
-  
+
   bool showmap;
 
     bool pauserace;
 
   bool showui;
-  
+
   bool showcheckpoint;
 
   float crashnoise_timeout;
-  
+
   std::vector<RainDrop> rain;
   std::vector<SnowFlake> snowfall;
 
   //
-  
+
   int loadscreencount;
-  
+
   float choose_spin;
-  
+
   int choose_type;
-  
+
 protected:
   void renderWater();
   void renderSky(const mat44f &cammat);
-  
+
   bool startGame(const std::string &filename);
   void toggleSounds(bool to);
   void startGame2();
   void endGame(int gamestate);
-  
+
   void quitGame() {
     endGame(GF_NOT_FINISHED);
     splashtimeout = 0.0f;
     appstate = AS_END_SCREEN;
   }
-  
+
   void levelScreenAction(int action, int index);
   void handleLevelScreenKey(const SDL_KeyboardEvent &ke);
   void finishRace(int gamestate, float coursetime);
-  
+
 public:
   MainApp(const std::string &title, const std::string &name):
     PApp(title, name)
   {
   }
   //MainApp::~MainApp(); // should not have destructor, use unload
-  
+
   float getCodriverVolume() const
   {
       return cfg_volume_codriver;
   }
-  
+
   void config();
   void load();
   void unload();
-  
+
   void copyDefaultPlayers() const;
   void loadConfig();
   bool loadAll();
   bool loadLevelsAndEvents();
   bool loadLevel(TriggerLevel &tl);
-  
+
   void calcScreenRatios();
-  
+
   void tick(float delta);
-  
+
   void resize();
   void render(float eyetranslation);
-  
+
   void renderStateLoading(float eyetranslation);
   void renderStateEnd(float eyetranslation);
   void tickStateLevel(float delta);
@@ -573,7 +573,7 @@ public:
   void renderStateChoose(float eyetranslation);
   void tickStateGame(float delta);
   void renderStateGame(float eyetranslation);
-  
+
   void keyEvent(const SDL_KeyboardEvent &ke);
   void mouseMoveEvent(int dx, int dy);
   void cursorMoveEvent(int posx, int posy);
@@ -584,12 +584,12 @@ public:
     {
         return aud_codriverwords;
     }
-    
+
     std::unordered_map<std::string, PTexture *> getCodriverSigns() const
     {
         return tex_codriversigns;
     }
-    
+
     PCodriverUserConfig getCodriverUserConfig() const
     {
         return cfg_codriveruserconfig;

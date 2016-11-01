@@ -25,62 +25,68 @@ void PTerrain::unload()
 }
 
 
-PTerrain::PTerrain (TiXmlElement *element, const std::string &filepath, PSSTexture &ssTexture) :
+PTerrain::PTerrain (XMLElement *element, const std::string &filepath, PSSTexture &ssTexture) :
   loaded (false)
 {
   unload();
-  
+
   std::string heightmap, colormap, terrainmap, roadmap, foliagemap, hudmap;
-  
+
   scale_hz = 1.0;
   scale_vt = 1.0;
-  
+
   const char *val;
-  
+
   val = element->Attribute("tilesize");
   if (val) tilesize = atoi(val);
-  
+
   val = element->Attribute("horizontalscale");
   if (val) scale_hz = atof(val);
-  
+
   val = element->Attribute("verticalscale");
   if (val) scale_vt = atof(val);
-  
+
   val = element->Attribute("heightmap");
   if (val) heightmap = val;
-  
+
   val = element->Attribute("colormap");
   if (val) colormap = val;
-  
+
   val = element->Attribute("terrainmap");
   if (val != nullptr) terrainmap = val;
-  
+
   val = element->Attribute("roadmap");
   if (val != nullptr) roadmap = val;
-  
+
   val = element->Attribute("foliagemap");
   if (val && MainApp::cfg_foliage) foliagemap = val;
-  
+
   val = element->Attribute("hudmap");
   if (val) hudmap = val;
 
-    TiXmlNode *bfnode;
+    XMLElement *node = element->FirstChildElement("blurfilter");
     std::vector<std::vector<float> > blurfilter;
 
-    if ((bfnode = element->FirstChild("blurfilter")) != nullptr)
+    if (node != nullptr)
     {
-        for (TiXmlElement *walk = bfnode->FirstChildElement(); walk; walk = walk->NextSiblingElement())
-            if (!strcmp(walk->Value(), "row"))
-            {
-                std::stringstream bfrow(std::string(walk->Attribute("data")));
-                float elem;
-                std::vector<float> row;
+        for (XMLElement *walk = node->FirstChildElement("row");
+            walk != nullptr;
+            walk = walk->NextSiblingElement("row"))
+        {
+            const char *srow = walk->Attribute("data");
+            
+            if (srow == nullptr)
+                continue;
 
-                while (bfrow >> elem)
-                    row.push_back(elem);
+            std::stringstream bfrow(srow);
+            float coef;
+            std::vector<float> row;
 
-                blurfilter.push_back(row);
-            }
+            while (bfrow >> coef)
+                row.push_back(coef);
+
+            blurfilter.push_back(row);
+        }
     }
     else
     {
@@ -91,11 +97,11 @@ PTerrain::PTerrain (TiXmlElement *element, const std::string &filepath, PSSTextu
         };
     }
 
-  for (TiXmlElement *walk = element->FirstChildElement();
+  for (XMLElement *walk = element->FirstChildElement();
     walk; walk = walk->NextSiblingElement()) {
 
     if (!strcmp(walk->Value(), "foliageband") && MainApp::cfg_foliage) {
-      
+
       PTerrainFoliageBand tfb;
       tfb.middle = 0.5f;
       tfb.range = 0.5f;
@@ -107,16 +113,16 @@ PTerrain::PTerrain (TiXmlElement *element, const std::string &filepath, PSSTextu
       //tfb.modelscale = 1.0f;
       tfb.sprite_tex = nullptr;
       tfb.sprite_count = 1;
-      
+
       val = walk->Attribute("middle");
       if (val) tfb.middle = atof(val);
-      
+
       val = walk->Attribute("range");
       if (val) tfb.range = atof(val);
-      
+
       val = walk->Attribute("density");
       if (val) tfb.density = atof(val);
-      
+
       val = walk->Attribute("scale");
       if (val) tfb.scale = atof(val);
 
@@ -130,43 +136,43 @@ PTerrain::PTerrain (TiXmlElement *element, const std::string &filepath, PSSTextu
       /*
       val = walk->Attribute("model");
       if (val) tfb.model = ssModel.loadModel(PUtil::assemblePath(val, filepath));
-      
+
       val = walk->Attribute("modelscale");
       if (val) tfb.modelscale = atof(val);
       */
-      
+
       val = walk->Attribute("sprite");
       if (val) tfb.sprite_tex = ssTexture.loadTexture(PUtil::assemblePath(val, filepath));
-      
+
       val = walk->Attribute("spritecount");
       if (val) tfb.sprite_count = atoi(val);
-      
+
       foliageband.push_back(tfb);
     }
   }
-  
-  
+
+
   if (!heightmap.length()) {
     throw MakePException ("Load failed: terrain has no heightmap");
   }
-  
+
   if (!colormap.length()) {
     throw MakePException ("Load failed: terrain has no colormap");
   }
-  
+
   if (tilesize != (tilesize & (-tilesize)) ||
     tilesize < 4) {
     throw MakePException ("Load failed: tile size not power of two dimension, or too small");
   }
-  
+
   if (scale_hz <= 0.0 || scale_vt == 0.0) {
     throw MakePException ("Load failed: invalid scale value");
   }
-  
+
   scale_hz_inv = 1.0 / scale_hz;
   scale_vt_inv = 1.0 / scale_vt;
   scale_tile_inv = scale_hz_inv / (float)tilesize;
-  
+
   PImage img;
   try
   {
@@ -177,25 +183,25 @@ PTerrain::PTerrain (TiXmlElement *element, const std::string &filepath, PSSTextu
     PUtil::outLog() << "Load failed: couldn't open heightmap \"" << heightmap << "\"\n";
     throw;
   }
-  
+
   totsize = img.getcx();
   if (totsize != img.getcy() ||
     totsize != (totsize & (-totsize)) ||
     totsize < 16) {
     throw MakePException ("Load failed: heightmap not square, or not power of two dimension, or too small");
   }
-  
+
   totsizesq = totsize * totsize;
-  
+
   if (tilesize > totsize) tilesize = totsize;
-  
+
   tilecount = totsize / tilesize;
   totmask = totsize - 1;
-  
+
   //PUtil::outLog() << "img: " << totsize << " squared, " << img.getcc() << " cc\n";
-  
+
   hmap.resize(totsizesq);
-  
+
 #if 0
   if (img.getcc() != 1) {
     if (PUtil::isDebugLevel(DEBUGLEVEL_TEST))
@@ -211,10 +217,10 @@ PTerrain::PTerrain (TiXmlElement *element, const std::string &filepath, PSSTextu
     if (PUtil::isDebugLevel(DEBUGLEVEL_TEST))
       PUtil::outLog() << "Warning: heightmap is not single channel\n";
   }
-  
+
   int cc = img.getcc();
   uint8 *dat = img.getData();
-  
+
   for (int y=0; y<totsize; ++y) {
     for (int x=0; x<totsize; ++x) {
       float accum = 0.0;
@@ -229,9 +235,9 @@ PTerrain::PTerrain (TiXmlElement *element, const std::string &filepath, PSSTextu
     }
   }
 #endif
-  
+
   img.unload();
-  
+
   try
   {
     cmap.load(PUtil::assemblePath(colormap, filepath));
@@ -241,17 +247,17 @@ PTerrain::PTerrain (TiXmlElement *element, const std::string &filepath, PSSTextu
     PUtil::outLog() << "Load failed: couldn't open colormap \"" << colormap << "\"\n";
     throw;
   }
-  
+
   cmaptotsize = cmap.getcx();
   if (cmaptotsize != cmap.getcy() ||
     cmaptotsize != (cmaptotsize & (-cmaptotsize)) ||
     cmaptotsize < tilecount) {
     throw MakePException ("Load failed: colormap not square, or not power of two dimension, or too small");
   }
-  
+
   cmaptilesize = cmaptotsize / tilecount;
   cmaptotmask = cmaptotsize - 1;
-  
+
   // load terrain map image
   try
   {
@@ -291,16 +297,16 @@ PTerrain::PTerrain (TiXmlElement *element, const std::string &filepath, PSSTextu
     }
 
   // calculate foliage try counts for tile size
-  
+
   for (unsigned int b = 0; b < foliageband.size(); b++) {
     foliageband[b].trycount =
       (int) (foliageband[b].density * (float)totsizesq * scale_hz * scale_hz);
   }
-  
+
   // load foliage map
-  
+
   fmap.resize(totsizesq, 0.0f);
-  
+
   if (foliagemap.length()) {
     try
     {
@@ -311,39 +317,39 @@ PTerrain::PTerrain (TiXmlElement *element, const std::string &filepath, PSSTextu
       PUtil::outLog() << "Load failed: couldn't open foliage map \"" << foliagemap << "\"\n";
       throw;
     }
-    
+
     if (totsize != img.getcy() ||
       totsize != img.getcx()) {
       throw MakePException ("Load failed: foliage map size doesn't match heightmap");
     }
-    
+
     int cc = img.getcc();
     uint8 *dat = img.getData();
-    
+
     if (cc != 1) {
       if (PUtil::isDebugLevel(DEBUGLEVEL_TEST))
         PUtil::outLog() << "Warning: foliage map is not single channel\n";
     }
-    
+
     for (int i = 0; i < totsizesq; i++) {
       fmap[i] = (float) dat[i * cc] / 255.0f;
     }
   }
-  
+
   // load hud map
-  
+
   tex_hud_map = nullptr;
-  
+
   if (hudmap.length()) {
     tex_hud_map = ssTexture.loadTexture(PUtil::assemblePath(hudmap, filepath));
   }
-  
+
   // prepare shared index buffers
-  
+
   int tilesizep1 = tilesize + 1;
-  
+
   numinds = 0;
-  
+
   PRamFile ramfile;
   uint16 index;
   for (int y=0; y<tilesize; ++y) {
@@ -366,10 +372,10 @@ PTerrain::PTerrain (TiXmlElement *element, const std::string &filepath, PSSTextu
       numinds += 1;
     }
   }
-  
+
   ind.create(ramfile.getSize(), PVBuffer::IndexContent, PVBuffer::StaticUsage, ramfile.getData());
   ramfile.clear();
-  
+
   loaded = true;
 }
 
@@ -409,15 +415,15 @@ PTerrainTile *PTerrain::getTile(int tilex, int tiley)
 
   tileptr->mins = vec3f((float)tilex * scale_hz, (float)tiley * scale_hz, 1000000000.0);
   tileptr->maxs = vec3f((float)(tilex+1) * scale_hz, (float)(tiley+1) * scale_hz, -1000000000.0);
-  
+
   // TODO: quadtree based thing
-  
+
   //std::vector<bool>
-  
+
   static PRamFile ramfile1, ramfile2;
-  
+
   ramfile1.clear();
-  
+
   int tileoffsety = tiley * tilesize;
   int tileoffsetx = tilex * tilesize;
   int tilesizep1 = tilesize + 1;
@@ -446,33 +452,33 @@ PTerrainTile *PTerrain::getTile(int tilex, int tiley)
   //tileptr->maxs = vec3f((float)(tilex+1) * scale_hz, (float)(tiley+1) * scale_hz, 100.0);
 
   tileptr->numverts = tilesizep1 * tilesizep1;
-  
+
   tileptr->tex.loadPiece(cmap,
     (tilex * cmaptilesize) & cmaptotmask, (tiley * cmaptilesize) & cmaptotmask,
     cmaptilesize, cmaptilesize, true, true);
-  
+
   // Create foliage
-  
+
   srand(1);
-  
+
   tileptr->foliage.resize(foliageband.size());
-  
+
   for (unsigned int b = 0; b < foliageband.size(); b++) {
-    
+
     tileptr->foliage[b].inst.clear();
-    
+
     // Create foliage instances
-    
+
     for (int i = 0; i < foliageband[b].trycount; i++) {
-      
+
       vec2f ftry = vec2f(
         (float)((tileptr->posx * tilesize) + rand01 * tilesize) * scale_hz,
         (float)((tileptr->posy * tilesize) + rand01 * tilesize) * scale_hz);
-        
+
       float fol = getFoliageLevel(ftry.x, ftry.y);
-      
+
       if ((1.0 - fabs((fol - foliageband[b].middle) / foliageband[b].range)) < rand01) continue;
-      
+
       tileptr->foliage[b].inst.push_back(PTerrainFoliage());
       tileptr->foliage[b].inst.back().pos.x = ftry.x;
       tileptr->foliage[b].inst.back().pos.y = ftry.y;
@@ -482,49 +488,49 @@ PTerrainTile *PTerrain::getTile(int tilex, int tiley)
       //tileptr->foliage[b].inst.back().scale = (foliageband[b].scalemin + fol * 0.5f) * (rand01 * rand01 + 0.5) * foliageband[b].scalemax;
       tileptr->foliage[b].inst.back().scale = (foliageband[b].scale + fol * 0.5f) * (rand01 * rand01 + 0.5) * 1.4;
     }
-    
+
     // Create vertex buffers for rendering
-    
+
 #define HMULT   1.0
 #define VMULT   2.0
-    
+
     ramfile1.clear();
     ramfile2.clear();
-    
+
     tileptr->foliage[b].numvert = 0;
     tileptr->foliage[b].numelem = 0;
-    
+
     float angincr = PI / (float)foliageband[b].sprite_count;
     for (unsigned int j=0; j<tileptr->foliage[b].inst.size(); j++) {
       for (float anga = 0.0f; anga < PI - 0.01f; anga += angincr) {
         float interang = tileptr->foliage[b].inst[j].ang + anga;
         int stv = tileptr->foliage[b].numvert;
         PVert_tv tmpv;
-        
+
         tmpv.xyz = tileptr->foliage[b].inst[j].pos +
           vec3f(cos(interang)*HMULT,sin(interang)*HMULT,0.0f) * tileptr->foliage[b].inst[j].scale;
         tmpv.st = vec2f(1.0f,0.0f);
         ramfile1.write(&tmpv,sizeof(PVert_tv));
         tileptr->foliage[b].numvert++;
-        
+
         tmpv.xyz = tileptr->foliage[b].inst[j].pos +
           vec3f(-cos(interang)*HMULT,-sin(interang)*HMULT,0.0f) * tileptr->foliage[b].inst[j].scale;
         tmpv.st = vec2f(0.0f,0.0f);
         ramfile1.write(&tmpv,sizeof(PVert_tv));
         tileptr->foliage[b].numvert++;
-        
+
         tmpv.xyz = tileptr->foliage[b].inst[j].pos +
           vec3f(-cos(interang)*HMULT,-sin(interang)*HMULT,VMULT) * tileptr->foliage[b].inst[j].scale;
         tmpv.st = vec2f(0.0f,1.0f-1.0f/32.0f);
         ramfile1.write(&tmpv,sizeof(PVert_tv));
         tileptr->foliage[b].numvert++;
-        
+
         tmpv.xyz = tileptr->foliage[b].inst[j].pos +
           vec3f(cos(interang)*HMULT,sin(interang)*HMULT,VMULT) * tileptr->foliage[b].inst[j].scale;
         tmpv.st = vec2f(1.0f,1.0f-1.0f/32.0f);
         ramfile1.write(&tmpv,sizeof(PVert_tv));
         tileptr->foliage[b].numvert++;
-        
+
         int ind;
         ind = stv + 0;
         ramfile2.write(&ind,sizeof(uint32));
@@ -546,7 +552,7 @@ PTerrainTile *PTerrain::getTile(int tilex, int tiley)
         tileptr->foliage[b].numelem++;
       }
     }
-    
+
     if (tileptr->foliage[b].numelem) {
       tileptr->foliage[b].buff[0].create(ramfile1.getSize(),
         PVBuffer::VertexContent, PVBuffer::StaticUsage, ramfile1.getData());
@@ -554,7 +560,7 @@ PTerrainTile *PTerrain::getTile(int tilex, int tiley)
         PVBuffer::IndexContent, PVBuffer::StaticUsage, ramfile2.getData());
     }
   }
-  
+
   //PUtil::outLog() << "2: " << tileptr->posx << " " << tileptr->posy << std::endl;
   return tileptr;
 }
@@ -563,7 +569,7 @@ PTerrainTile *PTerrain::getTile(int tilex, int tiley)
 void PTerrain::render(const vec3f &campos, const mat44f &camorim)
 {
   float blah = camorim.row[0][0]; blah = blah; // unused
-  
+
   // increase all lru counters
   for (std::list<PTerrainTile>::iterator iter = tile.begin();
     iter != tile.end(); ++iter) ++iter->lru_counter;
@@ -590,19 +596,19 @@ void PTerrain::render(const vec3f &campos, const mat44f &camorim)
     maxtx = ctx + 4,
     minty = cty - 3,
     maxty = cty + 4;
-  
+
   // Determine list of tiles to draw
-  
+
   std::list<PTerrainTile *> drawtile;
-  
+
   for (int ty = minty; ty < maxty; ++ty) {
     for (int tx = mintx; tx < maxtx; ++tx) {
       drawtile.push_back(getTile(tx,ty));
     }
   }
-  
+
   // Draw terrain
-  
+
   glEnable(GL_TEXTURE_GEN_S);
   glEnable(GL_TEXTURE_GEN_T);
 
@@ -658,28 +664,28 @@ void PTerrain::render(const vec3f &campos, const mat44f &camorim)
   glColor3f(1.0f, 1.0f, 1.0f);
   glEnableClientState(GL_TEXTURE_COORD_ARRAY);
   glEnableClientState(GL_VERTEX_ARRAY);
-  
+
   for (unsigned int b = 0; b < foliageband.size(); b++) {
-    
+
     foliageband[b].sprite_tex->bind();
-    
+
     for (std::list<PTerrainTile *>::iterator t = drawtile.begin(); t != drawtile.end(); t++) {
-      
+
       if ((*t)->foliage[b].numelem) {
         (*t)->foliage[b].buff[0].bind(); // vert data
         (*t)->foliage[b].buff[1].bind(); // indices
-        
+
         glTexCoordPointer(2, GL_FLOAT, sizeof(PVert_tv), (*t)->foliage[b].buff[0].getPointer(0));
         glVertexPointer(3, GL_FLOAT, sizeof(PVert_tv), (*t)->foliage[b].buff[0].getPointer(sizeof(float)*2));
-        
+
         glDrawRangeElements(GL_TRIANGLES,
           0,(*t)->foliage[b].numvert,(*t)->foliage[b].numelem,
           GL_UNSIGNED_INT,(*t)->foliage[b].buff[1].getPointer(0));
       }
-      
+
       #if 0
       for (std::vector<PTerrainFoliage>::iterator f = (*t)->foliage.begin(); f != (*t)->foliage.end(); f++) {
-        
+
         #if 0
         glBegin(GL_LINES);
         vec3f pos = f->pos;
@@ -688,10 +694,10 @@ void PTerrain::render(const vec3f &campos, const mat44f &camorim)
         glVertex3fv(pos);
         glEnd();
         #endif
-        
+
         #if 0
         if (!f->tfb->model) continue;
-        
+
         glPushMatrix();
         vec3f &pos = f->pos;
         glTranslatef(pos.x, pos.y, pos.z);
@@ -704,7 +710,7 @@ void PTerrain::render(const vec3f &campos, const mat44f &camorim)
     }
   }
   #endif
-  
+
   PVBuffer::unbind();
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
   glDisableClientState(GL_VERTEX_ARRAY);
@@ -717,12 +723,12 @@ void PTerrain::drawSplat(float x, float y, float scale, float angle)
   float *hmd = &hmap[0];
   int cx = totsize;
   int cy = totsize;
-  
+
   x *= scale_hz_inv;
   y *= scale_hz_inv;
-  
+
   scale *= 0.5f;
-  
+
   int miny = (int)(y - scale);
   if ((y - scale) < 0.0f) miny--;
   int maxy = (int)(y + scale) + 1;
@@ -731,21 +737,21 @@ void PTerrain::drawSplat(float x, float y, float scale, float angle)
   if ((x - scale) < 0.0f) minx--;
   int maxx = (int)(x + scale) + 2;
   if ((x + scale) < 0.0f) maxx--;
-  
+
   glMatrixMode(GL_TEXTURE);
-  
+
   glPushMatrix();
   glTranslatef(0.5f, 0.5f, 0.0f);
   glRotatef(DEGREES(angle), 0.0f, 0.0f, 1.0f);
   glScalef(0.5f / scale, 0.5f / scale, 1.0f);
   glTranslatef(-x, -y, 0.0f);
-  
+
   for (int y2=miny; y2<maxy; y2++) {
     int yc = y2 & (cy-1),
       ycp1 = (yc+1) & (cy-1),
       yc_cx = yc * cx,
       ycp1_cx = ycp1 * cx;
-    
+
     glBegin(GL_TRIANGLE_STRIP);
     for (int x2=minx; x2<maxx; x2++) {
       int xc = x2 & (cx - 1);
@@ -757,7 +763,7 @@ void PTerrain::drawSplat(float x, float y, float scale, float angle)
     glEnd();
   }
   glPopMatrix();
-  
+
   glMatrixMode(GL_MODELVIEW);
 }
 

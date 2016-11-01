@@ -131,45 +131,45 @@ public:
 
 class PSim {
 private:
-  
+
   PTerrain *terrain;
-  
+
   PResourceList<PVehicleType> vtypelist;
-  
+
   std::vector<PRigidBody *> body;
-  
+
   std::vector<PVehicle *> vehicle;
-  
+
   vec3f gravity;
-  
+
 public:
   PSim();
   ~PSim();
-  
+
 public:
   void setTerrain(PTerrain *_terrain) { terrain = _terrain; }
-  
+
   void setGravity(const vec3f &_gravity) { gravity = _gravity; }
-  
+
   PVehicleType *loadVehicleType(const std::string &filename, PSSModel &ssModel);
-  
+
   PRigidBody *createRigidBody();
-  
-  PVehicle *createVehicle(TiXmlElement *element, const std::string &filepath, PSSModel &ssModel);
+
+  PVehicle *createVehicle(XMLElement *element, const std::string &filepath, PSSModel &ssModel);
   PVehicle *createVehicle(const std::string &type, const vec3f &pos, const quatf &ori, const std::string &filepath, PSSModel &ssModel);
   PVehicle *createVehicle(PVehicleType *type, const vec3f &pos, const quatf &ori, PSSModel &ssModel);
-  
+
   // Remove all bodies and vehicles
   void clear();
-  
+
   // Step the simulation delta seconds
   void tick(float delta);
-  
-  
+
+
   PTerrain *getTerrain() { return terrain; }
-  
+
 public:
-  
+
   friend class PRigidBody;
   friend class PVehicle;
 };

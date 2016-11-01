@@ -387,19 +387,19 @@ void MainApp::loadConfig()
   
   // Load actual settings from file
   
-  TiXmlDocument xmlfile(cfgfilename.c_str());
+  XMLDocument xmlfile;
   
-  TiXmlElement *rootelem = PUtil::loadRootElement(xmlfile, "config");
+  XMLElement *rootelem = PUtil::loadRootElement(xmlfile, cfgfilename, "config");
   if (!rootelem) {
     PUtil::outLog() << "Error: Couldn't load configuration file" << std::endl;
-    PUtil::outLog() << "TinyXML: " << xmlfile.ErrorDesc() << std::endl;
+    PUtil::outLog() << "TinyXML: " << xmlfile.GetErrorStr1() << ", " << xmlfile.GetErrorStr2() << std::endl;
     PUtil::outLog() << "Your data paths are probably not set up correctly" << std::endl;
     throw MakePException ("Boink");
   }
   
   const char *val;
   
-  for (TiXmlElement *walk = rootelem->FirstChildElement();
+  for (XMLElement *walk = rootelem->FirstChildElement();
     walk; walk = walk->NextSiblingElement()) {
 
     if (strcmp(walk->Value(), "player") == 0)
@@ -595,7 +595,7 @@ void MainApp::loadConfig()
     else
     if (!strcmp(walk->Value(), "datadirectory"))
     {
-        for (TiXmlElement *walk2 = walk->FirstChildElement(); walk2; walk2 = walk2->NextSiblingElement())
+        for (XMLElement *walk2 = walk->FirstChildElement(); walk2; walk2 = walk2->NextSiblingElement())
             if (!strcmp(walk2->Value(), "data"))
                 cfg_datadirs.push_back(walk2->Attribute("path"));
     }
@@ -671,7 +671,7 @@ void MainApp::loadConfig()
 
     } else if (!strcmp(walk->Value(), "controls")) {
       
-      for (TiXmlElement *walk2 = walk->FirstChildElement();
+      for (XMLElement *walk2 = walk->FirstChildElement();
         walk2; walk2 = walk2->NextSiblingElement()) {
         
         if (!strcmp(walk2->Value(), "keyboard")) {
@@ -680,7 +680,7 @@ void MainApp::loadConfig()
           if (val && !strcmp(val, "no"))
             continue;
           
-          for (TiXmlElement *walk3 = walk2->FirstChildElement();
+          for (XMLElement *walk3 = walk2->FirstChildElement();
             walk3; walk3 = walk3->NextSiblingElement()) {
             
             if (!strcmp(walk3->Value(), "key")) {
@@ -724,7 +724,7 @@ void MainApp::loadConfig()
           if (val && !strcmp(val, "no"))
             continue;
           
-          for (TiXmlElement *walk3 = walk2->FirstChildElement();
+          for (XMLElement *walk3 = walk2->FirstChildElement();
             walk3; walk3 = walk3->NextSiblingElement()) {
             
             if (!strcmp(walk3->Value(), "button")) {
@@ -818,8 +818,8 @@ bool MainApp::loadLevel(TriggerLevel &tl)
   tl.tex_minimap = nullptr;
   tl.tex_screenshot = nullptr;
   
-  TiXmlDocument xmlfile(tl.filename.c_str());
-  TiXmlElement *rootelem = PUtil::loadRootElement(xmlfile, "level");
+  XMLDocument xmlfile;
+  XMLElement *rootelem = PUtil::loadRootElement(xmlfile, tl.filename, "level");
   if (!rootelem) {
     PUtil::outLog() << "Couldn't read level \"" << tl.filename << "\"" << std::endl;
     return false;
@@ -850,7 +850,7 @@ bool MainApp::loadLevel(TriggerLevel &tl)
   if (val != nullptr)
     tl.tex_minimap = getSSTexture().loadTexture(PUtil::assemblePath(val, tl.filename));
 
-  for (TiXmlElement *walk = rootelem->FirstChildElement();
+  for (XMLElement *walk = rootelem->FirstChildElement();
     walk; walk = walk->NextSiblingElement()) {
 
     if (!strcmp(walk->Value(), "race")) {
@@ -900,8 +900,8 @@ bool MainApp::loadLevelsAndEvents()
     
     te.filename = *i;
     
-    TiXmlDocument xmlfile(i->c_str());
-    TiXmlElement *rootelem = PUtil::loadRootElement(xmlfile, "event");
+    XMLDocument xmlfile;
+    XMLElement *rootelem = PUtil::loadRootElement(xmlfile, *i, "event");
     if (!rootelem) {
       PUtil::outLog() << "Couldn't read event \"" << *i << "\"" << std::endl;
       continue;
@@ -925,7 +925,7 @@ bool MainApp::loadLevelsAndEvents()
     
     float evtotaltime = 0.0f;
     
-    for (TiXmlElement *walk = rootelem->FirstChildElement();
+    for (XMLElement *walk = rootelem->FirstChildElement();
       walk; walk = walk->NextSiblingElement()) {
       
       if (strcmp(walk->Value(), "unlocks") == 0)

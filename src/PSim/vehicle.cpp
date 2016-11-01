@@ -151,8 +151,8 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
   
   //
   
-  TiXmlDocument xmlfile(filename.c_str());
-  TiXmlElement *rootelem = PUtil::loadRootElement(xmlfile, "vehicle");
+  XMLDocument xmlfile;
+  XMLElement *rootelem = PUtil::loadRootElement(xmlfile, filename, "vehicle");
   if (!rootelem) {
     PUtil::outLog() << "Load failed: TinyXML error\n";
     return false;
@@ -192,7 +192,7 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
     return false;
   }
 
-  for (TiXmlElement *walk = rootelem->FirstChildElement();
+  for (XMLElement *walk = rootelem->FirstChildElement();
     walk; walk = walk->NextSiblingElement()) {
 
     if (false) {
@@ -257,7 +257,7 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
 
     } else if (!strcmp(walk->Value(), "drivesystem")) {
       
-      for (TiXmlElement *walk2 = walk->FirstChildElement();
+      for (XMLElement *walk2 = walk->FirstChildElement();
         walk2; walk2 = walk2->NextSiblingElement()) {
         if (!strcmp(walk2->Value(), "engine")) {
           
@@ -266,7 +266,7 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
           val = walk2->Attribute("powerscale");
           if (val) powerscale = atof(val);
           
-          for (TiXmlElement *walk3 = walk2->FirstChildElement();
+          for (XMLElement *walk3 = walk2->FirstChildElement();
             walk3; walk3 = walk3->NextSiblingElement()) {
             
             if (!strcmp(walk3->Value(), "powerpoint")) {
@@ -293,7 +293,7 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
           
         } else if (!strcmp(walk2->Value(), "gearbox")) {
           
-          for (TiXmlElement *walk3 = walk2->FirstChildElement();
+          for (XMLElement *walk3 = walk2->FirstChildElement();
             walk3; walk3 = walk3->NextSiblingElement()) {
             
             if (!strcmp(walk3->Value(), "gear")) {
@@ -358,7 +358,7 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
       val = walk->Attribute("model");
       if (val) vtp->model = ssModel.loadModel(PUtil::assemblePath(val, filename));
 
-      for (TiXmlElement *walk2 = walk->FirstChildElement();
+      for (XMLElement *walk2 = walk->FirstChildElement();
         walk2; walk2 = walk2->NextSiblingElement()) {
         if (!strcmp(walk2->Value(), "clip")) {
           vehicle_clip_s vc;

@@ -1285,8 +1285,8 @@ bool Gui::loadColors(const std::string &filename)
     if (PUtil::isDebugLevel(DEBUGLEVEL_TEST))
         PUtil::outLog() << "Loading GUI colors from \"" << filename << "\"\n";
 
-    TiXmlDocument xmlfile(filename.c_str());
-    TiXmlElement *rootelem = PUtil::loadRootElement(xmlfile, "menucolors");
+    XMLDocument xmlfile;
+    XMLElement *rootelem = PUtil::loadRootElement(xmlfile, filename, "menucolors");
 
     if (rootelem == nullptr)
         return false;

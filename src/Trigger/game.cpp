@@ -109,8 +109,8 @@ bool TriggerGame::loadLevel(const std::string &filename)
   
   cdcheckpt_ordered = false;
   
-  TiXmlDocument xmlfile(filename.c_str());
-  TiXmlElement *rootelem = PUtil::loadRootElement(xmlfile, "level");
+  XMLDocument xmlfile;
+  XMLElement *rootelem = PUtil::loadRootElement(xmlfile, filename, "level");
   if (!rootelem) return false;
   
   const char *val;
@@ -118,7 +118,7 @@ bool TriggerGame::loadLevel(const std::string &filename)
   val = rootelem->Attribute("comment");
   if (val) comment = val;
   
-  for (TiXmlElement *walk = rootelem->FirstChildElement();
+  for (XMLElement *walk = rootelem->FirstChildElement();
     walk; walk = walk->NextSiblingElement()) {
     
     if (!strcmp(walk->Value(), "terrain")) {
@@ -193,7 +193,7 @@ bool TriggerGame::loadLevel(const std::string &filename)
                 number_of_laps = 1;
         }
       
-      for (TiXmlElement *walk2 = walk->FirstChildElement();
+      for (XMLElement *walk2 = walk->FirstChildElement();
         walk2; walk2 = walk2->NextSiblingElement()) {
         
         if (!strcmp(walk2->Value(), "checkpoint")) {
