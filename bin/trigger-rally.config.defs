@@ -45,7 +45,7 @@
 		stereoswapeyes="no"
 		/>
 		<!-- Automatic video mode ("automatic"):
-			yes - ignore user values and run fullscreen at native resolution and color depth
+			yes - ignore user values and run fullscreen at desktop resolution and color depth
 			no - run with user-provided values for width, height and bpp
 		-->
 		<!-- Possible values for stereo:
@@ -177,7 +177,7 @@
 			<key action="next" id="SDLK_COMMA" />
 		</keyboard>
 		<!-- For a list of SDLKey ID's visit:
-			http://www.libsdl.org/release/SDL-1.2.15/docs/html/sdlkey.html
+			http://wiki.libsdl.org/SDL_Keycode
 		-->
 
 		<!-- Typical joystick or wheel & pedals configuration -->
