@@ -814,4 +814,4 @@ private:
 };
 
 #undef GETLINE_SKIP_EMPTY_LINES
-
+#undef GETLINE_SKIP_EMPTY_LINES_B
