@@ -389,19 +389,22 @@ std::string PUtil::formatTimeShort(float seconds)
 
 // These are implemented over in physfs_rw.cpp
 
-int physfs_seek(SDL_RWops *context, int offset, int whence);
-int physfs_read(SDL_RWops *context, void *ptr, int size, int maxnum);
-int physfs_write(SDL_RWops *context, const void *ptr, int size, int num);
+Sint64 physfs_size(SDL_RWops *context);
+Sint64 physfs_seek(SDL_RWops *context, Sint64 offset, int whence);
+size_t physfs_read(SDL_RWops *context, void *ptr, size_t size, size_t maxnum);
+size_t physfs_write(SDL_RWops *context, const void *ptr, size_t size, size_t num);
 int physfs_close(SDL_RWops *context);
 
 SDL_RWops *PUtil::allocPhysFSops(PHYSFS_file *pfile)
 {
   SDL_RWops *rwops = SDL_AllocRW();
 
+  rwops->size = physfs_size;
   rwops->seek = physfs_seek;
   rwops->read = physfs_read;
   rwops->write = physfs_write;
   rwops->close = physfs_close;
+  rwops->type = SDL_RWOPS_UNKNOWN;
   rwops->hidden.unknown.data1 = (void *) pfile;
 
   return rwops;

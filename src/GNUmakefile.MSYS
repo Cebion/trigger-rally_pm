@@ -22,8 +22,8 @@ TR_DLLFILES     :=                  \
     $(TR_BINDIR)/libjpeg-9.dll      \
     $(TR_BINDIR)/libphysfs.dll      \
     $(TR_BINDIR)/libpng16-16.dll    \
-    $(TR_BINDIR)/SDL.dll            \
-    $(TR_BINDIR)/SDL_image.dll      \
+    $(TR_BINDIR)/SDL2.dll           \
+    $(TR_BINDIR)/SDL2_image.dll     \
     $(TR_BINDIR)/zlib1.dll
 FMODAPIDIR      := /c/Program Files (x86)/FMOD SoundSystem/FMOD Studio API Windows/api/lowlevel
 PROJDIRS        := PEngine PSim TinyXML2 Trigger
@@ -43,7 +43,7 @@ LIBDIRS         :=                  \
     -L'$(FMODAPIDIR)/lib'
 CXXFLAGS        += -std=c++11 $(MODENV) $(WARNINGS) $(OPTIMS)
 CPPFLAGS        += $(DMACROS) $(INCDIRS)
-EXTRA_LIBS      := -lopengl32 -lglu32 -lglew32 -lSDL -lSDL_image -lphysfs -lfmod
+EXTRA_LIBS      := -lmingw32 -lSDL2main -lopengl32 -lglu32 -lglew32 -lSDL2 -lSDL2_image -lphysfs -lfmod
 LDFLAGS         += $(MODENV) $(LIBDIRS) $(EXTRA_LIBS)
 
 #
@@ -177,11 +177,11 @@ $(TR_BINDIR)/libphysfs.dll:
 $(TR_BINDIR)/libpng16-16.dll:
 	@cp --verbose /usr/local/bin/libpng16-16.dll $(TR_BINDIR)
 
-$(TR_BINDIR)/SDL.dll:
-	@cp --verbose /usr/local/bin/SDL.dll $(TR_BINDIR)
+$(TR_BINDIR)/SDL2.dll:
+	@cp --verbose /usr/local/bin/SDL2.dll $(TR_BINDIR)
 
-$(TR_BINDIR)/SDL_image.dll:
-	@cp --verbose /usr/local/bin/SDL_image.dll $(TR_BINDIR)
+$(TR_BINDIR)/SDL2_image.dll:
+	@cp --verbose /usr/local/bin/SDL2_image.dll $(TR_BINDIR)
 
 $(TR_BINDIR)/zlib1.dll:
 	@cp --verbose /usr/local/bin/zlib1.dll $(TR_BINDIR)

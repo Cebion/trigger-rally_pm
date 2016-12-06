@@ -8,7 +8,8 @@
 
 #include "main.h"
 
-#include <SDL/SDL_thread.h>
+#include <SDL2/SDL_main.h>
+#include <SDL2/SDL_thread.h>
 
 #include <cctype>
 #include <regex>
@@ -89,7 +90,7 @@ void MainApp::load()
       break;
       
     case UserControl::TypeKey:
-      if (ctrl.map[i].key.sym <= 0 || ctrl.map[i].key.sym >= SDLK_LAST)
+      if (ctrl.map[i].key.sym <= 0 /* || ctrl.map[i].key.sym >= SDLK_LAST */) // `SDLK_LAST` unavailable in SDL2
         ctrl.map[i].type = UserControl::TypeUnassigned;
       break;
       
@@ -111,20 +112,20 @@ namespace
 
 ///
 /// @brief X-macro defining supported SDL keymaps.
-/// @see http://www.libsdl.org/release/SDL-1.2.15/docs/html/sdlkey.html
+/// @see http://wiki.libsdl.org/SDL_Keycode
 ///
 #define STRING_TO_SDL_KEYMAP    \
+    X(SDLK_UNKNOWN)             \
     X(SDLK_BACKSPACE)           \
     X(SDLK_TAB)                 \
-    X(SDLK_CLEAR)               \
     X(SDLK_RETURN)              \
-    X(SDLK_PAUSE)               \
     X(SDLK_ESCAPE)              \
     X(SDLK_SPACE)               \
     X(SDLK_EXCLAIM)             \
     X(SDLK_QUOTEDBL)            \
     X(SDLK_HASH)                \
     X(SDLK_DOLLAR)              \
+    X(SDLK_PERCENT)             \
     X(SDLK_AMPERSAND)           \
     X(SDLK_QUOTE)               \
     X(SDLK_LEFTPAREN)           \
@@ -185,32 +186,7 @@ namespace
     X(SDLK_y)                   \
     X(SDLK_z)                   \
     X(SDLK_DELETE)              \
-    X(SDLK_KP0)                 \
-    X(SDLK_KP1)                 \
-    X(SDLK_KP2)                 \
-    X(SDLK_KP3)                 \
-    X(SDLK_KP4)                 \
-    X(SDLK_KP5)                 \
-    X(SDLK_KP6)                 \
-    X(SDLK_KP7)                 \
-    X(SDLK_KP8)                 \
-    X(SDLK_KP9)                 \
-    X(SDLK_KP_PERIOD)           \
-    X(SDLK_KP_DIVIDE)           \
-    X(SDLK_KP_MULTIPLY)         \
-    X(SDLK_KP_MINUS)            \
-    X(SDLK_KP_PLUS)             \
-    X(SDLK_KP_ENTER)            \
-    X(SDLK_KP_EQUALS)           \
-    X(SDLK_UP)                  \
-    X(SDLK_DOWN)                \
-    X(SDLK_RIGHT)               \
-    X(SDLK_LEFT)                \
-    X(SDLK_INSERT)              \
-    X(SDLK_HOME)                \
-    X(SDLK_END)                 \
-    X(SDLK_PAGEUP)              \
-    X(SDLK_PAGEDOWN)            \
+    X(SDLK_CAPSLOCK)            \
     X(SDLK_F1)                  \
     X(SDLK_F2)                  \
     X(SDLK_F3)                  \
@@ -223,37 +199,165 @@ namespace
     X(SDLK_F10)                 \
     X(SDLK_F11)                 \
     X(SDLK_F12)                 \
+    X(SDLK_PRINTSCREEN)         \
+    X(SDLK_SCROLLLOCK)          \
+    X(SDLK_PAUSE)               \
+    X(SDLK_INSERT)              \
+    X(SDLK_HOME)                \
+    X(SDLK_PAGEUP)              \
+    X(SDLK_END)                 \
+    X(SDLK_PAGEDOWN)            \
+    X(SDLK_RIGHT)               \
+    X(SDLK_LEFT)                \
+    X(SDLK_DOWN)                \
+    X(SDLK_UP)                  \
+    X(SDLK_NUMLOCKCLEAR)        \
+    X(SDLK_KP_DIVIDE)           \
+    X(SDLK_KP_MULTIPLY)         \
+    X(SDLK_KP_MINUS)            \
+    X(SDLK_KP_PLUS)             \
+    X(SDLK_KP_ENTER)            \
+    X(SDLK_KP_1)                \
+    X(SDLK_KP_2)                \
+    X(SDLK_KP_3)                \
+    X(SDLK_KP_4)                \
+    X(SDLK_KP_5)                \
+    X(SDLK_KP_6)                \
+    X(SDLK_KP_7)                \
+    X(SDLK_KP_8)                \
+    X(SDLK_KP_9)                \
+    X(SDLK_KP_0)                \
+    X(SDLK_KP_PERIOD)           \
+    X(SDLK_APPLICATION)         \
+    X(SDLK_POWER)               \
+    X(SDLK_KP_EQUALS)           \
     X(SDLK_F13)                 \
     X(SDLK_F14)                 \
     X(SDLK_F15)                 \
-    X(SDLK_NUMLOCK)             \
-    X(SDLK_CAPSLOCK)            \
-    X(SDLK_SCROLLOCK)           \
-    X(SDLK_RSHIFT)              \
-    X(SDLK_LSHIFT)              \
-    X(SDLK_RCTRL)               \
-    X(SDLK_LCTRL)               \
-    X(SDLK_RALT)                \
-    X(SDLK_LALT)                \
-    X(SDLK_RMETA)               \
-    X(SDLK_LMETA)               \
-    X(SDLK_LSUPER)              \
-    X(SDLK_RSUPER)              \
-    X(SDLK_MODE)                \
+    X(SDLK_F16)                 \
+    X(SDLK_F17)                 \
+    X(SDLK_F18)                 \
+    X(SDLK_F19)                 \
+    X(SDLK_F20)                 \
+    X(SDLK_F21)                 \
+    X(SDLK_F22)                 \
+    X(SDLK_F23)                 \
+    X(SDLK_F24)                 \
+    X(SDLK_EXECUTE)             \
     X(SDLK_HELP)                \
-    X(SDLK_PRINT)               \
-    X(SDLK_SYSREQ)              \
-    X(SDLK_BREAK)               \
     X(SDLK_MENU)                \
-    X(SDLK_POWER)               \
-    X(SDLK_EURO)
+    X(SDLK_SELECT)              \
+    X(SDLK_STOP)                \
+    X(SDLK_AGAIN)               \
+    X(SDLK_UNDO)                \
+    X(SDLK_CUT)                 \
+    X(SDLK_COPY)                \
+    X(SDLK_PASTE)               \
+    X(SDLK_FIND)                \
+    X(SDLK_MUTE)                \
+    X(SDLK_VOLUMEUP)            \
+    X(SDLK_VOLUMEDOWN)          \
+    X(SDLK_KP_COMMA)            \
+    X(SDLK_KP_EQUALSAS400)      \
+    X(SDLK_ALTERASE)            \
+    X(SDLK_SYSREQ)              \
+    X(SDLK_CANCEL)              \
+    X(SDLK_CLEAR)               \
+    X(SDLK_PRIOR)               \
+    X(SDLK_RETURN2)             \
+    X(SDLK_SEPARATOR)           \
+    X(SDLK_OUT)                 \
+    X(SDLK_OPER)                \
+    X(SDLK_CLEARAGAIN)          \
+    X(SDLK_CRSEL)               \
+    X(SDLK_EXSEL)               \
+    X(SDLK_KP_00)               \
+    X(SDLK_KP_000)              \
+    X(SDLK_THOUSANDSSEPARATOR)  \
+    X(SDLK_DECIMALSEPARATOR)    \
+    X(SDLK_CURRENCYUNIT)        \
+    X(SDLK_CURRENCYSUBUNIT)     \
+    X(SDLK_KP_LEFTPAREN)        \
+    X(SDLK_KP_RIGHTPAREN)       \
+    X(SDLK_KP_LEFTBRACE)        \
+    X(SDLK_KP_RIGHTBRACE)       \
+    X(SDLK_KP_TAB)              \
+    X(SDLK_KP_BACKSPACE)        \
+    X(SDLK_KP_A)                \
+    X(SDLK_KP_B)                \
+    X(SDLK_KP_C)                \
+    X(SDLK_KP_D)                \
+    X(SDLK_KP_E)                \
+    X(SDLK_KP_F)                \
+    X(SDLK_KP_XOR)              \
+    X(SDLK_KP_POWER)            \
+    X(SDLK_KP_PERCENT)          \
+    X(SDLK_KP_LESS)             \
+    X(SDLK_KP_GREATER)          \
+    X(SDLK_KP_AMPERSAND)        \
+    X(SDLK_KP_DBLAMPERSAND)     \
+    X(SDLK_KP_VERTICALBAR)      \
+    X(SDLK_KP_DBLVERTICALBAR)   \
+    X(SDLK_KP_COLON)            \
+    X(SDLK_KP_HASH)             \
+    X(SDLK_KP_SPACE)            \
+    X(SDLK_KP_AT)               \
+    X(SDLK_KP_EXCLAM)           \
+    X(SDLK_KP_MEMSTORE)         \
+    X(SDLK_KP_MEMRECALL)        \
+    X(SDLK_KP_MEMCLEAR)         \
+    X(SDLK_KP_MEMADD)           \
+    X(SDLK_KP_MEMSUBTRACT)      \
+    X(SDLK_KP_MEMMULTIPLY)      \
+    X(SDLK_KP_MEMDIVIDE)        \
+    X(SDLK_KP_PLUSMINUS)        \
+    X(SDLK_KP_CLEAR)            \
+    X(SDLK_KP_CLEARENTRY)       \
+    X(SDLK_KP_BINARY)           \
+    X(SDLK_KP_OCTAL)            \
+    X(SDLK_KP_DECIMAL)          \
+    X(SDLK_KP_HEXADECIMAL)      \
+    X(SDLK_LCTRL)               \
+    X(SDLK_LSHIFT)              \
+    X(SDLK_LALT)                \
+    X(SDLK_LGUI)                \
+    X(SDLK_RCTRL)               \
+    X(SDLK_RSHIFT)              \
+    X(SDLK_RALT)                \
+    X(SDLK_RGUI)                \
+    X(SDLK_MODE)                \
+    X(SDLK_AUDIONEXT)           \
+    X(SDLK_AUDIOPREV)           \
+    X(SDLK_AUDIOSTOP)           \
+    X(SDLK_AUDIOPLAY)           \
+    X(SDLK_AUDIOMUTE)           \
+    X(SDLK_MEDIASELECT)         \
+    X(SDLK_WWW)                 \
+    X(SDLK_MAIL)                \
+    X(SDLK_CALCULATOR)          \
+    X(SDLK_COMPUTER)            \
+    X(SDLK_AC_SEARCH)           \
+    X(SDLK_AC_HOME)             \
+    X(SDLK_AC_BACK)             \
+    X(SDLK_AC_FORWARD)          \
+    X(SDLK_AC_STOP)             \
+    X(SDLK_AC_REFRESH)          \
+    X(SDLK_AC_BOOKMARKS)        \
+    X(SDLK_BRIGHTNESSDOWN)      \
+    X(SDLK_BRIGHTNESSUP)        \
+    X(SDLK_DISPLAYSWITCH)       \
+    X(SDLK_KBDILLUMTOGGLE)      \
+    X(SDLK_KBDILLUMDOWN)        \
+    X(SDLK_KBDILLUMUP)          \
+    X(SDLK_EJECT)               \
+    X(SDLK_SLEEP)
 
 ///
 /// @brief Converts the string to a SDL keycode.
 /// @param [in] s   The string to be converted.
 /// @returns The keycode.
 ///
-SDLKey getSdlKeySym(const std::string &s)
+SDL_Keycode getSdlKeySym(const std::string &s)
 {
 #define X(SdlKey)   if (s == #SdlKey) return SdlKey;
     STRING_TO_SDL_KEYMAP
@@ -1434,7 +1538,7 @@ void MainApp::tickStateGame(float delta)
       break;
       
     case UserControl::TypeKey:
-      ctrl.map[a].value = keyDown(ctrl.map[a].key.sym) ? 1.0f : 0.0f;
+      ctrl.map[a].value = keyDown(SDL_GetScancodeFromKey(ctrl.map[a].key.sym)) ? 1.0f : 0.0f;
       break;
       
     case UserControl::TypeJoyButton:
@@ -2124,39 +2228,7 @@ void MainApp::joyButtonEvent(int which, int button, bool down)
   }
 }
 
-#ifndef WIN32
-
 int main(int argc, char *argv[])
 {
-  MainApp *game = new MainApp("Trigger Rally", ".trigger-rally");
-
-  int ret = game->run(argc, argv);
-
-  delete game;
-
-  return ret;
+    return MainApp("Trigger Rally", ".trigger-rally").run(argc, argv);
 }
-
-#else
-
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
-{
-    UNREFERENCED_PARAMETER(hInstance);
-    UNREFERENCED_PARAMETER(hPrevInstance);
-    UNREFERENCED_PARAMETER(lpCmdLine);
-    UNREFERENCED_PARAMETER(nCmdShow);
-
-  MainApp *game = new MainApp("Trigger Rally", ".trigger-rally");
-
-  int ret = game->run(0, nullptr);
-
-  delete game;
-
-  return ret;
-}
-
-#endif
-

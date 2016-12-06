@@ -21,7 +21,7 @@
 // "SDL.h" is supposed to be the portable way, but it
 // doesn't seem to work in some circumstances...
 //#include "SDL.h"
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 
 
 // The PhysicsFS game file system
@@ -194,12 +194,12 @@ public:
 
 
 
-#include <hiscore1.h>
+#include "hiscore1.h"
 #include "app.h"
 #include "subsys.h"
 #include "audio.h"
 #include "render.h"
-#include <codriver.h>
+#include "codriver.h"
 
 
 #endif // PENGINE_H_INCLUDED

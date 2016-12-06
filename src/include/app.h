@@ -43,7 +43,8 @@ class PApp
 
         std::string appname, apptitle;
 
-        SDL_Surface *screen;
+        SDL_Window *screen; // TODO: rename this to "window" maybe
+        SDL_GLContext context;
         
         /// Attempts to set fullscreen at native resolution.
         bool autoVideo = false;
@@ -62,7 +63,7 @@ class PApp
         StereoMode stereo;
         float stereoEyeTranslation;
 
-        uint8* sdl_keymap;
+        const uint8* sdl_keymap;
         int sdl_numkeys;
         uint8 sdl_mousemap;
         std::vector<joystick_s> sdl_joy;
@@ -90,7 +91,12 @@ class PApp
             best_times("/players")
         {
             //PUtil::outLog() << "Initialising SDL" << std::endl;
-            SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_JOYSTICK | SDL_INIT_NOPARACHUTE);
+            const int si = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_JOYSTICK);
+
+            if (si < 0)
+            {
+                PUtil::outLog() << "Failed to initialize SDL: " << SDL_GetError() << std::endl;
+            }
 
             cx = cy = 0;
             bpp = 0;
@@ -218,15 +224,26 @@ class PApp
             // use automatic video mode
             if (autoVideo)
             {
-                const SDL_VideoInfo *info = SDL_GetVideoInfo();
+                SDL_DisplayMode dm;
 
-                cx      = info->current_w;
-                cy      = info->current_h;
-                bpp     = info->vfmt->BitsPerPixel;
-                fullscr = true;
-                noframe = hideFrame;
+                if (SDL_GetCurrentDisplayMode(0, &dm) == 0)
+                {
+                    cx = dm.w;
+                    cy = dm.h;
+                    fullscr = fullScreen;
+                    noframe = hideFrame;
+                    PUtil::outLog() << "Automatic video mode resolution: " << cx << 'x' << cy << std::endl;
+                }
+                else
+                {
+                    PUtil::outLog() << "SDL error, SDL_GetCurrentDisplayMode(): " << SDL_GetError() << std::endl;
+                    autoVideo = false;
+                }
             }
-            else
+
+            // not written as an `else` branch because `autoVideo` may have
+            // been updated in the case that automatic video mode failed
+            if (!autoVideo)
             {
                 cx = w;
                 cy = h;

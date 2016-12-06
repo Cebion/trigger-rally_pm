@@ -240,10 +240,13 @@ int PApp::run(int argc, char *argv[])
 
   srand(SDL_GetTicks());
   
-  SDL_WM_SetCaption(apptitle.c_str(), nullptr);
-  
   PUtil::outLog() << "Create window and set video mode" << std::endl;
-  
+#if 0
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+    SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
+#endif
   SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
   
   if (reqRGB) {
@@ -268,11 +271,59 @@ int PApp::run(int argc, char *argv[])
   }
   
   if (cx <= 0 || cy <= 0) setScreenModeAutoWindow();
-  
-  screen = SDL_SetVideoMode(cx,cy,bpp,
-    SDL_OPENGL |
-    (fullscr ? SDL_FULLSCREEN : 0) |
-    (noframe ? SDL_NOFRAME : 0));
+
+    if (!autoVideo)
+    {
+        screen = SDL_CreateWindow(apptitle.c_str(),
+            SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+            cx, cy,
+            SDL_WINDOW_OPENGL |
+            (fullscr ? SDL_WINDOW_FULLSCREEN : 0)
+            /* | (noframe ? SDL_NOFRAME : 0) */ ); // broken by SDL2, no more `SDL_NOFRAME`
+    }
+    else // automatic video mode
+    {
+        //
+        // NOTE:
+        //  The `SDL_GetDesktopMode()` function is used instead of the automatic
+        //  flag `SDL_WINDOW_FULLSCREEN_DESKTOP` because the latter fails to work
+        //  reliably on Linux in certain versions of SDL2.
+        //
+
+#define SDL_WINDOW_FULLSCREEN_DESKTOP_IS_STILL_BROKEN
+
+#ifdef SDL_WINDOW_FULLSCREEN_DESKTOP_IS_STILL_BROKEN
+        SDL_DisplayMode dm;
+
+        if (SDL_GetDesktopDisplayMode(0, &dm) == 0)
+        {
+            cx = dm.w;
+            cy = dm.h;
+            PUtil::outLog() << "Desktop video mode resolution: " << cx << 'x' << cy << std::endl;
+        }
+        else
+        {
+            PUtil::outLog() << "SDL error, SDL_GetDesktopDisplayMode(): " << SDL_GetError() << std::endl;
+            cx = 800;
+            cy = 600;
+        }
+
+        screen = SDL_CreateWindow(apptitle.c_str(),
+            SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+            cx, cy,
+            SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN);
+#else
+        //
+        // NOTE:
+        //  This would be the "proper" way of doing things, but at the time of this
+        //  writing it only works reliably on Windows 7 using SDL2 version 2.0.5.
+        //
+        screen = SDL_CreateWindow(apptitle.c_str(),
+            SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+            0, 0,
+            SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN_DESKTOP);
+#endif
+    }
   
   if (!screen) {
     PUtil::outLog() << "Failed to create window or set video mode" << std::endl;
@@ -284,6 +335,21 @@ int PApp::run(int argc, char *argv[])
     }
     return 1;
   }
+  
+  context = SDL_GL_CreateContext(screen);
+  
+    if (context == NULL)
+    {
+        PUtil::outLog() << "Failed to create OpenGL context for game window\n";
+        PUtil::outLog() << "SDL error: " << SDL_GetError() << std::endl;
+        SDL_DestroyWindow(screen);
+        SDL_Quit();
+
+        if (PHYSFS_deinit() == 0)
+            PUtil::outLog() << "PhysFS: " << PHYSFS_getLastError() << std::endl;
+
+        return 1;
+    }
   
   sdl_mousemap = 0;
   
@@ -297,13 +363,15 @@ int PApp::run(int argc, char *argv[])
     sdl_joy[i].sdl_joystick = SDL_JoystickOpen(i);
     if (sdl_joy[i].sdl_joystick == nullptr) {
       PUtil::outLog() << "failed to open joystick" << std::endl;
+      SDL_GL_DeleteContext(context);
+      SDL_DestroyWindow(screen);
       SDL_Quit();
       if (PHYSFS_deinit() == 0) {
         PUtil::outLog() << "PhysFS: " << PHYSFS_getLastError() << std::endl;
       }
       return 1;
     }
-    sdl_joy[i].name = SDL_JoystickName(i);
+    sdl_joy[i].name = SDL_JoystickName(sdl_joy[i].sdl_joystick);
     sdl_joy[i].axis.resize(SDL_JoystickNumAxes(sdl_joy[i].sdl_joystick));
     for (unsigned int j=0; j<sdl_joy[i].axis.size(); j++)
       sdl_joy[i].axis[j] = ((float)SDL_JoystickGetAxis(sdl_joy[i].sdl_joystick, j) + 0.5f) / 32767.5f;
@@ -329,16 +397,18 @@ int PApp::run(int argc, char *argv[])
   SDL_JoystickEventState(SDL_ENABLE);
   
   int err = glewInit();
-  
+
   if (err != GLEW_OK) {
     PUtil::outLog() << "GLEW failed to initialise: " << glewGetErrorString(err) << std::endl;
+    SDL_GL_DeleteContext(context);
+    SDL_DestroyWindow(screen);
     SDL_Quit();
     if (PHYSFS_deinit() == 0) {
       PUtil::outLog() << "PhysFS: " << PHYSFS_getLastError() << std::endl;
     }
     return 1;
   }
-  
+
   PUtil::outLog() << "GLEW initialized" << std::endl;
   
   PUtil::outLog() << "Graphics: " <<
@@ -389,12 +459,16 @@ int PApp::run(int argc, char *argv[])
       delete sslist.back();
       sslist.pop_back();
     }
-    
+
+    SDL_GL_DeleteContext(context);
+    SDL_DestroyWindow(screen);
     SDL_Quit();
+
     if (PHYSFS_deinit() == 0)
     {
       PUtil::outLog () << "PhysFS: " << PHYSFS_getLastError() << std::endl;
     }
+
     return 1;
   }
 
@@ -413,20 +487,25 @@ int PApp::run(int argc, char *argv[])
       sslist.pop_back();
     }
 
+    SDL_GL_DeleteContext(context);
+    SDL_DestroyWindow(screen);
     SDL_Quit();
+
     if (PHYSFS_deinit() == 0) {
       PUtil::outLog() << "PhysFS: " << PHYSFS_getLastError() << std::endl;
     }
+
     return 1;
   }
 
   //SDL_ShowCursor(SDL_DISABLE);
   //SDL_WM_GrabInput(SDL_GRAB_ON);
-  SDL_WM_GrabInput(SDL_GRAB_OFF);
-  SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
+  //SDL_WM_GrabInput(SDL_GRAB_OFF);
+  //SDL_SetWindowGrab(screen, SDL_TRUE);
+  //SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
   //SDL_EnableUNICODE(1);
 
-  sdl_keymap = SDL_GetKeyState(&sdl_numkeys);
+  sdl_keymap = SDL_GetKeyboardState(&sdl_numkeys);
 
   resize();
 
@@ -460,9 +539,12 @@ int PApp::run(int argc, char *argv[])
         break;
       */
 
+      // unavailable (and unneeded?) in SDL2
+#if 0
       case SDL_VIDEOEXPOSE:
         repaint = true;
         break;
+#endif
 
       case SDL_KEYDOWN:
       case SDL_KEYUP:
@@ -547,7 +629,7 @@ int PApp::run(int argc, char *argv[])
         
         render(0.0f);
         glFlush();
-        SDL_GL_SwapBuffers();
+        SDL_GL_SwapWindow(screen);
         break;
         
       case StereoQuadBuffer: // Hardware quad buffer stereo
@@ -560,7 +642,7 @@ int PApp::run(int argc, char *argv[])
         render(stereoEyeTranslation);
         glFlush();
         
-        SDL_GL_SwapBuffers();
+        SDL_GL_SwapWindow(screen);
         break;
         
       case StereoRedBlue: // Red-blue anaglyph stereo
@@ -578,7 +660,7 @@ int PApp::run(int argc, char *argv[])
         render(stereoEyeTranslation);
         glFlush();
         
-        SDL_GL_SwapBuffers();
+        SDL_GL_SwapWindow(screen);
         break;
         
       case StereoRedGreen: // Red-green anaglyph stereo
@@ -596,7 +678,7 @@ int PApp::run(int argc, char *argv[])
         render(stereoEyeTranslation);
         glFlush();
         
-        SDL_GL_SwapBuffers();
+        SDL_GL_SwapWindow(screen);
         break;
         
       case StereoRedCyan: // Red-cyan anaglyph stereo
@@ -609,7 +691,7 @@ int PApp::run(int argc, char *argv[])
         render(stereoEyeTranslation);
         glFlush();
         
-        SDL_GL_SwapBuffers();
+        SDL_GL_SwapWindow(screen);
         break;
         
       case StereoYellowBlue: // Yellow-blue anaglyph stereo
@@ -622,7 +704,7 @@ int PApp::run(int argc, char *argv[])
         render(stereoEyeTranslation);
         glFlush();
         
-        SDL_GL_SwapBuffers();
+        SDL_GL_SwapWindow(screen);
         break;
       }
       repaint = false;
@@ -675,10 +757,13 @@ int PApp::run(int argc, char *argv[])
     sslist.pop_back();
   }
   
-  SDL_WM_GrabInput(SDL_GRAB_OFF);
+  //SDL_WM_GrabInput(SDL_GRAB_OFF);
+  //SDL_SetWindowGrab(screen, SDL_FALSE);
   SDL_ShowCursor(SDL_ENABLE);
   
-  SDL_Quit();
+    SDL_GL_DeleteContext(context);
+    SDL_DestroyWindow(screen);
+    SDL_Quit();
   
   best_times.savePlayer();
   

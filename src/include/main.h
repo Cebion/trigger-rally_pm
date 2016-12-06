@@ -261,7 +261,7 @@ struct UserControl {
   } type;
   union {
     struct {
-      SDLKey sym;
+      SDL_Keycode sym;
     } key;
     struct {
       int button;

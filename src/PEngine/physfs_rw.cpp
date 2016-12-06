@@ -7,15 +7,20 @@
 
 #include "pengine.h"
 
+Sint64 physfs_size(SDL_RWops *context)
+{
+    PHYSFS_file *pfile = (PHYSFS_file *)context->hidden.unknown.data1;
 
+    return PHYSFS_fileLength(pfile);
+}
 
-int physfs_seek(SDL_RWops *context, int offset, int whence)
+Sint64 physfs_seek(SDL_RWops *context, Sint64 offset, int whence)
 {
   PHYSFS_file *pfile = (PHYSFS_file *)context->hidden.unknown.data1;
   
-  int target;
+  Sint64 target;
   
-  int curpos = PHYSFS_tell(pfile);
+  Sint64 curpos = PHYSFS_tell(pfile);
   
   switch (whence) {
   default:
@@ -30,7 +35,7 @@ int physfs_seek(SDL_RWops *context, int offset, int whence)
     break;
   }
   
-    int result = PHYSFS_seek(pfile, target);
+    Sint64 result = PHYSFS_seek(pfile, target);
     if (! result) {
         throw MakePException("Error seeking: " + PHYSFS_getLastError());
     }
@@ -43,15 +48,18 @@ int physfs_seek(SDL_RWops *context, int offset, int whence)
 }
 
 
-int physfs_read(SDL_RWops *context, void *ptr, int size, int maxnum)
+size_t physfs_read(SDL_RWops *context, void *ptr, size_t size, size_t maxnum)
 {
   PHYSFS_file *pfile = (PHYSFS_file *)context->hidden.unknown.data1;
   
-  return PHYSFS_read(pfile, ptr, size, maxnum);
+  const Sint64 r = PHYSFS_read(pfile, ptr, size, maxnum);
+  
+  // reading 0 bytes is considered an error now, thanks SDL2!
+  return r == -1 ? 0 : r;
 }
 
 
-int physfs_write(SDL_RWops *context, const void *ptr, int size, int num)
+size_t physfs_write(SDL_RWops *context, const void *ptr, size_t size, size_t num)
 {
   PHYSFS_file *pfile = (PHYSFS_file *)context->hidden.unknown.data1;
   
