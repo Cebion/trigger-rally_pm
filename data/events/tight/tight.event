@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<event name="11. Tight Trophy" author="Onsemeliot" locked="no">
+
+	<unlocks file="/vehicles/cordo_super500/cordo_super500.vehicle" />
+	<unlocks file="/vehicles/fox_super500/fox_super500.vehicle" />
+	<unlocks file="/vehicles/evo_super500/evo_super500.vehicle" />
+
+	<level file="promenade/promenade.level" />
+	<level file="lovely/lovely.level" />
+	<level file="mostly/mostly.level" />
+	<level file="oasis/oasis.level" />
+	<level file="wetwoods/wetwoods.level" />
+	<level file="meteor/meteor.level" />
+
+</event>
