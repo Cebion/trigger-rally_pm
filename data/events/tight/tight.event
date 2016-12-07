@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<event name="11. Tight Trophy" author="Onsemeliot" locked="no">
+<event name="11. Tight Trophy" author="Onsemeliot" locked="yes">
 
 	<unlocks file="/vehicles/cordo_super500/cordo_super500.vehicle" />
 	<unlocks file="/vehicles/fox_super500/fox_super500.vehicle" />
