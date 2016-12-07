@@ -1,9 +1,7 @@
 <?xml version="1.0" ?>
 <event name="10. Flood" author="Onsemeliot" locked="yes">
 
-	<unlocks file="/vehicles/cordo_super500/cordo_super500.vehicle" />
-	<unlocks file="/vehicles/fox_super500/fox_super500.vehicle" />
-	<unlocks file="/vehicles/evo_super500/evo_super500.vehicle" />
+	<unlocks file="/events/tight/tight.event" />
 	
 	<level file="flood/flood.level" />
 	<level file="flood/wettarmac.level" />
