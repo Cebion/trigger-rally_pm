@@ -141,7 +141,10 @@ Iwan 'qubodup' Gabovitch, Onsemeliot
 	
 Jared Buckner, Onsemeliot
 	plugins/map-delta.zip (GPL)
-	
+
+Keistutis, Onsemeliot
+	textures/veg/bush-low.png (CC0) https://openclipart.org/detail/202745/bush
+
 kougloff, Iwan Gabovitch, Liviu Andronic
 	sounds/gear.wav (CC0, PD) source: http://www.freesound.org/people/kougloff/sounds/117558/
 
@@ -448,6 +451,7 @@ Onsemeliot
 	events/triggercup/warmup/mm.png (GPL)
 	events/triggercup/warmup/ss.png (GPL)
 	events/triggercup/warmup/t.png (GPL)
+	events/tight (GPL)
 	events/weird/china/c.png (GPL)
 	events/weird/china/h.png (GPL)
 	events/weird/china/mm.png (GPL)
@@ -859,12 +863,14 @@ Onsemeliot
 	textures/veg/mais.png (CC0, PD), source: http://opengameart.org/content/corn-resp-maize
 	textures/veg/olive-bush.png (CC0, PD)
 	textures/veg/palm-tree.png (CC0, PD)
+	textures/veg/palm-tree2.png (CC0, PD)
 	textures/veg/pear-tree.png (CC0, PD)
 	textures/veg/post.png (CC0, PD)
 	textures/veg/red-tree.png (CC0, PD)
 	textures/veg/snowy-tree.png (CC0, PD)
 	textures/veg/spruce.png (CC0, PD), source: https://openclipart.org/detail/227626/spruce
 	textures/veg/thick-leafes.png (CC0, PD)
+	textures/veg/thorn-bush.png (CC0, PD)
 	textures/veg/wide-tree.png (CC0, PD)
 	textures/water/black-water.png (CC0, PD)
 	textures/water/dark-ice-water.png (CC0, PD)
@@ -965,6 +971,9 @@ Onsemeliot, Andrei Bondor
 	maps/xerxes/xerxes.level (GPL)
 	maps/yearzero/yearzero.level (GPL)
 	maps/zone/zone.level (GPL)
+
+Rambo Tribble, Onsemeliot
+	textures/veg/fir.png (CC0) https://openclipart.org/detail/181473/douglas-fir
 	
 Pulp, Onsemeliot
 	plugins/map-pulp.zip (unlicenced)
