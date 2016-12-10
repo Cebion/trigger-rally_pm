@@ -16,6 +16,7 @@
 
 GLfloat MainApp::cfg_anisotropy = 1.0f;
 bool MainApp::cfg_foliage = true;
+bool MainApp::cfg_roadsigns = true;
 bool MainApp::cfg_weather = true;
 
 void MainApp::config()
@@ -427,6 +428,7 @@ void MainApp::loadConfig()
   cfg_volume_codriver = 1.0f;
   cfg_anisotropy = 1.0f;
   cfg_foliage = true;
+  cfg_roadsigns = true;
   cfg_weather = true;
   cfg_speed_unit = mph;
   cfg_speed_style = analogue;
@@ -661,6 +663,16 @@ void MainApp::loadConfig()
                 cfg_foliage = false;
             else // "yes"
                 cfg_foliage = true;
+        }
+        
+        val = walk->Attribute("roadsigns");
+        
+        if (val != nullptr)
+        {
+            if (strcmp(val, "no") == 0)
+                cfg_roadsigns = false;
+            else // yes
+                cfg_roadsigns = true;
         }
         
         val = walk->Attribute("weather");

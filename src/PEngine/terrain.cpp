@@ -100,7 +100,7 @@ PTerrain::PTerrain (XMLElement *element, const std::string &filepath, PSSTexture
   for (XMLElement *walk = element->FirstChildElement();
     walk; walk = walk->NextSiblingElement()) {
 
-    if (strcmp(walk->Value(), "roadsign") == 0)
+    if (strcmp(walk->Value(), "roadsign") == 0 && MainApp::cfg_roadsigns)
     {
         road_sign temprs;
 /*
