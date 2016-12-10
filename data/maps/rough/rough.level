@@ -75,7 +75,7 @@
         <location coords="888, 302" oridegrees="295" />
     </roadsign>
     <roadsign sprite="/textures/roadsigns/zigzag.png" scale="3">
-        <location coords="905, 611" oridegrees="220" />
+        <location coords="905, 611" oridegrees="40" />
     </roadsign>
     <roadsign sprite="/textures/roadsigns/arrowright.png" scale="3">
         <location coords="444, 93" oridegrees="35" />
