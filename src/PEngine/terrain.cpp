@@ -863,13 +863,18 @@ void PTerrain::render(const vec3f &campos, const mat44f &camorim)
     }
   }
 
+    PVBuffer::unbind();
+
     // draw road signs
     for (unsigned int b=0; b < roadsigns.size(); ++b)
     {
         roadsigns[b].sprite->bind();
 
-        for (PTerrainTile *t: drawtile)
+        if (!drawtile.empty())
+        //for (PTerrainTile *t: drawtile)
         {
+            PTerrainTile *t = drawtile.front();
+
             if (t->roadsignset[b].numelem)
             {
                 t->roadsignset[b].buff[0].bind();
