@@ -388,6 +388,13 @@ struct PTerrainFoliageSet {
   int numvert, numelem;
 };
 
+struct PRoadSignSet {
+    std::vector<PTerrainFoliage> inst;
+    PVBuffer buff[2];
+    int numvert;
+    int numelem;
+};
+
 struct PTerrainTile {
   int posx, posy;
   int lru_counter;
@@ -402,6 +409,7 @@ struct PTerrainTile {
   //
 
   std::vector<PTerrainFoliageSet> foliage;
+  std::vector<PRoadSignSet> roadsignset;
 };
 
 ///
@@ -504,6 +512,41 @@ private:
     int by;
 };
 
+struct road_sign
+{
+public:
+
+//
+// being smart here makes the rest of the code more complicated;
+// so let's be stupid for now...
+//
+#if 0
+    struct road_sign_location
+    {
+    public:
+
+        float x;
+        float y;
+        float deg;
+
+        road_sign_location(float x=0, float y=0, float deg=0):
+            x(x), y(y), deg(deg)
+        {
+        }
+    };
+
+    std::vector<road_sign_location> location;
+#endif
+
+    PTexture   *sprite  = nullptr;
+//  PTexture   *front   = nullptr;
+//  PTexture   *back    = nullptr;
+    float       scale   = 1.0f;
+    float       x       = 0.0f;
+    float       y       = 0.0f;
+    float       deg     = 0.0f;
+};
+
 class PTerrain // TODO: make this RAII conformant
 {
 protected:
@@ -524,6 +567,7 @@ protected:
 
   std::vector<float> fmap;
   std::vector<PTerrainFoliageBand> foliageband;
+  std::vector<road_sign> roadsigns;
 
   std::list<PTerrainTile> tile;
 
