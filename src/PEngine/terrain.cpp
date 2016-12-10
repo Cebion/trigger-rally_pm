@@ -578,13 +578,13 @@ PTerrainTile *PTerrain::getTile(int tilex, int tiley)
 
         tmpv.xyz = tileptr->foliage[b].inst[j].pos +
           vec3f(-cos(interang)*HMULT,-sin(interang)*HMULT,VMULT) * tileptr->foliage[b].inst[j].scale;
-        tmpv.st = vec2f(0.0f,1.0f-1.0f/32.0f);
+        tmpv.st = vec2f(0.0f,1.0f/*-1.0f/32.0f*/);
         ramfile1.write(&tmpv,sizeof(PVert_tv));
         tileptr->foliage[b].numvert++;
 
         tmpv.xyz = tileptr->foliage[b].inst[j].pos +
           vec3f(cos(interang)*HMULT,sin(interang)*HMULT,VMULT) * tileptr->foliage[b].inst[j].scale;
-        tmpv.st = vec2f(1.0f,1.0f-1.0f/32.0f);
+        tmpv.st = vec2f(1.0f,1.0f/*-1.0f/32.0f*/);
         ramfile1.write(&tmpv,sizeof(PVert_tv));
         tileptr->foliage[b].numvert++;
 
@@ -672,14 +672,14 @@ PTerrainTile *PTerrain::getTile(int tilex, int tiley)
                 tmpv.xyz = tileptr->roadsignset[b].inst[j].pos +
                     vec3f(-cos(interang)*HMULT,-sin(interang)*HMULT,VMULT) *
                     tileptr->roadsignset[b].inst[j].scale;
-                tmpv.st = vec2f(0.0f,1.0f-1.0f/32.0f);
+                tmpv.st = vec2f(0.0f,1.0f/*-1.0f/32.0f*/);
                 ramfile1.write(&tmpv,sizeof(PVert_tv));
                 tileptr->roadsignset[b].numvert++;
 
                 tmpv.xyz = tileptr->roadsignset[b].inst[j].pos +
                     vec3f(cos(interang)*HMULT,sin(interang)*HMULT,VMULT) *
                     tileptr->roadsignset[b].inst[j].scale;
-                tmpv.st = vec2f(1.0f,1.0f-1.0f/32.0f);
+                tmpv.st = vec2f(1.0f,1.0f/*-1.0f/32.0f*/);
                 ramfile1.write(&tmpv,sizeof(PVert_tv));
                 tileptr->roadsignset[b].numvert++;
 
