@@ -532,6 +532,7 @@ Onsemeliot
 	maps/between/m.png (GPL)
 	maps/between/mm.png (GPL)
 	maps/between/ss.png (GPL)
+	maps/bitethedust/ (GPL)
 	maps/blunt/c.png (GPL)
 	maps/blunt/f.png (GPL)
 	maps/blunt/h.png (GPL)
@@ -721,6 +722,7 @@ Onsemeliot
 	maps/quintessence/m.png (GPL)
 	maps/quintessence/mm.png (GPL)
 	maps/quintessence/ss.png (GPL)
+	maps/raw/ (GPL)
 	maps/redrock/c.png (GPL)
 	maps/redrock/f.png (GPL)
 	maps/redrock/h.png (GPL)
@@ -839,6 +841,7 @@ Onsemeliot
 	textures/CodriverSigns/plain/* (CC0, PD)
 	textures/CodriverSigns/white/* (CC0, PD)
 	textures/life_helmet.png (CC0, PD), source: https://openclipart.org/detail/172011/racing-helmet
+	textures/roadsigns/ (CC0, PD), raw material from: https://openclipart.org/search/?query=roadsigns
 	textures/sky/cloudy.png (GPL)
 	textures/sky/dark-blue.png (GPL)
 	textures/sky/dark-clouds.png (GPL)
