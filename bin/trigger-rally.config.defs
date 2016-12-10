@@ -71,6 +71,7 @@
 	<graphics
 		anisotropy="4"
 		foliage="yes"
+		roadsigns="yes"
 		weather="yes"
 		snowflaketype="textured"
 		dirteffect="yes"
@@ -87,6 +88,11 @@
 		foliage:
 			Turns vegetation on and off.
 			"yes" means that bushes, grass and trees will be displayed.
+			"no" means that they won't be.
+
+		roadsigns:
+			Turns road signs on and off.
+			"yes" means that road signs and other sprites will be displayed.
 			"no" means that they won't be.
 
 		weather:
