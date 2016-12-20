@@ -738,6 +738,7 @@ Onsemeliot
 	maps/ripe/h.png (GPL)
 	maps/ripe/ss.png (GPL)
 	maps/ripe/t.png (GPL)
+	maps/rough (GPL)
 	maps/rural (GPL)
 	maps/rugged/c.png (GPL)
 	maps/rugged/h.png (GPL)

@@ -150,6 +150,16 @@ http://sourceforge.net/projects/trigger-rally/support
 // Version history //
 /////////////////////
 
+18/12/2016 - Trigger 0.6.5
+  - Fixed framerate drop caused by codriver voice on certain post-XP Windows'
+  - Fixed compilation error of "hiscore1.h" by C++11 compilers
+  - Added 2 new events and 13 new single races (total 25 new races)
+  - Added "road sign" option for map creators
+  - Updated code to use TinyXML-2, SDL2 and SDL2_image
+  - Improved code friendliness to Linux when searching for the default
+    configuration file "trigger-rally.config.defs"
+  - Released 64-bit binaries for Windows x64, optimized for AMD K8 
+
 23/04/2016 - Trigger 0.6.4
   - Added recording of best times
   - Added unlocking of vehicles and events
