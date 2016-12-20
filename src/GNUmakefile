@@ -4,7 +4,7 @@
 
 # standard GNU and custom variables
 DISTNAME        := trigger-rally
-DISTVER         := 0.6.5
+DISTVER         := 0.6.6
 DISTDIR         := $(DISTNAME)-$(DISTVER)
 DISTARC         := $(DISTDIR).tar.gz
 TR_EXENAME      := trigger-rally
