@@ -538,6 +538,7 @@ Onsemeliot
 	maps/blunt/h.png (GPL)
 	maps/blunt/mm.png (GPL)
 	maps/blunt/ss.png (GPL)
+	maps/coastline (GPL)
 	maps/coffee/c.jpg (GPL)
 	maps/coffee/f.png (GPL)
 	maps/coffee/h.png (GPL)
@@ -642,6 +643,7 @@ Onsemeliot
 	maps/jumpy/h.png (GPL)
 	maps/jumpy/m.png (GPL)
 	maps/jumpy/ss.png (GPL)
+	maps/jupiter (GPL)
 	maps/kraut/c.png (GPL)
 	maps/kraut/f.png (GPL)
 	maps/kraut/h.png (GPL)
@@ -1071,6 +1073,9 @@ Richard Langridge, Farrer, Iwan Gabovitch
 	vehicles/fox_wrc/fox_wrc.mtl (GPL)
 	vehicles/fox_wrc/fox_wrc.obj (GPL)
 	vehicles/fox_wrc/fox_wrc.vehicle (GPL)
+	
+rubberduck, Onsemeliot
+	textures/veg/herbs.png (CC0), http://opengameart.org/content/free-plant-pack
 
 Tim Wintle, Andrei Bodor, Onsemeliot
 	plugins/map-snowlevel.zip (unlicenced)
