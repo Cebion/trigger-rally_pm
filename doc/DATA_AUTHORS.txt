@@ -166,10 +166,13 @@ Matthias Keysermann, Andrei Bondor, Onsemeliot
 
 Mehihe
 	textures/veg/snowy-spruce.png (CC0, PD), source: https://openclipart.org/detail/213658/christmas-tree
+
+moijin001, Onsemeliot (PD), source: https://openclipart.org/detail/205562/church-of-vasteras
+	maps/glacier/church.png (GPL)
 	
 Mysteryem
 	textures/detail.jpg (GPL) source: http://opengameart.org/content/29-grounds-and-walls-and-water-1024x1024
-	
+
 Onsemeliot
 	events/alps/alps.event (GPL)
 	events/alps/dawn/c.jpg (GPL)
@@ -605,6 +608,14 @@ Onsemeliot
 	maps/frozen/t.png (GPL)
 	maps/ghats/mm.png (GPL)
 	maps/ghats/ss.png (GPL)
+	maps/glacier/c.png (GPL)
+	maps/glacier/f.png (GPL)
+	maps/glacier/glacier.level (GPL)
+	maps/glacier/h.png (GPL)
+	maps/glacier/mm.png (GPL)
+	maps/glacier/r.png (GPL)
+	maps/glacier/ss.png (GPL)
+	maps/glacier/t.png (GPL)
 	maps/grass/c.png (GPL)
 	maps/grass/f.png (GPL)
 	maps/grass/h.png (GPL)
@@ -980,6 +991,9 @@ Onsemeliot, Andrei Bondor
 
 Rambo Tribble, Onsemeliot
 	textures/veg/fir.png (CC0) https://openclipart.org/detail/181473/douglas-fir
+	
+rones, Onsemeliot (PD), source: https://openclipart.org/detail/262423/overhead-power-line-by-rones
+	maps/glacier/power.png (GPL)
 	
 Pulp, Onsemeliot
 	plugins/map-pulp.zip (unlicenced)
