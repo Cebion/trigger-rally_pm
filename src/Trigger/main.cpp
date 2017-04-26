@@ -1296,7 +1296,7 @@ bool MainApp::startGame(const std::string &filename)
   
   race_data.playername  = cfg_playername; // TODO: move to a better place
   race_data.mapname     = filename;
-  choose_type = game->vehiclechoices.size() - 1;
+  choose_type = 0;
   
   if (game->vehiclechoices.size() > 1) {
     appstate = AS_CHOOSE_VEHICLE;
