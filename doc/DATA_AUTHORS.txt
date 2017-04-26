@@ -835,6 +835,7 @@ Onsemeliot
 	maps/xerxes/m.png (GPL)
 	maps/xerxes/mm.png (GPL)
 	maps/xerxes/ss.png (GPL)
+	maps/xing (GPL)
 	maps/yearzero/c.png (GPL)
 	maps/yearzero/f.png (GPL)
 	maps/yearzero/h.png (GPL)
