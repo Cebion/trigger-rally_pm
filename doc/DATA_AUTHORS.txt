@@ -541,6 +541,7 @@ Onsemeliot
 	maps/blunt/h.png (GPL)
 	maps/blunt/mm.png (GPL)
 	maps/blunt/ss.png (GPL)
+	maps/bunnykingdom (GPL)
 	maps/coastline (GPL)
 	maps/coffee/c.jpg (GPL)
 	maps/coffee/f.png (GPL)
