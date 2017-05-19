@@ -344,11 +344,11 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
           vtp->ref_local.setPosition(pos * allscale);
       }
       
-      val = walk->Attribute("ori");
+      val = walk->Attribute("orientation");
       if (val) {
         quatf ori;
         // note: w first, as per usual mathematical notation
-        if (sscanf(val, "%f , %f , %f , %f", &ori.w, &ori.x, &ori.y, &ori.z) == 3)
+        if (sscanf(val, "%f , %f , %f , %f", &ori.w, &ori.x, &ori.y, &ori.z) == 4)
           vtp->ref_local.setOrientation(ori);
       }
 
