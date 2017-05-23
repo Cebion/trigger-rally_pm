@@ -27,7 +27,7 @@ TR_DLLFILES     :=                  \
     $(TR_BINDIR)/zlib1.dll
 FMODAPIDIR      := /c/Program Files (x86)/FMOD SoundSystem/FMOD Studio API Windows/api/lowlevel
 PROJDIRS        := PEngine PSim TinyXML2 Trigger
-SRCFILES        := $(shell find $(PROJDIRS) -type f -name "*.cpp")
+SRCFILES        := $(sort $(shell find $(PROJDIRS) -type f -name "*.cpp"))
 OBJFILES        := $(patsubst %.cpp, %.o, $(SRCFILES))
 DEPFILES        := $(patsubst %.cpp, %.d, $(SRCFILES))
 WARNINGS        ?= -Wall -Wextra -pedantic
