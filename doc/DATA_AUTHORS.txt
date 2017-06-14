@@ -87,7 +87,16 @@ Andrei Bondor, Onsemeliot
 	
 Bleed - http://remusprites.carbonmade.com
 	textures/veg/brown-tree.png (CCBY 3.0), source: http://opengameart.org/content/tree-collection-v26-bleeds-game-art
+	textures/veg/green-tree.png (CCBY 3.0), source: http://opengameart.org/content/tree-collection-v26-bleeds-game-art
+	textures/veg/green-tree2.png (CCBY 3.0), source: http://opengameart.org/content/tree-collection-v26-bleeds-game-art
 	textures/veg/fine-tree.png (CCBY 3.0), source: http://opengameart.org/content/tree-collection-v26-bleeds-game-art
+	textures/veg/needle.png (CCBY 3.0), source: http://opengameart.org/content/tree-collection-v26-bleeds-game-art
+	textures/veg/palm3.png (CCBY 3.0), source: http://opengameart.org/content/tree-collection-v26-bleeds-game-art
+	textures/veg/palm4.png (CCBY 3.0), source: http://opengameart.org/content/tree-collection-v26-bleeds-game-art
+	textures/veg/spruce-little.png (CCBY 3.0), source: http://opengameart.org/content/tree-collection-v26-bleeds-game-art
+	textures/veg/thick-tree.png (CCBY 3.0), source: http://opengameart.org/content/tree-collection-v26-bleeds-game-art
+	textures/veg/wide-tree2.png (CCBY 3.0), source: http://opengameart.org/content/tree-collection-v26-bleeds-game-art
+	textures/veg/willow.png (CCBY 3.0), source: http://opengameart.org/content/tree-collection-v26-bleeds-game-art
 	
 
 Bruno "Fuddl" Kleinert, Andrei Bondor, Onsemeliot
@@ -286,6 +295,7 @@ Onsemeliot
 	events/coy/undergrowth/mm.png (GPL)
 	events/coy/undergrowth/ss.png (GPL)
 	events/coy/undergrowth/t.png (GPL)
+	events/encountered (GPL)
 	events/flood (GPL)
 	events/highstakes/crossing/c.png (GPL)
 	events/highstakes/crossing/f.png (GPL)
@@ -859,6 +869,8 @@ Onsemeliot
 	textures/life_helmet.png (CC0, PD), source: https://openclipart.org/detail/172011/racing-helmet
 	textures/roadsigns/ (CC0, PD), raw material from: https://openclipart.org/search/?query=roadsigns
 	textures/sky/cloudy.png (GPL)
+	textures/sky/cloudy2.png (GPL)
+	textures/sky/cloudy3.png (GPL)
 	textures/sky/dark-blue.png (GPL)
 	textures/sky/dark-clouds.png (GPL)
 	textures/sky/dawn.jpg (GPL)
@@ -878,6 +890,7 @@ Onsemeliot
 	textures/veg/bush.png (CC0, PD), source: http://opengameart.org/content/bush-0
 	textures/veg/dusty-bush.png (CC0, PD)
 	textures/veg/grain.png (CC0, PD)
+	textures/veg/horse-chestnut-tree.png (CC0, PD)
 	textures/veg/ivy.png (CC0, PD), source: http://opengameart.org/content/ivy
 	textures/veg/mais.png (CC0, PD), source: http://opengameart.org/content/corn-resp-maize
 	textures/veg/olive-bush.png (CC0, PD)
@@ -885,6 +898,7 @@ Onsemeliot
 	textures/veg/palm-tree2.png (CC0, PD)
 	textures/veg/pear-tree.png (CC0, PD)
 	textures/veg/post.png (CC0, PD)
+	textures/veg/purple-leaf-plum.png (CC0, PD)
 	textures/veg/red-tree.png (CC0, PD)
 	textures/veg/snowy-tree.png (CC0, PD)
 	textures/veg/spruce.png (CC0, PD), source: https://openclipart.org/detail/227626/spruce
