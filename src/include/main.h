@@ -277,6 +277,9 @@ struct UserControl {
   float value; // from 0.0 to 1.0 depending on activation level
 };
 
+///
+/// @brief this class is the Trigger Rally. A MainApp object is the only thing main() does
+///
 class MainApp : public PApp {
 public:
   enum Speedunit {

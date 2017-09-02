@@ -4,13 +4,20 @@
 // Copyright 2004-2006 Jasmine Langridge, jas@jareiko.net
 // License: GPL version 2 (see included gpl.txt)
 
+// Vehicle class related functions, such as:
+// PDriveSystem          classes functions
+// PDriveSystemInstance  ""
+// PVehicleType          ""
+// PVehicle              ""
+
+
 #include "psim.h"
 
-
-
-// PDriveSystem and PDriveSystemInstance //
-
-
+///
+/// @brief Get the engine power output at a rps
+/// @param rps = radians per second
+/// @retval output power
+///
 float PDriveSystem::getPowerAtRPS(float rps)
 {
   unsigned int p;
@@ -35,78 +42,116 @@ float PDriveSystem::getPowerAtRPS(float rps)
   return power;
 }
 
+///
+/// @brief engine simulation tick. Decide if change gear, compute output torque
+/// @param delta = timeslice to compute
+/// @param wheel_rps = current rps of the wheel
+/// @param thottle = input throttle
+///
 void PDriveSystemInstance::tick(float delta, float throttle, float wheel_rps)
 {
+  // convert the rps of the wheel to the actual engine rps \
+     multiplying it for the inverse of the current gear ratio
   rps = wheel_rps * dsys->gear[currentgear].y;
   
   bool wasreverse = reverse;
+  
+  // check if the throttle will going reverse or not
   reverse = (throttle < 0.0f);
   
+  // if reverse changes, there is a gear change
   if (wasreverse != reverse) flag_gearchange = true;
   
+  // rps and throttle will be set here always positive
   if (reverse) {
     rps *= -1.0f;
     throttle *= -1.0f;
   }
   
   CLAMP_UPPER(throttle, 1.0f);
+  
+  // engine rps have to be in the range
   CLAMP(rps, dsys->minRPS, dsys->maxRPS);
   
   if (reverse) {
     currentgear = 0;
   }
   
+  // final output engine torque
   out_torque = dsys->getPowerAtRPS(rps) * dsys->gear[currentgear].y / rps;
   
+  // if not reverse
   if (!reverse) {
+	// store if we should change gear (0 no, 1 go up, -1 go down)
     int newtarget_rel = 0;
     
+    // if it's not last gear (we can go up)
     if (currentgear < (int)dsys->gear.size()-1) {
+	  // nextrate = rps if the gear was the next one 
       float nextrate = rps / dsys->gear[currentgear].y * dsys->gear[currentgear+1].y;
+      // nextrate has to be in the rps range
       CLAMP(nextrate, dsys->minRPS, dsys->maxRPS);
+      // final output engine torque if the gear was the next one
       float nexttorque = dsys->getPowerAtRPS(nextrate) * dsys->gear[currentgear+1].y / nextrate;
+      // if going up we gain torque
       if (nexttorque > out_torque)
+        // do it
         newtarget_rel = 1;
     }
 
-    // don't test for down if already decided to go up
+    // if the gear is not reverse and we haven't yet decided to go up
     if (currentgear > 0 && newtarget_rel == 0) {
+	  // nextrate = rps if the gear was the previous one
       float nextrate = rps / dsys->gear[currentgear].y * dsys->gear[currentgear-1].y;
+      // nextrate has to be in the rps range
       CLAMP(nextrate, dsys->minRPS, dsys->maxRPS);
+      // final output engine torque if the gear was the previous one
       float nexttorque = dsys->getPowerAtRPS(nextrate) * dsys->gear[currentgear-1].y / nextrate;
+      // if going down we gain gear
       if (nexttorque > out_torque)
+        // do it
         newtarget_rel = -1;
     }
     
+    // if we are going to change gear and targetgear_rel is updated
     if (newtarget_rel != 0 && newtarget_rel == targetgear_rel) {
+      // if has passed enought time
       if ((gearch -= delta) <= 0.0f)
       {
+		// the rps with the new gear
         float nextrate = rps / dsys->gear[currentgear].y * dsys->gear[currentgear + targetgear_rel].y;
-        CLAMP(nextrate, dsys->minRPS, dsys->maxRPS);
+        CLAMP(nextrate, dsys->minRPS, dsys->maxRPS); 
+        // final output torque with the new gear
         out_torque = dsys->getPowerAtRPS(nextrate) * dsys->gear[currentgear + targetgear_rel].y / nextrate;
+        // change gear
         currentgear += targetgear_rel;
+        // set gearch
         gearch = dsys->gearch_repeat;
+        // there is a gear change
         flag_gearchange = true;
       }
     } else {
+      // update targetgear_rel, and set gearch 
       gearch = dsys->gearch_first;
       targetgear_rel = newtarget_rel;
     }
   }
   
+  // output torque is proportional to throttle
   out_torque *= throttle;
   
+  // if reverse the output torque is obviously reversed
   if (reverse) {
     out_torque *= -1.0;
   }
   
+  // the torque will be lower when wheels are rounding fastly
   out_torque -= wheel_rps * 0.1f;
 }
 
-
-// PVehicleType //
-
-
+///
+/// @brief load a vehicle type from a file
+///
 bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
 {
   if (PUtil::isDebugLevel(DEBUGLEVEL_TEST))
@@ -496,22 +541,30 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
   return true;
 }
 
+///
+/// @brief unload parts of the PVehicleType
+///
 void PVehicleType::unload()
 {
   part.clear();
 }
 
 
-// PVehicle //
-
 
 //TNL_IMPLEMENT_NETOBJECT(PVehicle); 
 
+///
+/// @brief Constructor of the PVehicle class
+/// @param sim_parent = the simulation where the vehicle stays
+/// @param _type = the type of vehicle the new vehicle is
+///
 PVehicle::PVehicle(PSim &sim_parent, PVehicleType *_type) :
   sim(sim_parent), type(_type), dsysi(&_type->dsys)
 {
+  // body is the vehicle rigid body
   body = sim.createRigidBody();
   
+  // vehicle mass is approximately meant to be cuboid
   body->setMassCuboid(type->mass, type->dims);
   
   state.setZero();
@@ -534,6 +587,7 @@ PVehicle::PVehicle(PSim &sim_parent, PVehicleType *_type) :
   crunch_level = 0.0f;
   crunch_level_prev = 0.0f;
   
+  // Set parts and wheels
   part.resize(type->part.size());
   for (unsigned int i=0; i<part.size(); i++) {
     part[i].ref_local = type->part[i].ref_local;
@@ -541,7 +595,7 @@ PVehicle::PVehicle(PSim &sim_parent, PVehicleType *_type) :
     part[i].wheel.resize(type->part[i].wheel.size());
     
     for (unsigned int j=0; j<part[i].wheel.size(); j++) {
-      part[i].wheel[j].ref_world.setPosition(vec3f(0,0,1000000)); // FIXME!!!
+      part[i].wheel[j].ref_world.setPosition(vec3f(0,0,1000000)); // FIXME
     }
   }
   
@@ -550,12 +604,18 @@ PVehicle::PVehicle(PSim &sim_parent, PVehicleType *_type) :
   //mNetFlags.set(Ghostable);
 }
 
+///
+/// @brief reset the vehicle anywhere it is (used when it get flipped or something)
+///
 void PVehicle::doReset()
 {
+  // some time has to pass before reset
   if (reset_time != 0.0f) return;
   
+  // the reset position
   reset_pos = body->pos + vec3f(0.0f, 0.0f, 2.0f);
   
+  // set the new orientation
   vec3f forw = makevec3f(body->getOrientationMatrix().row[0]);
   float forwangle = atan2(forw.y, forw.x);
   
@@ -566,11 +626,13 @@ void PVehicle::doReset()
   
   reset_ori = temp;
   
+  // set a reset time again
   reset_time = 3.0f;
   
   crunch_level = 0.0f;
   crunch_level_prev = 0.0f;
   
+  // stop all the wheels
   for (unsigned int i=0; i<part.size(); i++) {
     for (unsigned int j=0; j<part[i].wheel.size(); j++) {
       part[i].wheel[j].spin_vel = 0.0f;
@@ -583,32 +645,46 @@ void PVehicle::doReset()
     }
   }
   
+  // stop
   forwardspeed = 0.0f;
   wheel_angvel = 0.0f;
   wheel_speed = 0.0f;
   
+  // reset engine
   dsysi.doReset();
   
+  // control state
   state.setZero();
 }
 
+///
+/// @brief reset the vehicle to a specific point (used when the 'recover' button is pressed)
+/// @param pos = the position where the vehicle has to be set
+/// @param ori = the orientation the vehicle has to be set
+/// @todo this share much code with doReset(), maybe we should do something about it?
+///
 void PVehicle::doReset2(const vec3f &pos, const quatf &ori)
 {
+  // some time has to pass before reset
   if (reset_time != 0.0f) return;
 
+  // the reset position
   reset_pos = pos;
 
+  // set the new orientation
   quatf temp = ori; // FIXME: laziness and fear of breaking copy-pasted code
 
   if (body->ori.dot(temp) < 0.0f) temp = temp * -1.0f;
 
   reset_ori = temp;
 
+  // set a reset time again
   reset_time = 3.0f;
 
   crunch_level = 0.0f;
   crunch_level_prev = 0.0f;
 
+  // stop all the wheels
   for (unsigned int i=0; i<part.size(); i++) {
     for (unsigned int j=0; j<part[i].wheel.size(); j++) {
       part[i].wheel[j].spin_vel = 0.0f;
@@ -621,15 +697,21 @@ void PVehicle::doReset2(const vec3f &pos, const quatf &ori)
     }
   }
 
+  // stop
   forwardspeed = 0.0f;
   wheel_angvel = 0.0f;
   wheel_speed = 0.0f;
 
+  // reset engine
   dsysi.doReset();
 
   state.setZero();
 }
 
+///
+/// @brief Physic simulation for the single vehicle
+/// @param delta = timeslice to compute
+///
 void PVehicle::tick(float delta)
 {
   // ensure control values are in valid range
@@ -672,9 +754,11 @@ void PVehicle::tick(float delta)
   // check for resetting (if the vehicle has been flipped or something)
   if (reset_time != 0.0f) {
     if (reset_time > 0.0f) {
+	  // move toward reset position and orientation
       PULLTOWARD(body->pos, reset_pos, delta * 2.0f);
       PULLTOWARD(body->ori, reset_ori, delta * 2.0f);
       
+      // stop
       body->setLinearVel(vec3f::zero());
       body->setAngularVel(vec3f::zero());
       
@@ -789,10 +873,11 @@ void PVehicle::tick(float delta)
   vec3f forwarddir = makevec3f(body->getInverseOrientationMatrix().row[1]);
   //vec3f rightdir = makevec3f(body->getInverseOrientationMatrix().row[0]);
   
+  // handle engine (output torque, change gear if needed...)
   dsysi.tick(delta, state.throttle, wheel_angvel);
   
+  // Output engine power
   float drivetorque = dsysi.getOutputTorque();
-  //float drivetorque = 0.0f;
   
   float turnfactor = state.turn.z;// /
     //(1.0f + fabsf(wheel_angvel) / 70.0f);
@@ -803,19 +888,23 @@ void PVehicle::tick(float delta)
   
   skid_level = 0.0f;
   
+  // the parts
   for (unsigned int i=0; i<part.size(); ++i) {
+    // the clips of the part
     for (unsigned int j=0; j<type->part[i].clip.size(); ++j) {
       
+      // the local clip coordinate
       vec3f lclip = type->part[i].clip[j].pt;
-      
+      // the world clip coordinate
       vec3f wclip = part[i].ref_world.getLocToWorldPoint(lclip);
       
+      // where the clip *might* touch the ground
       PTerrain::ContactInfo tci;
       tci.pos.x = wclip.x;
       tci.pos.y = wclip.y;
-      
       sim.getTerrain()->getContactInfo(tci);
       
+      // if the clip hovers let it hover
       if (type->part[i].clip[j].type == VCLIP_HOVER) {
         if (tci.pos.z < 40.3) {
           tci.pos.z = 40.3;
@@ -823,8 +912,10 @@ void PVehicle::tick(float delta)
         }
       }
       
+      // if the clip touches the ground
       if (wclip.z <= tci.pos.z) {
       
+        // how much the wheel enter the groud along the normal
         float depth = (tci.pos - wclip) * tci.normal;
         vec3f ptvel = body->getLinearVelAtPoint(wclip);
       
@@ -862,8 +953,7 @@ void PVehicle::tick(float delta)
             float perpforce = depth * type->part[i].clip[j].force -
               surfvel.z * type->part[i].clip[j].dampening;
             
-            // check we have positive normal force
-            
+            // if we have positive normal force
             if (perpforce > 0.0f) {
               vec2f friction = vec2f(-surfvel.x, -surfvel.y) * 10000.0f;
               
@@ -929,26 +1019,30 @@ void PVehicle::tick(float delta)
       }
     }
     
+    // The wheels
     for (unsigned int j=0; j<type->part[i].wheel.size(); ++j) {
       
       PVehicleWheel &wheel = part[i].wheel[j];
       PVehicleTypeWheel &typewheel = type->part[i].wheel[j];
 
-        const TerrainType mf_tt = sim.getTerrain()->getRoadSurface(wheel.ref_world.getPosition());
-        const float mf_coef     = PUtil::decideFrictionCoef(mf_tt);
-        const float mf_resis    = PUtil::decideResistance(mf_tt);
+      // terrain information
+      const TerrainType mf_tt = sim.getTerrain()->getRoadSurface(wheel.ref_world.getPosition());
+      const float mf_coef     = PUtil::decideFrictionCoef(mf_tt);
+      const float mf_resis    = PUtil::decideResistance(mf_tt);
 
       vec3f wclip = wheel.ref_world.getPosition();
       
       //vec3f wclip = vec3f(0,0,2000);
       
       // TODO: calc wclip along wheel plane instead of just straight down
+      // wclip is the lowest point of the wheel
       wclip.z -= typewheel.radius;
       
       wclip.z += INTERP(wheel.bumplast, wheel.bumpnext, wheel.bumptravel);
       
       wheel.spin_vel += drivetorque * typewheel.drive * delta * (1.0f - mf_resis);
       
+      // brakes affects wheel spin velocity
       float desiredchange = (state.brake1 * typewheel.brake1 +
         state.brake2 * typewheel.brake2) * delta;
       if (wheel.spin_vel > desiredchange)
@@ -958,26 +1052,37 @@ void PVehicle::tick(float delta)
       else
         wheel.spin_vel = 0.0f;
       
+      // update wheel spin position
       wheel.spin_pos += wheel.spin_vel * delta;
+      
+      // update wheel spin velocity for the ground resistance
       wheel.spin_vel -= wheel.spin_vel * mf_resis * delta;
       
+      // update wheel position respect steering axis
       wheel.turn_pos = turnfactor * typewheel.steer;
       
       wheel.dirtthrow = 0.0f;
       
+      // the suspension force is proportional to how much the suspension \
+         is tensed up and the proper suspension force
       float suspension_force = wheel.ride_pos * typewheel.force;
-      
+     
+      // update suspension velocity
       wheel.ride_vel +=
         (-suspension_force -
         wheel.ride_vel * typewheel.dampening) * 0.02 * delta;
+      
+      // update suspension position
       wheel.ride_pos += wheel.ride_vel * delta;
       
+      // tci = the terrain point that shares the vertical with wclip
       PTerrain::ContactInfo tci;
       tci.pos.x = wclip.x;
       tci.pos.y = wclip.y;
       
       sim.getTerrain()->getContactInfo(tci);
       
+      // If the wheel touches the ground
       if (wclip.z <= tci.pos.z) {
         
         wheel.bumptravel += fabsf(wheel.spin_vel) * 0.6f * delta;
@@ -989,6 +1094,7 @@ void PVehicle::tick(float delta)
           wheel.bumpnext = randm11 * rand01 * typewheel.radius * 0.1f;
         }
         
+        // how much wclip is below the ground along the normal
         float depth = (tci.pos - wclip) * tci.normal;
         vec3f ptvel = body->getLinearVelAtPoint(wclip);
         
@@ -1011,16 +1117,21 @@ void PVehicle::tick(float delta)
           ptvel * surf_forward,
           ptvel * tci.normal);
         
+        // with how much force the wheel pushes the ground
         float perpforce = suspension_force;
+        
         if (surfvel.z < 0.0f) perpforce -= surfvel.z * typewheel.dampening;
         
+        // suspension get pressed
         wheel.ride_pos += depth;
         
         float maxdepth = typewheel.radius * 0.7f;
         
+        // if the suspension get pressed too much
         if (wheel.ride_pos > maxdepth) {
+		  // how much is overpressed
           float overdepth = wheel.ride_pos - maxdepth;
-          
+          // suspension will be pressed to its maximum value
           wheel.ride_pos = maxdepth;
           
           perpforce -= overdepth * surfvel.z * typewheel.dampening * 5.0f;
@@ -1030,7 +1141,6 @@ void PVehicle::tick(float delta)
           wheel.ride_vel = -surfvel.z;
         
         // check we have positive normal force
-        
         if (perpforce > 0.0f) {
           vec2f friction = vec2f(-surfvel.x, -surfvel.y) * 10000.0f;
 

@@ -4,7 +4,9 @@
 // Copyright 2004-2006 Jasmine Langridge, jas@jareiko.net
 // License: GPL version 2 (see included gpl.txt)
 
-
+//
+// This file contains definitions and classes related to Vehicles
+//
 
 // vehicle core types
 
@@ -12,7 +14,7 @@
 #define VCTYPE_HELICOPTER   2
 #define VCTYPE_PLANE        3
 #define VCTYPE_HOVERCRAFT   4
-#define VCTYPE_CAR      5
+#define VCTYPE_CAR          5
 
 
 // vehicle clip point types
@@ -52,7 +54,9 @@ const float MPS_KPH_SPEED_MULT = 3.6f;
 const float MPS_MPH_DEG_MULT = MPS_MPH_SPEED_MULT * DEG_PER_MPH;
 const float MPS_KPH_DEG_MULT = MPS_KPH_SPEED_MULT * DEG_PER_KPH;
 
-
+///
+/// @brief class which contains the control status of a vehicle
+///
 struct v_control_s {
   // shared
   float throttle;
@@ -83,6 +87,9 @@ struct v_control_s {
     collective = 10.0f;
   }
   
+  ///
+  /// @brief ensure all the values are within range
+  ///
   void clamp() {
     CLAMP(throttle, -1.0f, 1.0f);
     CLAMP(brake1, 0.0f, 1.0f);
@@ -96,17 +103,32 @@ struct v_control_s {
   }
 };
 
+// @todo Why call the same class in two ways?
 typedef v_control_s v_state_s;
 
-
+///
+/// @brief Datas about performances of a vehicle
+///
 class PDriveSystem {
 private:
+
+  // the curve graph of the power of the engine
+  // x = radians per second
+  // y = output power
   std::vector<vec2f> powercurve;
   
+  // vector of gears
+  // x = ratio
+  // y = 1/ratio
   std::vector<vec2f> gear;
   
-  float gearch_first, gearch_repeat;
+  // standard time to change gear
+  float gearch_first;
   
+  // time to change gear if you change it just after another change
+  float gearch_repeat;
+  
+  // engine minimum and maximum radians per second angular speed
   float minRPS, maxRPS;
   
 protected:
@@ -119,17 +141,31 @@ public:
     minRPS(10000000.0f),
     maxRPS(0.0f) { }
   
+  ///
+  /// @brief Add a point to the power curve
+  /// @param rpm   = at 'rpm' round per minute
+  /// @param power = you get 'power' output power
+  /// @todo overload function to allow to give angular velocity directly in radians per second?
+  ///
   void addPowerCurvePoint(float rpm, float power) {
+	// no power with the engine still
     if (rpm <= 0.0f) return;
     
+    // round per minute >> radians per second
     float rps = RPM_TO_RPS(rpm);
     
+    // add the point
     powercurve.push_back(vec2f(rps, power));
     
+    // if the point is out of range, adapt max or min rps
     if (minRPS > rps) minRPS = rps;
     if (maxRPS < rps) maxRPS = rps;
   }
   
+  ///
+  /// @brief add a gear
+  /// @param ratio = gear ratio
+  ///
   void addGear(float ratio) {
     if (hasGears()) {
       if (ratio <= getLastGearRatio()) return;
@@ -137,6 +173,7 @@ public:
       if (ratio <= 0.0f) return;
     }
     
+    // put in x the ratio, in y its inverse
     gear.push_back(vec2f(ratio, 1.0f / ratio));
   }
   
@@ -146,20 +183,34 @@ public:
   friend class PDriveSystemInstance;
 };
 
+///
+/// @brief data about current values of the vehicle, compare with PDriveSystem
+///
 class PDriveSystemInstance {
 private:
   
+  // reference with performance of the vehicle
   PDriveSystem *dsys;
   
+  // current rps (always positive)
   float rps;
   
-  int currentgear, targetgear_rel;
+  // gear currently used
+  int currentgear;
+  
+  // target gear relative (1 to go up, -1 to go down, 0 to stay)
+  int targetgear_rel;
+  
+  // timing variable for gear changing
   float gearch;
   
+  // if the car is going reverse, (rps will be always positive) 
   bool reverse;
   
+  // current output engine torque
   float out_torque;
   
+  // if the vehicle has changed gear in the past
   bool flag_gearchange;
   
 public:
@@ -172,13 +223,15 @@ public:
     out_torque(0.0f),
     flag_gearchange(false) { }
   
+  // Simulation tick
   void tick(float delta, float throttle, float wheel_rps);
   
+  // return current information
   float getOutputTorque() { return out_torque; }
-  
   float getEngineRPS() { return rps; }
   float getEngineRPM() { return RPS_TO_RPM(rps); }
   
+  // return current gear (reverse will out -1)
   int getCurrentGear() { return reverse ? -1 : currentgear; }
   
   bool getFlagGearChange() {
@@ -187,6 +240,9 @@ public:
     return ret;
   }
   
+  ///
+  /// @brief Reset the engine, used i.e. with the 'recover' key
+  ///
   void doReset() {
     rps = dsys->minRPS;
     currentgear = 0;
@@ -196,22 +252,29 @@ public:
   }
 };
 
-
 struct vehicle_clip_s {
   vec3f pt;
   int type;
   float force, dampening;
 };
 
-
+///
+/// @brief stores a type of wheel and its stats
+///
 struct PVehicleTypeWheel {
+  // its position
   vec3f pt;
   float radius;
+  // performance
   float drive, steer, brake1, brake2;
-  float force, dampening;
+  // suspension proper resistance force
+  float force;
+  float dampening;
 };
 
-
+///
+/// @brief stores a type of part
+///
 struct PVehicleTypePart {
   std::string name, parentname;
   int parent;
@@ -228,46 +291,59 @@ struct PVehicleTypePart {
   PModel *model;
 };
 
-
+///
+/// @brief class which store a model (type) of vehicle: e.g. name, specifications
+///
 class PVehicleType : public PResource {
 public:
+
+  // Statistics and stuff displayed to the user, not actually used in the simulation
   std::string proper_name;
-  std::string proper_class;
+  std::string proper_class;  // class name (i.e. "WRC")
   
-  // Pseudo Statistics
   std::string pstat_weightkg;
   std::string pstat_enginebhp;
   std::string pstat_wheeldrive;
   std::string pstat_handling;
   
+  // type of vehicle (usually VCTYPE_CAR)
   int coretype;
   
+  // mass
   float mass;
+  
+  // dimensions (aproximated as a cuboid)
   vec3f dims;
   
+  // parts which compose the vehicle
   std::vector<PVehicleTypePart> part;
   
+  // wheel scale
   float wheelscale;
+  
+  // wheel model
   PModel *wheelmodel;
   
+  // Car statistics (powercurve, gears...)
   PDriveSystem dsys;
   
   float inverse_drive_total;
   
   float wheel_speed_multiplier;
   
-public:
+  // Vehicle dinamic specification
   struct {
     // shared
     float speed;
     vec3f turnspeed;
     float turnspeed_a, turnspeed_b; // turnspeed = a + b * speed
     vec3f drag;
-    float angdrag;
+    float angdrag; // angular drag
     vec2f lift; // x = fin lift (hz), y = wing lift (vt)
     vec2f fineffect; // x = rudder/fin (hz), y = tail (vt)
   } param;
 
+  // vehicle specific control specifications
   v_control_s ctrlrate;
 
 public:
@@ -280,12 +356,20 @@ public:
 };
 
 
-
+///
+/// @brief Class representing a wheel of a vehicle
+///
 struct PVehicleWheel {
-  float ride_pos, ride_vel; // ride = suspension travel
-  float spin_pos, spin_vel; // spin = driving axis rotation
-  float turn_pos; // turn = steering axis rotation
+  // suspension position
+  float ride_pos;
+  // suspension position changing velocity
+  float ride_vel;
+  // driving axis rotation
+  float spin_pos, spin_vel;
+  // steering axis rotation
+  float turn_pos;
   
+  // his reference position
   PReferenceFrame ref_world;
   
   float skidding, dirtthrow;
@@ -310,36 +394,48 @@ struct PVehiclePart {
 
   // ref_local is initted from vehicle type, but may change per-vehicle
 
+  // reference points in the local and world system
   PReferenceFrame ref_local, ref_world;
   
   std::vector<PVehicleWheel> wheel;
 };
 
-
-
+///
+/// @brief store a vehicle instance
+///
 class PVehicle {
 //class PVehicle : public NetObject {
 //typedef NetObject Parent;
   
 public:
+  // physic simulation information
   PSim &sim;
   
+  // the type of Vehicle
   PVehicleType *type;
   
+  // the reference rigid body of the vehicle
+  // contains datas such as position, orientation, velocity, mass ...
   PRigidBody *body;
   
+  // the part which compose the vehicle
   std::vector<PVehiclePart> part;
   
+  // current control state (eg. brakes, turn)
   v_state_s state;
   
+  // engine instance (current RPS, gear...)
   PDriveSystemInstance dsysi;
   
   // helicopter-specific
   float blade_ang1;
   
+  // next checkpoint
   int nextcp;
-  int nextcdcp; ///< Next codriver checkpoint.
-  int currentlap; ///< Current lap, counted from 1.
+  // next codriver checkpoint
+  int nextcdcp;
+  // current lap, counted from 1
+  int currentlap;
   
   // for vehicle resetting, after being flipped
   float reset_trigger_time;
@@ -350,7 +446,7 @@ public:
   // for body crash/impact noises
   float crunch_level, crunch_level_prev;
   
-public:
+  // current controls situation (eg. brakes, turn)
   v_control_s ctrl;
   
   // info
@@ -381,14 +477,16 @@ public:
   void unpackUpdate(GhostConnection *connection, BitStream *stream);
   */
   
-  
+  // simulate for 'delta' seconds
   void tick(float delta);
   
   bool canHaveDustTrail();
   
   void updateParts();
   
+  // reset the car when it get flipped or something
   void doReset();
+  // reset the car when 'q' is pressed
   void doReset2(const vec3f &pos, const quatf &ori);
   
   float getEngineRPM() { return dsysi.getEngineRPM(); }

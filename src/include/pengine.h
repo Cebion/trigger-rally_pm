@@ -102,7 +102,7 @@ struct dirtinfo
 };
 
 ///
-/// @brief Helper structure for storing colors.
+/// @brief Helper structure for storing RGB colors.
 ///
 struct rgbcolor
 {
@@ -142,6 +142,10 @@ struct rgbcolor
 
 #include "terrainmap.h"
 
+///
+/// @brief Class which contains helper functions
+/// @todo maybe set these functions in a more ordered way?
+///
 class PUtil {
 private:
   PUtil() { } // cannot be constructed

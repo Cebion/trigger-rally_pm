@@ -4,6 +4,9 @@
 // Copyright 2004-2006 Jasmine Langridge, jas@jareiko.net
 // License: GPL version 2 (see included gpl.txt)
 
+//
+// This file contains basic classes the physic engine uses
+//
 
 #include <pengine.h>
 
@@ -30,13 +33,19 @@ class PVehicleType;
 class   PVehicleTypePart;
 class PVehicle;
 
-
-
+///
+/// @brief Store a Reference oriented point (stores coordinates and orientation)
+/// @details It is the base class for more advanced classes such as PRigidBody
+///
 class PReferenceFrame {
 public:
+  // position
   vec3f pos;
+  // orientation
   quatf ori;
-
+  // orientation matrix, and its inverse
+  // not directly modify them, but modify ori then run UpdateMatrices()
+  // @todo maybe make them private/protected?
   mat44f ori_mat, ori_mat_inv;
 
 public:
@@ -44,20 +53,24 @@ public:
     updateMatrices();
   }
 
+  // Update the orientation matrices from quaternion orientation (ori)
   void updateMatrices() {
     ori.normalize();
     ori_mat = ori.getMatrix();
     ori_mat_inv = ori_mat.transpose();
   }
 
+  // Position
   void setPosition(const vec3f &_pos) { pos = _pos; }
   vec3f getPosition() { return pos; }
 
+  // Orientation
   void setOrientation(const quatf &_ori) { ori = _ori; }
   quatf getOrientation() { return ori; }
   mat44f getOrientationMatrix() { return ori_mat; }
   mat44f getInverseOrientationMatrix() { return ori_mat_inv; }
 
+  // Change coordinate reference (From local to world system and viceversa)
   vec3f getLocToWorldVector(const vec3f &pt) {
     return ori_mat.transform1(pt);
   }
@@ -72,24 +85,28 @@ public:
   }
 };
 
-
+///
+/// @brief A Rigid body with mass, position, velocity, and angular mass, position, and velocity
+/// @todo: intelligent friction calculation
+///
 class PRigidBody : public PReferenceFrame {
 private:
 
+  // Class that stores simulation informations (such as gravity force intensity)
   PSim &sim;
 
-  // config
+  // mass and 1/mass
   float mass, mass_inv;
-  vec3f angmass, angmass_inv; // inertial tensor approximation
+  // inertial tensor (angular mass) and 1/angmass (usually just approximately computed)
+  vec3f angmass, angmass_inv;
 
-  // state
+  // linear and angular velocity
   vec3f linvel;
   vec3f angvel;
 
+  // the force and the torque accumuled during a slice of time
   vec3f accum_force;
   vec3f accum_torque;
-
-  // TODO: intelligent friction calc
 
 public:
   PRigidBody(PSim &sim_parent);
@@ -117,6 +134,7 @@ public:
   vec3f getLinearVelAtPoint(const vec3f &pt);
   vec3f getLinearVelAtLocPoint(const vec3f &pt);
 
+  // Step the simulation delta seconds
   void tick(float delta);
 
   friend class PSim;
@@ -127,26 +145,31 @@ public:
 
 #include "vehicle.h"
 
-
-
+///
+/// @brief class that stores information about a physic simulation instance
+///
 class PSim {
 private:
 
+  // the terrain class
   PTerrain *terrain;
 
+  // the various types of vehicle
   PResourceList<PVehicleType> vtypelist;
 
+  // the various bodyes inside the simulation
   std::vector<PRigidBody *> body;
 
+  // the various vehicles inside the simulation
   std::vector<PVehicle *> vehicle;
 
+  // the gravity vector
   vec3f gravity;
 
 public:
   PSim();
   ~PSim();
 
-public:
   void setTerrain(PTerrain *_terrain) { terrain = _terrain; }
 
   void setGravity(const vec3f &_gravity) { gravity = _gravity; }
@@ -165,10 +188,8 @@ public:
   // Step the simulation delta seconds
   void tick(float delta);
 
-
   PTerrain *getTerrain() { return terrain; }
 
-public:
 
   friend class PRigidBody;
   friend class PVehicle;

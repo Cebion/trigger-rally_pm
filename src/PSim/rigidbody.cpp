@@ -4,11 +4,16 @@
 // Copyright 2004-2006 Jasmine Langridge, jas@jareiko.net
 // License: GPL version 2 (see included gpl.txt)
 
+//
+// PRigidbody class functions
+// Here there are functions that manage the rigid bodies and related physic
+//
+
 #include "psim.h"
 
-
-
-
+///
+/// @brief initialize PRigidBody
+///
 PRigidBody::PRigidBody(PSim &sim_parent) : PReferenceFrame(), sim(sim_parent)
 {
   linvel = vec3f::zero();
@@ -27,17 +32,24 @@ PRigidBody::~PRigidBody()
 {
 }
 
-
+///
+/// @brief set a new mass as cuboid then update the angular mass
+/// @param _mass  = new mass
+/// @param rad    = the size of the cuboid
+///
 void PRigidBody::setMassCuboid(float _mass, const vec3f &rad)
 {
+  // if there is no mass or a dimension is zero or less return
   if (mass <= 0.0 ||
     rad.x <= 0.0 ||
     rad.y <= 0.0 ||
     rad.z <= 0.0) return;
 
+  // set mass
   mass = _mass;
   mass_inv = 1.0 / mass;
 
+  // set angular mass
 #if 1
   angmass = vec3f(rad.y*rad.z, rad.z*rad.x, rad.x*rad.y) * (mass * 0.4);
 #else
@@ -49,17 +61,29 @@ void PRigidBody::setMassCuboid(float _mass, const vec3f &rad)
   angmass_inv.z = 1.0 / angmass.z;
 }
 
-
+///
+/// @brief Add a force to the rigid body
+/// @param frc = force in the world system
+///
 void PRigidBody::addForce(const vec3f &frc)
 {
   accum_force += frc;
 }
 
+///
+/// @brief Add a force to the rigid body
+/// @param frc = force in the local system
+///
 void PRigidBody::addLocForce(const vec3f &frc)
 {
   addForce(getLocToWorldVector(frc));
 }
 
+///
+/// @brief Add a force to the rigid body
+/// @param frc = force in the world system
+/// @param pt = point where the force is applied in the world system
+///
 void PRigidBody::addForceAtPoint(const vec3f &frc, const vec3f &pt)
 {
   accum_force += frc;
@@ -70,26 +94,49 @@ void PRigidBody::addForceAtPoint(const vec3f &frc, const vec3f &pt)
   //accum_torque -= wdiff ^ frc;
 }
 
+///
+/// @brief Add a force to the rigid body
+/// @param frc = force in the local system
+/// @param pt = point where the force is applied in the world system
+///
 void PRigidBody::addLocForceAtPoint(const vec3f &frc, const vec3f &pt)
 {
   addForceAtPoint(getLocToWorldVector(frc), pt);
 }
 
+///
+/// @brief Add a force to the rigid body
+/// @param frc = force in the world system
+/// @param pt = point where the force is applied in the local system
+///
 void PRigidBody::addForceAtLocPoint(const vec3f &frc, const vec3f &pt)
 {
   addForceAtPoint(frc, getLocToWorldPoint(pt));
 }
 
+///
+/// @brief Add a force to the rigid body
+/// @param frc = force in the local system
+/// @param pt = point where the force is applied in the local system
+///
 void PRigidBody::addLocForceAtLocPoint(const vec3f &frc, const vec3f &pt)
 {
   addForceAtPoint(getLocToWorldVector(frc), getLocToWorldPoint(pt));
 }
 
+///
+/// @brief Add a torque to the rigid body
+/// @param trq = force in the world system
+///
 void PRigidBody::addTorque(const vec3f &trq)
 {
   accum_torque += trq;
 }
 
+///
+/// @brief Add a torque to the rigid body
+/// @param trq = force in the local system
+///
 void PRigidBody::addLocTorque(const vec3f &trq)
 {
   addTorque(getLocToWorldVector(trq));
@@ -106,19 +153,26 @@ vec3f PRigidBody::getLinearVelAtLocPoint(const vec3f &pt)
   return getLinearVelAtPoint(getLocToWorldPoint(pt));
 }
 
-
+// Uncomment this to prevent rigid body velocity and angular velocity go too high (see PRigidBody::tick() )
 //#define CLAMPVEL
 
+///
+/// @brief Apply forces and torque accumulated, update the body accordingly
+/// @param delta = the time slice to compute
+///
 void PRigidBody::tick(float delta)
 {
+  // update the linear velocity of the body
   linvel += (accum_force * mass_inv + sim.gravity) * delta;
 
 #ifdef CLAMPVEL
+  // Keep linvel inside a range of values
   CLAMP(linvel.x, -20.0, 20.0);
   CLAMP(linvel.y, -20.0, 20.0);
   CLAMP(linvel.z, -20.0, 20.0);
 #endif
 
+  // update the position of the body
   pos += linvel * delta;
 
 #if 0
@@ -138,23 +192,26 @@ void PRigidBody::tick(float delta)
     accum_torque.y * angmass_inv_world.y,
     accum_torque.z * angmass_inv_world.z);
 
+  // update the angular velocity
   angvel += ang_accel * delta;
 
 #ifdef CLAMPVEL
+  // keep angular velocity inside a range a value
   CLAMP(angvel.x, -20.0, 20.0);
   CLAMP(angvel.y, -20.0, 20.0);
   CLAMP(angvel.z, -20.0, 20.0);
 #endif
 
+  // update the orientation
   quatf angdelta;
   angdelta.fromThreeAxisAngle(angvel * delta);
-
   ori = ori * angdelta;
   //ori = angdelta * ori;
 
   //PULLTOWARD(linvel, vec3f::zero(), delta * 0.1);
   //PULLTOWARD(angvel, vec3f::zero(), delta * 0.1);
 
+  // resetting
   accum_force = vec3f::zero();
   accum_torque = vec3f::zero();
 
