@@ -118,9 +118,8 @@ private:
   std::vector<vec2f> powercurve;
   
   // vector of gears
-  // x = ratio
-  // y = 1/ratio
-  std::vector<vec2f> gear;
+  // round ratio
+  std::vector<float> gear;
   
   // standard time to change gear
   float gearch_first;
@@ -173,12 +172,12 @@ public:
       if (ratio <= 0.0f) return;
     }
     
-    // put in x the ratio, in y its inverse
-    gear.push_back(vec2f(ratio, 1.0f / ratio));
+    // put in the ratio
+    gear.push_back(ratio);
   }
   
   bool hasGears() { return !gear.empty(); }
-  float getLastGearRatio() { return gear.back().x; }
+  float getLastGearRatio() { return gear.back(); }
   
   friend class PDriveSystemInstance;
 };

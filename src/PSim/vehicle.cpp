@@ -52,7 +52,7 @@ void PDriveSystemInstance::tick(float delta, float throttle, float wheel_rps)
 {
   // convert the rps of the wheel to the actual engine rps \
      multiplying it for the inverse of the current gear ratio
-  rps = wheel_rps * dsys->gear[currentgear].y;
+  rps = wheel_rps / dsys->gear[currentgear];
   
   bool wasreverse = reverse;
   
@@ -78,7 +78,7 @@ void PDriveSystemInstance::tick(float delta, float throttle, float wheel_rps)
   }
   
   // final output engine torque
-  out_torque = dsys->getPowerAtRPS(rps) * dsys->gear[currentgear].y / rps;
+  out_torque = dsys->getPowerAtRPS(rps) / (dsys->gear[currentgear] * rps);
   
   // if not reverse
   if (!reverse) {
@@ -88,11 +88,11 @@ void PDriveSystemInstance::tick(float delta, float throttle, float wheel_rps)
     // if it's not last gear (we can go up)
     if (currentgear < (int)dsys->gear.size()-1) {
 	  // nextrate = rps if the gear was the next one 
-      float nextrate = rps / dsys->gear[currentgear].y * dsys->gear[currentgear+1].y;
+      float nextrate = rps * dsys->gear[currentgear] / dsys->gear[currentgear+1];
       // nextrate has to be in the rps range
       CLAMP(nextrate, dsys->minRPS, dsys->maxRPS);
       // final output engine torque if the gear was the next one
-      float nexttorque = dsys->getPowerAtRPS(nextrate) * dsys->gear[currentgear+1].y / nextrate;
+      float nexttorque = dsys->getPowerAtRPS(nextrate) / (dsys->gear[currentgear+1] * nextrate);
       // if going up we gain torque
       if (nexttorque > out_torque)
         // do it
@@ -102,11 +102,11 @@ void PDriveSystemInstance::tick(float delta, float throttle, float wheel_rps)
     // if the gear is not reverse and we haven't yet decided to go up
     if (currentgear > 0 && newtarget_rel == 0) {
 	  // nextrate = rps if the gear was the previous one
-      float nextrate = rps / dsys->gear[currentgear].y * dsys->gear[currentgear-1].y;
+      float nextrate = rps * dsys->gear[currentgear] / dsys->gear[currentgear-1];
       // nextrate has to be in the rps range
       CLAMP(nextrate, dsys->minRPS, dsys->maxRPS);
       // final output engine torque if the gear was the previous one
-      float nexttorque = dsys->getPowerAtRPS(nextrate) * dsys->gear[currentgear-1].y / nextrate;
+      float nexttorque = dsys->getPowerAtRPS(nextrate) / (dsys->gear[currentgear-1] * nextrate);
       // if going down we gain gear
       if (nexttorque > out_torque)
         // do it
@@ -119,10 +119,10 @@ void PDriveSystemInstance::tick(float delta, float throttle, float wheel_rps)
       if ((gearch -= delta) <= 0.0f)
       {
 		// the rps with the new gear
-        float nextrate = rps / dsys->gear[currentgear].y * dsys->gear[currentgear + targetgear_rel].y;
+        float nextrate = rps * dsys->gear[currentgear] / dsys->gear[currentgear + targetgear_rel];
         CLAMP(nextrate, dsys->minRPS, dsys->maxRPS); 
         // final output torque with the new gear
-        out_torque = dsys->getPowerAtRPS(nextrate) * dsys->gear[currentgear + targetgear_rel].y / nextrate;
+        out_torque = dsys->getPowerAtRPS(nextrate) / (dsys->gear[currentgear + targetgear_rel] * nextrate);
         // change gear
         currentgear += targetgear_rel;
         // set gearch
