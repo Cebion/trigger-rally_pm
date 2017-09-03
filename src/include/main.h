@@ -69,6 +69,7 @@ public:
 private:
   MainApp *app;
 
+  // simulation context
   PSim *sim;
 
   int randomseed;
@@ -86,8 +87,11 @@ private:
   PCodriverVoice cdvoice;
   PCodriverSigns cdsigns;
 
+  // when a vehicle starts going offroad this time is set (to know how much time has spent offroad)
   float offroadtime_begin   = 0.0f;
+  // when a vehicle stops going offroad this time is set (to know how much time has spent offroad)
   float offroadtime_end     = 0.0f;
+  // total time offroad
   float offroadtime_total   = 0.0f;
 
 public:
@@ -104,12 +108,21 @@ public:
 
 private:
 
+  // In what moment of the race we are
+  // GS_COUNTDOWN = the few seconds before start
+  // GS_RACING = during racing
+  // GS_FINISHED = race ended
+  // TODO: use an enumeration instead of an int?
   int gamestate;
 
+  // Time passed since the race started
   float coursetime;
-  float othertime; // used pre and post race
-  float cptime; // checkpoint time
-  float targettime; // the time needed to win
+  // used pre and post race (i.e. Countdown)
+  float othertime;
+  // checkpoint time
+  float cptime;
+  // the time needed to win
+  float targettime;
 
   std::string comment; // level comment string
 

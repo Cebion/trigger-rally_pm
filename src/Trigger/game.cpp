@@ -28,7 +28,7 @@ TriggerGame::~TriggerGame()
 }
 
 ///
-/// @brief Loads vehicles for the game.
+/// @brief Loads vehicle types for the game.
 /// @details This file scans the directory "/data/vehicles".
 /// @returns Whether or not the loading was successful.
 /// @retval true            Mostly OK.
@@ -41,31 +41,38 @@ bool TriggerGame::loadVehicles()
     if (PUtil::isDebugLevel(DEBUGLEVEL_TEST))
         PUtil::outLog() << "Loading vehicle information from \"/vehicles\"\n";
 
+    // if no simulation instance exists, create a new one
     if (sim == nullptr)
         sim = new PSim();
 
+    // find names of all vehicle types
     const std::list<std::string> vehiclefiles = PUtil::findFiles("/vehicles", ".vehicle");
 
+    // if there is any vehicle
     if (!vehiclefiles.empty())
     {
         for (const std::string &vefi: vehiclefiles)
         {
             PUtil::outLog() << "Found vehicle: \"" << vefi << "\"\n";
 
+            // if the vehicle is locked
             if (app->isVehicleLocked(vefi) && !app->isUnlockedByPlayer(vefi))
             {
                 PUtil::outLog() << "Vehicle \"" << vefi << "\" is locked\n";
                 continue;
             }
 
+            // load it
             PVehicleType *vt = sim->loadVehicleType(vefi, app->getSSModel());
 
+            // push it
             if (vt != nullptr)
                 vehiclechoices.push_back(vt);
             else
                 PUtil::outLog() << "Warning: failed to load vehicle from \"" << vefi << "\"\n";
         }
     }
+    // if no vehicle is available
     else
     {
         PUtil::outLog() << "Error: there is no vehicle information" << std::endl;
@@ -75,294 +82,337 @@ bool TriggerGame::loadVehicles()
     return true;
 }
 
+///
+/// @brief load a level from his filename
+/// @returns Whether or not the loading was successful.
+/// @retval true  = mostly ok
+///         false = some problem occured
+///
 bool TriggerGame::loadLevel(const std::string &filename)
 {
   
-  if (PUtil::isDebugLevel(DEBUGLEVEL_TEST))
-    PUtil::outLog() << "Loading level \"" << filename << "\"\n";
+	if (PUtil::isDebugLevel(DEBUGLEVEL_TEST))
+		PUtil::outLog() << "Loading level \"" << filename << "\"\n";
 
-  if (sim == nullptr)
-    sim = new PSim();
+	// create a new PSim if there is no one
+	if (sim == nullptr)
+		sim = new PSim();
   
-  sim->setGravity(vec3f(0.0,0.0,-9.81));
+	// set default values
+	sim->setGravity(vec3f(0.0,0.0,-9.81));
   
-  start_pos = vec3f::zero();
-  start_ori = quatf::identity();
+	start_pos = vec3f::zero();
+	start_ori = quatf::identity();
   
-  number_of_laps = 1;
-  targettime = 754.567f;
+	number_of_laps = 1;
+	targettime = 754.567f;
   
-  weather.cloud.texname = std::string("");
-  weather.cloud.scrollrate = 0.001f;
-  weather.fog.color = vec3f(1.0f, 1.0f, 1.0f);
-  weather.fog.density = 0.01f;
-  weather.fog.density_sky = 0.8f;
-  weather.precip.rain = 0.0f;
-  weather.precip.snowfall = 0.0f;
+	weather.cloud.texname = std::string("");
+	weather.cloud.scrollrate = 0.001f;
+	weather.fog.color = vec3f(1.0f, 1.0f, 1.0f);
+	weather.fog.density = 0.01f;
+	weather.fog.density_sky = 0.8f;
+	weather.precip.rain = 0.0f;
+	weather.precip.snowfall = 0.0f;
   
-  water.enabled = false;
-  water.height = 0.0f;
-  water.texname = "";
-  water.useralpha = false;
-  water.alpha = 1.0f;
-  water.fixedalpha = false;
+	water.enabled = false;
+	water.height = 0.0f;
+	water.texname = "";
+	water.useralpha = false;
+	water.alpha = 1.0f;
+	water.fixedalpha = false;
   
-  cdcheckpt_ordered = false;
+	cdcheckpt_ordered = false;
   
-  XMLDocument xmlfile;
-  XMLElement *rootelem = PUtil::loadRootElement(xmlfile, filename, "level");
-  if (!rootelem) return false;
+	XMLDocument xmlfile;
+	XMLElement *rootelem = PUtil::loadRootElement(xmlfile, filename, "level");
+	if (!rootelem) return false;
   
-  const char *val;
+	const char *val;
   
-  val = rootelem->Attribute("comment");
-  if (val) comment = val;
+	val = rootelem->Attribute("comment");
+	if (val) comment = val;
   
-  for (XMLElement *walk = rootelem->FirstChildElement();
-    walk; walk = walk->NextSiblingElement()) {
+	// walk along the XML file and read datas
+	for (XMLElement *walk = rootelem->FirstChildElement();
+		walk; walk = walk->NextSiblingElement())
+	{
     
-    if (!strcmp(walk->Value(), "terrain")) {
-      try
-      {
-        terrain = new PTerrain (walk, filename, app->getSSTexture ());
-      }
-      catch (PException &e)
-      {
-        PUtil::outLog () << "Terrain problem: " << e.what () << std::endl;
-        return false;
-      }
-      sim->setTerrain(terrain);
-    }
+		// terrain
+		if (!strcmp(walk->Value(), "terrain"))
+		{
+			try
+			{
+				terrain = new PTerrain (walk, filename, app->getSSTexture ());
+			}
+			catch (PException &e)
+			{
+				PUtil::outLog () << "Terrain problem: " << e.what () << std::endl;
+				return false;
+			}
+			sim->setTerrain(terrain);
+		}
 //
 // TODO: delete this code soon
 //
-#if 0
-    else if (!strcmp(walk->Value(), "vehicle")) {
-      PVehicle *vh = sim->createVehicle(walk, filename, app->getSSModel());
-      if (vh) {
-        //vehicle.push_back(vh);
-      } else {
-        PUtil::outLog() << "Warning: failed to load vehicle\n";
-      }
-    }
-    else if (!strcmp(walk->Value(), "vehicleoption")) {
+//#if 0
+//    else if (!strcmp(walk->Value(), "vehicle")) {
+//      PVehicle *vh = sim->createVehicle(walk, filename, app->getSSModel());
+//      if (vh) {
+//        //vehicle.push_back(vh);
+//      } else {
+//        PUtil::outLog() << "Warning: failed to load vehicle\n";
+//      }
+//    }
+//    else if (!strcmp(walk->Value(), "vehicleoption")) {
+//
+//      val = walk->Attribute("type");
+//      
+//      if (val) {
+//        PVehicleType *vt = sim->loadVehicleType(PUtil::assemblePath(val, filename), app->getSSModel());
+//        if (vt) {
+//          vehiclechoices.push_back(vt);
+//        } else {
+//          PUtil::outLog() << "Warning: failed to load vehicle option\n";
+//        }
+//      } else {
+//        PUtil::outLog() << "Warning: vehicle option has no type\n";
+//      }
+//   }
+//#endif
 
-      val = walk->Attribute("type");
+		// race (TODO: check race type... laps? once only?)
+		else if (!strcmp(walk->Value(), "race"))
+		{
+			// level coordinates are multiplied by this multiplier
+			vec2f coordscale = vec2f(1.0f, 1.0f);
+			val = walk->Attribute("coordscale");
+			if (val) sscanf(val, "%f , %f", &coordscale.x, &coordscale.y);
       
-      if (val) {
-        PVehicleType *vt = sim->loadVehicleType(PUtil::assemblePath(val, filename), app->getSSModel());
-        if (vt) {
-          vehiclechoices.push_back(vt);
-        } else {
-          PUtil::outLog() << "Warning: failed to load vehicle option\n";
-        }
-      } else {
-        PUtil::outLog() << "Warning: vehicle option has no type\n";
-      }
-    }
-#endif
-    else if (!strcmp(walk->Value(), "race")) {
+			// target time (seconds)
+			val = walk->Attribute("targettime");
+			if (val) targettime = atof(val);
+     
+			// Codriver checkpoint mode
+			val = walk->Attribute("codrivercpmode");
+			if (val != nullptr)
+			{
+				if (!strcmp(val, "ordered"))
+					cdcheckpt_ordered = true;
+				else if (!strcmp(val, "free"))
+					cdcheckpt_ordered = false;
+			}
       
-      // TODO: check race type... laps? once only?
-      
-      vec2f coordscale = vec2f(1.0f, 1.0f);
-      val = walk->Attribute("coordscale");
-      if (val) sscanf(val, "%f , %f", &coordscale.x, &coordscale.y);
-      
-      val = walk->Attribute("targettime");
-      if (val) targettime = atof(val);
-      
-      val = walk->Attribute("codrivercpmode");
-      
-        if (val != nullptr)
-        {
-            if (!strcmp(val, "ordered"))
-                cdcheckpt_ordered = true;
-            else
-            if (!strcmp(val, "free"))
-                cdcheckpt_ordered = false;
-        }
-      
-      val = walk->Attribute("laps");
-      
-        if (val != nullptr)
-        {
-            number_of_laps = std::stoi(val);
+			// number of laps
+			val = walk->Attribute("laps");
+			if (val != nullptr)
+			{
+				number_of_laps = std::stoi(val);
 
-            if (number_of_laps < 1)
-                number_of_laps = 1;
-        }
+				if (number_of_laps < 1)
+					number_of_laps = 1;
+			}
       
-      for (XMLElement *walk2 = walk->FirstChildElement();
-        walk2; walk2 = walk2->NextSiblingElement()) {
-        
-        if (!strcmp(walk2->Value(), "checkpoint")) {
-          val = walk2->Attribute("coords");
+			// Checkpoints
+			for (XMLElement *walk2 = walk->FirstChildElement();
+				walk2; walk2 = walk2->NextSiblingElement())
+			{
+       
+				// if next element is a checkpoint
+				if (!strcmp(walk2->Value(), "checkpoint"))
+				{
+					// coordinates
+					val = walk2->Attribute("coords");
 
-            vec2f coords;
+					vec2f coords;
 
-          if (val) {
-            if (sscanf(val, "%f , %f", &coords.x, &coords.y) == 2) {
-              coords.x *= coordscale.x;
-              coords.y *= coordscale.y;
-            } else
-              PUtil::outLog() << "Error reading checkpoint coords\n";
-          } else {
-            PUtil::outLog() << "Warning: checkpoint has no coords\n";
-          }
+					// read and save save them after applying the coord scale
+					if (val)
+					{
+						if (sscanf(val, "%f , %f", &coords.x, &coords.y) == 2) {
+							coords.x *= coordscale.x;
+							coords.y *= coordscale.y;
+						} else
+							PUtil::outLog() << "Error reading checkpoint coords\n";
+					} else {
+						PUtil::outLog() << "Warning: checkpoint has no coords\n";
+					}
 
-          val = walk2->Attribute("notes");
+					// pace notes (they are if is a codriver checkpoint)
+					val = walk2->Attribute("notes");
 
-          if (val != nullptr) // is a codriver checkpoint
-          {
-            codrivercheckpt.push_back({{coords.x, coords.y, terrain->getHeight(coords.x, coords.y)}, val});
-          }
-          else // is a mandatory regular checkpoint
-          {
-            checkpt.push_back(vec3f(coords.x, coords.y, terrain->getHeight(coords.x, coords.y)));
-          }
-        } else if (!strcmp(walk2->Value(), "startposition")) {
+					// if is a codriver checkpoint
+					if (val != nullptr)
+					{
+						codrivercheckpt.push_back({{coords.x, coords.y, terrain->getHeight(coords.x, coords.y)}, val});
+					}
+					// if is a mandatory regular checkpoint
+					else
+					{
+						checkpt.push_back(vec3f(coords.x, coords.y, terrain->getHeight(coords.x, coords.y)));
+					}
+				}
+				// if is the start position 
+				else if (!strcmp(walk2->Value(), "startposition")) 
+				{
+					// coordinates
+					val = walk2->Attribute("pos");
+					if (val) sscanf(val, "%f , %f , %f", &start_pos.x, &start_pos.y, &start_pos.z);
           
-          val = walk2->Attribute("pos");
-          if (val) sscanf(val, "%f , %f , %f", &start_pos.x, &start_pos.y, &start_pos.z);
+					// apply scale
+					start_pos.x *= coordscale.x;
+					start_pos.y *= coordscale.y;
           
-          start_pos.x *= coordscale.x;
-          start_pos.y *= coordscale.y;
+					// set this as the position of the last checkpoint
+					lastCkptPos = vec3f(start_pos.x, start_pos.y, terrain->getHeight(start_pos.x, start_pos.y) + 2.0f);
           
-          lastCkptPos = vec3f(start_pos.x, start_pos.y, terrain->getHeight(start_pos.x, start_pos.y) + 2.0f);
+					// orientation
+					val = walk2->Attribute("oridegrees");
+					if (val)
+					{
+						float deg = atof(val);
+						start_ori.fromZAngle(-RADIANS(deg));
+						lastCkptOri = start_ori;
+					}
           
-          val = walk2->Attribute("oridegrees");
-          if (val) {
-            float deg = atof(val);
-            start_ori.fromZAngle(-RADIANS(deg));
-            lastCkptOri = start_ori;
-          }
-          
-          val = walk2->Attribute("ori");
-          if (val) sscanf(val, "%f , %f , %f , %f", &start_ori.w, &start_ori.x, &start_ori.y, &start_ori.z);
-        }
-        else
-        if (!strcmp(walk2->Value(), "codrivercp"))
-        {
-            vec2f coords(0.0f, 0.0f);
-            std::string notes;
+					val = walk2->Attribute("ori");
+					if (val) sscanf(val, "%f , %f , %f , %f", &start_ori.w, &start_ori.x, &start_ori.y, &start_ori.z);
+				}
+				// if it is a codriver checkpoint
+				else if (!strcmp(walk2->Value(), "codrivercp")) 
+				{
+					vec2f coords(0.0f, 0.0f);
+					std::string notes;
 
-            val = walk2->Attribute("coords");
+					// coordinates
+					val = walk2->Attribute("coords");
 
-            if (val != nullptr)
-            {
-                if (sscanf(val, "%f , %f", &coords.x, &coords.y) == 2)
-                {
-                    coords.x *= coordscale.x;
-                    coords.y *= coordscale.y;
-                }
-                else
-                    PUtil::outLog() << "Error reading codriver checkpoint coords\n";
-            }
-            else
-                PUtil::outLog() << "Warning: codriver checkpoint has no coords\n";
+					if (val != nullptr)
+					{
+						if (sscanf(val, "%f , %f", &coords.x, &coords.y) == 2)
+						{
+							coords.x *= coordscale.x;
+							coords.y *= coordscale.y;
+						}
+						else
+							PUtil::outLog() << "Error reading codriver checkpoint coords\n";
+					}
+					else
+						PUtil::outLog() << "Warning: codriver checkpoint has no coords\n";
 
-            val = walk2->Attribute("notes");
+					// pace notes
+					val = walk2->Attribute("notes");
+	
+					if (val != nullptr)
+						notes = val;
+					else
+						PUtil::outLog() << "Warning: codriver checkpoint has no pace notes\n";
 
-            if (val != nullptr)
-                notes = val;
-            else
-                PUtil::outLog() << "Warning: codriver checkpoint has no pace notes\n";
+					codrivercheckpt.push_back({{coords.x, coords.y, terrain->getHeight(coords.x, coords.y)}, notes});
+				}
+			}
+		}
+		// weather conditions
+		else if (!strcmp(walk->Value(), "weather"))
+		{
+			val = walk->Attribute("cloudtexture");
+			if (val) weather.cloud.texname = PUtil::assemblePath(val, filename);
+      
+			val = walk->Attribute("cloudscrollrate");
+			if (val) weather.cloud.scrollrate = atof(val);
+      
+			val = walk->Attribute("fogcolor");
+			if (val) sscanf(val, "%f , %f , %f", &weather.fog.color.x, &weather.fog.color.y, &weather.fog.color.z);
+	
+			val = walk->Attribute("fogdensity");
+			if (val) weather.fog.density = atof(val);
+      
+			val = walk->Attribute("fogdensitysky");
+			if (val) weather.fog.density_sky = atof(val);
+      
+			val = walk->Attribute("rain");
+			if (val && MainApp::cfg_weather) weather.precip.rain = atof(val);
+	
+			val = walk->Attribute("snowfall");
+			if (val != nullptr && MainApp::cfg_weather)
+				weather.precip.snowfall = atof(val);
+		}
+		// water specifications
+		else if (!strcmp(walk->Value(), "water"))
+		{
+			// if there is the water element means there is water
+			water.enabled = true;
+				
+			// height
+			val = walk->Attribute("height");
 
-            codrivercheckpt.push_back({{coords.x, coords.y, terrain->getHeight(coords.x, coords.y)}, notes});
-        }
-      }
-    } else if (!strcmp(walk->Value(), "weather")) {
-      
-      val = walk->Attribute("cloudtexture");
-      if (val) weather.cloud.texname = PUtil::assemblePath(val, filename);
-      
-      val = walk->Attribute("cloudscrollrate");
-      if (val) weather.cloud.scrollrate = atof(val);
-      
-      val = walk->Attribute("fogcolor");
-      if (val) sscanf(val, "%f , %f , %f", &weather.fog.color.x, &weather.fog.color.y, &weather.fog.color.z);
-      
-      val = walk->Attribute("fogdensity");
-      if (val) weather.fog.density = atof(val);
-      
-      val = walk->Attribute("fogdensitysky");
-      if (val) weather.fog.density_sky = atof(val);
-      
-      val = walk->Attribute("rain");
-      if (val && MainApp::cfg_weather) weather.precip.rain = atof(val);
-      
-      val = walk->Attribute("snowfall");
-      if (val != nullptr && MainApp::cfg_weather)
-        weather.precip.snowfall = atof(val);
-    }
-    else
-    if (!strcmp(walk->Value(), "water"))
-    {
-        water.enabled = true;
-        val = walk->Attribute("height");
-
-        if (val != nullptr)
-            water.height = atof(val);
+			if (val != nullptr)
+				water.height = atof(val);
             
-        val = walk->Attribute("watertexture");
+			// texture
+			val = walk->Attribute("watertexture");
         
-        if (val != nullptr)
-            water.texname = val;
-        else
-            water.texname = "";
+			if (val != nullptr)
+				water.texname = val;
+			else
+				water.texname = "";
             
-        val = walk->Attribute("alpha");
+			// alpha
+			val = walk->Attribute("alpha");
         
-        if (val != nullptr)
-        {
-            water.useralpha = true;
-            water.alpha = atof(val);
-        }
-        else
-            water.useralpha = false;
+			if (val != nullptr)
+			{
+				water.useralpha = true;
+				water.alpha = atof(val);
+			}
+			else
+				water.useralpha = false;
 
-        val = walk->Attribute("fixedalpha");
+			val = walk->Attribute("fixedalpha");
 
-        if (val != nullptr && !strcmp(val, "yes"))
-            water.fixedalpha = true;
-    }
-  }
+			if (val != nullptr && !strcmp(val, "yes"))
+				water.fixedalpha = true;
+		}
+	}
   
-  srand(1000);
+	srand(1000);
   
-  if (checkpt.size() == 0) {
-    int cpsize = 3;
+	// if there are no checkpoints
+	if (checkpt.size() == 0)
+	{	
+		int cpsize = 3;
     
-    std::vector<vec2f> temp1;
+		std::vector<vec2f> temp1;
     
-    temp1.resize(cpsize);
+		temp1.resize(cpsize);
     
-    float ang = randm11 * PI;
+		float ang = randm11 * PI;
     
-    temp1[0] = vec2f(cosf(ang),sinf(ang)) * (100.0f + rand01 * 300.0f);
+		temp1[0] = vec2f(cosf(ang),sinf(ang)) * (100.0f + rand01 * 300.0f);
     
-    for (int i=1; i<cpsize; i++) {
-      ang += randm11 * (PI * 0.3f);
+		for (int i=1; i<cpsize; i++)
+		{
+			ang += randm11 * (PI * 0.3f);
       
-      temp1[i] = temp1[i-1] + vec2f(cosf(ang),sinf(ang)) * (100.0f + rand01 * 300.0f);
-    }
+			temp1[i] = temp1[i-1] + vec2f(cosf(ang),sinf(ang)) * (100.0f + rand01 * 300.0f);
+		}
     
-    checkpt.resize(cpsize, vec3f::zero());
+		checkpt.resize(cpsize, vec3f::zero());
     
-    for (int i=0; i<cpsize; i++) {
-      vec2f coords = temp1[i];
-      checkpt[i].pt = vec3f(coords.x, coords.y, terrain->getHeight(coords.x, coords.y));
-    }
-  }
+		for (int i=0; i<cpsize; i++) {
+			vec2f coords = temp1[i];
+			checkpt[i].pt = vec3f(coords.x, coords.y, terrain->getHeight(coords.x, coords.y));
+		}
+	}
   
-  for (unsigned int i=0; i<vehicle.size(); i++) {
-    vehicle[i]->ctrl.brake1 = 1.0f;
-  }
+	// activate vehicle brakes
+	for (unsigned int i=0; i<vehicle.size(); i++) {
+		vehicle[i]->ctrl.brake1 = 1.0f;
+	}
   
-  // get cars on ground  
-  for (float t = 0.0f; t < 2.0f; t += 0.01f)
-    sim->tick(0.01f);
+	// do two seconds of simulations to have fine cars on ground
+	for (float t = 0.0f; t < 2.0f; t += 0.01f)
+		sim->tick(0.01f);
   
   /*
   for (int i=1; i<vehicle.size(); i++) {
@@ -370,144 +420,206 @@ bool TriggerGame::loadLevel(const std::string &filename)
   }
   */
   
-  coursetime = 0.0f;
-  othertime = 3.0f;
-  cptime = -4.0f;
-  gamestate = GS_COUNTDOWN;
-  return true;
+	// set some values
+	coursetime = 0.0f;
+	othertime = 3.0f;
+	cptime = -4.0f;
+	gamestate = GS_COUNTDOWN;
+  
+	return true;
 }
 
+///
+/// @brief Create a new vehicle and push it in the simulation
+/// @param type = the type of the vehicle to create
+///
 void TriggerGame::chooseVehicle(PVehicleType *type)
-{
-//  vec3f pos = vec3f::zero();
+{ 
+	// create the vehicle
+	PVehicle *vh = sim->createVehicle(type, start_pos, start_ori, app->getSSModel());
   
-//  quatf ori = quatf::identity();
-  
-  PVehicle *vh = sim->createVehicle(type, start_pos, start_ori, app->getSSModel());
-  
-  if (vh) vehicle.push_back(vh);
-  else PUtil::outLog() << "Warning: failed to load vehicle\n";
+	if (vh)
+		vehicle.push_back(vh);
+	else
+		PUtil::outLog() << "Warning: failed to load vehicle\n";
 }
 
+///
+/// @brief tick of a race
+/// @details manage game statuses, time, checkpoint, physic simulators.
+/// @param delta = time slice to run (in seconds)
+///
 void TriggerGame::tick(float delta)
 {
+	// Manage game states, and time counters accordingly
+	switch (gamestate) {
+		
+		// Countdown before start
+		case GS_COUNTDOWN:
+			// count down is going
+			othertime -= delta;
+			// if countdown finishes
+			if (othertime <= 0.0f)
+			{
+				// make the race start
+				// this 5 seconds are the one used when the race finishes (see "case GS_FINISHED:")
+				othertime = 5.0f;
+				gamestate = GS_RACING;
+			}
+			
+			// In the countdown brakes must be on and user input ignored
+			for (unsigned int i=0; i<vehicle.size(); i++)
+			{
+				vehicle[i]->ctrl.setZero();
+				vehicle[i]->ctrl.brake1 = 1.0f;
+				vehicle[i]->ctrl.brake2 = 1.0f;
+			}
+			break;
+		
+		// racing
+		case GS_RACING:
+			// time goes on
+			coursetime += delta;
+    
+			// if the time finishes, and you have to stay in the time (for example in events) the race finishes
+			if (coursetime + offroadtime_total * offroadtime_penalty_multiplier > targettime && app->lss.state == AM_TOP_EVT_PREP) {
+				gamestate = GS_FINISHED;
+			}
+			break;
+ 
+		// race finished
+		case GS_FINISHED:
+			// some seconds after the race finishes
+			othertime -= delta;
+    
+			// brake up all vehicles
+			for (unsigned int i=0; i<vehicle.size(); i++)
+			{
+				//vehicle[i]->ctrl.setZero();
+				vehicle[i]->ctrl.brake1 = 1.0f;
+				//vehicle[i]->ctrl.brake2 = 1.0f;
+			}
+			break;
+	}
   
-  switch (gamestate) {
-  case GS_COUNTDOWN:
-    othertime -= delta;
-    if (othertime <= 0.0f) {
-      othertime = 5.0f;
-      gamestate = GS_RACING;
-    }
-    
-    for (unsigned int i=0; i<vehicle.size(); i++) {
-      vehicle[i]->ctrl.setZero();
-      vehicle[i]->ctrl.brake1 = 1.0f;
-      vehicle[i]->ctrl.brake2 = 1.0f;
-    }
-    //return;
-    break;
-  case GS_RACING:
-    coursetime += delta;
-    
-    if (coursetime + offroadtime_total * offroadtime_penalty_multiplier > targettime && app->lss.state == AM_TOP_EVT_PREP) {
-      gamestate = GS_FINISHED;
-    }
-    break;
-  case GS_FINISHED:
-    othertime -= delta;
-    
-    for (unsigned int i=0; i<vehicle.size(); i++) {
-      //vehicle[i]->ctrl.setZero();
-      vehicle[i]->ctrl.brake1 = 1.0f;
-      //vehicle[i]->ctrl.brake2 = 1.0f;
-    }
-    
-    break;
-  }
+	//vehic->getBody().addLocTorque(vec3f(50.0,0.0,0.0));
   
-  //vehic->getBody().addLocTorque(vec3f(50.0,0.0,0.0));
+	// do the simulation
+	sim->tick(delta);
   
-  sim->tick(delta);
-  
-  for (unsigned int i=0; i<vehicle.size(); i++) {
+	for (unsigned int i=0; i<vehicle.size(); i++)
+	{
+		const vec3f bodypos = vehicle[i]->body->getPosition();
+		
+		// line starting from the next checkpoint to the current position of the vehicle
+    	vec2f diff = makevec2f(checkpt[vehicle[i]->nextcp].pt) - makevec2f(bodypos);
+
+		// if the car was offroad in previous iteration
+		static bool offroad_earlier = false;
+		
+		// if the car is currently offroad
+		const bool offroad_now = !terrain->getRmapOnRoad(bodypos);
+
+		//
+		// TODO: the offroad penalty code is bad because it accumulates
+		//  time for all cars (this will be a problem in the future if
+		//  multiplayer races or AI drivers are implemented.)
+		//
+		
+		// if it was offroad earlier
+		if (offroad_earlier)
+		{
+			// but not now
+			if (!offroad_now)
+			{
+				// update offroad values
+				offroad_earlier     = false;
+				offroadtime_end     = coursetime;
+				offroadtime_total   += offroadtime_end - offroadtime_begin;
+			}
+		}
+		// if it wasn't before but now
+		else if (offroad_now)
+		{
+			// update offroad values
+			offroad_earlier     = true;
+			offroadtime_begin   = coursetime;
+		}
+
+		// if the vehicle get a checkpoint
+		if (diff.lengthsq() < 30.0f * 30.0f)
+		{
+			//vehicle[i]->nextcp = (vehicle[i]->nextcp + 1) % checkpt.size();
+			// update last checkpoint informations
+			lastCkptPos = checkpt[vehicle[i]->nextcp].pt + vec3f(0.0f, 0.0f, 2.0f);
+			lastCkptOri = vehicle[i]->body->getOrientation();
+			
+			cptime = coursetime;
+			
+			// if its last checkpoint
+			if (++vehicle[i]->nextcp >= (int)checkpt.size())
+			{
+				// restart checkpoint counter
+				vehicle[i]->nextcp = 0;
+				// update lap counter
+				++vehicle[i]->currentlap;
+				// if it was last lap, enter game state GS_FINISHED (race finished)
+				if (i == 0 && vehicle[i]->currentlap > number_of_laps) gamestate = GS_FINISHED;
+			}
+		}
     
-    vec2f diff = makevec2f(checkpt[vehicle[i]->nextcp].pt) - makevec2f(vehicle[i]->body->getPosition());
+		// if there are codriver checkpoints
+		if (!codrivercheckpt.empty())
+		{
+			// if codriver checkpoint are in ordered mode
+			if (cdcheckpt_ordered)
+			{
+				// distance to next codriver checkpoint
+				diff = makevec2f(codrivercheckpt[vehicle[i]->nextcdcp].pt) - makevec2f(vehicle[i]->body->getPosition());
 
-    static bool offroad_earlier = false;
+				// if the vehicle is enought close the checkpoint
+				if (diff.lengthsq() < 20.0f * 20.0f)
+				{
+					// Codriver says the notes
+					cdvoice.say(codrivercheckpt[vehicle[i]->nextcdcp].notes);
+					// the related sign appears
+					cdsigns.set(codrivercheckpt[vehicle[i]->nextcdcp].notes, coursetime);
+					// update last checkpoint informations
+					lastCkptPos = codrivercheckpt[vehicle[i]->nextcdcp].pt + vec3f(0.0f, 0.0f, 2.0f);
+					lastCkptOri = vehicle[i]->body->getOrientation();
 
-    const vec3f bodypos = vehicle[i]->body->getPosition();
-    const bool offroad_now = !terrain->getRmapOnRoad(bodypos);
+					// update next codriver checkpoint, if they are over start over again
+					if (++vehicle[i]->nextcdcp >= (int)codrivercheckpt.size())
+						vehicle[i]->nextcdcp = 0;
+				}
+			}
+			// if they aren't in ordered mode
+			else
+			{
+				// check for every codriver checkpoint
+				for (std::size_t j=0; j < codrivercheckpt.size(); ++j)
+				{
+					// distance to the codriver checkpoint
+					diff = makevec2f(codrivercheckpt[j].pt) - makevec2f(vehicle[i]->body->getPosition());
 
-    //
-    // TODO: the offroad penalty code is bad because it accumulates
-    //  time for all cars (this will be a problem in the future if
-    //  multiplayer races or AI drivers are implemented.)
-    //
-    if (offroad_earlier)
-    {
-        if (!offroad_now)
-        {
-            offroad_earlier     = false;
-            offroadtime_end     = coursetime;
-            offroadtime_total   += offroadtime_end - offroadtime_begin;
-        }
-    }
-    else
-    if (offroad_now)
-    {
-        offroad_earlier     = true;
-        offroadtime_begin   = coursetime;
-    }
-
-    if (diff.lengthsq() < 30.0f * 30.0f) {
-      //vehicle[i]->nextcp = (vehicle[i]->nextcp + 1) % checkpt.size();
-        lastCkptPos = checkpt[vehicle[i]->nextcp].pt + vec3f(0.0f, 0.0f, 2.0f);
-        lastCkptOri = vehicle[i]->body->getOrientation();
-        cptime = coursetime;
-      if (++vehicle[i]->nextcp >= (int)checkpt.size()) {
-        vehicle[i]->nextcp = 0;
-        ++vehicle[i]->currentlap;
-        if (i == 0 && vehicle[i]->currentlap > number_of_laps) gamestate = GS_FINISHED;
-      }
-    }
-    
-    if (!codrivercheckpt.empty())
-    {
-        if (cdcheckpt_ordered)
-        {
-            diff = makevec2f(codrivercheckpt[vehicle[i]->nextcdcp].pt) - makevec2f(vehicle[i]->body->getPosition());
-
-            if (diff.lengthsq() < 20.0f * 20.0f)
-            {
-                cdvoice.say(codrivercheckpt[vehicle[i]->nextcdcp].notes);
-                cdsigns.set(codrivercheckpt[vehicle[i]->nextcdcp].notes, coursetime);
-                lastCkptPos = codrivercheckpt[vehicle[i]->nextcdcp].pt + vec3f(0.0f, 0.0f, 2.0f);
-                lastCkptOri = vehicle[i]->body->getOrientation();
-
-                if (++vehicle[i]->nextcdcp >= (int)codrivercheckpt.size())
-                    vehicle[i]->nextcdcp = 0;
-            }
-        }
-        else
-        {
-            for (std::size_t j=0; j < codrivercheckpt.size(); ++j)
-            {
-                diff = makevec2f(codrivercheckpt[j].pt) - makevec2f(vehicle[i]->body->getPosition());
-
-                if (diff.lengthsq() < 20.0f * 20.0f && static_cast<int> (j + 1) != vehicle[i]->nextcdcp)
-                {
-                    cdvoice.say(codrivercheckpt[j].notes);
-                    cdsigns.set(codrivercheckpt[j].notes, coursetime);
-                    lastCkptPos = codrivercheckpt[j].pt + vec3f(0.0f, 0.0f, 2.0f);
-                    lastCkptOri = vehicle[i]->body->getOrientation();
-                    vehicle[i]->nextcdcp = j + 1;
-                    break;
-                }
-            }
-        }
-    }
-  }
+					// if it is close enought 
+					if (diff.lengthsq() < 20.0f * 20.0f && static_cast<int> (j + 1) != vehicle[i]->nextcdcp)
+					{
+						// say the notes
+						cdvoice.say(codrivercheckpt[j].notes);
+						// print the sign
+						cdsigns.set(codrivercheckpt[j].notes, coursetime);
+						// update last checkpoint
+						lastCkptPos = codrivercheckpt[j].pt + vec3f(0.0f, 0.0f, 2.0f);
+						lastCkptOri = vehicle[i]->body->getOrientation();
+						
+						vehicle[i]->nextcdcp = j + 1;
+						break;
+					}
+				}
+			}
+		}
+	}
   
   /*
   for (int i=0; i<aid.size(); i++) {
