@@ -793,13 +793,13 @@ void PVehicle::tick(float delta)
   body->addLocTorque(vec3f(-loclinvel.z * type->param.fineffect.y, 0.0, loclinvel.x * type->param.fineffect.x));
   
   // angular drag
-  body->addTorque(angvel * -type->param.angdrag);
+  body->addTorque(angvel.modulate(angvel) * -type->param.angdrag);
 
   // linear drag
   vec3f frc = -vec3f(
-    loclinvel.x * type->param.drag.x,
-    loclinvel.y * type->param.drag.y,
-    loclinvel.z * type->param.drag.z);
+    SQUARED(loclinvel.x) * type->param.drag.x,
+    SQUARED(loclinvel.y) * type->param.drag.y,
+    SQUARED(loclinvel.z) * type->param.drag.z);
 
   // lift
   frc += -vec3f(

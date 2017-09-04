@@ -487,13 +487,16 @@ private:
 
   DirtParticleSystem *psys_dirt;
 
+  // Tones
   PAudioSample *aud_engine,
                *aud_wind,
                *aud_gearchange,
                *aud_gravel,
                *aud_crash1;
 
+  // Audio instances
   PAudioInstance *audinst_engine, *audinst_wind, *audinst_gravel;
+  
   std::vector<PAudioInstance *> audinst;
 
   float cloudscroll;

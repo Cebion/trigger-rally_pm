@@ -403,6 +403,7 @@ void MainApp::copyDefaultPlayers() const
 }
 
 ///
+/// @brief Load configurations from files
 /// @todo Since C++11 introduced default members initializers, the defaults could
 ///  be set in the class declaration directly rather than in this function.
 ///
@@ -1094,11 +1095,11 @@ bool MainApp::loadLevelsAndEvents()
   return true;
 }
 
-//
-// TODO: should also load all vehicles here, then if needed filter which
-//  of them should be made available to the player -- it makes no sense
-//  to reload vehicles for each race, over and over again
-//
+///
+/// @TODO: should also load all vehicles here, then if needed filter which
+///  of them should be made available to the player -- it makes no sense
+///  to reload vehicles for each race, over and over again
+///
 bool MainApp::loadAll()
 {
   if (!(tex_fontDsmNormal = getSSTexture().loadTexture("/textures/fontDsmNormal.png")))
@@ -1275,29 +1276,39 @@ void MainApp::unload()
   delete psys_dirt;
 }
 
+///
+/// @brief Prepare to start a new game (a race)
+/// @param filename = filename of the level (track) to load
+///
 bool MainApp::startGame(const std::string &filename)
 {
   PUtil::outLog() << "Starting level \"" << filename << "\"" << std::endl;
   
+  // mouse is grabbed during the race
   grabMouse(true);
   
+  // the game
   game = new TriggerGame(this);
   
+  // load vehicles
   if (!game->loadVehicles())
   {
       PUtil::outLog() << "Error: failed to load vehicles" << std::endl;
       return false;
   }
   
+  // load the vehicle
   if (!game->loadLevel(filename)) {
     PUtil::outLog() << "Error: failed to load level" << std::endl;
     return false;
   }
   
+  // useful datas
   race_data.playername  = cfg_playername; // TODO: move to a better place
   race_data.mapname     = filename;
   choose_type = 0;
   
+  // if there is more than a vehicle to choose from, choose it
   if (game->vehiclechoices.size() > 1) {
     appstate = AS_CHOOSE_VEHICLE;
   } else {
@@ -1317,22 +1328,26 @@ bool MainApp::startGame(const std::string &filename)
     appstate = AS_IN_GAME;
   }
   
+  // load the sky texture
   tex_sky[0] = nullptr;
   
   if (game->weather.cloud.texname.length() > 0)
     tex_sky[0] = getSSTexture().loadTexture(game->weather.cloud.texname);
   
+  // if there is none load default
   if (tex_sky[0] == nullptr) {
     tex_sky[0] = getSSTexture().loadTexture("/textures/sky/blue.jpg");
     
     if (tex_sky[0] == nullptr) tex_sky[0] = tex_detail; // last fallback...
   }
   
+  // load water texture
   tex_water = nullptr;
   
   if (!game->water.texname.empty())
     tex_water = getSSTexture().loadTexture(game->water.texname);
 
+  // if there is none load water default
   if (tex_water == nullptr)
     tex_water = tex_waterdefault;
   
@@ -1377,6 +1392,9 @@ void MainApp::toggleSounds(bool to)
     }
 }
 
+///
+/// @brief Initialize game sounds 
+///
 void MainApp::startGame2()
 {
   if (cfg_enable_sound) {

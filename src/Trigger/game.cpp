@@ -88,6 +88,7 @@ bool TriggerGame::loadVehicles()
 /// @retval true  = mostly ok
 ///         false = some problem occured
 ///
+
 bool TriggerGame::loadLevel(const std::string &filename)
 {
   
@@ -418,7 +419,7 @@ bool TriggerGame::loadLevel(const std::string &filename)
   for (int i=1; i<vehicle.size(); i++) {
     aid.push_back(AIDriver(i));
   }
-  */
+  */ 
   
 	// set some values
 	coursetime = 0.0f;
@@ -428,6 +429,7 @@ bool TriggerGame::loadLevel(const std::string &filename)
   
 	return true;
 }
+
 
 ///
 /// @brief Create a new vehicle and push it in the simulation

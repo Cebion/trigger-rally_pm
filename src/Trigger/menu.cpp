@@ -1307,16 +1307,21 @@ bool Gui::loadColors(const std::string &filename)
     return r;
 }
 
+///
+/// @brief GUI tick
+///
 void Gui::tick(float delta)
 {
   float decay = delta * 3.0f;
   
+  // gradually unglow all widgets
   for (unsigned int i = 0; i < widget.size(); i++)
   {
     widget[i].glow -= decay;
     CLAMP_LOWER(widget[i].glow, 0.0f);
   }
 
+  // keep the highlighted widget fully glowing
   if (highlight != -1) {
     widget[highlight].glow = 1.0f;
   }
