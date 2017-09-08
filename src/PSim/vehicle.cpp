@@ -145,7 +145,7 @@ void PDriveSystemInstance::tick(float delta, float throttle, float wheel_rps)
     out_torque *= -1.0;
   }
   
-  // the torque will be lower when wheels are rounding fastly
+  // transimission energy dispersed
   out_torque -= wheel_rps * 0.1f;
 }
 
@@ -806,6 +806,7 @@ void PVehicle::tick(float delta)
     loclinvel.x * type->param.lift.x * loclinvel.y,
     0.0,
     loclinvel.z * type->param.lift.y * loclinvel.y);
+  
 
   // VEHICLE TYPE POINT
 
@@ -915,8 +916,10 @@ void PVehicle::tick(float delta)
       // if the clip touches the ground
       if (wclip.z <= tci.pos.z) {
       
-        // how much the wheel enter the groud along the normal
+        // how much the clip enters the groud along the normal
         float depth = (tci.pos - wclip) * tci.normal;
+        
+        // clip velocity
         vec3f ptvel = body->getLinearVelAtPoint(wclip);
       
         vec3f frc = vec3f::zero();
@@ -940,20 +943,28 @@ void PVehicle::tick(float delta)
             
             //float testval = tci.normal * rightdir;
             
+            // forward direction
             vec3f surf_forward = tci.normal ^ rightdir;
             surf_forward.normalize();
+            
+            // lateral right dircetion
             vec3f surf_right = surf_forward ^ tci.normal;
             surf_right.normalize();
             
+            // velocity along directions
             vec3f surfvel(
-              ptvel * surf_right,
-              ptvel * surf_forward,
-              ptvel * tci.normal);
+              ptvel * surf_right, // lateral
+              ptvel * surf_forward, // forward
+              ptvel * tci.normal); // normal (perpendicular the ground)
             
-            float perpforce = depth * type->part[i].clip[j].force -
-              surfvel.z * type->part[i].clip[j].dampening;
+            // how much force the clip put against the ground
+            float perpforce = 
+			  // how much the clip is below surface (times own clip force)
+              depth * type->part[i].clip[j].force
+              // how much the fast the clip is going down (times own clip dampen capabilities)
+              - surfvel.z * type->part[i].clip[j].dampening;
             
-            // if we have positive normal force
+            // if the clip pushes against the ground
             if (perpforce > 0.0f) {
               vec2f friction = vec2f(-surfvel.x, -surfvel.y) * 10000.0f;
               
@@ -1036,6 +1047,7 @@ void PVehicle::tick(float delta)
       
       // TODO: calc wclip along wheel plane instead of just straight down
       // wclip is the lowest point of the wheel
+      
       wclip.z -= typewheel.radius;
       
       wclip.z += INTERP(wheel.bumplast, wheel.bumpnext, wheel.bumptravel);
@@ -1063,8 +1075,8 @@ void PVehicle::tick(float delta)
       
       wheel.dirtthrow = 0.0f;
       
-      // the suspension force is proportional to how much the suspension \
-         is tensed up and the proper suspension force
+      // the suspension force is proportional to how much the suspension
+      // is tensed up and the proper suspension force
       float suspension_force = wheel.ride_pos * typewheel.force;
      
       // update suspension velocity
@@ -1094,8 +1106,10 @@ void PVehicle::tick(float delta)
           wheel.bumpnext = randm11 * rand01 * typewheel.radius * 0.1f;
         }
         
-        // how much wclip is below the ground along the normal
+        // how much wheel is below the ground along the normal
         float depth = (tci.pos - wclip) * tci.normal;
+        
+        // wheel velocity
         vec3f ptvel = body->getLinearVelAtPoint(wclip);
         
         vec3f frc = vec3f::zero();
@@ -1104,14 +1118,19 @@ void PVehicle::tick(float delta)
         
         //float testval = tci.normal * rightdir;
 
+		// the forward direction
         vec3f surf_forward = tci.normal ^ rightdir;
         surf_forward.normalize();
+        
+        // the right side direction
         vec3f surf_right = surf_forward ^ tci.normal;
         surf_right.normalize();
         
         // add wheel rotation speed to ptvel
+        // direction * wheel spin vel * wheel radius * own terrain resistance
         ptvel += surf_forward * (-wheel.spin_vel * typewheel.radius) * (1.0f - mf_resis);
 
+        // velocity along these three directions
         vec3f surfvel(
           ptvel * surf_right,
           ptvel * surf_forward,
@@ -1120,32 +1139,39 @@ void PVehicle::tick(float delta)
         // with how much force the wheel pushes the ground
         float perpforce = suspension_force;
         
-        if (surfvel.z < 0.0f) perpforce -= surfvel.z * typewheel.dampening;
+        // if the wheel has a velocity toward the bottom (the normal respect the ground right below, it can be inclinated)
+        if (surfvel.z < 0.0f)
+          // this velocity get absorbed by the suspension
+          perpforce -= surfvel.z * typewheel.dampening;
         
         // suspension get pressed
         wheel.ride_pos += depth;
         
+        // suspension can't get more strecthed than the 70% of the wheel radius
         float maxdepth = typewheel.radius * 0.7f;
         
         // if the suspension get pressed too much
         if (wheel.ride_pos > maxdepth) {
 		  // how much is overpressed
           float overdepth = wheel.ride_pos - maxdepth;
-          // suspension will be pressed to its maximum value
+          // suspension will be pressed down to its maximum value
           wheel.ride_pos = maxdepth;
-          
+          // the force will be instead transferred directly to the ground
           perpforce -= overdepth * surfvel.z * typewheel.dampening * 5.0f;
         }
         
         if (wheel.ride_vel < -surfvel.z)
           wheel.ride_vel = -surfvel.z;
         
-        // check we have positive normal force
+        // if the wheel is pushing to the ground
         if (perpforce > 0.0f) {
+		  
+		  // proportional to the actual velocity right and forward
           vec2f friction = vec2f(-surfvel.x, -surfvel.y) * 10000.0f;
 
-          //float maxfriction = perpforce * 1.0f;
+          // max friction available proportional to the pressure of the wheel to the ground and ground own friction coefficent
           float maxfriction = perpforce * mf_coef;
+          
           float testfriction = perpforce * 1.0f;
           
           float leng = friction.length();
@@ -1153,19 +1179,27 @@ void PVehicle::tick(float delta)
           if (leng > 0.0f && leng > testfriction)
             friction *= (maxfriction / leng) + 0.02f;
 
-          frc += (tci.normal * perpforce +
+          // add a force
+          frc += (
+              // the perpendicular force along the normal
+		      tci.normal * perpforce +
+		      // laterally
               surf_right * friction.x +
+              // in the forward direction
               surf_forward * friction.y);
           
+          // update wheel spin velocity
           wheel.spin_vel -= (friction.y * typewheel.radius) * 0.1f * delta;
           
           //wheel.turn_vel -= friction.x * 1.0f * delta;
 
+          // apply the force
           body->addForceAtPoint(frc, wclip);
           
           wheel.dirtthrow = leng / maxfriction;
           skid_level += wheel.dirtthrow;
           
+          // down direction
           vec3f downward = surf_forward ^ rightdir;
           downward.normalize();
           
@@ -1175,8 +1209,10 @@ void PVehicle::tick(float delta)
             downward += surf_forward * 0.3f;
           downward.normalize();
           
+          // where to throw dirt
           wheel.dirtthrowpos = wheel.ref_world.getPosition() +
             downward * typewheel.radius;
+          // how much fast throw
           wheel.dirtthrowvec =
             body->getLinearVelAtPoint(wheel.dirtthrowpos) +
             (downward ^ rightdir) * (wheel.spin_vel * typewheel.radius);

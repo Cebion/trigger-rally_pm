@@ -1393,7 +1393,7 @@ void MainApp::toggleSounds(bool to)
 }
 
 ///
-/// @brief Initialize game sounds 
+/// @brief Initialize game sounds instances
 ///
 void MainApp::startGame2()
 {

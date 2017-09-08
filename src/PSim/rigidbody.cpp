@@ -142,12 +142,21 @@ void PRigidBody::addLocTorque(const vec3f &trq)
   addTorque(getLocToWorldVector(trq));
 }
 
+///
+/// @brief get the linear velocity of a point
+/// @details it's linear velocity is derived from rigid body's linear velocity plus his angular velocity cross product with the distance from the rotation center
+/// @param pt = point in the world system
+///
 vec3f PRigidBody::getLinearVelAtPoint(const vec3f &pt)
 {
   vec3f usept = pt - pos;
   return (linvel + (usept ^ angvel));
 }
 
+/// @brief get the linear velocity of a point
+/// @details it's linear velocity is derived from rigid body's linear velocity plus his angular velocity cross product with the distance from the rotation center
+/// @param pt = point in the local system
+///
 vec3f PRigidBody::getLinearVelAtLocPoint(const vec3f &pt)
 {
   return getLinearVelAtPoint(getLocToWorldPoint(pt));
