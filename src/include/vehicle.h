@@ -454,6 +454,13 @@ public:
   float wheel_speed;
   float skid_level;
   
+  // when a vehicle starts going offroad this time is set (to know how much time has spent offroad)
+  float offroadtime_begin   = 0.0f;
+  // when a vehicle stops going offroad this time is set (to know how much time has spent offroad)
+  float offroadtime_end     = 0.0f;
+  // total time offroad
+  float offroadtime_total   = 0.0f;
+  
 public:
 /*  
   enum StateBits {

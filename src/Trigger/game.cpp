@@ -440,6 +440,10 @@ void TriggerGame::chooseVehicle(PVehicleType *type)
 	// create the vehicle
 	PVehicle *vh = sim->createVehicle(type, start_pos, start_ori, app->getSSModel());
   
+	// it is also user vehicle
+	uservehicle = vh;
+  
+	// if everything's ok push it in the vehicle list
 	if (vh)
 		vehicle.push_back(vh);
 	else
@@ -484,7 +488,7 @@ void TriggerGame::tick(float delta)
 			coursetime += delta;
     
 			// if the time finishes, and you have to stay in the time (for example in events) the race finishes
-			if (coursetime + offroadtime_total * offroadtime_penalty_multiplier > targettime && app->lss.state == AM_TOP_EVT_PREP) {
+			if (coursetime + uservehicle->offroadtime_total * offroadtime_penalty_multiplier > targettime && app->lss.state == AM_TOP_EVT_PREP) {
 				gamestate = GS_FINISHED;
 			}
 			break;
@@ -503,8 +507,6 @@ void TriggerGame::tick(float delta)
 			}
 			break;
 	}
-  
-	//vehic->getBody().addLocTorque(vec3f(50.0,0.0,0.0));
   
 	// do the simulation
 	sim->tick(delta);
@@ -536,8 +538,8 @@ void TriggerGame::tick(float delta)
 			{
 				// update offroad values
 				offroad_earlier     = false;
-				offroadtime_end     = coursetime;
-				offroadtime_total   += offroadtime_end - offroadtime_begin;
+				vehicle[i]->offroadtime_end     = coursetime;
+				vehicle[i]->offroadtime_total   += vehicle[i]->offroadtime_end - vehicle[i]->offroadtime_begin;
 			}
 		}
 		// if it wasn't before but now
@@ -545,7 +547,7 @@ void TriggerGame::tick(float delta)
 		{
 			// update offroad values
 			offroad_earlier     = true;
-			offroadtime_begin   = coursetime;
+			vehicle[i]->offroadtime_begin   = coursetime;
 		}
 
 		// if the vehicle get a checkpoint

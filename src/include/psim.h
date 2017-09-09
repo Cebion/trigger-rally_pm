@@ -154,7 +154,7 @@ private:
   // the terrain class
   PTerrain *terrain;
 
-  // the various types of vehicle
+  // the various types of vehicles
   PResourceList<PVehicleType> vtypelist;
 
   // the various bodyes inside the simulation

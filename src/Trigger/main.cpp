@@ -1415,13 +1415,13 @@ void MainApp::startGame2()
 void MainApp::endGame(int gamestate)
 {
   float coursetime = (gamestate == GF_NOT_FINISHED) ? 0.0f :
-    game->coursetime + game->offroadtime_total * game->offroadtime_penalty_multiplier;
+    game->coursetime + game->uservehicle->offroadtime_total * game->offroadtime_penalty_multiplier;
   
     if (gamestate != GF_NOT_FINISHED && lss.state != AM_TOP_EVT_PREP)
     {
         race_data.carname   = game->vehicle.front()->type->proper_name;
         race_data.carclass  = game->vehicle.front()->type->proper_class;
-        race_data.totaltime = game->coursetime + game->offroadtime_total * game->offroadtime_penalty_multiplier;
+        race_data.totaltime = game->coursetime + game->uservehicle->offroadtime_total * game->offroadtime_penalty_multiplier;
         race_data.maxspeed  = 0.0f; // TODO: measure this too
         //PUtil::outLog() << race_data;
         current_times = best_times.insertAndGetCurrentTimesHL(race_data);

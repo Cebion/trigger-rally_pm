@@ -76,6 +76,9 @@ private:
 
   std::vector<PVehicle *> vehicle;
 
+  // User's vehicle
+  PVehicle *uservehicle;
+
   //std::vector<AIDriver> aid;
 
   PTerrain *terrain;
@@ -87,23 +90,17 @@ private:
   PCodriverVoice cdvoice;
   PCodriverSigns cdsigns;
 
-  // when a vehicle starts going offroad this time is set (to know how much time has spent offroad)
-  float offroadtime_begin   = 0.0f;
-  // when a vehicle stops going offroad this time is set (to know how much time has spent offroad)
-  float offroadtime_end     = 0.0f;
-  // total time offroad
-  float offroadtime_total   = 0.0f;
-
 public:
 
     const float offroadtime_penalty_multiplier = 2.5f;
 
     ///
     /// @brief Used for "real-time" counting of seconds, to scare the player.
+    /// @details it read offroad time of the user vehicle
     ///
     float getOffroadTime() const
     {
-        return offroadtime_total + (coursetime - offroadtime_begin);
+        return uservehicle->offroadtime_total + (coursetime - uservehicle->offroadtime_begin);
     }
 
 private:
@@ -197,7 +194,7 @@ public:
 
   int getFinishState() {
     if (gamestate != GS_FINISHED) return GF_NOT_FINISHED;
-    if (coursetime + offroadtime_total * offroadtime_penalty_multiplier <= targettime) return GF_PASS;
+    if (coursetime + uservehicle->offroadtime_total * offroadtime_penalty_multiplier <= targettime) return GF_PASS;
     else return GF_FAIL;
   }
 };

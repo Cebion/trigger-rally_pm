@@ -1486,7 +1486,7 @@ void MainApp::renderStateGame(float eyetranslation)
 
     {
         // show the time penalty if there is any
-        const float timepen = game->offroadtime_total * game->offroadtime_penalty_multiplier;
+        const float timepen = game->uservehicle->offroadtime_total * game->offroadtime_penalty_multiplier;
 
         // FIXME: why do glPushMatrix() and glPopMatrix() not work for me?
         if (timepen >= 0.1f)

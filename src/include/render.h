@@ -710,7 +710,7 @@ public:
     ///  in the terrain.
     /// @note The height component Z is ignored.
     /// @todo Should remove paranoid clampings?
-    /// @todo Should actually measure performance of float vs int.
+    /// @todo Should actually measure performance of float vs int. (int should be intrinsecally faster)
     /// @param [in] pos   Position in the terrain.
     /// @returns Terrain type.
     ///

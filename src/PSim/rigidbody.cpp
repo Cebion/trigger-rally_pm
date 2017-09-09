@@ -50,11 +50,7 @@ void PRigidBody::setMassCuboid(float _mass, const vec3f &rad)
   mass_inv = 1.0 / mass;
 
   // set angular mass
-#if 1
   angmass = vec3f(rad.y*rad.z, rad.z*rad.x, rad.x*rad.y) * (mass * 0.4);
-#else
-  angmass = vec3f(1.0, 1.0, 1.0) * (mass * 4.0);
-#endif
 
   angmass_inv.x = 1.0 / angmass.x;
   angmass_inv.y = 1.0 / angmass.y;
