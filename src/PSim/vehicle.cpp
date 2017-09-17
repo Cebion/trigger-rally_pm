@@ -50,8 +50,8 @@ float PDriveSystem::getPowerAtRPS(float rps)
 ///
 void PDriveSystemInstance::tick(float delta, float throttle, float wheel_rps)
 {
-  // convert the rps of the wheel to the actual engine rps \
-     multiplying it for the inverse of the current gear ratio
+  // convert the rps of the wheel to the actual engine rps
+  // multiplying it for the inverse of the current gear ratio
   rps = wheel_rps / dsys->gear[currentgear];
   
   bool wasreverse = reverse;
@@ -1041,16 +1041,8 @@ void PVehicle::tick(float delta)
       const float mf_coef     = PUtil::decideFrictionCoef(mf_tt);
       const float mf_resis    = PUtil::decideResistance(mf_tt);
 
-      vec3f wclip = wheel.ref_world.getPosition();
-      
-      //vec3f wclip = vec3f(0,0,2000);
-      
-      // TODO: calc wclip along wheel plane instead of just straight down
-      // wclip is the lowest point of the wheel
-      
-      wclip.z -= typewheel.radius;
-      
-      wclip.z += INTERP(wheel.bumplast, wheel.bumpnext, wheel.bumptravel);
+      // where the wheel might touch the ground
+      vec3f wclip = wheel.getLowestPoint(typewheel);
       
       wheel.spin_vel += drivetorque * typewheel.drive * delta * (1.0f - mf_resis);
       
@@ -1094,11 +1086,13 @@ void PVehicle::tick(float delta)
       
       sim.getTerrain()->getContactInfo(tci);
       
-      // If the wheel touches the ground
+      // further interaction only if the wheel touches the ground
       if (wclip.z <= tci.pos.z) {
         
+        // bump velocity is proportional to the wheel spin velocity
         wheel.bumptravel += fabsf(wheel.spin_vel) * 0.6f * delta;
         
+        // assign a new random bump if the bump velocity is too high
         if (wheel.bumptravel >= 1.0f) {
           wheel.bumplast = wheel.bumpnext;
           wheel.bumptravel -= (int)wheel.bumptravel;
@@ -1163,7 +1157,7 @@ void PVehicle::tick(float delta)
         if (wheel.ride_vel < -surfvel.z)
           wheel.ride_vel = -surfvel.z;
         
-        // if the wheel is pushing to the ground
+        // further interaction only if the wheel pushes the ground
         if (perpforce > 0.0f) {
 		  
 		  // proportional to the actual velocity right and forward
@@ -1199,7 +1193,7 @@ void PVehicle::tick(float delta)
           wheel.dirtthrow = leng / maxfriction;
           skid_level += wheel.dirtthrow;
           
-          // down direction
+          // downward direction
           vec3f downward = surf_forward ^ rightdir;
           downward.normalize();
           
@@ -1237,7 +1231,7 @@ void PVehicle::tick(float delta)
 }
 
 ///
-/// @brief Checks if vehicle can have a dust trail.
+/// @brief Checks if vehicle can have a dust trail. If at least one wheel touches the ground
 /// @todo Use a dynamic height?
 ///
 bool PVehicle::canHaveDustTrail()
@@ -1246,14 +1240,7 @@ bool PVehicle::canHaveDustTrail()
     {
         for (unsigned int j=0; j<type->part[i].wheel.size(); ++j)
         {
-            PVehicleWheel &wheel = part[i].wheel[j];
-            PVehicleTypeWheel &typewheel = type->part[i].wheel[j];
-            vec3f wclip = wheel.ref_world.getPosition();
-
-            // TODO: calc wclip along wheel plane instead of just straight down
-            wclip.z -= typewheel.radius;
-
-            wclip.z += INTERP(wheel.bumplast, wheel.bumpnext, wheel.bumptravel);
+            vec3f wclip = part[i].wheel[j].getLowestPoint(type->part[i].wheel[j]);
 
             PTerrain::ContactInfo tci;
 
@@ -1271,6 +1258,10 @@ bool PVehicle::canHaveDustTrail()
     return false;
 }
 
+///
+/// @brief update parts world coord and orientation
+/// @details If the local system moved, local coordinates and orientation are unchanged in the local system but not in the world system
+///
 void PVehicle::updateParts()
 {
   for (unsigned int i=0; i<part.size(); ++i) {
@@ -1302,4 +1293,17 @@ void PVehicle::updateParts()
       part[i].wheel[j].ref_world.updateMatrices();
     }
   }
+}
+
+///
+/// @brief Get the lowest point of the wheel, where it would touch the ground
+/// @todo calc wclip along wheel plane instead of just straight down to prevent unrealistic behaviour
+///
+vec3f PVehicleWheel::getLowestPoint(const PVehicleTypeWheel& typewheel) {
+		
+	vec3f wclip = ref_world.getPosition();
+
+	wclip.z -= typewheel.radius - INTERP(bumplast, bumpnext, bumptravel);
+
+	return wclip;
 }

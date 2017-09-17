@@ -358,37 +358,45 @@ public:
 ///
 /// @brief Class representing a wheel of a vehicle
 ///
-struct PVehicleWheel {
-  // suspension position
-  float ride_pos;
-  // suspension position changing velocity
-  float ride_vel;
-  // driving axis rotation
-  float spin_pos, spin_vel;
-  // steering axis rotation
-  float turn_pos;
+class PVehicleWheel {
+
+public:
+	// suspension position
+	float ride_pos;
+	// suspension position changing velocity
+	float ride_vel;
+	// driving axis rotation
+	float spin_pos, spin_vel;
+	// steering axis rotation
+	float turn_pos;
   
-  // his reference position
-  PReferenceFrame ref_world;
+	// his reference position in the world position
+	PReferenceFrame ref_world;
   
-  float skidding, dirtthrow;
-  vec3f dirtthrowpos, dirtthrowvec;
+	float skidding, dirtthrow;
+	// where the dust trail starts and its velocity
+	vec3f dirtthrowpos, dirtthrowvec;
   
-  float bumplast, bumpnext, bumptravel;
+    // bump travel is the current velocity from bumplast to bumpnext
+	float bumplast, bumpnext, bumptravel;
   
-  PVehicleWheel() {
-    ride_pos = 0.0f;
-    ride_vel = 0.0f;
-    spin_pos = 0.0f;
-    spin_vel = 0.0f;
-    turn_pos = 0.0f;
-    bumplast = 0.0f;
-    bumpnext = 0.0f;
-    bumptravel = 0.0f;
-  }
+	PVehicleWheel() {
+		ride_pos = 0.0f;
+		ride_vel = 0.0f;
+		spin_pos = 0.0f;
+		spin_vel = 0.0f;
+		turn_pos = 0.0f;
+		bumplast = 0.0f;
+		bumpnext = 0.0f;
+		bumptravel = 0.0f;
+	}
+  
+	vec3f getLowestPoint(const PVehicleTypeWheel& typewheel);
 };
 
-
+///
+/// @brief a vehicle point part, can have wheels attached
+///
 struct PVehiclePart {
 
   // ref_local is initted from vehicle type, but may change per-vehicle
@@ -410,7 +418,7 @@ public:
   // physic simulation information
   PSim &sim;
   
-  // the type of Vehicle
+  // the type of Vehicle and of his part
   PVehicleType *type;
   
   // the reference rigid body of the vehicle
