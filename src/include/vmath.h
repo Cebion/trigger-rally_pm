@@ -290,8 +290,10 @@ public:
   }
 };
 
-// this plane class is of form (x,y,z) . normal + offset = 0
-// ie, increasing offset moves plane backwards along its normal
+/// @brief class storing a plane
+/// @details this plane class is of form (x,y,z) . normal + offset = 0
+///          ie, increasing offset moves plane backwards along its normal
+///
 template<class T>
 class plane
 {
@@ -313,6 +315,9 @@ public:
   }
 };
 
+///
+/// @brief class storing a 4x4 matrix
+///
 template<class T>
 class mat44
 {
@@ -431,6 +436,9 @@ public:
 };
 
 
+///
+/// @brief class storing a quaternion
+///
 template <class T>
 class quat {
 public:

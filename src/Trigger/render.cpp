@@ -1450,7 +1450,7 @@ void MainApp::renderStateGame(float eyetranslation)
       glTranslatef( -hratio + hratio * (2.5f/50.f), vratio - vratio * (5.5f/50.f), 0.0f);
       glScalef(0.125f, 0.125f, 1.0f);
 
-      if (game->gamestate == GS_FINISHED)
+      if (game->gamestate == Gamestate::finished)
       {
           getSSRender().drawText(
               PUtil::formatTime(game->coursetime),
@@ -1521,7 +1521,7 @@ void MainApp::renderStateGame(float eyetranslation)
           glTranslatef( hratio - hratio * (2.5f/50.f), vratio - vratio * (5.5f/50.f), 0.0f);
           glScalef(0.125f, 0.125f, 1.0f);
 
-            if (game->getFinishState() != GF_NOT_FINISHED)
+            if (game->getFinishState() != Gamefinish::not_finished)
                 getSSRender().drawText(totalcp + '/' + totalcp, PTEXT_HZA_RIGHT | PTEXT_VTA_TOP);
             else
                 getSSRender().drawText(nextcp + '/' + totalcp, PTEXT_HZA_RIGHT | PTEXT_VTA_TOP);
@@ -1548,7 +1548,7 @@ void MainApp::renderStateGame(float eyetranslation)
             glTranslatef( hratio - hratio * (2.5f/50.f), vratio - vratio * (5.5f/50.f) - 0.20f, 0.0f);
             glScalef(0.125f, 0.125f, 1.0f);
 
-            if (game->getFinishState() != GF_NOT_FINISHED)
+            if (game->getFinishState() != Gamefinish::not_finished)
                 getSSRender().drawText(number_of_laps + '/' + number_of_laps, PTEXT_HZA_RIGHT | PTEXT_VTA_TOP);
             else
                 getSSRender().drawText(currentlap + '/' + number_of_laps, PTEXT_HZA_RIGHT | PTEXT_VTA_TOP);
@@ -1758,7 +1758,7 @@ void MainApp::renderStateGame(float eyetranslation)
       glPushMatrix(); // 2
       glTranslatef(0.0f, 0.2f, 0.0f);
       glScalef(0.6f, 0.6f, 1.0f);
-      if (game->gamestate == GS_COUNTDOWN)
+      if (game->gamestate == Gamestate::countdown)
       {
           float sizer = fmodf(game->othertime, 1.0f) + 0.5f;
           glScalef(sizer, sizer, 1.0f);
@@ -1766,9 +1766,9 @@ void MainApp::renderStateGame(float eyetranslation)
               PUtil::formatInt(((int)game->othertime + 1), 1),
               PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
       }
-      else if (game->gamestate == GS_FINISHED)
+      else if (game->gamestate == Gamestate::finished)
       {
-          if (game->getFinishState() == GF_PASS)
+          if (game->getFinishState() == Gamefinish::pass)
           {
               glColor4f(0.5f, 1.0f, 0.5f, 1.0f);
               getSSRender().drawText("WIN", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
@@ -1793,7 +1793,7 @@ void MainApp::renderStateGame(float eyetranslation)
       }
       glPopMatrix(); // 2
 
-      if (game->gamestate == GS_COUNTDOWN)
+      if (game->gamestate == Gamestate::countdown)
       {
           glPushMatrix(); // 2
           glTranslatef(0.0f, 0.6f, 0.0f);

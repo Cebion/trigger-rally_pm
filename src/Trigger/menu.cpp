@@ -825,58 +825,63 @@ void MainApp::levelScreenAction(int action, int index)
   //gui.doLayout();
 }
 
-void MainApp::finishRace(int gamestate, float coursetime)
+void MainApp::finishRace(Gamefinish state, float coursetime)
 {
-  switch (lss.state) {
-  case AM_TOP_EVT_PREP:
-    switch (gamestate) {
-    case GF_PASS:
-      lss.leveltimes.resize(events[lss.currentevent].levels.size(), 0.0f);
-      lss.leveltimes[lss.currentlevel] += coursetime;
-      lss.totaltime += coursetime;
-      lss.currentlevel++;
+	switch (lss.state)
+	{	
+		case AM_TOP_EVT_PREP:
+			switch (state)
+			{   
+				case Gamefinish::pass:
+					lss.leveltimes.resize(events[lss.currentevent].levels.size(), 0.0f);
+					lss.leveltimes[lss.currentlevel] += coursetime;
+					lss.totaltime += coursetime;
+					lss.currentlevel++;
 
-        // event was completed so save unlock data
-        if (lss.currentlevel >= (int)events[lss.currentevent].levels.size())
-        {
-            for (const std::string &s: events[lss.currentevent].unlocks)
-                best_times.addNewUnlock(s);
+					// event was completed so save unlock data
+					if (lss.currentlevel >= (int)events[lss.currentevent].levels.size())
+					{
+						for (const std::string &s: events[lss.currentevent].unlocks)
+							best_times.addNewUnlock(s);
 
-            player_unlocks = best_times.getUnlockData();
-            best_times.skipSavePlayer();
-        }
-
-      break;
-    case GF_FAIL:
-      lss.totaltime += coursetime;
-      lss.livesleft--;
-      break;
-    default:
-      break;
-    }
-    levelScreenAction(AA_RESUME, 0);
-    break;
-  case AM_TOP_PRAC_SEL_PREP:
-    levelScreenAction(AA_PICK_PRAC_LVL, lss.currentlevel);
-    break;
-  case AM_TOP_LVL_PREP:
-    // Calculate the index of first level in the page by truncating the current level index to the nearest 10
-    //levelScreenAction(AA_GO_LVL, (lss.currentlevel / MAX_RACES_ON_SCREEN) * MAX_RACES_ON_SCREEN );
-    levelScreenAction(AA_PICK_LVL, lss.currentlevel);
-    break;
+						player_unlocks = best_times.getUnlockData();
+						best_times.skipSavePlayer();
+					}
+					break;
     
-    case AM_TOP_LVL_TIMES:
-        levelScreenAction(AA_SHOWTIMES_LVL, 0);
-        break;
+				case Gamefinish::fail:
+					lss.totaltime += coursetime;
+					lss.livesleft--;
+					break;
+    
+				default:
+					break;
+			}
+			levelScreenAction(AA_RESUME, 0);
+			break;
+  
+		case AM_TOP_PRAC_SEL_PREP:
+			levelScreenAction(AA_PICK_PRAC_LVL, lss.currentlevel);
+			break;
+		
+		case AM_TOP_LVL_PREP:
+			// Calculate the index of first level in the page by truncating the current level index to the nearest 10
+			//levelScreenAction(AA_GO_LVL, (lss.currentlevel / MAX_RACES_ON_SCREEN) * MAX_RACES_ON_SCREEN );
+			levelScreenAction(AA_PICK_LVL, lss.currentlevel);
+			break;
+    
+		case AM_TOP_LVL_TIMES:
+			levelScreenAction(AA_SHOWTIMES_LVL, 0);
+			break;
         
-    case AM_TOP_PRAC_TIMES:
-        levelScreenAction(AA_SHOWTIMES_PRAC, 0);
-        break;
+		case AM_TOP_PRAC_TIMES:
+			levelScreenAction(AA_SHOWTIMES_PRAC, 0);
+			break;
     
-  default:
-    PUtil::outLog() << "Race finished in invalid state " << lss.state << std::endl;
-    break;
-  }
+		default:
+			PUtil::outLog() << "Race finished in invalid state " << lss.state << std::endl;
+			break;
+	}
 }
 
 void MainApp::tickStateLevel(float delta)

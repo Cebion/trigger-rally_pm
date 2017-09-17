@@ -1271,7 +1271,7 @@ bool MainApp::loadAll()
 
 void MainApp::unload()
 {
-  endGame(GF_NOT_FINISHED);
+  endGame(Gamefinish::not_finished);
   
   delete psys_dirt;
 }
@@ -1412,12 +1412,12 @@ void MainApp::startGame2()
   }
 }
 
-void MainApp::endGame(int gamestate)
+void MainApp::endGame(Gamefinish state)
 {
-  float coursetime = (gamestate == GF_NOT_FINISHED) ? 0.0f :
+  float coursetime = (state == Gamefinish::not_finished) ? 0.0f :
     game->coursetime + game->uservehicle->offroadtime_total * game->offroadtime_penalty_multiplier;
   
-    if (gamestate != GF_NOT_FINISHED && lss.state != AM_TOP_EVT_PREP)
+    if (state != Gamefinish::not_finished && lss.state != AM_TOP_EVT_PREP)
     {
         race_data.carname   = game->vehicle.front()->type->proper_name;
         race_data.carclass  = game->vehicle.front()->type->proper_class;
@@ -1460,7 +1460,7 @@ void MainApp::endGame(int gamestate)
     game = nullptr;
   }
   
-  finishRace(gamestate, coursetime);
+  finishRace(state, coursetime);
 }
 
 ///
@@ -1546,12 +1546,9 @@ void MainApp::tickStateGame(float delta)
 {
   PVehicle *vehic = game->vehicle[0];
   
-  if (game->isFinished()) {
-    
-    int gfs = game->getFinishState();
-    
-    endGame(gfs);
-    
+  if (game->isFinished())
+  {
+    endGame(game->getFinishState());
     return;
   }
   
@@ -1725,7 +1722,7 @@ void MainApp::tickStateGame(float delta)
   // allow temporary camera view changes for this frame
   int cameraview_mod = cameraview;
   
-  if (game->gamestate == GS_FINISHED) {
+  if (game->gamestate == Gamestate::finished) {
     cameraview_mod = 0;
     static float spinner = 0.0f;
     spinner += 1.4f * delta;
@@ -2095,7 +2092,7 @@ void MainApp::keyEvent(const SDL_KeyboardEvent &ke)
         return;
       }
       case SDLK_ESCAPE:
-        endGame(GF_NOT_FINISHED);
+        endGame(Gamefinish::not_finished);
         return;
       default:
         break;

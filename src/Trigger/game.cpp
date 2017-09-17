@@ -425,7 +425,7 @@ bool TriggerGame::loadLevel(const std::string &filename)
 	coursetime = 0.0f;
 	othertime = 3.0f;
 	cptime = -4.0f;
-	gamestate = GS_COUNTDOWN;
+	gamestate = Gamestate::countdown;
   
 	return true;
 }
@@ -461,7 +461,7 @@ void TriggerGame::tick(float delta)
 	switch (gamestate) {
 		
 		// Countdown before start
-		case GS_COUNTDOWN:
+		case Gamestate::countdown:
 			// count down is going
 			othertime -= delta;
 			// if countdown finishes
@@ -470,7 +470,7 @@ void TriggerGame::tick(float delta)
 				// make the race start
 				// this 5 seconds are the one used when the race finishes (see "case GS_FINISHED:")
 				othertime = 5.0f;
-				gamestate = GS_RACING;
+				gamestate = Gamestate::racing;
 			}
 			
 			// In the countdown brakes must be on and user input ignored
@@ -483,18 +483,18 @@ void TriggerGame::tick(float delta)
 			break;
 		
 		// racing
-		case GS_RACING:
+		case Gamestate::racing:
 			// time goes on
 			coursetime += delta;
     
 			// if the time finishes, and you have to stay in the time (for example in events) the race finishes
 			if (coursetime + uservehicle->offroadtime_total * offroadtime_penalty_multiplier > targettime && app->lss.state == AM_TOP_EVT_PREP) {
-				gamestate = GS_FINISHED;
+				gamestate = Gamestate::finished;
 			}
 			break;
  
 		// race finished
-		case GS_FINISHED:
+		case Gamestate::finished:
 			// some seconds after the race finishes
 			othertime -= delta;
     
@@ -568,7 +568,7 @@ void TriggerGame::tick(float delta)
 				// update lap counter
 				++vehicle[i]->currentlap;
 				// if it was last lap, enter game state GS_FINISHED (race finished)
-				if (i == 0 && vehicle[i]->currentlap > number_of_laps) gamestate = GS_FINISHED;
+				if (i == 0 && vehicle[i]->currentlap > number_of_laps) gamestate = Gamestate::finished;
 			}
 		}
     
