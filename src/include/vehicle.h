@@ -19,11 +19,12 @@ enum class v_core_type{
 
 
 // vehicle clip point types
-
-#define VCLIP_BODY          10
-#define VCLIP_DRIVE_LEFT    30
-#define VCLIP_DRIVE_RIGHT   31
-#define VCLIP_HOVER         40
+enum class v_clip_type{
+	body,
+	drive_left,
+	drive_right,
+	hover
+};
 
 
 // RPM = revolutions per minute
@@ -254,7 +255,7 @@ public:
 
 struct vehicle_clip_s {
   vec3f pt;
-  int type;
+  v_clip_type type;
   float force, dampening;
 };
 

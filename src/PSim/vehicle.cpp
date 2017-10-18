@@ -424,10 +424,10 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
           }
 
           if (false) ;
-          else if (!strcmp(val, "body")) vc.type = VCLIP_BODY;
-          else if (!strcmp(val, "drive-left")) vc.type = VCLIP_DRIVE_LEFT;
-          else if (!strcmp(val, "drive-right")) vc.type = VCLIP_DRIVE_RIGHT;
-          else if (!strcmp(val, "hover")) vc.type = VCLIP_HOVER;
+          else if (!strcmp(val, "body")) vc.type = v_clip_type::body;
+          else if (!strcmp(val, "drive-left")) vc.type = v_clip_type::drive_left;
+          else if (!strcmp(val, "drive-right")) vc.type = v_clip_type::drive_right;
+          else if (!strcmp(val, "hover")) vc.type = v_clip_type::hover;
           else {
             if (PUtil::isDebugLevel(DEBUGLEVEL_TEST))
               PUtil::outLog() << "Warning: <clip> has unrecognised type \"" << val << "\"\n";
@@ -915,7 +915,7 @@ void PVehicle::tick(float delta)
       sim.getTerrain()->getContactInfo(tci);
       
       // if the clip hovers let it hover
-      if (type->part[i].clip[j].type == VCLIP_HOVER) {
+      if (type->part[i].clip[j].type == v_clip_type::hover) {
         if (tci.pos.z < 40.3) {
           tci.pos.z = 40.3;
           tci.normal = vec3f(0,0,1);
@@ -935,7 +935,7 @@ void PVehicle::tick(float delta)
       
         switch (type->part[i].clip[j].type) {
         default:
-        case VCLIP_BODY:
+		case v_clip_type::body:
           {
             #if 0
             frc += vec3f(0.0, 0.0, type->part[i].clip[j].force);
@@ -994,7 +994,7 @@ void PVehicle::tick(float delta)
             #endif
           } break;
 
-        case VCLIP_DRIVE_LEFT:
+        case v_clip_type::drive_left:
           {
             frc += vec3f(0.0, 0.0, type->part[i].clip[j].force);
 
@@ -1009,7 +1009,7 @@ void PVehicle::tick(float delta)
             frc *= depth;
           } break;
 
-        case VCLIP_DRIVE_RIGHT:
+        case v_clip_type::drive_right:
           {
             frc += vec3f(0.0, 0.0, type->part[i].clip[j].force);
 
@@ -1024,7 +1024,7 @@ void PVehicle::tick(float delta)
             frc *= depth;
           } break;
 
-        case VCLIP_HOVER:
+        case v_clip_type::hover:
           {
             float surfvelz = ptvel * tci.normal;
 
