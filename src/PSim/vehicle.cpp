@@ -4,150 +4,7 @@
 // Copyright 2004-2006 Jasmine Langridge, jas@jareiko.net
 // License: GPL version 2 (see included gpl.txt)
 
-// Vehicle class related functions, such as:
-// PDriveSystem          classes functions
-// PDriveSystemInstance  ""
-// PVehicleType          ""
-// PVehicle              ""
-
-
 #include "psim.h"
-
-///
-/// @brief Get the engine power output at a rps
-/// @param rps = radians per second
-/// @retval output power
-///
-float PDriveSystem::getPowerAtRPS(float rps)
-{
-  unsigned int p;
-  float power;
-  
-  // find which curve points rps lies between
-  for (p = 0; p < powercurve.size() && powercurve[p].x < rps; p++);
-  
-  if (p == 0) {
-    // to the left of the graph
-    power = powercurve[0].y * (rps / powercurve[0].x);
-  } else if (p < powercurve.size()) {
-    // on the graph
-    power = powercurve[p-1].y + (powercurve[p].y - powercurve[p-1].y) *
-      ( (rps - powercurve[p-1].x) / (powercurve[p].x - powercurve[p-1].x) );
-  } else {
-    // to the right of the graph
-    power = powercurve[p-1].y + (0.0f - powercurve[p-1].y) *
-      ( (rps - powercurve[p-1].x) / (powercurve.back().x - powercurve[p-1].x) );
-  }
-  
-  return power;
-}
-
-///
-/// @brief engine simulation tick. Decide if change gear, compute output torque
-/// @param delta = timeslice to compute
-/// @param wheel_rps = current rps of the wheel
-/// @param thottle = input throttle
-///
-void PDriveSystemInstance::tick(float delta, float throttle, float wheel_rps)
-{
-  // convert the rps of the wheel to the actual engine rps
-  // multiplying it for the inverse of the current gear ratio
-  rps = wheel_rps / dsys->gear[currentgear];
-  
-  bool wasreverse = reverse;
-  
-  // check if the throttle will going reverse or not
-  reverse = (throttle < 0.0f);
-  
-  // if reverse changes, there is a gear change
-  if (wasreverse != reverse) flag_gearchange = true;
-  
-  // rps and throttle will be set here always positive
-  if (reverse) {
-    rps *= -1.0f;
-    throttle *= -1.0f;
-  }
-  
-  CLAMP_UPPER(throttle, 1.0f);
-  
-  // engine rps have to be in the range
-  CLAMP(rps, dsys->minRPS, dsys->maxRPS);
-  
-  if (reverse) {
-    currentgear = 0;
-  }
-  
-  // final output engine torque
-  out_torque = dsys->getPowerAtRPS(rps) / (dsys->gear[currentgear] * rps);
-  
-  // if not reverse
-  if (!reverse) {
-	// store if we should change gear (0 no, 1 go up, -1 go down)
-    int newtarget_rel = 0;
-    
-    // if it's not last gear (we can go up)
-    if (currentgear < (int)dsys->gear.size()-1) {
-	  // nextrate = rps if the gear was the next one 
-      float nextrate = rps * dsys->gear[currentgear] / dsys->gear[currentgear+1];
-      // nextrate has to be in the rps range
-      CLAMP(nextrate, dsys->minRPS, dsys->maxRPS);
-      // final output engine torque if the gear was the next one
-      float nexttorque = dsys->getPowerAtRPS(nextrate) / (dsys->gear[currentgear+1] * nextrate);
-      // if going up we gain torque
-      if (nexttorque > out_torque)
-        // do it
-        newtarget_rel = 1;
-    }
-
-    // if the gear is not reverse and we haven't yet decided to go up
-    if (currentgear > 0 && newtarget_rel == 0) {
-	  // nextrate = rps if the gear was the previous one
-      float nextrate = rps * dsys->gear[currentgear] / dsys->gear[currentgear-1];
-      // nextrate has to be in the rps range
-      CLAMP(nextrate, dsys->minRPS, dsys->maxRPS);
-      // final output engine torque if the gear was the previous one
-      float nexttorque = dsys->getPowerAtRPS(nextrate) / (dsys->gear[currentgear-1] * nextrate);
-      // if going down we gain gear
-      if (nexttorque > out_torque)
-        // do it
-        newtarget_rel = -1;
-    }
-    
-    // if we are going to change gear and targetgear_rel is updated
-    if (newtarget_rel != 0 && newtarget_rel == targetgear_rel) {
-      // if has passed enought time
-      if ((gearch -= delta) <= 0.0f)
-      {
-		// the rps with the new gear
-        float nextrate = rps * dsys->gear[currentgear] / dsys->gear[currentgear + targetgear_rel];
-        CLAMP(nextrate, dsys->minRPS, dsys->maxRPS); 
-        // final output torque with the new gear
-        out_torque = dsys->getPowerAtRPS(nextrate) / (dsys->gear[currentgear + targetgear_rel] * nextrate);
-        // change gear
-        currentgear += targetgear_rel;
-        // set gearch
-        gearch = dsys->gearch_repeat;
-        // there is a gear change
-        flag_gearchange = true;
-      }
-    } else {
-      // update targetgear_rel, and set gearch 
-      gearch = dsys->gearch_first;
-      targetgear_rel = newtarget_rel;
-    }
-  }
-  
-  // output torque is proportional to throttle
-  out_torque *= throttle;
-  
-  // if reverse the output torque is obviously reversed
-  if (reverse) {
-    out_torque *= -1.0;
-  }
-  
-  // transimission energy dispersed
-  out_torque -= wheel_rps * 0.1f;
-}
 
 ///
 /// @brief load a vehicle type from a file
@@ -337,7 +194,7 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
               }
               in_power = atof(val);
               
-              dsys.addPowerCurvePoint(in_rpm, in_power * powerscale);
+              engine.addPowerCurvePoint(in_rpm, in_power * powerscale);
             }
           }
           
@@ -350,7 +207,7 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
               
               val = walk3->Attribute("absolute");
               if (val) {
-                dsys.addGear(atof(val));
+                engine.addGear(atof(val));
               } else {
                 val = walk3->Attribute("relative");
                 if (!val) {
@@ -358,12 +215,12 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
                   continue;
                 }
                 
-                if (!dsys.hasGears()) {
+                if (!engine.hasGears()) {
                   PUtil::outLog() << "Warning: first gear cannot use relative value\n";
                   continue;
                 }
                 
-                dsys.addGear(dsys.getLastGearRatio() * atof(val));
+                engine.addGear(engine.getLastGearRatio() * atof(val));
               }
             }
           }
@@ -564,7 +421,7 @@ void PVehicleType::unload()
 /// @param _type = the type of vehicle the new vehicle is
 ///
 PVehicle::PVehicle(PSim &sim_parent, PVehicleType *_type) :
-  sim(sim_parent), type(_type), dsysi(&_type->dsys)
+  sim(sim_parent), type(_type), iengine(&_type->engine)
 {
   // body is the vehicle rigid body
   body = sim.createRigidBody();
@@ -660,7 +517,7 @@ void PVehicle::doReset()
   wheel_speed = 0.0f;
   
   // reset engine
-  dsysi.doReset();
+  iengine.doReset();
   
   // control state
   state.setZero();
@@ -712,7 +569,7 @@ void PVehicle::doReset2(const vec3f &pos, const quatf &ori)
   wheel_speed = 0.0f;
 
   // reset engine
-  dsysi.doReset();
+  iengine.doReset();
 
   state.setZero();
 }
@@ -884,10 +741,10 @@ void PVehicle::tick(float delta)
   //vec3f rightdir = makevec3f(body->getInverseOrientationMatrix().row[0]);
   
   // handle engine (output torque, change gear if needed...)
-  dsysi.tick(delta, state.throttle, wheel_angvel);
+  iengine.tick(delta, state.throttle, wheel_angvel);
   
   // Output engine power
-  float drivetorque = dsysi.getOutputTorque();
+  float drivetorque = iengine.getOutputTorque();
   
   float turnfactor = state.turn.z;// /
     //(1.0f + fabsf(wheel_angvel) / 70.0f);

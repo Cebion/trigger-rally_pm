@@ -8,6 +8,8 @@
 // This file contains definitions and classes related to Vehicles
 //
 
+#include "engine.h"
+
 // vehicle core types
 enum class v_core_type{
 	car,
@@ -25,13 +27,6 @@ enum class v_clip_type{
 	drive_right,
 	hover
 };
-
-
-// RPM = revolutions per minute
-// RPS = radians per second
-
-#define RPM_TO_RPS(x) ((x) * (PI / 30.0f))
-#define RPS_TO_RPM(x) ((x) * (30.0f / PI))
 
 // MPS = metres per second
 // KPH = kilometres per hour
@@ -108,150 +103,6 @@ struct v_control_s {
 // @todo Why call the same class in two ways?
 typedef v_control_s v_state_s;
 
-///
-/// @brief Datas about performances of a vehicle
-///
-class PDriveSystem {
-private:
-
-  // the curve graph of the power of the engine
-  // x = radians per second
-  // y = output power
-  std::vector<vec2f> powercurve;
-  
-  // vector of gears
-  // round ratio
-  std::vector<float> gear;
-  
-  // standard time to change gear
-  float gearch_first;
-  
-  // time to change gear if you change it just after another change
-  float gearch_repeat;
-  
-  // engine minimum and maximum radians per second angular speed
-  float minRPS, maxRPS;
-  
-protected:
-  float getPowerAtRPS(float rps);
-  
-public:
-  PDriveSystem() :
-    gearch_first(0.4f),
-    gearch_repeat(0.15f),
-    minRPS(10000000.0f),
-    maxRPS(0.0f) { }
-  
-  ///
-  /// @brief Add a point to the power curve
-  /// @param rpm   = at 'rpm' round per minute
-  /// @param power = you get 'power' output power
-  /// @todo overload function to allow to give angular velocity directly in radians per second?
-  ///
-  void addPowerCurvePoint(float rpm, float power) {
-	// no power with the engine still
-    if (rpm <= 0.0f) return;
-    
-    // round per minute >> radians per second
-    float rps = RPM_TO_RPS(rpm);
-    
-    // add the point
-    powercurve.push_back(vec2f(rps, power));
-    
-    // if the point is out of range, adapt max or min rps
-    if (minRPS > rps) minRPS = rps;
-    if (maxRPS < rps) maxRPS = rps;
-  }
-  
-  ///
-  /// @brief add a gear
-  /// @param ratio = gear ratio
-  ///
-  void addGear(float ratio) {
-    if (hasGears()) {
-      if (ratio <= getLastGearRatio()) return;
-    } else {
-      if (ratio <= 0.0f) return;
-    }
-    
-    // put in the ratio
-    gear.push_back(ratio);
-  }
-  
-  bool hasGears() { return !gear.empty(); }
-  float getLastGearRatio() { return gear.back(); }
-  
-  friend class PDriveSystemInstance;
-};
-
-///
-/// @brief data about current values of the vehicle, compare with PDriveSystem
-///
-class PDriveSystemInstance {
-private:
-  
-  // reference with performance of the vehicle
-  PDriveSystem *dsys;
-  
-  // current rps (always positive)
-  float rps;
-  
-  // gear currently used
-  int currentgear;
-  
-  // target gear relative (1 to go up, -1 to go down, 0 to stay)
-  int targetgear_rel;
-  
-  // timing variable for gear changing
-  float gearch;
-  
-  // if the car is going reverse, (rps will be always positive) 
-  bool reverse;
-  
-  // current output engine torque
-  float out_torque;
-  
-  // if the vehicle has changed gear in the past
-  bool flag_gearchange;
-  
-public:
-  PDriveSystemInstance(PDriveSystem *system) :
-    dsys(system),
-    currentgear(0),
-    targetgear_rel(0),
-    gearch(0.0f),
-    reverse(false),
-    out_torque(0.0f),
-    flag_gearchange(false) { }
-  
-  // Simulation tick
-  void tick(float delta, float throttle, float wheel_rps);
-  
-  // return current information
-  float getOutputTorque() { return out_torque; }
-  float getEngineRPS() { return rps; }
-  float getEngineRPM() { return RPS_TO_RPM(rps); }
-  
-  // return current gear (reverse will out -1)
-  int getCurrentGear() { return reverse ? -1 : currentgear; }
-  
-  bool getFlagGearChange() {
-    bool ret = flag_gearchange;
-    flag_gearchange = false;
-    return ret;
-  }
-  
-  ///
-  /// @brief Reset the engine, used i.e. with the 'recover' key
-  ///
-  void doReset() {
-    rps = dsys->minRPS;
-    currentgear = 0;
-    targetgear_rel = 0;
-    gearch = 0.0f;
-    out_torque = 0.0f;
-  }
-};
 
 struct vehicle_clip_s {
   vec3f pt;
@@ -326,7 +177,7 @@ public:
   PModel *wheelmodel;
   
   // Car statistics (powercurve, gears...)
-  PDriveSystem dsys;
+  PEngine engine;
   
   float inverse_drive_total;
   
@@ -433,8 +284,8 @@ public:
   // current control state (eg. brakes, turn)
   v_state_s state;
   
-  // engine instance (current RPS, gear...)
-  PDriveSystemInstance dsysi;
+  // engine instance
+  PEngineInstance iengine;
   
   // helicopter-specific
   float blade_ang1;
@@ -505,9 +356,9 @@ public:
   // reset the car when 'q' is pressed
   void doReset2(const vec3f &pos, const quatf &ori);
   
-  float getEngineRPM() { return dsysi.getEngineRPM(); }
-  int getCurrentGear() { return dsysi.getCurrentGear(); }
-  bool getFlagGearChange() { return dsysi.getFlagGearChange(); }
+  float getEngineRPM() { return iengine.getEngineRPM(); }
+  int getCurrentGear() { return iengine.getCurrentGear(); }
+  bool getFlagGearChange() { return iengine.getFlagGearChange(); }
   float getCrashNoiseLevel() {
     if (crunch_level > crunch_level_prev) {
       float tmp = crunch_level - crunch_level_prev;
