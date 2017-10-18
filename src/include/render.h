@@ -767,6 +767,9 @@ public:
         return PUtil::decideRoadSurface(temp);
     }
 
+  ///
+  /// @brief get the information about a contact point (its coordinates and normal) with the ground
+  ///
   void getContactInfo(ContactInfo &tci) {
     float x = tci.pos.x * scale_hz_inv;
     int xi = (int)x;

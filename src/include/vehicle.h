@@ -9,12 +9,13 @@
 //
 
 // vehicle core types
-
-#define VCTYPE_TANK         1
-#define VCTYPE_HELICOPTER   2
-#define VCTYPE_PLANE        3
-#define VCTYPE_HOVERCRAFT   4
-#define VCTYPE_CAR          5
+enum class v_core_type{
+	car,
+	tank,
+	helicopter,
+	plane,
+	hovercraft
+};
 
 
 // vehicle clip point types
@@ -305,8 +306,8 @@ public:
   std::string pstat_wheeldrive;
   std::string pstat_handling;
   
-  // type of vehicle (usually VCTYPE_CAR)
-  int coretype;
+  // type of vehicle (usually car)
+  v_core_type coretype;
   
   // mass
   float mass;

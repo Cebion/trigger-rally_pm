@@ -226,11 +226,16 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
   // VEHICLE TYPE POINT
 
   if (false) ;
-  else if (!strcmp(val, "tank")) coretype = VCTYPE_TANK;
-  else if (!strcmp(val, "helicopter")) coretype = VCTYPE_HELICOPTER;
-  else if (!strcmp(val, "plane")) coretype = VCTYPE_PLANE;
-  else if (!strcmp(val, "hovercraft")) coretype = VCTYPE_HOVERCRAFT;
-  else if (!strcmp(val, "car")) coretype = VCTYPE_CAR;
+  else if (!strcmp(val, "car"))
+	  coretype = v_core_type::car;
+  else if (!strcmp(val, "tank"))
+	  coretype = v_core_type::tank;
+  else if (!strcmp(val, "helicopter"))
+	  coretype = v_core_type::helicopter;
+  else if (!strcmp(val, "plane"))
+	  coretype = v_core_type::plane;
+  else if (!strcmp(val, "hovercraft"))
+	  coretype = v_core_type::hovercraft;
   else {
     if (PUtil::isDebugLevel(DEBUGLEVEL_TEST))
       PUtil::outLog() << "Error: <vehicle> has unrecognised type \"" << val << "\"\n";
@@ -567,6 +572,7 @@ PVehicle::PVehicle(PSim &sim_parent, PVehicleType *_type) :
   // vehicle mass is approximately meant to be cuboid
   body->setMassCuboid(type->mass, type->dims);
   
+  // set control
   state.setZero();
   ctrl.setZero();
   
@@ -574,8 +580,11 @@ PVehicle::PVehicle(PSim &sim_parent, PVehicleType *_type) :
   
   blade_ang1 = 0.0;
   
+  // set starting checkpoints
   nextcp = 0;
   nextcdcp = 0;
+  
+  // set lap
   currentlap = 1;
   
   wheel_angvel = 0.0f;
@@ -814,7 +823,7 @@ void PVehicle::tick(float delta)
   switch (type->coretype) {
   default: break;
 
-  case VCTYPE_TANK:
+  case v_core_type::tank:
     if (part.size() >= 3) {
       state.aim.x += ctrl.aim.x * delta * 0.5;
       if (state.aim.x < -PI) state.aim.x += 2.0*PI;
@@ -833,16 +842,16 @@ void PVehicle::tick(float delta)
     }
     break;
 
-  case VCTYPE_HELICOPTER:
+  case v_core_type::helicopter:
     break;
 
-  case VCTYPE_PLANE:
+  case v_core_type::plane:
     {
       frc.y += state.throttle * type->param.speed;
     }
     break;
 
-  case VCTYPE_HOVERCRAFT:
+  case v_core_type::hovercraft:
     {
       blade_ang1 = fmod(blade_ang1 + delta * 50.0 * state.throttle, 2.0*PI);
 
@@ -865,7 +874,7 @@ void PVehicle::tick(float delta)
     }
     break;
   
-  case VCTYPE_CAR:
+  case v_core_type::car:
     break;
   }
 
@@ -1135,10 +1144,10 @@ void PVehicle::tick(float delta)
         
         // if the wheel has a velocity toward the bottom (the normal respect the ground right below, it can be inclinated)
         if (surfvel.z < 0.0f)
-          // this velocity get absorbed by the suspension
+          // the perpendicular force get absorbed by the suspension
           perpforce -= surfvel.z * typewheel.dampening;
         
-        // suspension get pressed
+        // suspension get pressed to keep the wheel above ground
         wheel.ride_pos += depth;
         
         // suspension can't get more strecthed than the 70% of the wheel radius
@@ -1168,12 +1177,15 @@ void PVehicle::tick(float delta)
           
           float testfriction = perpforce * 1.0f;
           
+          // the length of the friction
           float leng = friction.length();
           
+          // if there is some friction, and it is bigger than testfriction
           if (leng > 0.0f && leng > testfriction)
+            // friction will be put equal to maxfriction with a little gain
             friction *= (maxfriction / leng) + 0.02f;
 
-          // add a force
+          // the force of the wheel
           frc += (
               // the perpendicular force along the normal
 		      tci.normal * perpforce +
@@ -1299,8 +1311,8 @@ void PVehicle::updateParts()
 /// @brief Get the lowest point of the wheel, where it would touch the ground
 /// @todo calc wclip along wheel plane instead of just straight down to prevent unrealistic behaviour
 ///
-vec3f PVehicleWheel::getLowestPoint(const PVehicleTypeWheel& typewheel) {
-		
+vec3f PVehicleWheel::getLowestPoint(const PVehicleTypeWheel& typewheel)
+{		
 	vec3f wclip = ref_world.getPosition();
 
 	wclip.z -= typewheel.radius - INTERP(bumplast, bumpnext, bumptravel);
