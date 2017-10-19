@@ -144,168 +144,189 @@ PModel::PModel (const std::string &filename, float globalScale)
  *        renderer is ignoring it (only setting vertex normals)
  * FIXME: Restriction: Model must have only a single material. 
  *                     See comment bellow on how to fix it.  */
+
+#define OBJ_BUFFER_SIZE 65552
+
 void PModel::loadOBJ(const std::string &filename, float globalScale)
 {
-   std::vector<vec3f> normals;  /**< Vector with all normals readed from file */
-   char buff[1000];             /**< File buffer */
-   PHYSFS_file* pfile;          /**< The real .obj file */
-   std::string tok;             /**< Readed token from line */
-   std::string value;           /**< Readed value from line */
-   int curVert=-1;              /**< Current readed vertex */
-   int curFace=-1;              /**< Current readed face */
-   int curNormal=-1;            /**< Current readed normal */
-   int curUV=-1;                /**< Current readed uvmap */
-   int objNumber=0;             /**< Number of objects declared */
-   PMesh* curMesh;              /**< Current loading mesh */
-   vec3f v3;                    /**< Vector to parse from lines */
-   vec2f v2;                    /**< Vector to parse from lines */
+	char buff[OBJ_BUFFER_SIZE];	/**< File buffer */
+	PHYSFS_file* pfile;          /**< The real .obj file */
+	std::string tok;             /**< Readed token from line */
+	std::string value;           /**< Readed value from line */
+	int curVert=-1;              /**< Current readed vertex */
+	int curFace=-1;              /**< Current readed face */
+	int curNormal=-1;            /**< Current readed normal */
+	int curUV=-1;                /**< Current readed uvmap */
+	int objNumber=0;             /**< Number of objects declared */
+	PMesh* curMesh;              /**< Current loading mesh */
+	vec3f v3;                    /**< Vector to parse from lines */
+	vec2f v2;                    /**< Vector to parse from lines */
    
-   /* Initing debug message */
-   if(PUtil::isDebugLevel(DEBUGLEVEL_TEST))
-   {
-      PUtil::outLog() << "Loading OBJ model \"" << filename 
-         << "\"" << std::endl;
-   }
+	/* Initing debug message */
+	if(PUtil::isDebugLevel(DEBUGLEVEL_TEST))
+	{
+		PUtil::outLog() << "Loading OBJ model \"" << filename 
+		<< "\"" << std::endl;
+	}
 
-   /* Open the .obj file */
-   pfile = PHYSFS_openRead(filename.c_str());
-   if(pfile == NULL)
-   {
-      throw MakePException(filename + ", PhysFS: " + PHYSFS_getLastError());
-   }
+	/* Open the .obj file */
+	pfile = PHYSFS_openRead(filename.c_str());
+	if(pfile == NULL)
+	{
+		throw MakePException(filename + ", PhysFS: " + PHYSFS_getLastError());
+	}
 
-   /* Create the single mesh (.obj isn't a multimesh file) */
-   mesh.push_back(PMesh());
-   curMesh = &mesh.back();
+	/* Create the single mesh (.obj isn't a multimesh file) */
+	mesh.push_back(PMesh());
+	curMesh = &mesh.back();
 
-   /* Loop throught all file */
-   while(PUtil::fgets2(buff,1000,pfile))
-   {
-      if(PUtil::getToken(buff, tok, value))
-      {
-         if(tok[0] == '#')
-         {
-            /* Comment. Just ignore. */
-         }
-         else if(tok == "v")
-         {
-            /* Vertex declaration */
-            curVert++;
-            curMesh->vert.resize(curVert+1);
-            if(sscanf(value.c_str(), "%f %f %f", 
-                     &v3.x, &v3.y, &v3.z) == 3)
-            { 
-               curMesh->vert[curVert] = v3 * globalScale;
-            }
-         }
-         else if(tok == "vn")
-         {
-            /* Vertex Normal declaraction */
-            curNormal++;
-            curMesh->norm.resize(curNormal+1);
-            if(sscanf(value.c_str(), "%f %f %f",
-                     &v3.x, &v3.y, &v3.z) == 3)
-            {
-               curMesh->norm[curNormal] = v3;
-               curMesh->norm[curNormal].normalize();
-            }
-         }
-         else if(tok == "vt")
-         {
-            /* Vertex st texture coordinate */
-            curUV++;
-            curMesh->texco.resize(curUV+1);
-            if(sscanf(value.c_str(), "%f %f", &v2.x, &v2.y) == 2)
-            {
-               curMesh->texco[curUV] = v2;
-            }
-         }
-         else if(tok == "f")
-         {
-            /* Face (triangle) declaration */
-            int v[3],uv[3],vn[3];
-            curFace++;
-            curMesh->face.resize(curFace+1);
-            if(sscanf(value.c_str(), "%d/%d/%d %d/%d/%d %d/%d/%d", 
-                &v[0], &uv[0], &vn[0], 
-                &v[1], &uv[1], &vn[1],
-                &v[2], &uv[2], &vn[2]) == 9)
-            {
-               /* NOTE: all index are dec by 1, as .obj range is
-                * [1,total] and pengine vector is [0,total) */
+	/* Loop throught all file */
+	while(PUtil::fgets2(buff, OBJ_BUFFER_SIZE ,pfile))
+	{
+		if(PUtil::getToken(buff, tok, value))
+		{
+		  
+			if(tok == "f")
+			{
+				std::vector<PFace>& facebuf = curMesh->face;
+				
+				/* Face (triangle) declaration */
+				int v[3],uv[3],vn[3];
+			
+				if (facebuf.size() == curFace)
+					facebuf.reserve(curFace + 256);
+			
+				curFace++;
+			
+				facebuf.resize(curFace+1);
+				if(sscanf(value.c_str(), "%d/%d/%d %d/%d/%d %d/%d/%d", 
+					&v[0], &uv[0], &vn[0], 
+					&v[1], &uv[1], &vn[1],
+					&v[2], &uv[2], &vn[2]) == 9)
+				{
+					/* NOTE: all index are dec by 1, as .obj range is
+					* [1,total] and pengine vector is [0,total) */
 
-               /* Set Vertex Index */
-               curMesh->face[curFace].vt[0] = v[0]-1;
-               curMesh->face[curFace].vt[1] = v[1]-1;
-               curMesh->face[curFace].vt[2] = v[2]-1;
-               /* Set UV Index  */
-               curMesh->face[curFace].tc[0] = uv[0]-1;
-               curMesh->face[curFace].tc[1] = uv[1]-1;
-               curMesh->face[curFace].tc[2] = uv[2]-1;
-               /* Set Normal Index  */
-               curMesh->face[curFace].nr[0] = vn[0]-1;
-               curMesh->face[curFace].nr[1] = vn[1]-1;
-               curMesh->face[curFace].nr[2] = vn[2]-1;
+					/* Set Vertex Index */
+					facebuf[curFace].vt[0] = v[0]-1;
+					facebuf[curFace].vt[1] = v[1]-1;
+					facebuf[curFace].vt[2] = v[2]-1;
+					/* Set UV Index  */
+					facebuf[curFace].tc[0] = uv[0]-1;
+					facebuf[curFace].tc[1] = uv[1]-1;
+					facebuf[curFace].tc[2] = uv[2]-1;
+					/* Set Normal Index  */
+					facebuf[curFace].nr[0] = vn[0]-1;
+					facebuf[curFace].nr[1] = vn[1]-1;
+					facebuf[curFace].nr[2] = vn[2]-1;
+				}
+			}
+			else if(tok == "vt")
+			{
+				/* Vertex st texture coordinate */
+			
+				if (curMesh->texco.size() == curUV)
+					curMesh->texco.reserve(curUV + 256);
+			
+				curUV++;
+			
+				curMesh->texco.resize(curUV+1);
+				if(sscanf(value.c_str(), "%f %f", &v2.x, &v2.y) == 2)
+					curMesh->texco[curUV] = v2;
+			}
+			else if(tok == "v")
+			{
+				/* Vertex declaration */
             
-            }
-         }
-         else if(tok == "mtllib")
-         {
-            /* Material Library declaration (mtllib) */
-            curMesh->fxname = PUtil::assemblePath(value/*"focus_tex.fx"*/, 
-                  filename);
-         }
-         else if(tok == "o")
-         {
-            /* Object name. Just ignore. */
-            objNumber++;
-            if(objNumber > 1)
-            {
-               PUtil::outLog() << "Warning: Object file \"" << filename 
-                  << "\" has more than one object defined!" << std::endl;
+				if (curMesh->vert.size() == curVert)
+					curMesh->vert.reserve(curVert + 128);
+		
+				curVert++;
+			
+				curMesh->vert.resize(curVert+1);
+			
+				if(sscanf(value.c_str(), "%f %f %f", 
+					&v3.x, &v3.y, &v3.z) == 3)
+				{
+					curMesh->vert[curVert] = v3 * globalScale;
+				}
+			}
+			else if(tok == "vn")
+			{
+				/* Vertex Normal declaraction */
+			
+				if (curMesh->norm.size() == curNormal)
+					curMesh->norm.reserve(curNormal + 128);
+			
+				curNormal++;
+			
+				curMesh->norm.resize(curNormal+1);
+				if(sscanf(value.c_str(), "%f %f %f",
+					&v3.x, &v3.y, &v3.z) == 3)
+				{
+					curMesh->norm[curNormal] = v3;
+					curMesh->norm[curNormal].normalize();
+				}
+			}
+			else if(tok == "mtllib")
+			{
+				/* Material Library declaration (mtllib) */
+				curMesh->fxname = PUtil::assemblePath(value/*"focus_tex.fx"*/, 
+					filename);
+			}
+			else if(tok == "o")
+			{
+				/* Object name. Just ignore. */
+				objNumber++;
+				if(objNumber > 1)
+				{
+					PUtil::outLog() << "Warning: Object file \"" << filename 
+					<< "\" has more than one object defined!" << std::endl;
+				}
+			}
+			else  if(tok[0] == '#')
+			{
+				/* Comment. Just ignore. */
+			}
+			else if(tok == "usemtl")
+			{
+				/* Face material usage. (usemtl). 
+				* FIXME: Ignoring, as the pengine renderer is 
+				* using only a single "fx" per mesh.
+				*
+				* A bad fix should just duplicate each distinct material faces
+				* as different meshes.
+				*
+				* A good fix should rewrite the renderer (at ./app.cpp) to 
+				* change materials on a single mesh as needed, allowing multiple 
+				* material meshes. 
+				*
+				* I'm do either of them, but just mark it as a restriction to
+				* .obj files on trigger. Someone must remove this restriction 
+				* latter */
+			}
+			else if(tok == "s")
+			{
+				/* Smooth toggle. Ignoring. */
+			}
+			else
+			{
+				PUtil::outLog () << "Warning: unknown token \"" << tok
+				<< "\" in file \"" << filename << "\"" << std::endl;
+			}
+		}
+	}
 
-            }
-         }
-         else if(tok == "usemtl")
-         {
-            /* Face material usage. (usemtl). 
-             * FIXME: Ignoring, as the pengine renderer is 
-             * using only a single "fx" per mesh.
-             *
-             * A bad fix should just duplicate each distinct material faces
-             * as different meshes.
-             *
-             * A good fix should rewrite the renderer (at ./app.cpp) to 
-             * change materials on a single mesh as needed, allowing multiple 
-             * material meshes. 
-             *
-             * I'm do either of them, but just mark it as a restriction to
-             * .obj files on trigger. Someone must remove this restriction 
-             * latter */
-         }
-         else if(tok == "s")
-         {
-            /* Smooth toggle. Ignoring. */
-         }
-         else
-         {
-            PUtil::outLog () << "Warning: unknown token \"" << tok
-               << "\" in file \"" << filename << "\"" << std::endl;
-         }
-      }
-   }
+	/* Verify if normals were defined */
+	if(curNormal == -1)
+	{
+		PUtil::outLog() << "Warning: Object file \"" << filename 
+		<< "\" had no normals defined!" << std::endl;
+	}
 
-   /* Verify if normals were defined */
-   if(curNormal == -1)
-   {
-      PUtil::outLog() << "Warning: Object file \"" << filename 
-         << "\" had no normals defined!" << std::endl;
-
-   }
-
-   /* Finally, close file and done. */
-   PHYSFS_close(pfile);
-   name = filename;
+	/* Finally, close file and done. */
+	PHYSFS_close(pfile);
+	name = filename;
 }
 
 
