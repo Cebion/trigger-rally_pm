@@ -10,27 +10,12 @@
 
 #include <pengine.h>
 
-/*
-#include <tnl/tnl.h>
-#include <tnl/tnlNetBase.h>
-#include <tnl/tnlGhostConnection.h>
-#include <tnl/tnlNetInterface.h>
-#include <tnl/tnlNetObject.h>
-*/
-
 
 class PSim;
-class   PRigidBody;
-
-class PMotor;
-class PGearbox;
-
-class ClipSet;
-class ClipNode;
-class ClipMesh;
+class PRigidBody;
 
 class PVehicleType;
-class   PVehicleTypePart;
+class PVehicleTypePart;
 class PVehicle;
 
 ///

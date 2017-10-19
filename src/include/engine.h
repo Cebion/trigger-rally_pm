@@ -134,7 +134,7 @@ private:
 	// current output engine torque
 	float out_torque;
   
-	// if the vehicle has changed gear in the past tick
+	// if the vehicle has changed gear recently
 	bool flag_gearchange;
   
 public:

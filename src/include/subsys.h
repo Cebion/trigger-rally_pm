@@ -21,56 +21,61 @@
 #include <string>
 #include <vector>
 
+
+///
+/// @brief A PResource basically is just a name
+///
 class PResource
 {
 protected:
-
-    std::string name;
+	std::string name;
 
 public:
-
-    const std::string & getName() const
-    {
-        return name;
-    }
+	const std::string & getName() const
+	{
+		return name;
+	}
 };
 
+///
+/// @brief Implementation of a buffer where you can push inside stuff and clear everything if you want
+/// @todo Actually is not a list. Why is called this way?
+///
 template <class T>
 class PResourceList
 {
 private:
 
-    std::vector<T *> reslist;
+	std::vector<T *> reslist;
 
 public:
 
-    ~PResourceList()
-    {
-        clear();
-    }
+	~PResourceList()
+	{
+		clear();
+	}
 
-    T * add(T *newresource)
-    {
-        reslist.push_back(newresource);
-        return newresource;
-    }
+	T * add(T *newresource)
+	{
+		reslist.push_back(newresource);
+		return newresource;
+	}
 
-    T * find(const std::string &name)
-    {
-        for (T *res: reslist)
-            if (name == res->getName())
-                return res;
+	T * find(const std::string &name)
+	{
+		for (T *res: reslist)
+			if (name == res->getName())
+				return res;
+		return nullptr;
+	}
 
-        return nullptr;
-    }
+	void clear()
+	{
+		for (T *res: reslist)
+			delete res;
 
-    void clear()
-    {
-        for (T *res: reslist)
-            delete res;
-
-        reslist.clear();
-    }
+		reslist.clear();
+	}
 };
 
 class PSubsystem

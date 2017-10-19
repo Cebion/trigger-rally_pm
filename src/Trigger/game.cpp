@@ -440,7 +440,7 @@ void TriggerGame::chooseVehicle(PVehicleType *type)
 	// create the vehicle
 	PVehicle *vh = sim->createVehicle(type, start_pos, start_ori, app->getSSModel());
   
-	// it is also user vehicle
+	// it is also the user vehicle
 	uservehicle = vh;
   
 	// if everything's ok push it in the vehicle list
@@ -501,9 +501,9 @@ void TriggerGame::tick(float delta)
 			// brake up all vehicles
 			for (unsigned int i=0; i<vehicle.size(); i++)
 			{
-				//vehicle[i]->ctrl.setZero();
 				vehicle[i]->ctrl.brake1 = 1.0f;
-				//vehicle[i]->ctrl.brake2 = 1.0f;
+				// also prevent throttle to avoid awful behaviour
+				vehicle[i]->ctrl.throttle = 0.0f;
 			}
 			break;
 	}
@@ -617,6 +617,7 @@ void TriggerGame::tick(float delta)
 						lastCkptPos = codrivercheckpt[j].pt + vec3f(0.0f, 0.0f, 2.0f);
 						lastCkptOri = vehicle[i]->body->getOrientation();
 						
+						// update next checkpoint
 						vehicle[i]->nextcdcp = j + 1;
 						break;
 					}
