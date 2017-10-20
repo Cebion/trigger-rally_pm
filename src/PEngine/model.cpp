@@ -149,14 +149,11 @@ PModel::PModel (const std::string &filename, float globalScale)
 
 void PModel::loadOBJ(const std::string &filename, float globalScale)
 {
-	char buff[OBJ_BUFFER_SIZE];	/**< File buffer */
+	std::vector<char> buff (OBJ_BUFFER_SIZE);	/**< File buffer */
 	PHYSFS_file* pfile;          /**< The real .obj file */
 	std::string tok;             /**< Readed token from line */
 	std::string value;           /**< Readed value from line */
-	int curVert=-1;              /**< Current readed vertex */
 	int curFace=-1;              /**< Current readed face */
-	int curNormal=-1;            /**< Current readed normal */
-	int curUV=-1;                /**< Current readed uvmap */
 	int objNumber=0;             /**< Number of objects declared */
 	PMesh* curMesh;              /**< Current loading mesh */
 	vec3f v3;                    /**< Vector to parse from lines */
@@ -181,9 +178,9 @@ void PModel::loadOBJ(const std::string &filename, float globalScale)
 	curMesh = &mesh.back();
 
 	/* Loop throught all file */
-	while(PUtil::fgets2(buff, OBJ_BUFFER_SIZE ,pfile))
+	while(PUtil::fgets2(buff.data(), buff.size() ,pfile))
 	{
-		if(PUtil::getToken(buff, tok, value))
+		if(PUtil::getToken(buff.data(), tok, value))
 		{
 		  
 			if(tok == "f")
@@ -225,47 +222,34 @@ void PModel::loadOBJ(const std::string &filename, float globalScale)
 			{
 				/* Vertex st texture coordinate */
 			
-				if (curMesh->texco.size() == curUV)
-					curMesh->texco.reserve(curUV + 256);
+				if (curMesh->texco.size() == curMesh->texco.size())
+					curMesh->texco.reserve(curMesh->texco.size() + 256);
 			
-				curUV++;
-			
-				curMesh->texco.resize(curUV+1);
 				if(sscanf(value.c_str(), "%f %f", &v2.x, &v2.y) == 2)
-					curMesh->texco[curUV] = v2;
+					curMesh->texco.push_back (v2);
 			}
 			else if(tok == "v")
 			{
 				/* Vertex declaration */
             
-				if (curMesh->vert.size() == curVert)
-					curMesh->vert.reserve(curVert + 128);
-		
-				curVert++;
+				if (curMesh->vert.size() == curMesh->vert.capacity())
+					curMesh->vert.reserve(curMesh->vert.capacity() + 128);
 			
-				curMesh->vert.resize(curVert+1);
-			
-				if(sscanf(value.c_str(), "%f %f %f", 
-					&v3.x, &v3.y, &v3.z) == 3)
-				{
-					curMesh->vert[curVert] = v3 * globalScale;
-				}
+				if(sscanf(value.c_str(), "%f %f %f", &v3.x, &v3.y, &v3.z) == 3)
+					curMesh->vert.push_back(v3 * globalScale);
 			}
 			else if(tok == "vn")
 			{
 				/* Vertex Normal declaraction */
 			
-				if (curMesh->norm.size() == curNormal)
-					curMesh->norm.reserve(curNormal + 128);
+				if (curMesh->norm.size() == curMesh->norm.capacity())
+					curMesh->norm.reserve(curMesh->norm.capacity() + 128);
 			
-				curNormal++;
-			
-				curMesh->norm.resize(curNormal+1);
 				if(sscanf(value.c_str(), "%f %f %f",
 					&v3.x, &v3.y, &v3.z) == 3)
 				{
-					curMesh->norm[curNormal] = v3;
-					curMesh->norm[curNormal].normalize();
+					curMesh->norm.push_back(v3);
+					curMesh->norm.back().normalize();
 				}
 			}
 			else if(tok == "mtllib")
@@ -318,7 +302,7 @@ void PModel::loadOBJ(const std::string &filename, float globalScale)
 	}
 
 	/* Verify if normals were defined */
-	if(curNormal == -1)
+	if(curMesh->norm.size() == 0)
 	{
 		PUtil::outLog() << "Warning: Object file \"" << filename 
 		<< "\" had no normals defined!" << std::endl;
