@@ -7,6 +7,7 @@
 #ifndef VMATHH
 #define VMATHH
 
+#include <cstdlib>
 #include <math.h>
 
 
