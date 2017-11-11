@@ -153,7 +153,7 @@ void PModel::loadOBJ(const std::string &filename, float globalScale)
 	PHYSFS_file* pfile;          /**< The real .obj file */
 	std::string tok;             /**< Readed token from line */
 	std::string value;           /**< Readed value from line */
-	int curFace=-1;              /**< Current readed face */
+	unsigned int curFace=-1;     /**< Current readed face */
 	int objNumber=0;             /**< Number of objects declared */
 	PMesh* curMesh;              /**< Current loading mesh */
 	vec3f v3;                    /**< Vector to parse from lines */
@@ -248,8 +248,8 @@ void PModel::loadOBJ(const std::string &filename, float globalScale)
 				if(sscanf(value.c_str(), "%f %f %f",
 					&v3.x, &v3.y, &v3.z) == 3)
 				{
+					v3.normalize();
 					curMesh->norm.push_back(v3);
-					curMesh->norm.back().normalize();
 				}
 			}
 			else if(tok == "mtllib")
