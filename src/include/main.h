@@ -75,14 +75,14 @@ enum class Gamestate {
 	// during racing
 	racing,
 	// race ended
-	finished	
+	finished
 };
 
 ///
 /// @brief class containing information about the race is being played
 ///
 class TriggerGame {
-	
+
 	friend class MainApp;
 
 public:
@@ -114,7 +114,7 @@ private:
 	std::vector<CheckPoint> checkpt;
 	// Codriver checkpoints
 	std::vector<CodriverCP> codrivercheckpt;
-	
+
 	int number_of_laps = 1;
 
 	// Codriver voice and sign set
@@ -274,7 +274,7 @@ struct TriggerEvent {
 
 class DirtParticleSystem : public PParticleSystem {
 public:
-	
+
 	void tick(float delta)
 	{
 		PParticleSystem::tick(delta);
@@ -467,7 +467,7 @@ private:
 		ActionNext,
 		ActionCount
 	};
-	
+
 	struct {
 		std::string action_name[ActionCount];
 		UserControl map[ActionCount];
@@ -499,9 +499,9 @@ private:
 
 	PVehicleType *vt_tank;
 
-	PTexture *tex_fontDsmNormal,
-			*tex_fontDsmOutlined,
-			*tex_fontDsmShadowed;
+	PTexture *tex_fontSourceCodeBold,
+			*tex_fontSourceCodeOutlined,
+			*tex_fontSourceCodeShadowed;
 
 	PTexture *tex_detail,
 			*tex_sky[1],
@@ -536,7 +536,7 @@ private:
 
 	// Audio instances
 	PAudioInstance *audinst_engine, *audinst_wind, *audinst_gravel;
-  
+
 	std::vector<PAudioInstance *> audinst;
 
 	float cloudscroll;
@@ -600,7 +600,7 @@ protected:
 
 public:
 	MainApp(const std::string &title, const std::string &name):
-  
+
     PApp(title, name)
 	{
 	}
@@ -658,4 +658,3 @@ public:
         return cfg_codriveruserconfig;
     }
 };
-

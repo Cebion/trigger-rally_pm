@@ -240,7 +240,7 @@ void MainApp::renderStateLoading(float eyetranslation)
     // if aspect ratio is larger than 1:1
     if ((float)getWidth()/(float)getHeight() > 1.0f)
     {
-      
+
       // lower and upper offset based on aspect ratio
       float off_l = (1 - ((float)getHeight() / (float)getWidth())) / 2.f;
       float off_u = 1 - off_l;
@@ -261,7 +261,7 @@ void MainApp::renderStateLoading(float eyetranslation)
       glTexCoord2f(off_u,0.0f); glVertex2f(1.0f, -1.0f);
     }
     glEnd();
-    
+
     tex_loading_screen->bind();
 
     GLfloat logovratio = static_cast<float> (getWidth()) / getHeight();
@@ -423,7 +423,7 @@ void MainApp::renderStateEnd(float eyetranslation)
     }
     glEnd();
 
-    tex_fontDsmOutlined->bind();
+    tex_fontSourceCodeOutlined->bind();
 
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
@@ -638,7 +638,7 @@ glMatrixMode(GL_PROJECTION);
     // use the same colors as the menu
     const GuiWidgetColors gwc = gui.getColors();
 
-    tex_fontDsmShadowed->bind();
+    tex_fontSourceCodeShadowed->bind();
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glDisable(GL_DEPTH_TEST);
@@ -1435,7 +1435,7 @@ void MainApp::renderStateGame(float eyetranslation)
       glPopMatrix(); // 2
       */
 
-      tex_fontDsmOutlined->bind();
+      tex_fontSourceCodeOutlined->bind();
 
       // time counter
 
@@ -1527,7 +1527,7 @@ void MainApp::renderStateGame(float eyetranslation)
                 getSSRender().drawText(nextcp + '/' + totalcp, PTEXT_HZA_RIGHT | PTEXT_VTA_TOP);
 
           // checkpoint label
-          
+
           //glPushMatrix(); // 3
           glTranslatef(0, 0.52f, 0.0f);
           glScalef(0.65f, 0.65f, 1.0f);
@@ -1575,7 +1575,7 @@ void MainApp::renderStateGame(float eyetranslation)
 
         glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
-      tex_fontDsmNormal->bind();
+      tex_fontSourceCodeBold->bind();
 
       // show current gear and speed
       {
@@ -1626,14 +1626,14 @@ void MainApp::renderStateGame(float eyetranslation)
     glScalef(0.1f, 0.1f, 1.0f);
     glTranslatef(0.0f, -4.0f, 0.0f);
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-    tex_fontDsmOutlined->bind();
+    tex_fontSourceCodeOutlined->bind();
     getSSRender().drawText(std::string("true time penalty: ") +
         std::to_string(game->offroadtime_total * game->offroadtime_penalty_multiplier),
         PTEXT_HZA_CENTER | PTEXT_VTA_TOP);
     glPopMatrix();
 #endif
 
-    tex_fontDsmShadowed->bind();
+    tex_fontSourceCodeShadowed->bind();
 
     // draw "off road" warning sign and text
     if (game->isRacing())
@@ -1663,7 +1663,7 @@ void MainApp::renderStateGame(float eyetranslation)
             glScalef(0.1f, 0.1f, 1.0f);
             glTranslatef(0.0f, -2.5f, 0.0f);
             glColor4f(1.0f, 1.0f, 0.0f, 1.0f);
-            tex_fontDsmOutlined->bind();
+            tex_fontSourceCodeOutlined->bind();
             getSSRender().drawText(
                 std::to_string(static_cast<int> (game->getOffroadTime() * game->offroadtime_penalty_multiplier)) +
                 " seconds",
@@ -1702,7 +1702,7 @@ void MainApp::renderStateGame(float eyetranslation)
             glEnable(GL_TEXTURE_2D);
             glPopMatrix();
         }
-        
+
         glColor3f(1.0f, 1.0f, 1.0f);
         getSSRender().drawText(s, PTEXT_HZA_CENTER | PTEXT_VTA_TOP);
         glPopMatrix(); // 2
@@ -1752,7 +1752,7 @@ void MainApp::renderStateGame(float eyetranslation)
     }
     #endif
 
-      tex_fontDsmOutlined->bind();
+      tex_fontSourceCodeOutlined->bind();
 
       glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
       glPushMatrix(); // 2
@@ -1835,4 +1835,3 @@ void MainApp::renderStateGame(float eyetranslation)
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_LIGHTING);
 }
-

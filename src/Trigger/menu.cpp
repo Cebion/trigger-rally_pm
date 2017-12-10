@@ -24,7 +24,7 @@ const float XTIMES_TOTALTIME    = 700.0f;
 void MainApp::levelScreenAction(int action, int index)
 {
   appstate = AS_LEVEL_SCREEN;
-  
+
   switch (action) {
   case AA_INIT:
     lss.state = AM_TOP;
@@ -89,7 +89,7 @@ void MainApp::levelScreenAction(int action, int index)
   case AA_QUIT_CONFIRM:
     quitGame();
     break;
-    
+
   case AA_START_EVT:
     startGame(events[lss.currentevent].levels[lss.currentlevel].filename);
     return;
@@ -171,15 +171,15 @@ void MainApp::levelScreenAction(int action, int index)
 
         break;
     }
-  
+
   default:
     PUtil::outLog() << "ERROR: invalid action code " << action << std::endl;
     requestExit();
     return;
   }
-  
+
   gui.setSSRender(getSSRender());
-  gui.setFont(tex_fontDsmShadowed);
+  gui.setFont(tex_fontSourceCodeShadowed);
   grabMouse(false);
   gui.clear();
   gui.addLabel(10.0f,570.0f, "Trigger Rally", PTEXT_HZA_LEFT | PTEXT_VTA_CENTER, 30.0f, LabelStyle::Weak);
@@ -203,7 +203,7 @@ void MainApp::levelScreenAction(int action, int index)
     gui.makeClickable(
       gui.addLabel(10.0f,30.0f, "back", PTEXT_HZA_LEFT | PTEXT_VTA_CENTER, 40.0f), AA_GO_TOP, 0);
     gui.addLabel(100.0f,470.0f, "Choose Event:", PTEXT_HZA_LEFT | PTEXT_VTA_CENTER, 30.0f, LabelStyle::Header);
-    
+
       int firstraceindex = index;
       const int prevbutton = gui.addGraphic(20.0f, 275.0f, 50.0f, 50.0f, tex_button_prev, GraphicStyle::Button);
       const int nextbutton = gui.addGraphic(730.0f, 275.0f, 50.0f, 50.0f, tex_button_next, GraphicStyle::Button);
@@ -225,7 +225,7 @@ void MainApp::levelScreenAction(int action, int index)
         gui.addLabel(700, 470, "races (timelimit)", PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20);
 
     for (int i = firstraceindex; i < firstraceindex + racesonscreencount; i++) {
-        
+
         const int eventlabel = gui.addLabel(100.0f,440.0f - (float)(i - firstraceindex) * 30.0f,
             events[i].name, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 25.0f, LabelStyle::List);
 
@@ -249,13 +249,13 @@ void MainApp::levelScreenAction(int action, int index)
     for (unsigned int i = 0; i < events[lss.currentevent].levels.size(); i++) {
 
       LabelStyle namestyle = LabelStyle::List;
-      
+
       if (lss.currentlevel > (int)i)
         namestyle = LabelStyle::Strong;
       else
       if (lss.currentlevel == (int)i)
         namestyle = LabelStyle::Marked;
-        
+
       gui.addLabel(100.0f,440.0f - (float)i * 30.0f,
         events[lss.currentevent].levels[i].name, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 25.0f, namestyle);
 
@@ -311,7 +311,7 @@ void MainApp::levelScreenAction(int action, int index)
     gui.makeClickable(
       gui.addLabel(10.0f, 10.0f, "back", PTEXT_HZA_LEFT | PTEXT_VTA_BOTTOM, 40.0f), AA_GO_TOP, 0);
     gui.addLabel(100.0f,470.0f, "Practice Event:", PTEXT_HZA_LEFT | PTEXT_VTA_CENTER, 30.0f, LabelStyle::Header);
-    
+
       int firstraceindex = index;
       const int prevbutton = gui.addGraphic(20.0f, 275.0f, 50.0f, 50.0f, tex_button_prev, GraphicStyle::Button);
       const int nextbutton = gui.addGraphic(730.0f, 275.0f, 50.0f, 50.0f, tex_button_next, GraphicStyle::Button);
@@ -333,7 +333,7 @@ void MainApp::levelScreenAction(int action, int index)
       gui.addLabel(700, 470, "races (timelimit)", PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20);
 
     for (int i = firstraceindex; i < firstraceindex + racesonscreencount; i++) {
-        
+
         const int eventlabel = gui.addLabel(100.0f,440.0f - (float)(i - firstraceindex) * 30.0f,
             events[i].name, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 25.0f, LabelStyle::List);
 
@@ -390,7 +390,7 @@ void MainApp::levelScreenAction(int action, int index)
     gui.makeClickable(
         gui.addLabel(400.0f, 10.0f, "best times", PTEXT_HZA_CENTER | PTEXT_VTA_BOTTOM, 40.0f),
         AA_BSHOWTIMES_PRAC, 0);
-      
+
     gui.addLabel(790.0f, 570.0f, events[lss.currentevent].name + " (" +
         PUtil::formatInt(lss.currentlevel + 1) + '/' + PUtil::formatInt(events[lss.currentevent].levels.size()) + ')',
         PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER, 20.0f, LabelStyle::Weak);
@@ -452,7 +452,7 @@ void MainApp::levelScreenAction(int action, int index)
           gui.addLabel(100.0f, 440.0f - (float)(i - firstraceindex) * 30.0f,
           levels[i].name, PTEXT_HZA_LEFT | PTEXT_VTA_TOP, 25.0f, LabelStyle::List),
           AA_PICK_LVL, i);
-          
+
         gui.addLabel(700.0f, 440.0f - (float)(i - firstraceindex) * 30.0f,
             levels[i].targettimeshort, PTEXT_HZA_RIGHT | PTEXT_VTA_TOP, 25.0f, LabelStyle::List);
       }
@@ -462,19 +462,19 @@ void MainApp::levelScreenAction(int action, int index)
   {
       const int prevbutton = gui.addGraphic(20.0f, 275.0f, 50.0f, 50.0f, tex_button_prev, GraphicStyle::Button);
       const int nextbutton = gui.addGraphic(730.0f, 275.0f, 50.0f, 50.0f, tex_button_next, GraphicStyle::Button);
-      
+
       int idxnext = lss.currentlevel + 1;
       int idxprev = lss.currentlevel - 1;
 
       CLAMP(idxnext, 0, static_cast<int> (levels.size() - 1));
       CLAMP(idxprev, 0, static_cast<int> (levels.size() - 1));
-      
+
       if (lss.currentlevel < static_cast<int> (levels.size() - 1))
         gui.makeClickable(nextbutton, AA_PICK_LVL, idxnext);
 
       if (lss.currentlevel > 0)
         gui.makeClickable(prevbutton, AA_PICK_LVL, idxprev);
-      
+
     gui.makeClickable(
       gui.addLabel(10.0f, 10.0f, "back", PTEXT_HZA_LEFT | PTEXT_VTA_BOTTOM, 40.0f),
       AA_GO_LVL, (lss.currentlevel / MAX_RACES_ON_SCREEN) * MAX_RACES_ON_SCREEN);
@@ -821,17 +821,17 @@ void MainApp::levelScreenAction(int action, int index)
       AA_GO_TOP, 0);
     break;
   }
-  
+
   //gui.doLayout();
 }
 
 void MainApp::finishRace(Gamefinish state, float coursetime)
 {
 	switch (lss.state)
-	{	
+	{
 		case AM_TOP_EVT_PREP:
 			switch (state)
-			{   
+			{
 				case Gamefinish::pass:
 					lss.leveltimes.resize(events[lss.currentevent].levels.size(), 0.0f);
 					lss.leveltimes[lss.currentlevel] += coursetime;
@@ -848,36 +848,36 @@ void MainApp::finishRace(Gamefinish state, float coursetime)
 						best_times.skipSavePlayer();
 					}
 					break;
-    
+
 				case Gamefinish::fail:
 					lss.totaltime += coursetime;
 					lss.livesleft--;
 					break;
-    
+
 				default:
 					break;
 			}
 			levelScreenAction(AA_RESUME, 0);
 			break;
-  
+
 		case AM_TOP_PRAC_SEL_PREP:
 			levelScreenAction(AA_PICK_PRAC_LVL, lss.currentlevel);
 			break;
-		
+
 		case AM_TOP_LVL_PREP:
 			// Calculate the index of first level in the page by truncating the current level index to the nearest 10
 			//levelScreenAction(AA_GO_LVL, (lss.currentlevel / MAX_RACES_ON_SCREEN) * MAX_RACES_ON_SCREEN );
 			levelScreenAction(AA_PICK_LVL, lss.currentlevel);
 			break;
-    
+
 		case AM_TOP_LVL_TIMES:
 			levelScreenAction(AA_SHOWTIMES_LVL, 0);
 			break;
-        
+
 		case AM_TOP_PRAC_TIMES:
 			levelScreenAction(AA_SHOWTIMES_PRAC, 0);
 			break;
-    
+
 		default:
 			PUtil::outLog() << "Race finished in invalid state " << lss.state << std::endl;
 			break;
@@ -893,9 +893,9 @@ void MainApp::tickStateLevel(float delta)
 void MainApp::cursorMoveEvent(int posx, int posy)
 {
   if (appstate != AS_LEVEL_SCREEN) return;
-  
+
   const GLdouble margin = (800.0 - 600.0 * cx / cy) / 2.0;
-  
+
   gui.setCursorPos(
     (float)posx / (float)getWidth() * (600.0 * cx / cy) + margin,
     (1.0f - (float)posy / (float)getHeight()) * 600.0f);
@@ -904,7 +904,7 @@ void MainApp::cursorMoveEvent(int posx, int posy)
 void MainApp::mouseButtonEvent(const SDL_MouseButtonEvent &mbe)
 {
   if (mbe.type != SDL_MOUSEBUTTONDOWN) return;
-  
+
   switch (appstate) {
   case AS_LEVEL_SCREEN:
     break;
@@ -914,15 +914,15 @@ void MainApp::mouseButtonEvent(const SDL_MouseButtonEvent &mbe)
   default:
     return;
   }
-  
+
   // TODO: fix this code
-  
+
   const GLdouble margin = (800.0 - 600.0 * cx / cy) / 2.0;
 
   int action, index;
-  
+
   if (!gui.getClickAction(action, index)) return;
-  
+
   levelScreenAction(action, index);
 
   gui.setCursorPos(
@@ -973,7 +973,7 @@ void MainApp::handleLevelScreenKey(const SDL_KeyboardEvent &ke)
   case SDLK_RETURN:
   case SDLK_KP_ENTER: {
       int data1, data2;
-      
+
       if (gui.getDefaultAction(data1, data2))
         levelScreenAction(data1, data2);
     } break;
@@ -1176,7 +1176,7 @@ void MainApp::handleLevelScreenKey(const SDL_KeyboardEvent &ke)
 void MainApp::renderStateLevel(float eyetranslation)
 {
   eyetranslation = eyetranslation;
-  
+
   glMatrixMode(GL_PROJECTION);
   glPushMatrix();
   glLoadIdentity();
@@ -1188,22 +1188,22 @@ void MainApp::renderStateLevel(float eyetranslation)
   glPushMatrix();
   glLoadIdentity();
   glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
-  
+
   glMatrixMode(GL_MODELVIEW);
-  
+
   // draw background image
-  
+
   glBlendFunc(GL_ONE, GL_ZERO);
   glDisable(GL_DEPTH_TEST);
   glDisable(GL_FOG);
   glDisable(GL_LIGHTING);
 
   tex_splash_screen->bind();
-  
+
   //glColor4f(0.0f, 0.0f, 0.2f, 1.0f); // make image dark blue
   glColor4f(1.0f, 1.0f, 1.0f, 1.0f); // use image's normal colors
   //glColor4f(0.5f, 0.5f, 0.5f, 1.0f); // make image darker
-  
+
     glBegin(GL_QUADS);
     // the background image is square and cut out a piece based on aspect ratio
     // -------- if aspect ratio is larger than 4:3
@@ -1240,22 +1240,22 @@ void MainApp::renderStateLevel(float eyetranslation)
   // draw GUI
 
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  
+
   glColor4f(1.0f, 1.0f, 1.0f, 0.2f);
-  
-  tex_fontDsmOutlined->bind();
-  
+
+  tex_fontSourceCodeOutlined->bind();
+
   glPushMatrix(); // 0
-  
+
   gui.render();
-  
+
   glPopMatrix(); // 0
-  
+
   glBlendFunc(GL_ONE, GL_ZERO);
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_FOG);
   glEnable(GL_LIGHTING);
-  
+
   glMatrixMode(GL_PROJECTION);
   glPopMatrix();
   glMatrixMode(GL_MODELVIEW);
@@ -1318,7 +1318,7 @@ bool Gui::loadColors(const std::string &filename)
 void Gui::tick(float delta)
 {
   float decay = delta * 3.0f;
-  
+
   // gradually unglow all widgets
   for (unsigned int i = 0; i < widget.size(); i++)
   {
@@ -1330,18 +1330,18 @@ void Gui::tick(float delta)
   if (highlight != -1) {
     widget[highlight].glow = 1.0f;
   }
-  
+
   defflash = fmodf(defflash + delta * 50.0f, PI*2.0f);
 }
 
 void Gui::setCursorPos(float x, float y)
 {
   highlight = -1;
-  
+
   for (unsigned int i = 0; i < widget.size(); i++) {
-    
+
     if (!widget[i].clickable) continue;
-    
+
     if (x >= widget[i].pos.x &&
       y >= widget[i].pos.y &&
       x < widget[i].pos.x + widget[i].dims_min.x &&
@@ -1353,27 +1353,27 @@ void Gui::setCursorPos(float x, float y)
 bool Gui::getClickAction(int &data1, int &data2)
 {
   if (highlight == -1) return false;
-  
+
   data1 = widget[highlight].d1;
   data2 = widget[highlight].d2;
-  
+
   return true;
 }
 
 bool Gui::getDefaultAction(int &data1, int &data2)
 {
   if (defwidget == -1) return false;
-  
+
   data1 = widget[defwidget].d1;
   data2 = widget[defwidget].d2;
-  
+
   return true;
 }
 
 void Gui::render()
 {
   for (unsigned int i = 0; i < widget.size(); i++) {
-    
+
     switch(widget[i].type) {
     case GWT_LABEL: {
       vec4f colc;
@@ -1382,24 +1382,24 @@ void Gui::render()
       } else {
         colc = widget[i].colnormal;
       }
-      
+
       if ((int)i == defwidget)
         colc += vec4f(0.1f, -0.1f, -0.1f, 0.0f) * sinf(defflash);
-      
+
       glPushMatrix();
-      
+
       vec2f ctr = widget[i].pos;
       glTranslatef(ctr.x, ctr.y, 0.0f);
-      
+
       glScalef(widget[i].fontsize, widget[i].fontsize, 1.0f);
-      
+
       fonttex->bind();
-      
+
       glColor4fv(colc);
       ssRender->drawText(widget[i].text, PTEXT_HZA_LEFT | PTEXT_VTA_BOTTOM);
       glPopMatrix();
       } break;
-      
+
     case GWT_GRAPHIC: {
       vec4f colc = vec4f(1.0f, 1.0f, 1.0f, 1.0f);
 
@@ -1411,11 +1411,11 @@ void Gui::render()
 
       vec2f min = widget[i].pos;
       vec2f max = widget[i].pos + widget[i].dims_min;
-      
+
       widget[i].tex->bind();
-      
+
       glColor4fv(colc);
-      
+
       glBegin(GL_QUADS);
       glTexCoord2f(0.0f, 0.0f); glVertex2f(min.x, min.y);
       glTexCoord2f(1.0f, 0.0f); glVertex2f(max.x, min.y);
@@ -1447,27 +1447,27 @@ void Gui::measureWidgetTree(int w)
 {
   widget[w].childcount = 0;
   widget[w].fillercount = 0;
-  
+
   switch (widget[w].type) {
   default:
-    
+
     widget[w].dims_measure = widget[w].dims_min;
-    
+
     break;
-    
+
   case GWT_CONTAINER: {
-    
+
     vec2f measure = vec2f(0.0f, 0.0f);
-    
+
     for (unsigned int i = 0; i < widget.size(); i++) {
       if (widget[i].parent == w) {
         measureWidgetTree(i);
-        
+
         widget[w].childcount++;
-        
+
         if (widget[i].type == GWT_FILLER)
           widget[w].fillercount++;
-        
+
         if (widget[w].vert) {
           CLAMP_LOWER(measure.x, widget[i].dims_measure.x);
           measure.y += widget[i].dims_measure.y;
@@ -1477,9 +1477,9 @@ void Gui::measureWidgetTree(int w)
         }
       }
     }
-    
+
     widget[w].dims_measure = measure;
-    
+
     } break;
   }
 }
@@ -1487,7 +1487,7 @@ void Gui::measureWidgetTree(int w)
 void Gui::placeWidgetTree(int w)
 {
   if (widget[w].childcount <= 0) return;
-  
+
   float extraspace = widget[w].vert ?
     - widget[w].dims_measure.x :
     - widget[w].dims_measure.y;
@@ -1496,12 +1496,12 @@ void Gui::placeWidgetTree(int w)
       widget[w].dims_min.x :
       widget[w].dims_min.y;
   }
-  
+
   CLAMP_LOWER(extraspace, 0.0f);
-  
+
   //CLAMP_LOWER(widget[w].dims_measure.x, widget[w].dims_min.x);
   //CLAMP_LOWER(widget[w].dims_measure.y, widget[w].dims_min.y);
-  
+
   float
     addtofillers = 0.0f,
     addtochildren = 0.0f;
@@ -1510,18 +1510,18 @@ void Gui::placeWidgetTree(int w)
     addtofillers = extraspace / (float)widget[w].fillercount;
   else
     addtochildren = extraspace / (float)widget[w].childcount;*/
-    
+
   if (widget[w].vert) {
     float distrib = widget[w].pos.y;
-    
+
     for (unsigned int i = 0; i < widget.size(); i++) {
       if (widget[i].parent == w) {
-        
+
         widget[i].pos.x = widget[w].pos.x;
         widget[i].pos.y = distrib;
-        
+
         widget[i].dims_measure.x = widget[w].dims_measure.x;
-        
+
         switch (widget[i].type) {
         case GWT_FILLER:
           widget[i].dims_measure.y += addtofillers;
@@ -1534,21 +1534,21 @@ void Gui::placeWidgetTree(int w)
           widget[i].dims_measure.y += addtochildren;
           break;
         }
-        
+
         distrib += widget[i].dims_measure.y;
       }
     }
   } else {
     float distrib = widget[w].pos.x;
-    
+
     for (unsigned int i = 0; i < widget.size(); i++) {
       if (widget[i].parent == w) {
-        
+
         widget[i].pos.x = distrib;
         widget[i].pos.y = widget[w].pos.y;
-        
+
         widget[i].dims_measure.y = widget[w].dims_measure.y;
-        
+
         switch (widget[i].type) {
         case GWT_FILLER:
           widget[i].dims_measure.x += addtofillers;
@@ -1561,7 +1561,7 @@ void Gui::placeWidgetTree(int w)
           widget[i].dims_measure.x += addtochildren;
           break;
         }
-        
+
         distrib += widget[i].dims_measure.x;
       }
     }
@@ -1571,7 +1571,7 @@ void Gui::placeWidgetTree(int w)
 void Gui::render()
 {
   // Render trees of all root containers
-  
+
   for (unsigned int i = 0; i < widget.size(); i++) {
     if (widget[i].parent == GWPARENT_NONE)
       renderWidgetTree(i);
@@ -1581,7 +1581,7 @@ void Gui::render()
 void Gui::renderWidgetTree(int w)
 {
   vec2f min, max;
-  
+
   switch (widget[w].type) {
   case GWT_CONTAINER:
     glColor4f(1.0f,0.0f,0.0f,0.2f);
@@ -1593,10 +1593,10 @@ void Gui::renderWidgetTree(int w)
     glColor4f(0.0f,0.0f,1.0f,0.2f);
     break;
   }
-  
+
   min = widget[w].pos;
   max = widget[w].pos + widget[w].dims_measure;
-  
+
   glDisable(GL_TEXTURE_2D);
   glBegin(GL_QUADS);
   glVertex2f(min.x, min.y);
@@ -1605,12 +1605,12 @@ void Gui::renderWidgetTree(int w)
   glVertex2f(min.x, max.y);
   glEnd();
   glEnable(GL_TEXTURE_2D);
-  
+
   // Render this widget
   switch (widget[w].type) {
   default:
     break;
-    
+
   case GWT_LABEL: {
     glPushMatrix();
     vec2f ctr = widget[w].pos + widget[w].dims_measure * 0.5f;
@@ -1621,7 +1621,7 @@ void Gui::renderWidgetTree(int w)
     glPopMatrix();
     } break;
   }
-  
+
   // Render children
   switch (widget[w].type) {
   case GWT_CONTAINER:
@@ -1654,7 +1654,7 @@ int Gui::addRootContainer(float x, float y, float width, float height, bool vert
   widget[w].parent = GWPARENT_NONE;
   widget[w].dims_min = vec2f(width, height);
   widget[w].pos = vec2f(x, y);
-  
+
   return w;
 }
 
@@ -1664,7 +1664,7 @@ int Gui::addFiller(int parent, float minwidth, float minheight)
   widget[w].type = GWT_FILLER;
   widget[w].parent = parent;
   widget[w].dims_min = vec2f(minwidth, minheight);
-  
+
   return w;
 }
 
@@ -1675,7 +1675,7 @@ int Gui::addContainer(float x, float y, float width, float height, bool vert)
   widget[w].vert = vert;
   widget[w].parent = parent;
   widget[w].dims_min = vec2f(minwidth, minheight);
-  
+
   return w;
 }
 #endif
@@ -1688,7 +1688,7 @@ int Gui::addLabel(float x, float y, const std::string &text, uint32 flags, float
   widget[w].fontsize = fontsize;
   widget[w].dims_min = ssRender->getTextDims(text) * fontsize;
   widget[w].pos = vec2f(x, y);
-  
+
   if (ls == LabelStyle::Regular)
   {
       widget[w].colnormal   = colors.normal;
@@ -1735,12 +1735,12 @@ int Gui::addLabel(float x, float y, const std::string &text, uint32 flags, float
     widget[w].pos.x -= widget[w].dims_min.x * 0.5f;
   else if (flags & PTEXT_HZA_RIGHT)
     widget[w].pos.x -= widget[w].dims_min.x;
-  
+
   if (flags & PTEXT_VTA_CENTER)
     widget[w].pos.y -= widget[w].dims_min.y * 0.5f;
   else if (flags & PTEXT_VTA_TOP)
     widget[w].pos.y -= widget[w].dims_min.y;
-  
+
   return w;
 }
 
@@ -1768,4 +1768,3 @@ int Gui::addGraphic(float x, float y, float width, float height, PTexture *tex, 
 
   return w;
 }
-

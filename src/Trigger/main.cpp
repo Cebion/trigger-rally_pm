@@ -59,47 +59,47 @@ void MainApp::config()
 void MainApp::load()
 {
   psys_dirt = nullptr;
-  
+
   audinst_engine = nullptr;
   audinst_wind = nullptr;
   audinst_gravel = nullptr;
   game = nullptr;
-  
+
   // use PUtil, not boost
   //std::string buff = boost::str(boost::format("textures/splash/splash%u.jpg") % ((rand() % 3) + 1));
   //if (!(tex_splash_screen = getSSTexture().loadTexture(buff))) return false;
-  
+
   if (!(tex_loading_screen = getSSTexture().loadTexture("/textures/splash/loading.png")))
     throw MakePException("Failed to load the Loading screen");
-  
+
   if (!(tex_splash_screen = getSSTexture().loadTexture("/textures/splash/splash.jpg")))
     throw MakePException("Failed to load the Splash screen");
 
   appstate = AS_LOAD_1;
-  
+
   loadscreencount = 3;
-  
+
   splashtimeout = 0.0f;
-  
+
   // Check that controls are available where requested
   // (can't be done in config because joy info not available)
-  
+
   for (int i = 0; i < ActionCount; i++) {
-    
+
     switch(ctrl.map[i].type) {
     case UserControl::TypeUnassigned:
       break;
-      
+
     case UserControl::TypeKey:
       if (ctrl.map[i].key.sym <= 0 /* || ctrl.map[i].key.sym >= SDLK_LAST */) // `SDLK_LAST` unavailable in SDL2
         ctrl.map[i].type = UserControl::TypeUnassigned;
       break;
-      
+
     case UserControl::TypeJoyButton:
       if (0 >= getNumJoysticks() || ctrl.map[i].joybutton.button >= getJoyNumButtons(0))
         ctrl.map[i].type = UserControl::TypeUnassigned;
       break;
-      
+
     case UserControl::TypeJoyAxis:
       if (0 >= getNumJoysticks() || ctrl.map[i].joyaxis.axis >= getJoyNumAxes(0))
         ctrl.map[i].type = UserControl::TypeUnassigned;
@@ -410,16 +410,16 @@ void MainApp::copyDefaultPlayers() const
 void MainApp::loadConfig()
 {
   PUtil::outLog() << "Loading game configuration" << std::endl;
-  
+
   // Set defaults
-  
+
   cfg_playername = "Player";
   cfg_copydefplayers = true;
-  
+
   cfg_video_cx = 640;
   cfg_video_cy = 480;
   cfg_video_fullscreen = false;
-  
+
   cfg_drivingassist = 1.0f;
   cfg_enable_sound = true;
   cfg_enable_codriversigns = true;
@@ -457,16 +457,16 @@ void MainApp::loadConfig()
   ctrl.action_name[ActionShowUi] = std::string("showui");
   ctrl.action_name[ActionShowCheckpoint] = std::string("showcheckpoint");
   ctrl.action_name[ActionNext] = std::string("next");
-  
+
   for (int i = 0; i < ActionCount; i++) {
     ctrl.map[i].type = UserControl::TypeUnassigned;
     ctrl.map[i].value = 0.0f;
   }
-  
+
   // Do config file management
-  
+
   std::string cfgfilename = "trigger-rally-" PACKAGE_VERSION ".config";
-  
+
   if (!PHYSFS_exists(cfgfilename.c_str())) {
 #ifdef UNIX
     const std::vector<std::string> cfghidingplaces {
@@ -481,21 +481,21 @@ void MainApp::loadConfig()
         }
 #endif
     PUtil::outLog() << "No user config file, copying over defaults" << std::endl;
-    
+
     std::string cfgdefaults = "trigger-rally.config.defs";
-    
+
     if (!PUtil::copyFile(cfgdefaults, cfgfilename)) {
-    
+
       PUtil::outLog() << "Couldn't create user config file. Proceeding with defaults." << std::endl;
-      
+
       cfgfilename = cfgdefaults;
     }
   }
-  
+
   // Load actual settings from file
-  
+
   XMLDocument xmlfile;
-  
+
   XMLElement *rootelem = PUtil::loadRootElement(xmlfile, cfgfilename, "config");
   if (!rootelem) {
     PUtil::outLog() << "Error: Couldn't load configuration file" << std::endl;
@@ -503,9 +503,9 @@ void MainApp::loadConfig()
     PUtil::outLog() << "Your data paths are probably not set up correctly" << std::endl;
     throw MakePException ("Boink");
   }
-  
+
   const char *val;
-  
+
   for (XMLElement *walk = rootelem->FirstChildElement();
     walk; walk = walk->NextSiblingElement()) {
 
@@ -545,10 +545,10 @@ void MainApp::loadConfig()
 
       val = walk->Attribute("width");
       if (val) cfg_video_cx = atoi(val);
-      
+
       val = walk->Attribute("height");
       if (val) cfg_video_cy = atoi(val);
-      
+
       val = walk->Attribute("fullscreen");
       if (val) {
         if (!strcmp(val, "yes"))
@@ -556,7 +556,7 @@ void MainApp::loadConfig()
         else if (!strcmp(val, "no"))
           cfg_video_fullscreen = false;
       }
-      
+
       val = walk->Attribute("requirergb");
       if (val) {
         if (!strcmp(val, "yes"))
@@ -564,7 +564,7 @@ void MainApp::loadConfig()
         else if (!strcmp(val, "no"))
           requireRGB(false);
       }
-      
+
       val = walk->Attribute("requirealpha");
       if (val) {
         if (!strcmp(val, "yes"))
@@ -572,7 +572,7 @@ void MainApp::loadConfig()
         else if (!strcmp(val, "no"))
           requireAlpha(false);
       }
-      
+
       val = walk->Attribute("requiredepth");
       if (val) {
         if (!strcmp(val, "yes"))
@@ -580,7 +580,7 @@ void MainApp::loadConfig()
         else if (!strcmp(val, "no"))
           requireDepth(false);
       }
-      
+
       val = walk->Attribute("requirestencil");
       if (val) {
         if (!strcmp(val, "yes"))
@@ -588,7 +588,7 @@ void MainApp::loadConfig()
         else if (!strcmp(val, "no"))
           requireStencil(false);
       }
-      
+
       val = walk->Attribute("stereo");
       if (val) {
         if (!strcmp(val, "none"))
@@ -604,12 +604,12 @@ void MainApp::loadConfig()
         else if (!strcmp(val, "yellow-blue"))
           setStereoMode(PApp::StereoYellowBlue);
       }
-      
+
       float sepMult = 1.0f;
       val = walk->Attribute("stereoswapeyes");
       if (val && !strcmp(val, "yes"))
         sepMult = -1.0f;
-      
+
       val = walk->Attribute("stereoeyeseparation");
       if (val) {
         setStereoEyeSeperation(atof(val) * sepMult);
@@ -637,7 +637,7 @@ void MainApp::loadConfig()
     if (!strcmp(walk->Value(), "graphics"))
     {
         val = walk->Attribute("anisotropy");
-        
+
         if (val)
         {
             if (!strcmp(val, "off"))
@@ -665,9 +665,9 @@ void MainApp::loadConfig()
             else // "yes"
                 cfg_foliage = true;
         }
-        
+
         val = walk->Attribute("roadsigns");
-        
+
         if (val != nullptr)
         {
             if (strcmp(val, "no") == 0)
@@ -675,9 +675,9 @@ void MainApp::loadConfig()
             else // yes
                 cfg_roadsigns = true;
         }
-        
+
         val = walk->Attribute("weather");
-        
+
         if (val)
         {
             if (!strcmp(val, "no"))
@@ -685,9 +685,9 @@ void MainApp::loadConfig()
             else // "yes"
                 cfg_weather = true;
         }
-        
+
         val = walk->Attribute("snowflaketype");
-        
+
         if (val)
         {
             if (!strcmp(val, "square"))
@@ -698,9 +698,9 @@ void MainApp::loadConfig()
             else // default
                 cfg_snowflaketype = SnowFlakeType::point;
         }
-        
+
         val = walk->Attribute("dirteffect");
-        
+
         if (val)
         {
             if (!strcmp(val, "yes"))
@@ -717,10 +717,10 @@ void MainApp::loadConfig()
                 cfg_datadirs.push_back(walk2->Attribute("path"));
     }
     else if (!strcmp(walk->Value(), "parameters")) {
-      
+
       val = walk->Attribute("drivingassist");
       if (val) cfg_drivingassist = atof(val);
-      
+
       val = walk->Attribute("enablesound");
       if (val) {
         if (!strcmp(val, "yes"))
@@ -755,9 +755,9 @@ void MainApp::loadConfig()
            hud_speedo_mps_speed_mult = MPS_KPH_SPEED_MULT;
          }
       }
-      
+
       val = walk->Attribute("codriver");
-      
+
       if (val != nullptr)
         cfg_codrivername = val;
 
@@ -787,27 +787,27 @@ void MainApp::loadConfig()
             cfg_codriveruserconfig.scale = std::stof(val);
 
     } else if (!strcmp(walk->Value(), "controls")) {
-      
+
       for (XMLElement *walk2 = walk->FirstChildElement();
         walk2; walk2 = walk2->NextSiblingElement()) {
-        
+
         if (!strcmp(walk2->Value(), "keyboard")) {
-          
+
           val = walk2->Attribute("enable");
           if (val && !strcmp(val, "no"))
             continue;
-          
+
           for (XMLElement *walk3 = walk2->FirstChildElement();
             walk3; walk3 = walk3->NextSiblingElement()) {
-            
+
             if (!strcmp(walk3->Value(), "key")) {
-              
+
               val = walk3->Attribute("action");
-              
+
               int a;
               for (a = 0; a < ActionCount; a++)
                 if (ctrl.action_name[a] == val) break;
-              
+
               if (a >= ActionCount) {
                 PUtil::outLog() << "Config ctrls: Unknown action \"" << val << "\"" << std::endl;
                 continue;
@@ -820,75 +820,75 @@ void MainApp::loadConfig()
                 continue;
               }
               */
-              
+
               val = walk3->Attribute("id");
-              
+
               if (!val)
               {
                   PUtil::outLog() << "Config ctrls: Key has no ID" << std::endl;
                   continue;
               }
-              
+
               ctrl.map[a].type = UserControl::TypeKey;
               //ctrl.map[a].key.sym = (SDLKey) atoi(val);
               ctrl.map[a].key.sym = getSdlKeySym(val);
             }
           }
-          
+
         } else if (!strcmp(walk2->Value(), "joystick")) {
-          
+
           val = walk2->Attribute("enable");
           if (val && !strcmp(val, "no"))
             continue;
-          
+
           for (XMLElement *walk3 = walk2->FirstChildElement();
             walk3; walk3 = walk3->NextSiblingElement()) {
-            
+
             if (!strcmp(walk3->Value(), "button")) {
-              
+
               val = walk3->Attribute("action");
-              
+
               int a;
               for (a = 0; a < ActionCount; a++)
                 if (ctrl.action_name[a] == val) break;
-              
+
               if (a >= ActionCount) {
                 PUtil::outLog() << "Config ctrls: Unknown action \"" << val << "\"" << std::endl;
                 continue;
               }
-              
+
               val = walk3->Attribute("index");
               if (!val) {
                 PUtil::outLog() << "Config ctrls: Joy button has no index" << std::endl;
                 continue;
               }
-              
+
               ctrl.map[a].type = UserControl::TypeJoyButton;
               ctrl.map[a].joybutton.button = atoi(val);
-              
+
             } else if (!strcmp(walk3->Value(), "axis")) {
-              
+
               val = walk3->Attribute("action");
-              
+
               int a;
               for (a = 0; a < ActionCount; a++)
                 if (ctrl.action_name[a] == val) break;
-              
+
               if (a >= ActionCount) {
                 PUtil::outLog() << "Config ctrls: Unknown action \"" << val << "\"" << std::endl;
                 continue;
               }
-              
+
               val = walk3->Attribute("index");
               if (!val) {
                 PUtil::outLog() << "Config ctrls: Joy axis has no index" << std::endl;
                 continue;
               }
-              
+
               int index = atoi(val);
-              
+
               bool positive;
-              
+
               val = walk3->Attribute("direction");
               if (!val) {
                 PUtil::outLog() << "Config ctrls: Joy axis has no direction" << std::endl;
@@ -903,16 +903,16 @@ void MainApp::loadConfig()
                   "\" is neither \"+\" nor \"-\"" << std::endl;
                 continue;
               }
-              
+
               ctrl.map[a].type = UserControl::TypeJoyAxis;
               ctrl.map[a].joyaxis.axis = index;
               ctrl.map[a].joyaxis.sign = positive ? 1.0f : -1.0f;
               ctrl.map[a].joyaxis.deadzone = 0.0f;
               ctrl.map[a].joyaxis.maxrange = 1.0f;
-              
+
               val = walk3->Attribute("deadzone");
               if (val) ctrl.map[a].joyaxis.deadzone = atof(val);
-              
+
               val = walk3->Attribute("maxrange");
               if (val) ctrl.map[a].joyaxis.maxrange = atof(val);
             }
@@ -934,36 +934,36 @@ bool MainApp::loadLevel(TriggerLevel &tl)
   tl.targettimefloat = 0.0f;
   tl.tex_minimap = nullptr;
   tl.tex_screenshot = nullptr;
-  
+
   XMLDocument xmlfile;
   XMLElement *rootelem = PUtil::loadRootElement(xmlfile, tl.filename, "level");
   if (!rootelem) {
     PUtil::outLog() << "Couldn't read level \"" << tl.filename << "\"" << std::endl;
     return false;
   }
-  
+
   const char *val;
-  
+
   val = rootelem->Attribute("name");
   if (val) tl.name = val;
-  
+
   val = rootelem->Attribute("description");
 
   if (val != nullptr)
     tl.description = val;
-  
+
   val = rootelem->Attribute("comment");
   if (val) tl.comment = val;
   val = rootelem->Attribute("author");
   if (val) tl.author = val;
 
   val = rootelem->Attribute("screenshot");
-  
+
   if (val != nullptr)
     tl.tex_screenshot = getSSTexture().loadTexture(PUtil::assemblePath(val, tl.filename));
 
   val = rootelem->Attribute("minimap");
-  
+
   if (val != nullptr)
     tl.tex_minimap = getSSTexture().loadTexture(PUtil::assemblePath(val, tl.filename));
 
@@ -980,71 +980,71 @@ bool MainApp::loadLevel(TriggerLevel &tl)
       }
     }
   }
-  
+
   return true;
 }
 
 bool MainApp::loadLevelsAndEvents()
 {
   PUtil::outLog() << "Loading levels and events" << std::endl;
-  
+
   // Find levels
-  
+
   std::list<std::string> results = PUtil::findFiles("/maps", ".level");
-  
+
   for (std::list<std::string>::iterator i = results.begin();
     i != results.end(); i++) {
-    
+
     TriggerLevel tl;
     tl.filename = *i;
-    
+
     if (!loadLevel(tl)) continue;
-    
+
     // Insert level in alphabetical order
     std::vector<TriggerLevel>::iterator j = levels.begin();
     while (j != levels.end() && j->name < tl.name) j++;
     levels.insert(j, tl);
   }
-  
+
   // Find events
-  
+
   results = PUtil::findFiles("/events", ".event");
-  
+
   for (std::list<std::string>::iterator i = results.begin();
     i != results.end(); i++) {
-    
+
     TriggerEvent te;
-    
+
     te.filename = *i;
-    
+
     XMLDocument xmlfile;
     XMLElement *rootelem = PUtil::loadRootElement(xmlfile, *i, "event");
     if (!rootelem) {
       PUtil::outLog() << "Couldn't read event \"" << *i << "\"" << std::endl;
       continue;
     }
-    
+
     const char *val;
-    
+
     val = rootelem->Attribute("name");
     if (val) te.name = val;
     val = rootelem->Attribute("comment");
     if (val) te.comment = val;
     val = rootelem->Attribute("author");
     if (val) te.author = val;
-    
+
     val = rootelem->Attribute("locked");
-    
+
     if (val != nullptr && strcmp(val, "yes") == 0)
         te.locked = true;
     else
         te.locked = false; // FIXME: redundant but clearer?
-    
+
     float evtotaltime = 0.0f;
-    
+
     for (XMLElement *walk = rootelem->FirstChildElement();
       walk; walk = walk->NextSiblingElement()) {
-      
+
       if (strcmp(walk->Value(), "unlocks") == 0)
       {
           val = walk->Attribute("file");
@@ -1059,39 +1059,39 @@ bool MainApp::loadLevelsAndEvents()
       }
       else
       if (!strcmp(walk->Value(), "level")) {
-        
+
         TriggerLevel tl;
-        
+
         val = walk->Attribute("file");
         if (!val) {
           PUtil::outLog() << "Warning: Event level has no filename" << std::endl;
           continue;
         }
         tl.filename = PUtil::assemblePath(val, *i);
-        
+
         if (loadLevel(tl))
         {
           te.levels.push_back(tl);
           evtotaltime += tl.targettimefloat;
         }
-          
+
         PUtil::outLog() << tl.filename << std::endl;
       }
     }
-    
+
     if (te.levels.size() <= 0) {
       PUtil::outLog() << "Warning: Event has no levels" << std::endl;
       continue;
     }
-    
+
     te.totaltime = PUtil::formatTimeShort(evtotaltime);
-    
+
     // Insert event in alphabetical order
     std::vector<TriggerEvent>::iterator j = events.begin();
     while (j != events.end() && j->name < te.name) j++;
     events.insert(j, te);
   }
-  
+
   return true;
 }
 
@@ -1102,38 +1102,38 @@ bool MainApp::loadLevelsAndEvents()
 ///
 bool MainApp::loadAll()
 {
-  if (!(tex_fontDsmNormal = getSSTexture().loadTexture("/textures/fontDsmNormal.png")))
+  if (!(tex_fontSourceCodeBold = getSSTexture().loadTexture("/textures/font-SourceCodeProBold.png")))
     return false;
 
-  if (!(tex_fontDsmOutlined = getSSTexture().loadTexture("/textures/fontDsmOutlined.png")))
+  if (!(tex_fontSourceCodeOutlined = getSSTexture().loadTexture("/textures/font-SourceCodeProBoldOutlined.png")))
     return false;
 
-  if (!(tex_fontDsmShadowed = getSSTexture().loadTexture("/textures/fontDsmShadowed.png")))
+  if (!(tex_fontSourceCodeShadowed = getSSTexture().loadTexture("/textures/font-SourceCodeProBoldShadowed.png")))
     return false;
 
   if (!(tex_end_screen = getSSTexture().loadTexture("/textures/splash/endgame.jpg"))) return false;
-  
+
   if (!(tex_hud_life = getSSTexture().loadTexture("/textures/life_helmet.png"))) return false;
-  
+
   if (!(tex_detail = getSSTexture().loadTexture("/textures/detail.jpg"))) return false;
   if (!(tex_dirt = getSSTexture().loadTexture("/textures/dust.png"))) return false;
   if (!(tex_shadow = getSSTexture().loadTexture("/textures/shadow.png", true, true))) return false;
-  
+
   if (!(tex_hud_revneedle = getSSTexture().loadTexture("/textures/rev_needle.png"))) return false;
-  
+
   if (!(tex_hud_revs = getSSTexture().loadTexture("/textures/dial_rev.png"))) return false;
-  
+
   if (!(tex_hud_offroad = getSSTexture().loadTexture("/textures/offroad.png"))) return false;
-  
+
   if (!(tex_race_no_screenshot = getSSTexture().loadTexture("/textures/no_screenshot.png"))) return false;
-  
+
   if (!(tex_race_no_minimap = getSSTexture().loadTexture("/textures/no_minimap.png"))) return false;
 
   if (!(tex_button_next = getSSTexture().loadTexture("/textures/button_next.png"))) return false;
   if (!(tex_button_prev = getSSTexture().loadTexture("/textures/button_prev.png"))) return false;
-  
+
   if (!(tex_waterdefault = getSSTexture().loadTexture("/textures/water/default.png"))) return false;
-  
+
   if (!(tex_snowflake = getSSTexture().loadTexture("/textures/snowflake.png"))) return false;
 
     if (cfg_enable_codriversigns && !cfg_codriversigns.empty())
@@ -1214,35 +1214,35 @@ bool MainApp::loadAll()
 
   if (!gui.loadColors("/menu.colors"))
     PUtil::outLog() << "Couldn't load (all) menu colors, continuing with defaults" << std::endl;
-  
+
   if (!loadLevelsAndEvents()) {
     PUtil::outLog() << "Couldn't load levels/events" << std::endl;
     return false;
   }
-  
+
   //quatf tempo;
   //tempo.fromThreeAxisAngle(vec3f(-0.38, -0.38, 0.0));
   //vehic->getBody().setOrientation(tempo);
-  
+
   campos = campos_prev = vec3f(-15.0,0.0,30.0);
   //camori.fromThreeAxisAngle(vec3f(-1.0,0.0,1.5));
   camori = quatf::identity();
-  
+
   camvel = vec3f::zero();
-  
+
   cloudscroll = 0.0f;
-  
+
   cprotate = 0.0f;
-  
+
   cameraview = 0;
   camera_user_angle = 0.0f;
-  
+
   showmap = true;
 
   pauserace = false;
 
   showui = true;
-  
+
   showcheckpoint = true;
 
   crashnoise_timeout = 0.0f;
@@ -1261,18 +1261,18 @@ bool MainApp::loadAll()
         psys_dirt = nullptr;
 
   //
-  
+
   choose_type = 0;
-  
+
   choose_spin = 0.0f;
-  
+
   return true;
 }
 
 void MainApp::unload()
 {
   endGame(Gamefinish::not_finished);
-  
+
   delete psys_dirt;
 }
 
@@ -1283,37 +1283,37 @@ void MainApp::unload()
 bool MainApp::startGame(const std::string &filename)
 {
   PUtil::outLog() << "Starting level \"" << filename << "\"" << std::endl;
-  
+
   // mouse is grabbed during the race
   grabMouse(true);
-  
+
   // the game
   game = new TriggerGame(this);
-  
+
   // load vehicles
   if (!game->loadVehicles())
   {
       PUtil::outLog() << "Error: failed to load vehicles" << std::endl;
       return false;
   }
-  
+
   // load the vehicle
   if (!game->loadLevel(filename)) {
     PUtil::outLog() << "Error: failed to load level" << std::endl;
     return false;
   }
-  
+
   // useful datas
   race_data.playername  = cfg_playername; // TODO: move to a better place
   race_data.mapname     = filename;
   choose_type = 0;
-  
+
   // if there is more than a vehicle to choose from, choose it
   if (game->vehiclechoices.size() > 1) {
     appstate = AS_CHOOSE_VEHICLE;
   } else {
     game->chooseVehicle(game->vehiclechoices[choose_type]);
-    
+
     if (lss.state == AM_TOP_LVL_PREP)
     {
         const float bct = best_times.getBestClassTime(
@@ -1327,30 +1327,30 @@ bool MainApp::startGame(const std::string &filename)
     startGame2();
     appstate = AS_IN_GAME;
   }
-  
+
   // load the sky texture
   tex_sky[0] = nullptr;
-  
+
   if (game->weather.cloud.texname.length() > 0)
     tex_sky[0] = getSSTexture().loadTexture(game->weather.cloud.texname);
-  
+
   // if there is none load default
   if (tex_sky[0] == nullptr) {
     tex_sky[0] = getSSTexture().loadTexture("/textures/sky/blue.jpg");
-    
+
     if (tex_sky[0] == nullptr) tex_sky[0] = tex_detail; // last fallback...
   }
-  
+
   // load water texture
   tex_water = nullptr;
-  
+
   if (!game->water.texname.empty())
     tex_water = getSSTexture().loadTexture(game->water.texname);
 
   // if there is none load water default
   if (tex_water == nullptr)
     tex_water = tex_waterdefault;
-  
+
   return true;
 }
 
@@ -1401,11 +1401,11 @@ void MainApp::startGame2()
     audinst_engine = new PAudioInstance(aud_engine, true);
     audinst_engine->setGain(0.0);
     audinst_engine->play();
-    
+
     audinst_wind = new PAudioInstance(aud_wind, true);
     audinst_wind->setGain(0.0);
     audinst_wind->play();
-    
+
     audinst_gravel = new PAudioInstance(aud_gravel, true);
     audinst_gravel->setGain(0.0);
     audinst_gravel->play();
@@ -1416,7 +1416,7 @@ void MainApp::endGame(Gamefinish state)
 {
   float coursetime = (state == Gamefinish::not_finished) ? 0.0f :
     game->coursetime + game->uservehicle->offroadtime_total * game->offroadtime_penalty_multiplier;
-  
+
     if (state != Gamefinish::not_finished && lss.state != AM_TOP_EVT_PREP)
     {
         race_data.carname   = game->vehicle.front()->type->proper_name;
@@ -1434,32 +1434,32 @@ void MainApp::endGame(Gamefinish state)
         if (lss.state == AM_TOP_PRAC_SEL_PREP)
             lss.state = AM_TOP_PRAC_TIMES;
     }
-  
+
   if (audinst_engine) {
     delete audinst_engine;
     audinst_engine = nullptr;
   }
-  
+
   if (audinst_wind) {
     delete audinst_wind;
     audinst_wind = nullptr;
   }
-  
+
   if (audinst_gravel) {
     delete audinst_gravel;
     audinst_gravel = nullptr;
   }
-  
+
   for (unsigned int i=0; i<audinst.size(); i++) {
     delete audinst[i];
   }
   audinst.clear();
-  
+
   if (game) {
     delete game;
     game = nullptr;
   }
-  
+
   finishRace(state, coursetime);
 }
 
@@ -1515,20 +1515,20 @@ void MainApp::tick(float delta)
     if (splashtimeout <= 0.0f)
       levelScreenAction(AA_INIT, 0);
     break;
-  
+
   case AS_LEVEL_SCREEN:
     tickStateLevel(delta);
     break;
-    
+
   case AS_CHOOSE_VEHICLE:
     tickStateChoose(delta);
     break;
-  
+
   case AS_IN_GAME:
       if (!pauserace)
         tickStateGame(delta);
     break;
-  
+
   case AS_END_SCREEN:
     splashtimeout += delta * 0.04f;
     if (splashtimeout >= 1.0f)
@@ -1545,62 +1545,62 @@ void MainApp::tickStateChoose(float delta)
 void MainApp::tickStateGame(float delta)
 {
   PVehicle *vehic = game->vehicle[0];
-  
+
   if (game->isFinished())
   {
     endGame(game->getFinishState());
     return;
   }
-  
+
   cloudscroll = fmodf(cloudscroll + delta * game->weather.cloud.scrollrate, 1.0f);
-  
+
   cprotate = fmodf(cprotate + delta * 1.0f, 1000.0f);
-  
+
   // Do input/control processing
-  
+
   for (int a = 0; a < ActionCount; a++) {
-    
+
     switch(ctrl.map[a].type) {
     case UserControl::TypeUnassigned:
       break;
-      
+
     case UserControl::TypeKey:
       ctrl.map[a].value = keyDown(SDL_GetScancodeFromKey(ctrl.map[a].key.sym)) ? 1.0f : 0.0f;
       break;
-      
+
     case UserControl::TypeJoyButton:
       ctrl.map[a].value = getJoyButton(0, ctrl.map[a].joybutton.button) ? 1.0f : 0.0f;
       break;
-      
+
     case UserControl::TypeJoyAxis:
       ctrl.map[a].value = ctrl.map[a].joyaxis.sign *
         getJoyAxis(0, ctrl.map[a].joyaxis.axis);
-        
+
       RANGEADJUST(ctrl.map[a].value, ctrl.map[a].joyaxis.deadzone, ctrl.map[a].joyaxis.maxrange, 0.0f, 1.0f);
-      
+
       CLAMP_LOWER(ctrl.map[a].value, 0.0f);
       break;
     }
   }
-  
+
   // Bit of a hack for turning, because you simply can't handle analogue
   // and digital steering the same way, afaics
-  
+
   if (ctrl.map[ActionLeft].type == UserControl::TypeJoyAxis ||
     ctrl.map[ActionRight].type == UserControl::TypeJoyAxis) {
-    
+
     // Analogue mode
-    
+
     vehic->ctrl.turn.z = 0.0f;
     vehic->ctrl.turn.z -= ctrl.map[ActionLeft].value;
     vehic->ctrl.turn.z += ctrl.map[ActionRight].value;
-    
+
   } else {
-    
+
     // Digital mode
-    
+
     static float turnaccel = 0.0f;
-    
+
     if (ctrl.map[ActionLeft].value > 0.0f) {
       if (turnaccel > -0.0f) turnaccel = -0.0f;
       turnaccel -= 8.0f * delta;
@@ -1614,15 +1614,15 @@ void MainApp::tickStateGame(float delta)
       PULLTOWARD(vehic->ctrl.turn.z, 0.0f, delta * 5.0f);
     }
   }
-  
+
   // Computer aided steering
   if (vehic->forwardspeed > 1.0f)
     vehic->ctrl.turn.z -= vehic->body->getAngularVel().z * cfg_drivingassist / (1.0f + vehic->forwardspeed);
-  
-  
+
+
   float throttletarget = 0.0f;
   float braketarget = 0.0f;
-  
+
   if (ctrl.map[ActionForward].value > 0.0f) {
     if (vehic->wheel_angvel > -10.0f)
       throttletarget = ctrl.map[ActionForward].value;
@@ -1635,16 +1635,16 @@ void MainApp::tickStateGame(float delta)
     else
       braketarget = ctrl.map[ActionBack].value;
   }
-  
+
   PULLTOWARD(vehic->ctrl.throttle, throttletarget, delta * 15.0f);
   PULLTOWARD(vehic->ctrl.brake1, braketarget, delta * 25.0f);
 
   vehic->ctrl.brake2 = ctrl.map[ActionHandbrake].value;
-  
-  
+
+
   //PULLTOWARD(vehic->ctrl.aim.x, 0.0, delta * 2.0);
   //PULLTOWARD(vehic->ctrl.aim.y, 0.0, delta * 2.0);
-  
+
   game->tick(delta);
 
     if (cfg_dirteffect)
@@ -1704,24 +1704,24 @@ void MainApp::tickStateGame(float delta)
       }
     }
   }
-  
+
   #undef BRIGHTEN_ADD
 
     }
-  
+
   float angtarg = 0.0f;
   angtarg -= ctrl.map[ActionCamLeft].value;
   angtarg += ctrl.map[ActionCamRight].value;
   angtarg *= PI*0.75f;
-  
+
   PULLTOWARD(camera_user_angle, angtarg, delta * 4.0f);
-  
+
   quatf tempo;
   //tempo.fromThreeAxisAngle(vec3f(-1.3,0.0,0.0));
-  
+
   // allow temporary camera view changes for this frame
   int cameraview_mod = cameraview;
-  
+
   if (game->gamestate == Gamestate::finished) {
     cameraview_mod = 0;
     static float spinner = 0.0f;
@@ -1730,36 +1730,36 @@ void MainApp::tickStateGame(float delta)
   } else {
     tempo.fromThreeAxisAngle(vec3f(-PI*0.5f,0.0f,0.0f));
   }
-  
+
   renderowncar = (cameraview_mod != 1);
-  
+
   campos_prev = campos;
-  
+
   //PReferenceFrame *rf = &vehic->part[2].ref_world;
   PReferenceFrame *rf = &vehic->getBody();
-  
+
   vec3f forw = makevec3f(rf->getOrientationMatrix().row[0]);
   vec3f nose = makevec3f(rf->getOrientationMatrix().row[1]);
   float forwangle = atan2(forw.y, forw.x);
   float noseangle = atan2(nose.z, nose.y);
-  
+
   mat44f cammat;
-  
+
   switch (cameraview_mod) {
       // Chase
-    default:   
+    default:
   case 0: {
     quatf temp2;
     temp2.fromZAngle(forwangle + camera_user_angle);
-    
+
     quatf target = tempo * temp2;
-    
+
     if (target.dot(camori) < 0.0f) target = target * -1.0f;
-    
+
     PULLTOWARD(camori, target, delta * 3.0f);
-    
+
     camori.normalize();
-    
+
     cammat = camori.getMatrix();
     cammat = cammat.transpose();
     //campos = rf->getPosition() + makevec3f(cammat.row[2]) * 100.0;
@@ -1767,20 +1767,20 @@ void MainApp::tickStateGame(float delta)
       makevec3f(cammat.row[1]) * 1.6f +
       makevec3f(cammat.row[2]) * 5.0f;
     } break;
-    
+
     // Bumper
   case 1: {
     quatf temp2;
     temp2.fromZAngle(camera_user_angle);
-    
+
     quatf target = tempo * temp2 * rf->ori;
-    
+
     if (target.dot(camori) < 0.0f) target = target * -1.0f;
-    
+
     PULLTOWARD(camori, target, delta * 25.0f);
-    
+
     camori.normalize();
-    
+
     cammat = camori.getMatrix();
     cammat = cammat.transpose();
     const mat44f &rfmat = rf->getInverseOrientationMatrix();
@@ -1789,21 +1789,21 @@ void MainApp::tickStateGame(float delta)
       makevec3f(rfmat.row[1]) * 1.7f +
       makevec3f(rfmat.row[2]) * 0.4f;
     } break;
-    
+
     // Side (right wheel)
   case 2: {
     quatf temp2;
     temp2.fromZAngle(camera_user_angle);
-    
+
     quatf target = tempo * temp2 * rf->ori;
-    
+
     if (target.dot(camori) < 0.0f) target = target * -1.0f;
-    
+
     //PULLTOWARD(camori, target, delta * 25.0f);
     camori = target;
-    
+
     camori.normalize();
-    
+
     cammat = camori.getMatrix();
     cammat = cammat.transpose();
     const mat44f &rfmat = rf->getInverseOrientationMatrix();
@@ -1858,7 +1858,7 @@ void MainApp::tickStateGame(float delta)
       makevec3f(rfmat.row[1]) * 1.7f +
       makevec3f(rfmat.row[2]) * 5.0f;
     } break;
-    
+
     // Piggyback (fixed chase)
     //
     // TODO: broken because of "world turns upside down" bug
@@ -1873,14 +1873,14 @@ void MainApp::tickStateGame(float delta)
     temp4 = temp3 * temp2;
 
     quatf target = tempo * temp4;
-    
+
     if (target.dot(camori) < 0.0f) target = target * -1.0f;
     //if (camori.dot(target) < 0.0f) camori = camori * -1.0f;
 
     PULLTOWARD(camori, target, delta * 3.0f);
-    
+
     camori.normalize();
-    
+
     cammat = camori.getMatrix();
     cammat = cammat.transpose();
     //campos = rf->getPosition() + makevec3f(cammat.row[2]) * 100.0;
@@ -1890,32 +1890,32 @@ void MainApp::tickStateGame(float delta)
     }
     break;
   }
-  
+
   forw = makevec3f(cammat.row[0]);
   camera_angle = atan2(forw.y, forw.x);
-  
+
   vec2f diff = makevec2f(game->checkpt[vehic->nextcp].pt) - makevec2f(vehic->body->getPosition());
   nextcpangle = -atan2(diff.y, diff.x) - forwangle + PI*0.5f;
-  
+
   if (cfg_enable_sound) {
     audinst_engine->setGain(cfg_volume_engine);
     audinst_engine->setPitch(vehic->getEngineRPM() / 9000.0f);
-    
+
     float windlevel = fabsf(vehic->forwardspeed) * 0.6f;
-    
+
     audinst_wind->setGain(windlevel * 0.03f * cfg_volume_sfx);
     audinst_wind->setPitch(windlevel * 0.02f + 0.9f);
-    
+
     audinst_gravel->setGain(vehic->getSkidLevel() * 0.1f * cfg_volume_sfx);
     audinst_gravel->setPitch(1.0f);//vehic->getEngineRPM() / 7500.0f);
-    
+
     if (vehic->getFlagGearChange()) {
       audinst.push_back(new PAudioInstance(aud_gearchange));
       audinst.back()->setPitch(1.0f + randm11*0.02f);
       audinst.back()->setGain(0.3f * cfg_volume_sfx);
       audinst.back()->play();
     }
-    
+
     if (crashnoise_timeout <= 0.0f) {
       float crashlevel = vehic->getCrashNoiseLevel();
       if (crashlevel > 0.0f) {
@@ -1928,7 +1928,7 @@ void MainApp::tickStateGame(float delta)
     } else {
       crashnoise_timeout -= delta;
     }
-  
+
     for (unsigned int i=0; i<audinst.size(); i++) {
       if (!audinst[i]->isPlaying()) {
         delete audinst[i];
@@ -1938,16 +1938,16 @@ void MainApp::tickStateGame(float delta)
       }
     }
   }
-  
+
   if (psys_dirt != nullptr)
     psys_dirt->tick(delta);
-  
+
 #define RAIN_START_LIFE         0.6f
 #define RAIN_POS_RANDOM         15.0f
 #define RAIN_VEL_RANDOM         2.0f
 
   vec3f camvel = (campos - campos_prev) * (1.0f / delta);
-  
+
   {
   const vec3f def_drop_vect(2.5f,0.0f,17.0f);
 
@@ -1968,7 +1968,7 @@ void MainApp::tickStateGame(float delta)
     rain.back().drop_vect = def_drop_vect + vec3f::rand() * RAIN_VEL_RANDOM;
     rain.back().life = RAIN_START_LIFE;
   }
-  
+
   // update life and delete dead raindrops
   unsigned int j=0;
   for (unsigned int i = 0; i < rain.size(); i++) {
@@ -2024,7 +2024,7 @@ void MainApp::tickStateGame(float delta)
   }
 
   // update stuff for SSRender
-  
+
   cam_pos = campos;
   cam_orimat = cammat;
   cam_linvel = camvel;
@@ -2037,12 +2037,12 @@ void MainApp::tickStateGame(float delta)
 void MainApp::keyEvent(const SDL_KeyboardEvent &ke)
 {
   if (ke.type == SDL_KEYDOWN) {
-    
+
     if (ke.keysym.sym == SDLK_F12) {
       saveScreenshot();
       return;
     }
-    
+
     switch (appstate) {
     case AS_LOAD_1:
     case AS_LOAD_2:
@@ -2055,7 +2055,7 @@ void MainApp::keyEvent(const SDL_KeyboardEvent &ke)
       handleLevelScreenKey(ke);
       return;
     case AS_CHOOSE_VEHICLE:
-      
+
       if (ctrl.map[ActionLeft].type == UserControl::TypeKey &&
         ctrl.map[ActionLeft].key.sym == ke.keysym.sym) {
         if (--choose_type < 0)
@@ -2070,7 +2070,7 @@ void MainApp::keyEvent(const SDL_KeyboardEvent &ke)
           choose_type = 0;
         return;
       }
-      
+
       switch (ke.keysym.sym) {
       case SDLK_RETURN:
       case SDLK_KP_ENTER:
@@ -2099,7 +2099,7 @@ void MainApp::keyEvent(const SDL_KeyboardEvent &ke)
       }
       break;
     case AS_IN_GAME:
-      
+
       if (ctrl.map[ActionRecover].type == UserControl::TypeKey &&
         ctrl.map[ActionRecover].key.sym == ke.keysym.sym) {
         game->vehicle[0]->doReset();
@@ -2134,14 +2134,14 @@ void MainApp::keyEvent(const SDL_KeyboardEvent &ke)
         showui = !showui;
         return;
       }
-      
+
       if (ctrl.map[ActionShowCheckpoint].type == UserControl::TypeKey &&
         ctrl.map[ActionShowCheckpoint].key.sym == ke.keysym.sym) {
             showcheckpoint = !showcheckpoint;
             return;
       }
-      
-      
+
+
       switch (ke.keysym.sym) {
       case SDLK_ESCAPE:
           endGame(game->getFinishState());
@@ -2161,7 +2161,7 @@ void MainApp::keyEvent(const SDL_KeyboardEvent &ke)
       requestExit();
       return;
     }
-    
+
     switch (ke.keysym.sym) {
     case SDLK_ESCAPE:
       quitGame();
@@ -2175,15 +2175,15 @@ void MainApp::keyEvent(const SDL_KeyboardEvent &ke)
 void MainApp::mouseMoveEvent(int dx, int dy)
 {
   //PVehicle *vehic = game->vehicle[0];
-  
+
   //vehic->ctrl.tank.turret_turn.x += dx * -0.002;
   //vehic->ctrl.tank.turret_turn.y += dy * 0.002;
-  
+
   //vehic->ctrl.turn.x += dy * 0.005;
   //vehic->ctrl.turn.y += dx * -0.005;
-  
+
   dy = dy;
-  
+
   if (appstate == AS_IN_GAME) {
     PVehicle *vehic = game->vehicle[0];
     vehic->ctrl.turn.z += dx * 0.01f;
@@ -2193,10 +2193,10 @@ void MainApp::mouseMoveEvent(int dx, int dy)
 void MainApp::joyButtonEvent(int which, int button, bool down)
 {
   if (which == 0 && down) {
-    
+
     switch (appstate) {
     case AS_CHOOSE_VEHICLE:
-      
+
       if (ctrl.map[ActionLeft].type == UserControl::TypeJoyButton &&
         ctrl.map[ActionLeft].joybutton.button == button) {
         if (--choose_type < 0)
@@ -2211,11 +2211,11 @@ void MainApp::joyButtonEvent(int which, int button, bool down)
           choose_type = 0;
         return;
       }
-      
+
       break;
-      
+
     case AS_IN_GAME:
-      
+
       if (ctrl.map[ActionRecover].type == UserControl::TypeJoyButton &&
         ctrl.map[ActionRecover].joybutton.button == button) {
         game->vehicle[0]->doReset();
