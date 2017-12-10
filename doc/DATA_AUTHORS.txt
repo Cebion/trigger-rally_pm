@@ -133,9 +133,6 @@ Iwan 'qubodup' Gabovitch
 	sounds/bang.wav (CC0, PD) source: http://www.freesound.org/people/qubodup/sounds/151624/
 	sounds/engine.wav (CC0, PD) source: http://opengameart.org/content/car-engine-loop-96khz-4s
 	textures/dial_rev.png (GPL)
-	textures/fontDsmNormal.png (GPL)
-	textures/fontDsmOutlined.png (GPL)
-	textures/fontDsmShadowed.png (GPL)
 	textures/noise.png (CC0, PD)
 	textures/rev_needle.png (CC0, PD)
 	textures/veg/cactus1.png (CC0, PD) source: http://opengameart.org/content/cactus-sprite-texture-0
@@ -872,6 +869,9 @@ Onsemeliot
 	sounds/codriver/tim (GPL)
 	textures/button_next.png (CC0, PD)
 	textures/button_prev.png (CC0, PD)
+	textures/font-SourceCodeProBold.png (GPL)
+	textures/font-SourceCodeProBoldOutlined.png (GPL)
+	textures/font-SourceCodeProBoldShadowed.png (GPL)
 	textures/CodriverSigns/glossy/* (CC0, PD)
 	textures/CodriverSigns/plain/* (CC0, PD)
 	textures/CodriverSigns/white/* (CC0, PD)
