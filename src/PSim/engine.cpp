@@ -28,10 +28,10 @@ float PEngine::getPowerAtRPS(float rps)
 {
 	unsigned int p;
 	float power;
-  
+
 	// find which curve points rps lies between
 	for (p = 0; p < powercurve.size() && powercurve[p].x < rps; p++);
-  
+
 	if (p == 0) {
 		// to the left of the graph
 		power = powercurve[0].y * (rps / powercurve[0].x);
@@ -44,7 +44,7 @@ float PEngine::getPowerAtRPS(float rps)
 		power = powercurve[p-1].y + (0.0f - powercurve[p-1].y) *
 			( (rps - powercurve[p-1].x) / (powercurve.back().x - powercurve[p-1].x) );
 	}
-  
+
 	return power;
 }
 
@@ -59,43 +59,43 @@ void PEngineInstance::tick(float delta, float throttle, float wheel_rps)
 	// convert the rps of the wheel to the actual engine rps
 	// multiplying it for the inverse of the current gear ratio
 	rps = wheel_rps / engine->gear[currentgear];
-  
+
 	bool wasreverse = reverse;
-  
+
 	// check if the throttle will going reverse or not
 	reverse = (throttle < 0.0f);
-  
+
 	// if reverse changes, there is a gear change
 	if (wasreverse != reverse) flag_gearchange = true;
-  
+
 	// rps and throttle will be set here always positive
 	if (reverse)
 	{
 		rps *= -1.0f;
 		throttle *= -1.0f;
 	}
-  
+
 	CLAMP_UPPER(throttle, 1.0f);
-  
+
 	// engine rps have to be in the range
 	CLAMP(rps, engine->minRPS, engine->maxRPS);
-  
+
 	if (reverse)
 		currentgear = 0;
-  
+
 	// final output engine torque
 	out_torque = engine->getPowerAtRPS(rps) / (engine->gear[currentgear] * rps);
-  
+
 	// Change gear only if it's not reversed
 	if (!reverse)
 	{
 		// store if we should change gear (0 no, 1 go up, -1 go down)
 		int newtarget_rel = 0;
-    
+
 		// if it's not last gear (we can go up)
 		if (currentgear < (int)engine->gear.size()-1)
 		{
-			// nextrate = rps if the gear was the next one 
+			// nextrate = rps if the gear was the next one
 			float nextrate = rps * engine->gear[currentgear] / engine->gear[currentgear+1];
 			// nextrate has to be in the rps range
 			CLAMP(nextrate, engine->minRPS, engine->maxRPS);
@@ -121,7 +121,7 @@ void PEngineInstance::tick(float delta, float throttle, float wheel_rps)
 				// do it
 				newtarget_rel = -1;
 		}
-    
+
 		// if we are going to change gear and targetgear_rel is updated
 		if (newtarget_rel != 0 && newtarget_rel == targetgear_rel)
 		{
@@ -130,7 +130,7 @@ void PEngineInstance::tick(float delta, float throttle, float wheel_rps)
 			{
 				// the rps with the new gear
 				float nextrate = rps * engine->gear[currentgear] / engine->gear[currentgear + targetgear_rel];
-				CLAMP(nextrate, engine->minRPS, engine->maxRPS); 
+				CLAMP(nextrate, engine->minRPS, engine->maxRPS);
 				// final output torque with the new gear
 				out_torque = engine->getPowerAtRPS(nextrate) / (engine->gear[currentgear + targetgear_rel] * nextrate);
 				// change gear
@@ -141,19 +141,21 @@ void PEngineInstance::tick(float delta, float throttle, float wheel_rps)
 				flag_gearchange = true;
 			}
 		} else {
-			// update targetgear_rel, and set gearch 
+			// update targetgear_rel, and set gearch
 			gearch = engine->gearch_first;
 			targetgear_rel = newtarget_rel;
 		}
 	}
-  
+
 	// output torque is proportional to throttle
 	out_torque *= throttle;
-  
+
 	// if reverse the output torque is obviously reversed
 	if (reverse)
 		out_torque *= -1.0;
-  
-	// transimission energy dispersed
-	out_torque -= wheel_rps * 0.1f;
+
+	// transimission and rolling energy dispersion and resistance
+	// @todo this should be a value in .veichle files that should change for each car
+	//out_torque -= wheel_rps * 0.1f;
+	out_torque *= 0.7;
 }

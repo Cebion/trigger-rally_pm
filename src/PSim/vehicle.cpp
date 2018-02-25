@@ -134,7 +134,7 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
       val = walk->Attribute("wheelmodel");
       if (val) wheelmodel = ssModel.loadModel(PUtil::assemblePath(val, filename));
 
-	// params about controls
+	// params
     } else if (!strcmp(walk->Value(), "ctrlparams")) {
 
       val = walk->Attribute("speed");
@@ -151,7 +151,6 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
 
       val = walk->Attribute("lift");
       if (val) sscanf(val, "%f , %f", &param.lift.x, &param.lift.y);
-
 
       val = walk->Attribute("speedrate");
       if (val) ctrlrate.throttle = atof(val);
@@ -284,8 +283,7 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
             continue;
           }
 
-          if (false) ;
-          else if (!strcmp(val, "body")) vc.type = v_clip_type::body;
+          if      (!strcmp(val, "body")) vc.type = v_clip_type::body;
           else if (!strcmp(val, "drive-left")) vc.type = v_clip_type::drive_left;
           else if (!strcmp(val, "drive-right")) vc.type = v_clip_type::drive_right;
           else if (!strcmp(val, "hover")) vc.type = v_clip_type::hover;
@@ -603,11 +601,13 @@ void PVehicle::tick(float delta)
   PULLTOWARD(state.collective, ctrl.collective, type->ctrlrate.collective * delta);
 
   // prepare some useful data
-  //vec3f pos = body->getPosition();
   vec3f linvel = body->getLinearVel();
   mat44f orimatt = body->getInverseOrientationMatrix();
   vec3f angvel = body->getAngularVel();
+  vec3f loclinvel = body->getWorldToLocVector(linvel);
+  vec3f locangvel = body->getWorldToLocVector(angvel);
 
+  // if car is upside down, wait 4 seconds then reset
   if (orimatt.row[2].z <= 0.1f) {
     reset_trigger_time += delta;
 
@@ -616,36 +616,28 @@ void PVehicle::tick(float delta)
   } else
     reset_trigger_time = 0.0f;
 
-  vec3f loclinvel = body->getWorldToLocVector(linvel);
-  vec3f locangvel = body->getWorldToLocVector(angvel);
-  //vec3f locangvel = body->getLocToWorldVector(angvel);
-  //vec3f locangvel = angvel;
+  // check for resetting to do
+  if (reset_time > 0.0f) {
+	// move toward reset position and orientation
+    PULLTOWARD(body->pos, reset_pos, delta * 2.0f);
+    PULLTOWARD(body->ori, reset_ori, delta * 2.0f);
 
-  // check for resetting (if the vehicle has been flipped or something)
-  if (reset_time != 0.0f) {
-    if (reset_time > 0.0f) {
-	  // move toward reset position and orientation
-      PULLTOWARD(body->pos, reset_pos, delta * 2.0f);
-      PULLTOWARD(body->ori, reset_ori, delta * 2.0f);
+    // stop
+    body->setLinearVel(vec3f::zero());
+    body->setAngularVel(vec3f::zero());
 
-      // stop
-      body->setLinearVel(vec3f::zero());
-      body->setAngularVel(vec3f::zero());
+    body->updateMatrices();
 
-      body->updateMatrices();
+    reset_time -= delta;
+    if (reset_time <= 0.0f)
+      reset_time = -2.0f;
 
-      reset_time -= delta;
-      if (reset_time <= 0.0f)
-        reset_time = -2.0f;
+    return;
 
-      return;
-
-    } else {
-      reset_time += delta;
-
-      if (reset_time > 0.0f)
-        reset_time = 0.0f;
-    }
+  } else {
+    reset_time += delta;
+    if (reset_time > 0.0f)
+      reset_time = 0.0f;
   }
 
   forwardspeed = loclinvel.y;
@@ -663,13 +655,13 @@ void PVehicle::tick(float delta)
   body->addLocTorque(vec3f(-loclinvel.z * type->param.fineffect.y, 0.0, loclinvel.x * type->param.fineffect.x));
 
   // angular drag
-  body->addTorque(angvel.modulate(angvel) * -type->param.angdrag);
+  body->addTorque(vec3f(angvel.x*fabsf(angvel.x), angvel.y*fabsf(angvel.y), angvel.z*fabsf(angvel.z)) * -type->param.angdrag);
 
   // linear drag
   vec3f frc = -vec3f(
-    SQUARED(loclinvel.x) * type->param.drag.x,
-    SQUARED(loclinvel.y) * type->param.drag.y,
-    SQUARED(loclinvel.z) * type->param.drag.z);
+    loclinvel.x * fabsf(loclinvel.x) * type->param.drag.x,
+    loclinvel.y * fabsf(loclinvel.y) * type->param.drag.y,
+    loclinvel.z * fabsf(loclinvel.z) * type->param.drag.z);
 
   // lift
   frc += -vec3f(

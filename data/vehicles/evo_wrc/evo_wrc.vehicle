@@ -17,26 +17,34 @@
 		wheelscale="0.033" />
 
 	<ctrlparams
+		drag="14, 7, 18"
+		angdrag="20"
+		lift="10, -10"
 		speedrate="15.0"
-		turnspeedrate="0.0, 0.0, 10.0" />
+		turnspeedrate="0.0, 0.0, 10.0"
+		fineffect="10, 13" />
 
 	<drivesystem>
-		<engine powerscale="10000">
-			<powerpoint rpm="2000" power="0.4" />
-			<powerpoint rpm="5000" power="0.7" />
-			<powerpoint rpm="8000" power="1.0" />
-			<powerpoint rpm="8500" power="0.8" />
-			<powerpoint rpm="10000" power="0.7" />
-			<powerpoint rpm="12000" power="0.0" />
+		<engine powerscale="30000">
+			<powerpoint rpm="1000" power="0.17" />
+			<powerpoint rpm="2000" power="0.35" />
+			<powerpoint rpm="3000" power="0.55" />
+			<powerpoint rpm="4000" power="0.78" />
+			<powerpoint rpm="5000" power="0.95" />
+			<powerpoint rpm="5250" power="0.98" />
+			<powerpoint rpm="5600" power="1.0" />
+			<powerpoint rpm="5700" power="0.92" />
+			<powerpoint rpm="5900" power="0.90" />
+			<powerpoint rpm="8000" power="0.0" />
 		</engine>
 
 		<gearbox>
-			<gear absolute="0.065" />
-			<gear relative="1.36" />
-			<gear relative="1.33" />
-			<gear relative="1.30" />
-			<gear relative="1.27" />
-			<gear relative="1.24" />
+			<gear absolute="0.07" />
+			<gear relative="1.624" />
+			<gear relative="1.372" />
+			<gear relative="1.298" />
+			<gear relative="1.353" />
+			<gear relative="1.148" />
 		</gearbox>
 	</drivesystem>
 
