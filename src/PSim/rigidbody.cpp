@@ -14,23 +14,21 @@
 ///
 /// @brief initialize PRigidBody
 ///
-PRigidBody::PRigidBody(PSim &sim_parent) : PReferenceFrame(), sim(sim_parent)
-{
-  linvel = vec3f::zero();
-  angvel = vec3f::zero();
-
-  mass = 1.0;
-  mass_inv = 1.0;
-  angmass = vec3f(1.0,1.0,1.0);
-  angmass_inv = vec3f(1.0,1.0,1.0);
-
-  accum_force = vec3f::zero();
-  accum_torque = vec3f::zero();
-}
+PRigidBody::PRigidBody(PSim &sim_parent):
+	PReferenceFrame(),
+	sim(sim_parent),
+	mass(1.0),
+	mass_inv(1.0),
+	angmass(vec3f(1.0,1.0,1.0)),
+	angmass_inv(vec3f(1.0,1.0,1.0)),
+	linvel(vec3f::zero()),
+	angvel(vec3f::zero()),
+	accum_force(vec3f::zero()),
+	accum_torque(vec3f::zero())
+{}
 
 PRigidBody::~PRigidBody()
-{
-}
+{}
 
 ///
 /// @brief set a new mass as cuboid then update the angular mass

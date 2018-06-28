@@ -10,21 +10,18 @@
 
 
 TriggerGame::TriggerGame(MainApp *parent):
-    cdvoice(parent->getCodriverWords(), parent->getCodriverVolume()),
-    cdsigns(parent->getCodriverSigns(), parent->getCodriverUserConfig())
-{
-  app = parent;
-  
-  sim = nullptr;
-  terrain = nullptr;
-  
-  randomseed = 0;
-}
+	app(parent),
+	sim(nullptr),
+	randomseed(0),
+	terrain(nullptr),
+	cdvoice(app->getCodriverWords(), app->getCodriverVolume()),
+	cdsigns(app->getCodriverSigns(), app->getCodriverUserConfig())
+{}
 
 TriggerGame::~TriggerGame()
 {
-  if (sim) delete sim;
-  if (terrain) delete terrain;
+	if (sim) delete sim;
+	if (terrain) delete terrain;
 }
 
 ///

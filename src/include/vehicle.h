@@ -243,7 +243,8 @@ public:
 		bumpnext = 0.0f;
 		bumptravel = 0.0f;
 	}
-  
+	
+	// get the lowest point of the wheel (the one that will touch the ground)
 	vec3f getLowestPoint(const PVehicleTypeWheel& typewheel);
 };
 

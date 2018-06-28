@@ -423,53 +423,43 @@ void PVehicleType::unload()
 /// @param _type = the type of vehicle the new vehicle is
 ///
 PVehicle::PVehicle(PSim &sim_parent, PVehicleType *_type) :
-  sim(sim_parent), type(_type), iengine(&_type->engine)
+	sim(sim_parent),
+	type(_type),
+	body(sim.createRigidBody()),
+	iengine(&type->engine),
+	blade_ang1(0.0f),
+	nextcp(0),
+	nextcdcp(0),
+	currentlap(1),
+	reset_trigger_time(0.0f),
+	reset_time(0.0f),
+	crunch_level(0.0f),
+	crunch_level_prev(0.0f),
+	forwardspeed(0.0f),
+	wheel_angvel(0.0f)
 {
-  // body is the vehicle rigid body
-  body = sim.createRigidBody();
+	// vehicle mass is approximately meant to be cuboid
+	body->setMassCuboid(type->mass, type->dims);
 
-  // vehicle mass is approximately meant to be cuboid
-  body->setMassCuboid(type->mass, type->dims);
+	// set control
+	state.setZero();
+	ctrl.setZero();
 
-  // set control
-  state.setZero();
-  ctrl.setZero();
+	// Set parts and wheels
+	part.resize(type->part.size());
+	for (unsigned int i=0; i<part.size(); i++) {
+		part[i].ref_local = type->part[i].ref_local;
 
-  forwardspeed = 0.0f;
+		part[i].wheel.resize(type->part[i].wheel.size());
 
-  blade_ang1 = 0.0;
+		for (unsigned int j=0; j<part[i].wheel.size(); j++) {
+			part[i].wheel[j].ref_world.setPosition(vec3f(0,0,1000000)); // FIXME
+		}
+	}
 
-  // set starting checkpoints
-  nextcp = 0;
-  nextcdcp = 0;
+	updateParts();
 
-  // set lap
-  currentlap = 1;
-
-  wheel_angvel = 0.0f;
-
-  reset_trigger_time = 0.0f;
-
-  reset_time = 0.0f;
-
-  crunch_level = 0.0f;
-  crunch_level_prev = 0.0f;
-
-  // Set parts and wheels
-  part.resize(type->part.size());
-  for (unsigned int i=0; i<part.size(); i++) {
-    part[i].ref_local = type->part[i].ref_local;
-
-    part[i].wheel.resize(type->part[i].wheel.size());
-
-    for (unsigned int j=0; j<part[i].wheel.size(); j++) {
-      part[i].wheel[j].ref_world.setPosition(vec3f(0,0,1000000)); // FIXME
-    }
-  }
-
-  updateParts();
-
-  //mNetFlags.set(Ghostable);
+	//mNetFlags.set(Ghostable);
 }
 
 ///
