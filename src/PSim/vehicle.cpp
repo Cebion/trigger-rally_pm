@@ -894,7 +894,7 @@ void PVehicle::tick(float delta)
       const float mf_resis    = PUtil::decideResistance(mf_tt);
 
       // where the wheel might touch the ground
-      vec3f wclip = wheel.getLowestPoint(typewheel);
+      vec3f wclip = wheel.getLowestPoint();
 
       wheel.spin_vel += drivetorque * typewheel.drive * delta * (1.0f - mf_resis);
 
@@ -1095,7 +1095,7 @@ bool PVehicle::canHaveDustTrail()
     {
         for (unsigned int j=0; j<type->part[i].wheel.size(); ++j)
         {
-            vec3f wclip = part[i].wheel[j].getLowestPoint(type->part[i].wheel[j]);
+            vec3f wclip = part[i].wheel[j].getLowestPoint();
 
             PTerrain::ContactInfo tci;
 
@@ -1138,6 +1138,7 @@ void PVehicle::updateParts()
             vec3f(0.0f, 0.0f, part[i].wheel[j].ride_pos);
 
       part[i].wheel[j].ref_world.setPosition(part[i].ref_world.getLocToWorldPoint(locpos));
+	  part[i].wheel[j].ref_world_lowest_point.setPosition(part[i].ref_world.getLocToWorldPoint(locpos - vec3f(0,0,type->part[i].wheel[j].radius)));
 
       quatf turnang, spinang;
       turnang.fromZAngle(part[i].wheel[j].turn_pos);
@@ -1146,19 +1147,22 @@ void PVehicle::updateParts()
       part[i].wheel[j].ref_world.ori = spinang * turnang * part[i].ref_world.ori;
 
       part[i].wheel[j].ref_world.updateMatrices();
+	  part[i].wheel[j].ref_world_lowest_point.updateMatrices();
     }
   }
 }
 
 ///
 /// @brief Get the lowest point of the wheel, where it would touch the ground
-/// @todo calc wclip along wheel plane instead of just straight down to prevent unrealistic behaviour
 ///
-vec3f PVehicleWheel::getLowestPoint(const PVehicleTypeWheel& typewheel)
+vec3f PVehicleWheel::getLowestPoint()
 {
-	vec3f wclip = ref_world.getPosition();
+	//vec3f wclip = ref_world.getPosition();
+	//wclip.z -= typewheel.radius;
 
-	wclip.z -= typewheel.radius - INTERP(bumplast, bumpnext, bumptravel);
-
+	vec3f wclip = ref_world_lowest_point.getPosition();
+	
+	wclip.z += INTERP(bumplast, bumpnext, bumptravel);
+	
 	return wclip;
 }

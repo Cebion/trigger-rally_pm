@@ -223,8 +223,11 @@ public:
 	// steering axis rotation
 	float turn_pos;
   
-	// his reference position in the world position
+	// his reference position in the world
 	PReferenceFrame ref_world;
+	
+	// the reference position in the world of the lowest point of the wheel (the one touching the ground)
+	PReferenceFrame ref_world_lowest_point;
   
 	float skidding, dirtthrow;
 	// where the dust trail starts and its velocity
@@ -245,7 +248,7 @@ public:
 	}
 	
 	// get the lowest point of the wheel (the one that will touch the ground)
-	vec3f getLowestPoint(const PVehicleTypeWheel& typewheel);
+	vec3f getLowestPoint();
 };
 
 ///
