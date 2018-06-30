@@ -149,28 +149,43 @@ void PSim::clear()
 ///
 void PSim::tick(float delta)
 {
-  if (delta <= 0.0) return;
+	if (delta <= 0.0) return;
 
-  // Find a new timeslice similar to 0.005 so we can do an int number (num) of equal ticks in the delta interval
-  float timeslice = 0.005;
-  int num = (int)(delta / timeslice) + 1;
-  timeslice = delta / (float)num;
+	/*
+	 * old code that uses variable step size
+	 * 
+	// Find a new timeslice similar to 0.005 so we can do an int number (num) of equal ticks in the delta interval
+	float timeslice = 0.005;
+	int num = (int)(delta / timeslice) + 1;
+	timeslice = delta / (float)num;
+	// do 'num' ticks each of 'timeslice' length
+	for (int timestep=0; timestep<num; ++timestep) {
+	*/
+	
+	// size of a step
+	const float timeslice = 0.004;
 
-  // do 'num' ticks each of 'timeslice' length
-  for (int timestep=0; timestep<num; ++timestep) {
-	// tick for vehicles
-    for (unsigned int i=0; i<vehicle.size(); ++i) {
-      vehicle[i]->tick(timeslice);
-    }
-    // tick for rigid bodies
-    for (unsigned int i=0; i<body.size(); ++i) {
-      body[i]->tick(timeslice);
-    }
-    // Update vehicles parts
-    for (unsigned int i=0; i<vehicle.size(); ++i) {
-      vehicle[i]->updateParts();
-    }
-  }
+	// how much time remains to simulate
+	static float t = 0;
+	t += delta;
+	
+	while(t >= timeslice)
+	{
+		// update time
+		t -= timeslice;
+		
+		// tick for vehicles
+		for (unsigned int i=0; i<vehicle.size(); ++i)
+			vehicle[i]->tick(timeslice);
+		
+		// tick for rigid bodies
+		for (unsigned int i=0; i<body.size(); ++i)
+			body[i]->tick(timeslice);
+		
+		// Update vehicles parts
+		for (unsigned int i=0; i<vehicle.size(); ++i)
+			vehicle[i]->updateParts();
+	}
 }
 
 
