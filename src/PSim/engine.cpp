@@ -155,7 +155,5 @@ void PEngineInstance::tick(float delta, float throttle, float wheel_rps)
 		out_torque *= -1.0;
 
 	// transimission and rolling energy dispersion and resistance
-	// @todo this should be a value in .veichle files that should change for each car
-	//out_torque -= wheel_rps * 0.1f;
-	out_torque *= 0.7;
+	out_torque -= wheel_rps * 0.1f;
 }
