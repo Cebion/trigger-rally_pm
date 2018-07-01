@@ -122,6 +122,9 @@ struct PVehicleTypeWheel {
   // suspension proper resistance force
   float force;
   float dampening;
+  
+  // frictions value of the wheel with the ground (around 0.03)
+  float friction;
 };
 
 ///

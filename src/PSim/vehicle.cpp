@@ -317,9 +317,9 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
           vtw.steer = 0.0f;
           vtw.brake1 = 0.0f;
           vtw.brake2 = 0.0f;
-
           vtw.force = 0.0f;
           vtw.dampening = 0.0f;
+          vtw.friction = 0.02f;
 
           val = walk2->Attribute("pos");
           if (!val) {
@@ -350,6 +350,9 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
 
           val = walk2->Attribute("dampening");
           if (val) vtw.dampening = atof(val);
+
+          val = walk2->Attribute("friction");
+          if (val) vtw.friction = atof(val);
 
           vtp->wheel.push_back(vtw);
           drive_total += vtw.drive;
@@ -1012,20 +1015,22 @@ void PVehicle::tick(const float& delta)
         if (perpforce > 0.0f) {
 
 		  // proportional to the actual velocity right and forward
-          vec2f friction = vec2f(-surfvel.x, -surfvel.y) * 10000.0f;
+		  //vec2f friction = vec2f(-surfvel.x, -surfvel.y) * 10000.0f;
+		  vec2f friction = vec2f(-surfvel.x, -surfvel.y) * typewheel.friction * 50.0f * 10000.0f;
 
           // max friction available proportional to the pressure of the wheel to the ground and ground own friction coefficent
           float maxfriction = perpforce * mf_coef;
 
           float testfriction = perpforce * 1.0f;
 
-          // the length of the friction
+          // the intensity of the friction
           float leng = friction.length();
 
           // if there is some friction, and it is bigger than testfriction
           if (leng > 0.0f && leng > testfriction)
             // friction will be put equal to maxfriction with a little gain
-            friction *= (maxfriction / leng) + 0.02f;
+            friction *= (maxfriction / leng) + typewheel.friction;
+            //friction *= (maxfriction / leng) + 0.02f;
 
           // the force of the wheel
           frc += (
@@ -1156,9 +1161,6 @@ void PVehicle::updateParts()
 ///
 vec3f PVehicleWheel::getLowestPoint()
 {
-	//vec3f wclip = ref_world.getPosition();
-	//wclip.z -= typewheel.radius;
-
 	vec3f wclip = ref_world_lowest_point.getPosition();
 	
 	wclip.z += INTERP(bumplast, bumpnext, bumptravel);
