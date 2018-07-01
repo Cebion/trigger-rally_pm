@@ -165,7 +165,7 @@ public:
 
   PVehicle *createVehicle(XMLElement *element, const std::string &filepath, PSSModel &ssModel);
   PVehicle *createVehicle(const std::string &type, const vec3f &pos, const quatf &ori, const std::string &filepath, PSSModel &ssModel);
-  PVehicle *createVehicle(PVehicleType *type, const vec3f &pos, const quatf &ori, PSSModel &ssModel);
+  PVehicle *createVehicle(PVehicleType *type, const vec3f &pos, const quatf &ori /* , PSSModel &ssModel */);
 
   // Remove all bodies and vehicles
   void clear();

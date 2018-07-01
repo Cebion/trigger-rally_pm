@@ -349,7 +349,7 @@ public:
   */
   
   // simulate for 'delta' seconds
-  void tick(float delta);
+  void tick(const float& delta);
   
   bool canHaveDustTrail();
   

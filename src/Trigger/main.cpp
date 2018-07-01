@@ -993,7 +993,7 @@ bool MainApp::loadLevelsAndEvents()
   std::list<std::string> results = PUtil::findFiles("/maps", ".level");
 
   for (std::list<std::string>::iterator i = results.begin();
-    i != results.end(); i++) {
+    i != results.end(); ++i) {
 
     TriggerLevel tl;
     tl.filename = *i;
@@ -1002,7 +1002,7 @@ bool MainApp::loadLevelsAndEvents()
 
     // Insert level in alphabetical order
     std::vector<TriggerLevel>::iterator j = levels.begin();
-    while (j != levels.end() && j->name < tl.name) j++;
+    while (j != levels.end() && j->name < tl.name) ++j;
     levels.insert(j, tl);
   }
 
@@ -1011,7 +1011,7 @@ bool MainApp::loadLevelsAndEvents()
   results = PUtil::findFiles("/events", ".event");
 
   for (std::list<std::string>::iterator i = results.begin();
-    i != results.end(); i++) {
+    i != results.end(); ++i) {
 
     TriggerEvent te;
 
@@ -1088,7 +1088,7 @@ bool MainApp::loadLevelsAndEvents()
 
     // Insert event in alphabetical order
     std::vector<TriggerEvent>::iterator j = events.begin();
-    while (j != events.end() && j->name < te.name) j++;
+    while (j != events.end() && j->name < te.name) ++j;
     events.insert(j, te);
   }
 

@@ -220,7 +220,7 @@ int PApp::run(int argc, char *argv[])
     std::list<std::string> zipfiles = PUtil::findFiles("", ".zip");
     
     for (std::list<std::string>::iterator i = zipfiles.begin();
-      i != zipfiles.end(); i++) {
+      i != zipfiles.end(); ++i) {
       
       const char *realpath = PHYSFS_getRealDir(i->c_str());
       
@@ -788,7 +788,7 @@ void PApp::drawModel(PModel &model)
 {
   for (std::vector<PMesh>::iterator mesh = model.mesh.begin();
     mesh != model.mesh.end();
-    mesh++) {
+    ++mesh) {
     if (!mesh->effect)
       mesh->effect = getSSEffect().loadEffect(mesh->fxname);
 

@@ -570,7 +570,7 @@ void PVehicle::doReset2(const vec3f &pos, const quatf &ori)
 /// @brief Physic simulation for the single vehicle
 /// @param delta = timeslice to compute
 ///
-void PVehicle::tick(float delta)
+void PVehicle::tick(const float& delta)
 {
   // ensure control values are in valid range
   ctrl.clamp();
@@ -664,7 +664,6 @@ void PVehicle::tick(float delta)
 
   // vehicle-specific code
   switch (type->coretype) {
-  default: break;
 
   case v_core_type::tank:
     if (part.size() >= 3) {
@@ -717,7 +716,7 @@ void PVehicle::tick(float delta)
     }
     break;
 
-  case v_core_type::car:
+  default:
     break;
   }
 
@@ -813,7 +812,7 @@ void PVehicle::tick(float delta)
             float perpforce =
 			  // how much the clip is below surface (times own clip force)
               depth * type->part[i].clip[j].force
-              // how much the fast the clip is going down (times own clip dampen capabilities)
+              // how much fast the clip is going down (times own clip dampen capabilities)
               - surfvel.z * type->part[i].clip[j].dampening;
 
             // if the clip pushes against the ground
@@ -889,7 +888,7 @@ void PVehicle::tick(float delta)
       PVehicleTypeWheel &typewheel = type->part[i].wheel[j];
 
       // terrain information
-      const TerrainType mf_tt = sim.getTerrain()->getRoadSurface(wheel.ref_world.getPosition());
+      const TerrainType mf_tt = sim.getTerrain()->getRoadSurface(wheel.ref_world_lowest_point.getPosition());
       const float mf_coef     = PUtil::decideFrictionCoef(mf_tt);
       const float mf_resis    = PUtil::decideResistance(mf_tt);
 

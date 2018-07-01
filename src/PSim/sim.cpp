@@ -96,17 +96,15 @@ PVehicle *PSim::createVehicle(const std::string &type, const vec3f &pos, const q
 {
   PVehicleType *vtype = loadVehicleType(PUtil::assemblePath(type, filepath), ssModel);
 
-  return createVehicle(vtype, pos, ori, ssModel);
+  return createVehicle(vtype, pos, ori /*, ssModel */);
 }
 
 ///
 /// @brief Create a new vehicle and put it in the vehicle vector
 /// @retval the pointer to the newly created vehicle, nullptr if problems occurred
 ///
-PVehicle *PSim::createVehicle(PVehicleType *type, const vec3f &pos, const quatf &ori, PSSModel &ssModel)
+PVehicle *PSim::createVehicle(PVehicleType *type, const vec3f &pos, const quatf &ori /*, PSSModel &ssModel */)
 {
-  PSSModel *unused = &ssModel; unused = unused;
-
   if (!type) return nullptr;
 
   PVehicle *newvehicle = new PVehicle(*this, type);

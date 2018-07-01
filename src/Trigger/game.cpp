@@ -435,7 +435,7 @@ bool TriggerGame::loadLevel(const std::string &filename)
 void TriggerGame::chooseVehicle(PVehicleType *type)
 { 
 	// create the vehicle
-	PVehicle *vh = sim->createVehicle(type, start_pos, start_ori, app->getSSModel());
+	PVehicle *vh = sim->createVehicle(type, start_pos, start_ori /*, app->getSSModel()*/);
   
 	// it is also the user vehicle
 	uservehicle = vh;
