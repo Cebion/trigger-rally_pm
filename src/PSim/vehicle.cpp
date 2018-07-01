@@ -2,9 +2,49 @@
 // vehicle.cpp
 
 // Copyright 2004-2006 Jasmine Langridge, jas@jareiko.net
+// Copyright 2018      Emanuele Sorce,    emanuele.sorce@hotmail.com
 // License: GPL version 2 (see included gpl.txt)
 
 #include "psim.h"
+
+// default vehicle type values
+#define DEF_VEHICLE_NAME "Vehicle"
+#define DEF_VEHICLE_CLASS "Unknown"
+#define DEF_PSTAT_WEIGHT "N/A"
+#define DEF_PSTAT_ENGINE "N/A"
+#define DEF_PSTAT_WHEELDRIVE "N/A"
+#define DEF_PSTAT_HANDLING "N/A"
+
+#define DEF_VEHICLE_MASS 1
+#define DEF_VEHICLE_DIMS vec3f(1,1,1)
+#define DEF_VEHICLE_WHEELSCALE 1
+
+#define DEF_VEHICLE_SPEED 0
+#define DEF_VEHICLE_TURNSPEED vec3f::zero()
+#define DEF_VEHICLE_TURNSPEED_A 1
+#define DEF_VEHICLE_TURNSPEED_B 0
+
+#define DEF_VEHICLE_DRAG vec3f::zero()
+#define DEF_VEHICLE_ANGDRAG 0
+#define DEF_VEHICLE_LIFT vec2f::zero()
+#define DEF_VEHICLE_FINEFFECT vec2f::zero()
+
+#define DEF_WHEEL_RADIUS 1
+#define DEF_WHEEL_DRIVE 0
+#define DEF_WHEEL_STEER 0
+#define DEF_WHEEL_BRAKE1 0
+#define DEF_WHEEL_BRAKE2 0
+#define DEF_WHEEL_FORCE 0
+#define DEF_WHEEL_DAMPENING 0
+#define DEF_WHEEL_FRICTION 0.02
+
+// When a car is reset, how much time to wait
+#define VEHICLE_RESET_TIME 3
+// When a car is upside down, how much time to wait before resetting
+#define VEHICLE_UPSIDEDOWN_RESET_TIME 4
+
+// This is a coefficent used to get the friction of a wheel or a clip with the ground
+#define FRICTION_MAGIC_COEFF 10000
 
 ///
 /// @brief load a vehicle type from a file
@@ -19,30 +59,30 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
   unload();
 
   // defaults
-  proper_name = "Vehicle";
-  proper_class = "Unknown";
+  proper_name = DEF_VEHICLE_NAME;
+  proper_class = DEF_VEHICLE_CLASS;
 
-  pstat_weightkg = "N/A";
-  pstat_enginebhp = "N/A";
-  pstat_wheeldrive = "N/A";
-  pstat_handling = "N/A";
+  pstat_weightkg = DEF_PSTAT_WEIGHT;
+  pstat_enginebhp = DEF_PSTAT_ENGINE;
+  pstat_wheeldrive = DEF_PSTAT_WHEELDRIVE;
+  pstat_handling = DEF_PSTAT_HANDLING;
 
-  mass = 1.0;
-  dims = vec3f(1.0,1.0,1.0);
+  mass = DEF_VEHICLE_MASS;
+  dims = DEF_VEHICLE_DIMS;
 
-  wheelscale = 1.0;
+  wheelscale = DEF_VEHICLE_WHEELSCALE;
   wheelmodel = nullptr;
 
   ctrlrate.setDefaultRates();
 
-  param.speed = 0.0;
-  param.turnspeed = vec3f::zero();
-  param.turnspeed_a = 1.0;
-  param.turnspeed_b = 0.0;
-  param.drag = vec3f::zero();
-  param.angdrag = 0.0;
-  param.lift = vec2f::zero();
-  param.fineffect = vec2f::zero();
+  param.speed = DEF_VEHICLE_SPEED;
+  param.turnspeed = DEF_VEHICLE_TURNSPEED;
+  param.turnspeed_a = DEF_VEHICLE_TURNSPEED_A;
+  param.turnspeed_b = DEF_VEHICLE_TURNSPEED_B;
+  param.drag = DEF_VEHICLE_DRAG;
+  param.angdrag = DEF_VEHICLE_ANGDRAG;
+  param.lift = DEF_VEHICLE_LIFT;
+  param.fineffect = DEF_VEHICLE_FINEFFECT;
 
   float allscale = 1.0;
 
@@ -311,15 +351,15 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
           vtp->clip.push_back(vc);
         } else if (!strcmp(walk2->Value(), "wheel")) {
           PVehicleTypeWheel vtw;
-
-          vtw.radius = 1.0f;
-          vtw.drive = 0.0f;
-          vtw.steer = 0.0f;
-          vtw.brake1 = 0.0f;
-          vtw.brake2 = 0.0f;
-          vtw.force = 0.0f;
-          vtw.dampening = 0.0f;
-          vtw.friction = 0.02f;
+          
+          vtw.radius = DEF_WHEEL_RADIUS;
+          vtw.drive = DEF_WHEEL_DRIVE;
+          vtw.steer = DEF_WHEEL_STEER;
+          vtw.brake1 = DEF_WHEEL_BRAKE1;
+          vtw.brake2 = DEF_WHEEL_BRAKE2;
+          vtw.force = DEF_WHEEL_FORCE;
+          vtw.dampening = DEF_WHEEL_DAMPENING;
+          vtw.friction = DEF_WHEEL_FRICTION;
 
           val = walk2->Attribute("pos");
           if (!val) {
@@ -488,7 +528,7 @@ void PVehicle::doReset()
   reset_ori = temp;
 
   // set a reset time again
-  reset_time = 3.0f;
+  reset_time = VEHICLE_RESET_TIME;
 
   crunch_level = 0.0f;
   crunch_level_prev = 0.0f;
@@ -540,7 +580,7 @@ void PVehicle::doReset2(const vec3f &pos, const quatf &ori)
   reset_ori = temp;
 
   // set a reset time again
-  reset_time = 3.0f;
+  reset_time = VEHICLE_RESET_TIME;
 
   crunch_level = 0.0f;
   crunch_level_prev = 0.0f;
@@ -600,11 +640,11 @@ void PVehicle::tick(const float& delta)
   vec3f loclinvel = body->getWorldToLocVector(linvel);
   vec3f locangvel = body->getWorldToLocVector(angvel);
 
-  // if car is upside down, wait 4 seconds then reset
+  // if car is upside down, wait some seconds then reset
   if (orimatt.row[2].z <= 0.1f) {
     reset_trigger_time += delta;
 
-    if (reset_trigger_time >= 4.0f)
+    if (reset_trigger_time >= VEHICLE_UPSIDEDOWN_RESET_TIME)
       doReset();
   } else
     reset_trigger_time = 0.0f;
@@ -820,7 +860,7 @@ void PVehicle::tick(const float& delta)
 
             // if the clip pushes against the ground
             if (perpforce > 0.0f) {
-              vec2f friction = vec2f(-surfvel.x, -surfvel.y) * 10000.0f;
+              vec2f friction = vec2f(-surfvel.x, -surfvel.y) * FRICTION_MAGIC_COEFF;
 
               float maxfriction = perpforce * 0.9f;
               float testfriction = perpforce * 1.2f;
@@ -1016,7 +1056,7 @@ void PVehicle::tick(const float& delta)
 
 		  // proportional to the actual velocity right and forward
 		  //vec2f friction = vec2f(-surfvel.x, -surfvel.y) * 10000.0f;
-		  vec2f friction = vec2f(-surfvel.x, -surfvel.y) * typewheel.friction * 50.0f * 10000.0f;
+		  vec2f friction = vec2f(-surfvel.x, -surfvel.y) * typewheel.friction * 50.0f * FRICTION_MAGIC_COEFF;
 
           // max friction available proportional to the pressure of the wheel to the ground and ground own friction coefficent
           float maxfriction = perpforce * mf_coef;
