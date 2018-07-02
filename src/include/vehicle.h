@@ -307,10 +307,11 @@ public:
   // current controls situation (eg. brakes, turn)
   v_control_s ctrl;
   
-  // info
   float forwardspeed;
   float wheel_angvel;
   float wheel_speed;
+  
+  // how much noise for the drifting of the wheels. 0 means none
   float skid_level;
   
   // when a vehicle starts going offroad this time is set (to know how much time has spent offroad)

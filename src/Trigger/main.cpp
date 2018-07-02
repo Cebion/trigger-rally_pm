@@ -31,10 +31,11 @@ void MainApp::config()
         throw MakePException("Data directory paths are empty: check your trigger-rally.config file.");
 
     for (const std::string &datadir: cfg_datadirs)
-        if (PHYSFS_addToSearchPath(datadir.c_str(), 1) == 0)
+        if (PHYSFS_mount(datadir.c_str(), NULL, 1) == 0)
         {
+			auto err = PHYSFS_getLastErrorCode();
             PUtil::outLog() << "Failed to add PhysFS search directory \"" << datadir << "\"" << std::endl
-                << "PhysFS: " << PHYSFS_getLastError() << std::endl;
+                << "PhysFS: " << err << " - " << PHYSFS_getErrorByCode(err) << std::endl;
         }
         else
         {
@@ -474,10 +475,11 @@ void MainApp::loadConfig()
     };
 
     for (const std::string &cfgpath: cfghidingplaces)
-        if (PHYSFS_addToSearchPath(cfgpath.c_str(), 1) == 0)
+        if (PHYSFS_mount(cfgpath.c_str(), NULL, 1) == 0)
         {
+			auto err = PHYSFS_getLastErrorCode();
             PUtil::outLog() << "Failed to add PhysFS search directory \"" <<
-                cfgpath << "\"\nPhysFS: " << PHYSFS_getLastError() << std::endl;
+                cfgpath << "\"\nPhysFS: " << err << " - " << PHYSFS_getErrorByCode(err) << std::endl;
         }
 #endif
     PUtil::outLog() << "No user config file, copying over defaults" << std::endl;

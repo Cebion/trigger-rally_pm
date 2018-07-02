@@ -170,7 +170,8 @@ void PModel::loadOBJ(const std::string &filename, float globalScale)
 	pfile = PHYSFS_openRead(filename.c_str());
 	if(pfile == NULL)
 	{
-		throw MakePException(filename + ", PhysFS: " + PHYSFS_getLastError());
+		auto err = PHYSFS_getLastErrorCode();
+		throw MakePException(filename + ", PhysFS: " + std::to_string(err) + " - " + PHYSFS_getErrorByCode(err));
 	}
 
 	/* Create the single mesh (.obj isn't a multimesh file) */
@@ -322,7 +323,8 @@ void PModel::loadASE (const std::string &filename, float globalScale)
 
   PHYSFS_file *pfile = PHYSFS_openRead(filename.c_str());
   if (pfile == nullptr) {
-    throw MakePException (filename + ", PhysFS: " + PHYSFS_getLastError());
+    auto err = PHYSFS_getLastErrorCode();
+    throw MakePException (filename + ", PhysFS: " + std::to_string(err) + " - " + PHYSFS_getErrorByCode(err));
   }
 
   std::vector<matl_s> matlist;

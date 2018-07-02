@@ -136,7 +136,8 @@ int PApp::run(int argc, char *argv[])
   
   if (PHYSFS_init((argc >= 1) ? argv[0] : nullptr) == 0) {
     PUtil::outLog() << "PhysFS failed to initialise" << std::endl;
-    PUtil::outLog() << "PhysFS: " << PHYSFS_getLastError() << std::endl;
+    auto err = PHYSFS_getLastErrorCode(); 
+    PUtil::outLog() << "PhysFS: " << err << " - " << PHYSFS_getErrorByCode(err) << std::endl;
     return 1;
   }
   
@@ -156,13 +157,15 @@ int PApp::run(int argc, char *argv[])
     PUtil::outLog() << "Set writable user directory to \"" << lsdbuff << "\"" << std::endl;
     
     if (PHYSFS_setWriteDir(lsdbuff.c_str()) == 0) {
+      auto err = PHYSFS_getLastErrorCode();
       PUtil::outLog() << "Failed to set PhysFS writable directory to \"" << lsdbuff << "\"" << std::endl
-          << "PhysFS: " << PHYSFS_getLastError() << std::endl;
+          << "PhysFS: " << err << " - " << PHYSFS_getErrorByCode(err) << std::endl;
     }
     
     if (PHYSFS_mkdir(appname.c_str()) == 0) {
+      auto err = PHYSFS_getLastErrorCode();
       PUtil::outLog() << "Failed to create directory \"" << appname << "\"" << std::endl
-          << "PhysFS: " << PHYSFS_getLastError() << std::endl;
+          << "PhysFS: " << err << " - " << PHYSFS_getErrorByCode(err) << std::endl;
     }
 #endif
     
@@ -171,14 +174,16 @@ int PApp::run(int argc, char *argv[])
     PUtil::outLog() << "Reset writable user directory to \"" << lsdbuff << "\"" << std::endl;
     
     if (PHYSFS_setWriteDir(lsdbuff.c_str()) == 0) {
+      auto err = PHYSFS_getLastErrorCode();
       PUtil::outLog() << "Failed to set PhysFS writable directory to \"" << lsdbuff << "\"" << std::endl
-          << "PhysFS: " << PHYSFS_getLastError() << std::endl;
+          << "PhysFS: " << err << " - " << PHYSFS_getErrorByCode(err) << std::endl;
     }
     
     if (PHYSFS_mkdir("/players") == 0)
     {
+        auto err = PHYSFS_getLastErrorCode();
         PUtil::outLog() << "Failed to create directory \"/players\"" << std::endl
-            << "PhysFS: " << PHYSFS_getLastError() << std::endl;
+            << "PhysFS: " << err << " - " << PHYSFS_getErrorByCode(err) << std::endl;
     }
     
     // Adding "." to the search path seems to add more trouble than it's worth
@@ -191,14 +196,16 @@ int PApp::run(int argc, char *argv[])
     
     std::string basedir = PHYSFS_getBaseDir();
     PUtil::outLog() << "Application base directory \"" << basedir << '\"' << std::endl;
-    if (PHYSFS_addToSearchPath(basedir.c_str(), 1) == 0) {
+    if (PHYSFS_mount(basedir.c_str(), NULL, 1) == 0) {
+      auto err = PHYSFS_getLastErrorCode();
       PUtil::outLog() << "Failed to add PhysFS search directory \"" << basedir << "\"" << std::endl
-          << "PhysFS: " << PHYSFS_getLastError() << std::endl;
+          << "PhysFS: " << err << " - " << PHYSFS_getErrorByCode(err) << std::endl;
     }
     
-    if (PHYSFS_addToSearchPath(lsdbuff.c_str(), 1) == 0) {
+    if (PHYSFS_mount(lsdbuff.c_str(), NULL, 1) == 0) {
+      auto err = PHYSFS_getLastErrorCode();
       PUtil::outLog() << "Failed to add PhysFS search directory \"" << lsdbuff << "\"" << std::endl
-          << "PhysFS: " << PHYSFS_getLastError() << std::endl;
+          << "PhysFS: " << err << " - " << PHYSFS_getErrorByCode(err) << std::endl;
     }
 
     // we run MainApp::config() here in order to add data dirs to PhysFS search path
@@ -211,7 +218,10 @@ int PApp::run(int argc, char *argv[])
         PUtil::outLog() << "Config failed: " << e.what() << std::endl;
         
         if (PHYSFS_deinit() == 0)
-            PUtil::outLog() << "PhysFS: " << PHYSFS_getLastError() << std::endl;
+        {
+            auto err = PHYSFS_getLastErrorCode();
+            PUtil::outLog() << "PhysFS: " << err << " - " << PHYSFS_getErrorByCode(err) << std::endl;
+        }
 
         return 1;
     }
@@ -227,13 +237,15 @@ int PApp::run(int argc, char *argv[])
       if (realpath) {
         std::string fullpath = (std::string)realpath + *i;
         
-        if (PHYSFS_addToSearchPath(fullpath.c_str(), 1) == 0) {
+        if (PHYSFS_mount(fullpath.c_str(), NULL, 1) == 0) {
+          auto err = PHYSFS_getLastErrorCode();
           PUtil::outLog() << "Failed to add archive \"" << fullpath << "\"" << std::endl
-              << "PhysFS: " << PHYSFS_getLastError() << std::endl;
+              << "PhysFS: " << err << " - " << PHYSFS_getErrorByCode(err) << std::endl;
         }
       } else {
+        auto err = PHYSFS_getLastErrorCode();
         PUtil::outLog() << "Failed to find path of archive \"" << *i << "\"" << std::endl
-            << "PhysFS: " << PHYSFS_getLastError() << std::endl;
+            << "PhysFS: " << err << " - " << PHYSFS_getErrorByCode(err) << std::endl;
       }
     }
   }
@@ -331,7 +343,8 @@ int PApp::run(int argc, char *argv[])
     PUtil::outLog() << "Try changing your video settings in trigger-rally.config" << std::endl;
     SDL_Quit();
     if (PHYSFS_deinit() == 0) {
-      PUtil::outLog() << "PhysFS: " << PHYSFS_getLastError() << std::endl;
+      auto err = PHYSFS_getLastErrorCode();
+      PUtil::outLog() << "PhysFS: " << err << " - " << PHYSFS_getErrorByCode(err) << std::endl;
     }
     return 1;
   }
@@ -346,8 +359,10 @@ int PApp::run(int argc, char *argv[])
         SDL_Quit();
 
         if (PHYSFS_deinit() == 0)
-            PUtil::outLog() << "PhysFS: " << PHYSFS_getLastError() << std::endl;
-
+		{
+			auto err = PHYSFS_getLastErrorCode();
+            PUtil::outLog() << "PhysFS: " << err << " - " << PHYSFS_getErrorByCode(err) << std::endl;
+		}
         return 1;
     }
   
@@ -367,7 +382,8 @@ int PApp::run(int argc, char *argv[])
       SDL_DestroyWindow(screen);
       SDL_Quit();
       if (PHYSFS_deinit() == 0) {
-        PUtil::outLog() << "PhysFS: " << PHYSFS_getLastError() << std::endl;
+		auto err = PHYSFS_getLastErrorCode();
+        PUtil::outLog() << "PhysFS: " << err << " - " << PHYSFS_getErrorByCode(err) << std::endl;
       }
       return 1;
     }
@@ -404,7 +420,8 @@ int PApp::run(int argc, char *argv[])
     SDL_DestroyWindow(screen);
     SDL_Quit();
     if (PHYSFS_deinit() == 0) {
-      PUtil::outLog() << "PhysFS: " << PHYSFS_getLastError() << std::endl;
+	  auto err = PHYSFS_getLastErrorCode();
+      PUtil::outLog() << "PhysFS: " << err << " - " << PHYSFS_getErrorByCode(err) << std::endl;
     }
     return 1;
   }
@@ -466,7 +483,8 @@ int PApp::run(int argc, char *argv[])
 
     if (PHYSFS_deinit() == 0)
     {
-      PUtil::outLog () << "PhysFS: " << PHYSFS_getLastError() << std::endl;
+	  auto err = PHYSFS_getLastErrorCode();
+      PUtil::outLog () << "PhysFS: " << err << " - " << PHYSFS_getErrorByCode(err) << std::endl;
     }
 
     return 1;
@@ -492,7 +510,8 @@ int PApp::run(int argc, char *argv[])
     SDL_Quit();
 
     if (PHYSFS_deinit() == 0) {
-      PUtil::outLog() << "PhysFS: " << PHYSFS_getLastError() << std::endl;
+	  auto err = PHYSFS_getLastErrorCode();
+      PUtil::outLog() << "PhysFS: " << err << " - " << PHYSFS_getErrorByCode(err) << std::endl;
     }
 
     return 1;
@@ -730,12 +749,13 @@ int PApp::run(int argc, char *argv[])
         PUtil::outLog() << "Writing screenshot \"" << filename << "\"" << std::endl;
         PHYSFS_file* pfile = PHYSFS_openWrite(filename);
         if (pfile) {
-          PHYSFS_write(pfile, buff, sizeof (char), strlen(buff));
-          PHYSFS_write(pfile, data1, sizeof (char), cx*cy*3);
+          PHYSFS_writeBytes(pfile, buff, sizeof (char) * strlen(buff));
+          PHYSFS_writeBytes(pfile, data1, sizeof (char) * cx*cy*3);
           PHYSFS_close(pfile);
         } else {
           PUtil::outLog() << "Screenshot write failed" << std::endl;
-          PUtil::outLog() << "PhysFS: " << PHYSFS_getLastError() << std::endl;
+		  auto err = PHYSFS_getLastErrorCode();
+          PUtil::outLog() << "PhysFS: " << err << " - " << PHYSFS_getErrorByCode(err) << std::endl;
         }
         delete[] data1;
         screenshot_requested = false;
@@ -768,7 +788,8 @@ int PApp::run(int argc, char *argv[])
   best_times.savePlayer();
   
   if (PHYSFS_deinit() == 0) {
-    PUtil::outLog() << "PhysFS: " << PHYSFS_getLastError() << std::endl;
+	auto err = PHYSFS_getLastErrorCode();
+    PUtil::outLog() << "PhysFS: " << err << " - " << PHYSFS_getErrorByCode(err) << std::endl;
   }
   
   PUtil::outLog() << "Shutdown complete" << std::endl;

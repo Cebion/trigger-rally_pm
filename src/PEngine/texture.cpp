@@ -73,7 +73,8 @@ void PImage::load (const std::string &filename)
   PHYSFS_file *pfile = PHYSFS_openRead(filename.c_str());
   
   if (pfile == nullptr) {
-    throw MakePException (filename + ", PhysFS: " + PHYSFS_getLastError ());
+	auto err = PHYSFS_getLastErrorCode();
+    throw MakePException (filename + ", PhysFS: " + std::to_string(err) + " - " + PHYSFS_getErrorByCode(err));
   }
   
   SDL_RWops *rwops = PUtil::allocPhysFSops(pfile);

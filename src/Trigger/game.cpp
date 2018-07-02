@@ -4,9 +4,34 @@
 // Copyright 2004-2006 Jasmine Langridge, jas@jareiko.net
 // License: GPL version 2 (see included gpl.txt)
 
-
-
 #include "main.h"
+
+// size of the checkpoints
+#define CODRIVER_CHECKPOINT_RADIUS 20
+#define CHECKPOINT_RADIUS 30
+
+// default values for the simulation
+#define DEF_GRAVITY vec3f(0, 0, -9.81)
+#define DEF_START_POS vec3f::zero();
+#define DEF_START_ORI quatf::identity();
+#define DEF_NUM_LAPS 1
+#define DEF_TARGET_TIME 754.567f
+#define DEF_CLOUD_SCROLLRATE 0.001
+#define DEF_FOG_COLOR vec3f(1,1,1)
+#define DEF_FOG_DENSITY 0.01
+#define DEF_FOG_DENSITY_SKY 0.8
+#define DEF_RAIN 0
+#define DEF_SNOWFALL 0
+#define DEF_WATER_ENABLED false
+#define DEF_WATER_HEIGHT 0
+#define DEF_WATER_USERALPHA false
+#define DEF_WATER_ALPHA 1
+#define DEF_WATER_FIXEDALPHA false
+
+#define DEF_CD_CHECKPT_ORDERED true
+
+// When the race finishes, how much time to wait before quitting
+#define ENDGAME_TIMER 5
 
 
 TriggerGame::TriggerGame(MainApp *parent):
@@ -97,30 +122,28 @@ bool TriggerGame::loadLevel(const std::string &filename)
 		sim = new PSim();
   
 	// set default values
-	sim->setGravity(vec3f(0.0,0.0,-9.81));
+	sim->setGravity(DEF_GRAVITY);
   
-	start_pos = vec3f::zero();
-	start_ori = quatf::identity();
+	start_pos = DEF_START_POS;
+	start_ori = DEF_START_ORI;
   
-	number_of_laps = 1;
-	targettime = 754.567f;
+	number_of_laps = DEF_NUM_LAPS;
+	targettime = DEF_TARGET_TIME;
+	
+	weather.cloud.scrollrate = DEF_CLOUD_SCROLLRATE;
+	weather.fog.color = DEF_FOG_COLOR;
+	weather.fog.density = DEF_FOG_DENSITY;
+	weather.fog.density_sky = DEF_FOG_DENSITY_SKY;
+	weather.precip.rain = DEF_RAIN;
+	weather.precip.snowfall = DEF_SNOWFALL;
   
-	weather.cloud.texname = std::string("");
-	weather.cloud.scrollrate = 0.001f;
-	weather.fog.color = vec3f(1.0f, 1.0f, 1.0f);
-	weather.fog.density = 0.01f;
-	weather.fog.density_sky = 0.8f;
-	weather.precip.rain = 0.0f;
-	weather.precip.snowfall = 0.0f;
+	water.enabled = DEF_WATER_ENABLED;
+	water.height = DEF_WATER_HEIGHT;
+	water.useralpha = DEF_WATER_USERALPHA;
+	water.alpha = DEF_WATER_ALPHA;
+	water.fixedalpha = DEF_WATER_FIXEDALPHA;
   
-	water.enabled = false;
-	water.height = 0.0f;
-	water.texname = "";
-	water.useralpha = false;
-	water.alpha = 1.0f;
-	water.fixedalpha = false;
-  
-	cdcheckpt_ordered = false;
+	cdcheckpt_ordered = DEF_CD_CHECKPT_ORDERED;
   
 	XMLDocument xmlfile;
 	XMLElement *rootelem = PUtil::loadRootElement(xmlfile, filename, "level");
@@ -406,11 +429,11 @@ bool TriggerGame::loadLevel(const std::string &filename)
 	// activate vehicle brakes
 	for (unsigned int i=0; i<vehicle.size(); i++) {
 		vehicle[i]->ctrl.brake1 = 1.0f;
+		vehicle[i]->ctrl.brake2 = 1.0f;
 	}
   
 	// do two seconds of simulations to have fine cars on ground
-	for (float t = 0.0f; t < 2.0f; t += 0.01f)
-		sim->tick(0.01f);
+	sim->tick(2);
   
   /*
   for (int i=1; i<vehicle.size(); i++) {
@@ -465,8 +488,8 @@ void TriggerGame::tick(float delta)
 			if (othertime <= 0.0f)
 			{
 				// make the race start
-				// this 5 seconds are the one used when the race finishes (see "case GS_FINISHED:")
-				othertime = 5.0f;
+				// this seconds are the one used when the race finishes (see "case GS_FINISHED:")
+				othertime = ENDGAME_TIMER;
 				gamestate = Gamestate::racing;
 			}
 			
@@ -548,7 +571,7 @@ void TriggerGame::tick(float delta)
 		}
 
 		// if the vehicle get a checkpoint
-		if (diff.lengthsq() < 30.0f * 30.0f)
+		if (diff.lengthsq() < CHECKPOINT_RADIUS * CHECKPOINT_RADIUS)
 		{
 			//vehicle[i]->nextcp = (vehicle[i]->nextcp + 1) % checkpt.size();
 			// update last checkpoint informations
@@ -579,7 +602,7 @@ void TriggerGame::tick(float delta)
 				diff = makevec2f(codrivercheckpt[vehicle[i]->nextcdcp].pt) - makevec2f(vehicle[i]->body->getPosition());
 
 				// if the vehicle is enought close the checkpoint
-				if (diff.lengthsq() < 20.0f * 20.0f)
+				if (diff.lengthsq() < CODRIVER_CHECKPOINT_RADIUS * CODRIVER_CHECKPOINT_RADIUS)
 				{
 					// Codriver says the notes
 					cdvoice.say(codrivercheckpt[vehicle[i]->nextcdcp].notes);
@@ -604,7 +627,8 @@ void TriggerGame::tick(float delta)
 					diff = makevec2f(codrivercheckpt[j].pt) - makevec2f(vehicle[i]->body->getPosition());
 
 					// if it is close enought 
-					if (diff.lengthsq() < 20.0f * 20.0f && static_cast<int> (j + 1) != vehicle[i]->nextcdcp)
+					if (diff.lengthsq() < CODRIVER_CHECKPOINT_RADIUS * CODRIVER_CHECKPOINT_RADIUS &&
+						static_cast<int> (j + 1) != vehicle[i]->nextcdcp)
 					{
 						// say the notes
 						cdvoice.say(codrivercheckpt[j].notes);

@@ -235,7 +235,7 @@ public:
             PHYSFS_File *pfile = PHYSFS_openRead((searchdir + '/' + *fname).c_str()); // Player File
             std::string pdata(PHYSFS_fileLength(pfile), '\0'); // Player Data
 
-            PHYSFS_read(pfile, &pdata.front(), sizeof (char), pdata.size());
+            PHYSFS_readBytes(pfile, &pdata.front(), sizeof (char) * pdata.size());
             readPlayerData(pname, pdata);
             PHYSFS_close(pfile);
         }
@@ -800,7 +800,7 @@ private:
         }
 #endif
 
-        PHYSFS_write(pfile, sspdata.str().data(), sizeof (char), sspdata.str().size());
+        PHYSFS_writeBytes(pfile, sspdata.str().data(), sizeof (char) * sspdata.str().size());
         PHYSFS_close(pfile);
     }
 

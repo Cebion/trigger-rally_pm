@@ -37,7 +37,8 @@ Sint64 physfs_seek(SDL_RWops *context, Sint64 offset, int whence)
   
     Sint64 result = PHYSFS_seek(pfile, target);
     if (! result) {
-        throw MakePException("Error seeking: " + PHYSFS_getLastError());
+		auto err = PHYSFS_getLastErrorCode();
+        throw MakePException("Error seeking: " + std::to_string(err) + " - " + PHYSFS_getErrorByCode(err));
     }
     
     return PHYSFS_tell(pfile);
@@ -52,7 +53,7 @@ size_t physfs_read(SDL_RWops *context, void *ptr, size_t size, size_t maxnum)
 {
   PHYSFS_file *pfile = (PHYSFS_file *)context->hidden.unknown.data1;
   
-  const Sint64 r = PHYSFS_read(pfile, ptr, size, maxnum);
+  const Sint64 r = PHYSFS_readBytes(pfile, ptr, size * maxnum);
   
   // reading 0 bytes is considered an error now, thanks SDL2!
   return r == -1 ? 0 : r;
@@ -63,7 +64,7 @@ size_t physfs_write(SDL_RWops *context, const void *ptr, size_t size, size_t num
 {
   PHYSFS_file *pfile = (PHYSFS_file *)context->hidden.unknown.data1;
   
-  return PHYSFS_write(pfile, ptr, size, num);
+  return PHYSFS_writeBytes(pfile, ptr, size * num);
 }
 
 

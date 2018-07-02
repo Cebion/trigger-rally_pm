@@ -121,7 +121,8 @@ void PEffect::loadMTL(const std::string &filename)
    if(pfile == nullptr)
    {
       con_printf("Cannot find effect file \"%s\"\n",filename);
-      throw MakePException ("PhysFS: " + PHYSFS_getLastError());
+	  auto err = PHYSFS_getLastErrorCode();
+      throw MakePException ("PhysFS: " + std::to_string(err) + " - " + PHYSFS_getErrorByCode(err));
    }
 
    name = filename;
@@ -188,7 +189,8 @@ void PEffect::loadFX(const std::string &filename)
   PHYSFS_file *pfile = PHYSFS_openRead(filename.c_str());
   if (pfile == nullptr) {
     con_printf("Cannot find effect file \"%s\"\n",filename);
-    throw MakePException ("PhysFS: " + PHYSFS_getLastError());
+	auto err = PHYSFS_getLastErrorCode();
+    throw MakePException ("PhysFS: " + std::to_string(err) + " - " + PHYSFS_getErrorByCode(err));
   }
   
   name = filename;
@@ -197,7 +199,7 @@ void PEffect::loadFX(const std::string &filename)
 
   char *source = new char [leng+1];
   
-  PHYSFS_read(pfile, source, sizeof (char), leng);
+  PHYSFS_readBytes(pfile, source, sizeof(char) * leng);
   PHYSFS_close(pfile);
 
   source[leng] = '\0';
@@ -235,8 +237,9 @@ void PEffect::loadFX(const std::string &filename)
   char buff1[512];
   char *scan = (char*)source;
   char *token;
-  char detail[512] = "parse error";
-
+  //char detail[512] = "parse error";
+  char detail[537] = "parse error";
+  
   int linec = 1;
   bool parseerror = false;
 

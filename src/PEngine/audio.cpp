@@ -184,14 +184,15 @@ PAudioSample::PAudioSample(const std::string &filename, bool positional3D)
 
     if (!pfile)
     {
-        throw MakePException ("Load failed: PhysFS: " + PHYSFS_getLastError());
+		auto err = PHYSFS_getLastErrorCode();
+        throw MakePException ("Load failed: PhysFS: " + std::to_string(err) + " - " + PHYSFS_getErrorByCode(err));
     }
 
     int filesize = PHYSFS_fileLength(pfile);
 
     char *wavbuffer = new char[filesize];
 
-    PHYSFS_read(pfile, wavbuffer, sizeof (char), filesize);
+    PHYSFS_readBytes(pfile, wavbuffer, sizeof (char) * filesize);
     PHYSFS_close(pfile);
 
     /* create the alut buffer from memory contents */
@@ -314,7 +315,8 @@ FMOD_RESULT F_CALLBACK fmod_file_open(const char *name, unsigned int *filesize, 
 
     if (*handle == nullptr)
     {
-        PUtil::outLog() << "PhysFS: " << PHYSFS_getLastError() << std::endl;
+		auto err = PHYSFS_getLastErrorCode();
+        PUtil::outLog() << "PhysFS: " << err << " - " << PHYSFS_getErrorByCode(err) << std::endl;
         return FMOD_ERR_FILE_BAD;
     }
 
@@ -341,7 +343,8 @@ FMOD_RESULT F_CALLBACK fmod_file_read(void *handle, void *buffer, unsigned int s
 
     if (numbytes == -1)
     {
-        PUtil::outLog() << "PhysFS: " << PHYSFS_getLastError() << std::endl;
+		auto err = PHYSFS_getLastErrorCode();
+        PUtil::outLog() << "PhysFS: " << err << " - " << PHYSFS_getErrorByCode(err) << std::endl;
         return FMOD_ERR_FILE_ENDOFDATA;
     }
 
@@ -355,7 +358,8 @@ FMOD_RESULT F_CALLBACK fmod_file_seek(void *handle, unsigned int pos, void *user
 
     if (PHYSFS_seek(reinterpret_cast<PHYSFS_File *> (handle), pos) == 0)
     {
-        PUtil::outLog() << "PhysFS: " << PHYSFS_getLastError() << std::endl;
+		auto err = PHYSFS_getLastErrorCode();
+        PUtil::outLog() << "PhysFS: " << err << " - " << PHYSFS_getErrorByCode(err) << std::endl;
         return FMOD_ERR_FILE_COULDNOTSEEK;
     }
 
@@ -577,7 +581,8 @@ PAudioSample::PAudioSample(const std::string &filename, bool positional3D)
 
     if (!pfile)
     {
-        PUtil::outLog() << "Load failed: PhysFS: " << PHYSFS_getLastError() << std::endl;
+		auto err = PHYSFS_getLastErrorCode();
+        PUtil::outLog() << "Load failed: PhysFS: " << err << " - " << PHYSFS_getErrorByCode(err) << std::endl;
         throw PFileException ();
     }
 

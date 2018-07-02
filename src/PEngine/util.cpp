@@ -136,7 +136,7 @@ char* PUtil::fgets2(char *s, int size, PHYSFS_file *pfile)
     // check for EOF
     if (PHYSFS_eof(pfile)) return nullptr;
 
-    int ret = PHYSFS_read(pfile, s + i, sizeof (char), 1);
+    int ret = PHYSFS_readBytes(pfile, s + i, sizeof(char));
 
     if (s[i] == '\n') break;
 
@@ -211,7 +211,8 @@ XMLElement *PUtil::loadRootElement(XMLDocument &doc, const std::string &filename
 {
   PHYSFS_file *pfile = PHYSFS_openRead(filename.c_str());
   if (pfile == nullptr) {
-    PUtil::outLog() << "Load failed: PhysFS: " << PHYSFS_getLastError() << std::endl;
+    auto err = PHYSFS_getLastErrorCode();
+    PUtil::outLog() << "Load failed: PhysFS: " << err << " - " << PHYSFS_getErrorByCode(err) << std::endl;
     return nullptr;
   }
 
@@ -219,7 +220,7 @@ XMLElement *PUtil::loadRootElement(XMLDocument &doc, const std::string &filename
 
   char *xmlbuffer = new char[filesize + 1];
 
-  PHYSFS_read(pfile, xmlbuffer, sizeof (char), filesize);
+  PHYSFS_readBytes(pfile, xmlbuffer, sizeof (char) * filesize);
   PHYSFS_close(pfile);
 
   xmlbuffer[filesize] = '\0';
@@ -252,7 +253,8 @@ bool PUtil::copyFile(const std::string &fileFrom, const std::string &fileTo)
   pfile_from = PHYSFS_openRead(fileFrom.c_str());
 
   if (!pfile_from) {
-    PUtil::outLog() << "Copy failed: PhysFS: " << PHYSFS_getLastError() << std::endl;
+	auto err = PHYSFS_getLastErrorCode();
+    PUtil::outLog() << "Copy failed: PhysFS: " << err << " - " << PHYSFS_getErrorByCode(err) << std::endl;
     return false;
   }
 
@@ -261,10 +263,11 @@ bool PUtil::copyFile(const std::string &fileFrom, const std::string &fileTo)
   std::string filepath = extractPathFromFilename(fileTo);
 
   if (!PHYSFS_mkdir(filepath.c_str())) {
-    const char *errstr = PHYSFS_getLastError();
-    if (strcmp(errstr, "File exists")) {
+	auto err = PHYSFS_getLastErrorCode();
+	std::string errstr = PHYSFS_getErrorByCode(err);
+    if (strcmp(errstr.c_str(), "File exists")) {
       PUtil::outLog() << "Couldn't mkdir \"" << filepath << "\", attempting copy anyway" << std::endl;
-      PUtil::outLog() << "PhysFS: " << errstr << std::endl;
+      PUtil::outLog() << "PhysFS: " << err << " - " << errstr << std::endl;
     }
   }
 
@@ -274,7 +277,8 @@ bool PUtil::copyFile(const std::string &fileFrom, const std::string &fileTo)
 
   if (!pfile_to) {
     PHYSFS_close(pfile_from);
-    PUtil::outLog() << "Copy failed: PhysFS: " << PHYSFS_getLastError() << std::endl;
+	auto err = PHYSFS_getLastErrorCode();
+    PUtil::outLog() << "Copy failed: PhysFS: " << err << " - " << PHYSFS_getErrorByCode(err) << std::endl;
     return false;
   }
 
@@ -286,9 +290,9 @@ bool PUtil::copyFile(const std::string &fileFrom, const std::string &fileTo)
   int readcount;
   do {
 
-    readcount = PHYSFS_read(pfile_from, block, sizeof (char), blocksize);
+    readcount = PHYSFS_readBytes(pfile_from, block, sizeof (char) * blocksize);
 
-    PHYSFS_write(pfile_to, block, sizeof (char), readcount);
+    PHYSFS_writeBytes(pfile_to, block, sizeof (char) * readcount);
 
   } while (readcount == blocksize);
 
