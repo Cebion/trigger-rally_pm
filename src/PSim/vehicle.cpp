@@ -47,6 +47,31 @@
 #define FRICTION_MAGIC_COEFF 10000
 
 ///
+/// @brief PVehicleWheel constructor
+///
+PVehicleWheel::PVehicleWheel()
+{
+	reset();
+}
+
+/// @brief reset wheel status
+void PVehicleWheel::reset()
+{
+	ride_pos = 0;
+	ride_vel = 0;
+	spin_pos = 0;
+	spin_vel = 0;
+	turn_pos = 0;
+	bumplast = 0;
+	bumpnext = 0;
+	bumptravel = 0;
+	skidding = 0;
+	dirtthrow = 0;
+	dirtthrowpos = vec3f::zero();
+	dirtthrowvec = vec3f::zero();
+}
+
+///
 /// @brief load a vehicle type from a file
 ///
 bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
@@ -479,7 +504,10 @@ PVehicle::PVehicle(PSim &sim_parent, PVehicleType *_type) :
 	crunch_level(0.0f),
 	crunch_level_prev(0.0f),
 	forwardspeed(0.0f),
-	wheel_angvel(0.0f)
+	wheel_angvel(0.0f),
+	offroadtime_begin(0),
+	offroadtime_end(0),
+	offroadtime_total(0)
 {
 	// vehicle mass is approximately meant to be cuboid
 	body->setMassCuboid(type->mass, type->dims);
@@ -527,44 +555,15 @@ void PVehicle::doReset()
 
   reset_ori = temp;
 
-  // set a reset time again
-  reset_time = VEHICLE_RESET_TIME;
-
-  crunch_level = 0.0f;
-  crunch_level_prev = 0.0f;
-
-  // stop all the wheels
-  for (unsigned int i=0; i<part.size(); i++) {
-    for (unsigned int j=0; j<part[i].wheel.size(); j++) {
-      part[i].wheel[j].spin_vel = 0.0f;
-      part[i].wheel[j].spin_pos = 0.0f;
-      part[i].wheel[j].ride_vel = 0.0f;
-      part[i].wheel[j].ride_pos = 0.0f;
-      part[i].wheel[j].turn_pos = 0.0f;
-      part[i].wheel[j].skidding = 0.0f;
-      part[i].wheel[j].dirtthrow = 0.0f;
-    }
-  }
-
-  // stop
-  forwardspeed = 0.0f;
-  wheel_angvel = 0.0f;
-  wheel_speed = 0.0f;
-
-  // reset engine
-  iengine.doReset();
-
-  // control state
-  state.setZero();
+  reset();
 }
 
 ///
 /// @brief reset the vehicle to a specific point (used when the 'recover' button is pressed)
 /// @param pos = the position where the vehicle has to be set
 /// @param ori = the orientation the vehicle has to be set
-/// @todo this share much code with doReset(), maybe we should do something about it?
 ///
-void PVehicle::doReset2(const vec3f &pos, const quatf &ori)
+void PVehicle::doReset(const vec3f &pos, const quatf &ori)
 {
   // some time has to pass before reset
   if (reset_time != 0.0f) return;
@@ -579,34 +578,36 @@ void PVehicle::doReset2(const vec3f &pos, const quatf &ori)
 
   reset_ori = temp;
 
-  // set a reset time again
-  reset_time = VEHICLE_RESET_TIME;
+  reset();
+}
 
-  crunch_level = 0.0f;
-  crunch_level_prev = 0.0f;
+void PVehicle::reset()
+{
+	// set a reset time
+	reset_time = VEHICLE_RESET_TIME;
 
-  // stop all the wheels
-  for (unsigned int i=0; i<part.size(); i++) {
-    for (unsigned int j=0; j<part[i].wheel.size(); j++) {
-      part[i].wheel[j].spin_vel = 0.0f;
-      part[i].wheel[j].spin_pos = 0.0f;
-      part[i].wheel[j].ride_vel = 0.0f;
-      part[i].wheel[j].ride_pos = 0.0f;
-      part[i].wheel[j].turn_pos = 0.0f;
-      part[i].wheel[j].skidding = 0.0f;
-      part[i].wheel[j].dirtthrow = 0.0f;
-    }
-  }
+	// reset noise level
+	crunch_level = 0;
+	crunch_level_prev = 0;
 
-  // stop
-  forwardspeed = 0.0f;
-  wheel_angvel = 0.0f;
-  wheel_speed = 0.0f;
+	// stop all the wheels
+	for (unsigned int i=0; i<part.size(); i++) {
+		for (unsigned int j=0; j<part[i].wheel.size(); j++) {
+			part[i].wheel[j].reset();
+		}
+	}
 
-  // reset engine
-  iengine.doReset();
+	// stop
+	forwardspeed = 0;
+	wheel_angvel = 0;
+	wheel_speed = 0;
+	skid_level = 0;
 
-  state.setZero();
+	// reset engine
+	iengine.doReset();
+
+	// reset controls
+	state.setZero();
 }
 
 ///
@@ -1103,8 +1104,7 @@ void PVehicle::tick(const float& delta)
           downward.normalize();
 
           // where to throw dirt
-          wheel.dirtthrowpos = wheel.ref_world.getPosition() +
-            downward * typewheel.radius;
+          wheel.dirtthrowpos = wheel.ref_world_lowest_point.getPosition();
           // how much fast throw
           wheel.dirtthrowvec =
             body->getLinearVelAtPoint(wheel.dirtthrowpos) +

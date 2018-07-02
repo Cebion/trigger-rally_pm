@@ -214,9 +214,8 @@ public:
 ///
 /// @brief Class representing a wheel of a vehicle
 ///
-class PVehicleWheel {
+struct PVehicleWheel {
 
-public:
 	// suspension position
 	float ride_pos;
 	// suspension position changing velocity
@@ -239,16 +238,10 @@ public:
     // bump travel is the current velocity from bumplast to bumpnext
 	float bumplast, bumpnext, bumptravel;
   
-	PVehicleWheel() {
-		ride_pos = 0.0f;
-		ride_vel = 0.0f;
-		spin_pos = 0.0f;
-		spin_vel = 0.0f;
-		turn_pos = 0.0f;
-		bumplast = 0.0f;
-		bumpnext = 0.0f;
-		bumptravel = 0.0f;
-	}
+	PVehicleWheel();
+	
+	// reset wheel to default
+	void reset();
 	
 	// get the lowest point of the wheel (the one that will touch the ground)
 	vec3f getLowestPoint();
@@ -271,8 +264,6 @@ struct PVehiclePart {
 /// @brief store a vehicle instance
 ///
 class PVehicle {
-//class PVehicle : public NetObject {
-//typedef NetObject Parent;
   
 public:
   // physic simulation information
@@ -323,21 +314,12 @@ public:
   float skid_level;
   
   // when a vehicle starts going offroad this time is set (to know how much time has spent offroad)
-  float offroadtime_begin   = 0.0f;
+  float offroadtime_begin;
   // when a vehicle stops going offroad this time is set (to know how much time has spent offroad)
-  float offroadtime_end     = 0.0f;
+  float offroadtime_end;
   // total time offroad
-  float offroadtime_total   = 0.0f;
+  float offroadtime_total;
   
-public:
-/*  
-  enum StateBits {
-    InitialBit = BIT(0),
-    KinematicsBit = BIT(1),
-    ControlBit = BIT(2),
-  };
-*/
-public:
   PVehicle(PSim &sim_parent, PVehicleType *_type);
   //~PVehicle() { unload(); } // body unloaded by sim
   
@@ -354,14 +336,16 @@ public:
   // simulate for 'delta' seconds
   void tick(const float& delta);
   
+  // check if a wheel touches the ground so that can have a dust trail
   bool canHaveDustTrail();
   
+  // update world reference of parts and wheels
   void updateParts();
   
-  // reset the car when it get flipped or something
+  // reset the car in place
   void doReset();
-  // reset the car when 'q' is pressed
-  void doReset2(const vec3f &pos, const quatf &ori);
+  // reset the car to a custom position and orientation
+  void doReset(const vec3f &pos, const quatf &ori);
   
   float getEngineRPM() { return iengine.getEngineRPM(); }
   int getCurrentGear() { return iengine.getCurrentGear(); }
@@ -377,4 +361,9 @@ public:
   }
   float getWheelSpeed() { return wheel_speed; }
   float getSkidLevel() { return skid_level; }
+
+private:
+	// subroutines that reset and stops status of the car
+	// it's more low level that the doReset() one
+	void reset();
 };

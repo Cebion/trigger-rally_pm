@@ -195,7 +195,7 @@ public:
 
 	void resetAtCheckpoint(PVehicle *veh)
 	{
-		veh->doReset2(lastCkptPos, lastCkptOri);
+		veh->doReset(lastCkptPos, lastCkptOri);
 	}
 
 	void renderCodriverSigns()
