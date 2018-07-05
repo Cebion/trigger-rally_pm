@@ -6,7 +6,7 @@
 
 
 #include "pengine.h"
-
+#include "physfs_utils.h"
 #include "main.h"
 
 #include <SDL2/SDL_image.h>
@@ -73,8 +73,7 @@ void PImage::load (const std::string &filename)
   PHYSFS_file *pfile = PHYSFS_openRead(filename.c_str());
   
   if (pfile == nullptr) {
-	auto err = PHYSFS_getLastErrorCode();
-    throw MakePException (filename + ", PhysFS: " + std::to_string(err) + " - " + PHYSFS_getErrorByCode(err));
+    throw MakePException (filename + ", PhysFS: " + physfs_getErrorString());
   }
   
   SDL_RWops *rwops = PUtil::allocPhysFSops(pfile);

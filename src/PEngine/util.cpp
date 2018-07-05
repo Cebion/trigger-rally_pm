@@ -6,6 +6,7 @@
 
 
 #include "pengine.h"
+#include "physfs_utils.h"
 
 ///
 /// @brief Returns the road surface based on the RGB color.
@@ -211,8 +212,7 @@ XMLElement *PUtil::loadRootElement(XMLDocument &doc, const std::string &filename
 {
   PHYSFS_file *pfile = PHYSFS_openRead(filename.c_str());
   if (pfile == nullptr) {
-    auto err = PHYSFS_getLastErrorCode();
-    PUtil::outLog() << "Load failed: PhysFS: " << err << " - " << PHYSFS_getErrorByCode(err) << std::endl;
+    PUtil::outLog() << "Load failed: PhysFS: " << physfs_getErrorString() << std::endl;
     return nullptr;
   }
 
@@ -253,8 +253,7 @@ bool PUtil::copyFile(const std::string &fileFrom, const std::string &fileTo)
   pfile_from = PHYSFS_openRead(fileFrom.c_str());
 
   if (!pfile_from) {
-	auto err = PHYSFS_getLastErrorCode();
-    PUtil::outLog() << "Copy failed: PhysFS: " << err << " - " << PHYSFS_getErrorByCode(err) << std::endl;
+    PUtil::outLog() << "Copy failed: PhysFS: " << physfs_getErrorString() << std::endl;
     return false;
   }
 
@@ -263,11 +262,18 @@ bool PUtil::copyFile(const std::string &fileFrom, const std::string &fileTo)
   std::string filepath = extractPathFromFilename(fileTo);
 
   if (!PHYSFS_mkdir(filepath.c_str())) {
+	#if PHYSFS_VER_MAJOR >= 3
 	auto err = PHYSFS_getLastErrorCode();
 	std::string errstr = PHYSFS_getErrorByCode(err);
-    if (strcmp(errstr.c_str(), "File exists")) {
+	std::string debugstr = err + " - " + errstr;
+	// version 2.x and downwards
+	#else
+	std::string errstr = PHYSFS_getLastError();
+	std::string debugstr = errstr;
+	#endif
+    if (errstr == "File exists") {
       PUtil::outLog() << "Couldn't mkdir \"" << filepath << "\", attempting copy anyway" << std::endl;
-      PUtil::outLog() << "PhysFS: " << err << " - " << errstr << std::endl;
+      PUtil::outLog() << "PhysFS: " << debugstr << std::endl;
     }
   }
 
@@ -277,8 +283,7 @@ bool PUtil::copyFile(const std::string &fileFrom, const std::string &fileTo)
 
   if (!pfile_to) {
     PHYSFS_close(pfile_from);
-	auto err = PHYSFS_getLastErrorCode();
-    PUtil::outLog() << "Copy failed: PhysFS: " << err << " - " << PHYSFS_getErrorByCode(err) << std::endl;
+    PUtil::outLog() << "Copy failed: PhysFS: " << physfs_getErrorString() << std::endl;
     return false;
   }
 
@@ -390,14 +395,6 @@ std::string PUtil::formatTimeShort(float seconds)
 
     return formatInt(time_mins) + ':' + formatInt(time_secs, 2);
 }
-
-// These are implemented over in physfs_rw.cpp
-
-Sint64 physfs_size(SDL_RWops *context);
-Sint64 physfs_seek(SDL_RWops *context, Sint64 offset, int whence);
-size_t physfs_read(SDL_RWops *context, void *ptr, size_t size, size_t maxnum);
-size_t physfs_write(SDL_RWops *context, const void *ptr, size_t size, size_t num);
-int physfs_close(SDL_RWops *context);
 
 SDL_RWops *PUtil::allocPhysFSops(PHYSFS_file *pfile)
 {

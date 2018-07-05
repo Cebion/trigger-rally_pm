@@ -38,6 +38,7 @@
 #endif
 
 #include "pengine.h"
+#include "physfs_utils.h"
 
 // I was half way through implementing SDL_mixer support when
 // I realised it has no ability to change pitch / playback
@@ -184,8 +185,7 @@ PAudioSample::PAudioSample(const std::string &filename, bool positional3D)
 
     if (!pfile)
     {
-		auto err = PHYSFS_getLastErrorCode();
-        throw MakePException ("Load failed: PhysFS: " + std::to_string(err) + " - " + PHYSFS_getErrorByCode(err));
+        throw MakePException ("Load failed: PhysFS: " + physfs_getErrorString());
     }
 
     int filesize = PHYSFS_fileLength(pfile);
@@ -315,8 +315,7 @@ FMOD_RESULT F_CALLBACK fmod_file_open(const char *name, unsigned int *filesize, 
 
     if (*handle == nullptr)
     {
-		auto err = PHYSFS_getLastErrorCode();
-        PUtil::outLog() << "PhysFS: " << err << " - " << PHYSFS_getErrorByCode(err) << std::endl;
+        PUtil::outLog() << "PhysFS: " << physfs_getErrorString() << std::endl;
         return FMOD_ERR_FILE_BAD;
     }
 
@@ -343,8 +342,7 @@ FMOD_RESULT F_CALLBACK fmod_file_read(void *handle, void *buffer, unsigned int s
 
     if (numbytes == -1)
     {
-		auto err = PHYSFS_getLastErrorCode();
-        PUtil::outLog() << "PhysFS: " << err << " - " << PHYSFS_getErrorByCode(err) << std::endl;
+        PUtil::outLog() << "PhysFS: " << physfs_getErrorString() << std::endl;
         return FMOD_ERR_FILE_ENDOFDATA;
     }
 
@@ -358,8 +356,7 @@ FMOD_RESULT F_CALLBACK fmod_file_seek(void *handle, unsigned int pos, void *user
 
     if (PHYSFS_seek(reinterpret_cast<PHYSFS_File *> (handle), pos) == 0)
     {
-		auto err = PHYSFS_getLastErrorCode();
-        PUtil::outLog() << "PhysFS: " << err << " - " << PHYSFS_getErrorByCode(err) << std::endl;
+        PUtil::outLog() << "PhysFS: " << physfs_getErrorString() << std::endl;
         return FMOD_ERR_FILE_COULDNOTSEEK;
     }
 
@@ -581,8 +578,7 @@ PAudioSample::PAudioSample(const std::string &filename, bool positional3D)
 
     if (!pfile)
     {
-		auto err = PHYSFS_getLastErrorCode();
-        PUtil::outLog() << "Load failed: PhysFS: " << err << " - " << PHYSFS_getErrorByCode(err) << std::endl;
+        PUtil::outLog() << "Load failed: PhysFS: " << physfs_getErrorString() << std::endl;
         throw PFileException ();
     }
 

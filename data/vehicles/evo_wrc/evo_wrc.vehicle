@@ -47,7 +47,7 @@
 		fineffect="10, 13" />
 
 	<drivesystem>
-		<engine powerscale="30000">
+		<engine powerscale="20000">
 			<powerpoint rpm="1000" power="0.17" />
 			<powerpoint rpm="2000" power="0.35" />
 			<powerpoint rpm="3000" power="0.55" />

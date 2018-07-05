@@ -6,6 +6,7 @@
 
 
 #include "pengine.h"
+#include "physfs_utils.h"
 
 
 fx_renderstate_s def_rs;
@@ -121,8 +122,7 @@ void PEffect::loadMTL(const std::string &filename)
    if(pfile == nullptr)
    {
       con_printf("Cannot find effect file \"%s\"\n",filename);
-	  auto err = PHYSFS_getLastErrorCode();
-      throw MakePException ("PhysFS: " + std::to_string(err) + " - " + PHYSFS_getErrorByCode(err));
+      throw MakePException ("PhysFS: " + physfs_getErrorString());
    }
 
    name = filename;
@@ -180,30 +180,31 @@ void PEffect::loadMTL(const std::string &filename)
 
 void PEffect::loadFX(const std::string &filename)
 {
-  if (PUtil::isDebugLevel(DEBUGLEVEL_TEST))
-    PUtil::outLog() << "Loading fx shader \"" << filename << "\"" << std::endl;
+	if (PUtil::isDebugLevel(DEBUGLEVEL_TEST))
+		PUtil::outLog() << "Loading fx shader \"" << filename << "\"" << std::endl;
 
-  unload();
+	// unload eventual previous loaded effect
+	unload();
 
-  //FILE *file = fopen(filename.c_str(),"rb");
-  PHYSFS_file *pfile = PHYSFS_openRead(filename.c_str());
-  if (pfile == nullptr) {
-    con_printf("Cannot find effect file \"%s\"\n",filename);
-	auto err = PHYSFS_getLastErrorCode();
-    throw MakePException ("PhysFS: " + std::to_string(err) + " - " + PHYSFS_getErrorByCode(err));
-  }
-  
-  name = filename;
+	// open file
+	PHYSFS_file *pfile = PHYSFS_openRead(filename.c_str());
+	if (pfile == nullptr)
+	{
+		con_printf("Cannot find effect file \"%s\"\n",filename);
+		throw MakePException ("PhysFS: " + physfs_getErrorString());
+	}
+	
+	// set the name
+	name = filename;
 
-  int leng = PHYSFS_fileLength(pfile);
-
-  char *source = new char [leng+1];
-  
-  PHYSFS_readBytes(pfile, source, sizeof(char) * leng);
-  PHYSFS_close(pfile);
-
-  source[leng] = '\0';
-
+	// we'll create a string storing the whole file
+	int leng = PHYSFS_fileLength(pfile);
+	char *source = new char[leng+1];
+	PHYSFS_readBytes(pfile, source, sizeof(char) * leng);
+	source[leng] = '\0';
+	
+	// close file since we have everything in char *source
+	PHYSFS_close(pfile);
 
 #define SKIPWHITESPACE \
   while (*scan == ' ' || *scan == '\t' || *scan == '\n' || *scan == '\r') { \
@@ -234,266 +235,684 @@ void PEffect::loadFX(const std::string &filename)
     *(token++) = *(scan++); \
   } *token = '\0'; token = buff1;
 
-  char buff1[512];
-  char *scan = (char*)source;
-  char *token;
-  //char detail[512] = "parse error";
-  char detail[537] = "parse error";
+	char buff1[512];
   
-  int linec = 1;
-  bool parseerror = false;
+	char *token;
 
-  while (1) {
-    SKIPWHITESPACE; if (!*scan) break;
+	// In case of failures, stores short descriptive string
+	std::string detail("parse error");
+  
+	int linec = 1;
+	bool parseerror = false;
 
-    READTOKEN; if (!*scan) { parseerror = true; break; }
+	// this is the pointer to the char in source that's to be read next
+	char* scan = source;
+	
+	while (1)
+	{
+		SKIPWHITESPACE;
+		if (!*scan)
+			break;
 
-    if (!strcmp(token, "texture")) {
-      tex.push_back(fx_texture_s());
-      fx_texture_s *curtex = &tex.back();
+		READTOKEN;
+		if (!*scan)
+		{
+			parseerror = true;
+			break;
+		}
+
+		if (!strcmp(token, "texture"))
+		{
+			tex.push_back(fx_texture_s());
+			fx_texture_s *curtex = &tex.back();
       
-      curtex->texobject = nullptr;
+			curtex->texobject = nullptr;
 
-      SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
+			SKIPWHITESPACE;
+			if (!*scan)
+			{
+				parseerror = true;
+				break;
+			}
 
-      READTOKEN; if (!*scan) { parseerror = true; break; }
-      curtex->name = token;
+			READTOKEN;
+			if (!*scan)
+			{
+				parseerror = true;
+				break;
+			}
+			curtex->name = token;
 
-      SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-      if (*scan != '{') { parseerror = true; break; }
-      scan++;
+			SKIPWHITESPACE;
+			if (!*scan)
+			{
+				parseerror = true;
+				break;
+			}
+			if (*scan != '{')
+			{
+				parseerror = true;
+				break;
+			}
+			scan++;
 
-      while (1) {
-        SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-        if (*scan == '}') { scan++; break; }
+			while (1)
+			{
+				SKIPWHITESPACE;
+				if (!*scan)
+				{
+					parseerror = true;
+					break;
+				}
+				if (*scan == '}')
+				{
+					scan++;
+					break;
+				}
 
-        READTOKEN; if (!*scan) { parseerror = true; break; }
+				READTOKEN;
+				if (!*scan)
+				{
+					parseerror = true;
+					break;
+				}
 
-        // type = [ TEX_2D | TEX_3D | TEX_CUBE ];
-        if (!strcmp(token, "type")) {
-          SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-          if (*scan != '=') { parseerror = true; break; }
-          scan++;
-          SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-          READTOKEN; if (!*scan) { parseerror = true; break; }
-          if (!strcmp(token,"TEX_2D")) curtex->type = GL_TEXTURE_2D;
-          else if (!strcmp(token,"TEX_3D")) curtex->type = GL_TEXTURE_3D;
-          else if (!strcmp(token,"TEX_CUBE")) curtex->type = GL_TEXTURE_CUBE_MAP;
-          else { parseerror = true; break; }
-          SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-          if (*scan != ';') { parseerror = true; break; }
-          scan++;
-        } else
-        // src = "blah.png";
-        if (!strcmp(token, "src")) {
-          SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-          if (*scan != '=') { parseerror = true; break; }
-          scan++;
-          SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-          READTOKEN; if (!*scan) { parseerror = true; break; }
-          curtex->filename = PUtil::assemblePath(token, filename);
-          SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-          if (*scan != ';') { parseerror = true; break; }
-          scan++;
-        } else {
-          parseerror = true; break;
-        }
-      }
-    } else
-    if (!strcmp(token, "technique")) {
-      tech.push_back(fx_technique_s());
-      fx_technique_s *curtech = &tech.back();
+				// type = [ TEX_2D | TEX_3D | TEX_CUBE ];
+				if (!strcmp(token, "type"))
+				{
+					SKIPWHITESPACE;
+					if (!*scan)
+					{
+						parseerror = true;
+						break;
+					}
+					if (*scan != '=')
+					{
+						parseerror = true;
+						break;
+					}
+					scan++;
+					SKIPWHITESPACE;
+					if (!*scan)
+					{
+						parseerror = true;
+						break;
+					}
+					READTOKEN;
+					if (!*scan)
+					{
+						parseerror = true;
+						break;
+					}
+					if (!strcmp(token,"TEX_2D"))
+						curtex->type = GL_TEXTURE_2D;
+					else if (!strcmp(token,"TEX_3D"))
+						curtex->type = GL_TEXTURE_3D;
+					else if (!strcmp(token,"TEX_CUBE"))
+						curtex->type = GL_TEXTURE_CUBE_MAP;
+					else
+					{
+						parseerror = true;
+						break;
+					}
+					SKIPWHITESPACE;
+					if (!*scan)
+					{
+						parseerror = true;
+						break;
+					}
+					if (*scan != ';')
+					{
+						parseerror = true;
+						break;
+					}
+					scan++;
+				}
+				// src = "blah.png";
+				else if (!strcmp(token, "src"))
+				{
+					SKIPWHITESPACE;
+					if (!*scan)
+					{
+						parseerror = true;
+						break;
+					}
+					if (*scan != '=')
+					{
+						parseerror = true;
+						break;
+					}
+					scan++;
+					SKIPWHITESPACE;
+					if (!*scan)
+					{
+						parseerror = true;
+						break;
+					}
+					READTOKEN;
+					if (!*scan)
+					{
+						parseerror = true;
+						break;
+					}
+					curtex->filename = PUtil::assemblePath(token, filename);
+					SKIPWHITESPACE;
+					if (!*scan)
+					{
+						parseerror = true;
+						break;
+					}
+					if (*scan != ';')
+					{
+						parseerror = true;
+						break;
+					}
+					scan++;
+				}
+				else
+				{
+					parseerror = true; 
+					break;
+				}
+			}
+		}
+		else if (!strcmp(token, "technique"))
+		{
+			tech.push_back(fx_technique_s());
+			fx_technique_s *curtech = &tech.back();
       
-      SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
+			SKIPWHITESPACE;
+			if (!*scan)
+			{
+				parseerror = true;
+				break;
+			}
 
-      READTOKEN; if (!*scan) { parseerror = true; break; }
-      curtech->name = token;
+			READTOKEN;
+			if (!*scan)
+			{
+				parseerror = true;
+				break;
+			}
+			curtech->name = token;
 
-      SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-      if (*scan != '{') { parseerror = true; break; }
-      scan++;
+			SKIPWHITESPACE;
+			if (!*scan)
+			{
+				parseerror = true;
+				break;
+			}
+			if (*scan != '{')
+			{
+				parseerror = true;
+				break;
+			}
+			scan++;
 
-      while (1) {
-        SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-        if (*scan == '}') { scan++; break; }
+			while (1)
+			{
+				SKIPWHITESPACE;
+				if (!*scan)
+				{
+					parseerror = true;
+					break;
+				}
+				if (*scan == '}')
+				{
+					scan++;
+					break;
+				}
 
-        READTOKEN; if (!*scan) { parseerror = true; break; }
+				READTOKEN;
+				if (!*scan)
+				{
+					parseerror = true;
+					break;
+				}
         
-        if (!strcmp(token, "pass")) {
-          curtech->pass.push_back(fx_pass_s());
-          fx_pass_s *curpass = &curtech->pass.back();
-          fx_renderstate_s *currs = &curpass->rs;
-          // set default render state for pass
-#if 0
-          if (curtech->pass.size() > 1)
-            *currs = curtech->pass[curtech->pass.size()-2].rs;
-          else
-            *currs = def_rs;
-#else
-          *currs = def_rs;
-#endif
+			if (!strcmp(token, "pass"))
+			{
+				curtech->pass.push_back(fx_pass_s());
+				fx_pass_s *curpass = &curtech->pass.back();
+				fx_renderstate_s *currs = &curpass->rs;
+				// set default render state for pass
+				#if 0
+				if (curtech->pass.size() > 1)
+					*currs = curtech->pass[curtech->pass.size()-2].rs;
+				else
+					*currs = def_rs;
+				#else
+					*currs = def_rs;
+				#endif
 
-          SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-          if (*scan != '{') { parseerror = true; break; }
-          scan++;
+				SKIPWHITESPACE;
+				if (!*scan)
+				{
+					parseerror = true;
+					break;
+				}
+				if (*scan != '{')
+				{
+					parseerror = true;
+					break;
+				}
+				scan++;
 
-          while (1) {
-            SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-            if (*scan == '}') { scan++; break; }
+				while (1)
+				{
+					SKIPWHITESPACE;
+					if (!*scan)
+					{
+						parseerror = true;
+						break;
+					}
+					if (*scan == '}')
+					{
+						scan++;
+						break;
+					}
 
-            READTOKEN; if (!*scan) { parseerror = true; break; }
+					READTOKEN;
+					if (!*scan)
+					{
+						parseerror = true;
+						break;
+					}
 
-            // depthtest = [ true | false ];
-            if (!strcmp(token, "depthtest")) {
-              //con_printf("depthtest\n");
-              SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-              if (*scan != '=') { parseerror = true; break; }
-              scan++;
-              SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-              READTOKEN; if (!*scan) { parseerror = true; break; }
-              if (0);
-              else if (!strcmp(token,"true")) currs->depthtest = true;
-              else if (!strcmp(token,"false")) currs->depthtest = false;
-              else { parseerror = true; break; }
-              SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-              if (*scan != ';') { parseerror = true; break; }
-              scan++;
-            } else
-            // alphatest = { FUNC, value };
-            if (!strcmp(token, "alphatest")) {
-              //con_printf("alphatest\n");
-              SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-              if (*scan != '=') { parseerror = true; break; }
-              scan++;
-              SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-              if (*scan != '{') { parseerror = true; break; }
-              scan++;
-              SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-              READTOKEN; if (!*scan) { parseerror = true; break; }
-              if (0);
-              else if (!strcmp(token,"LESS")) currs->alphatest.func = GL_LESS;
-              else if (!strcmp(token,"EQUAL")) currs->alphatest.func = GL_EQUAL;
-              else if (!strcmp(token,"LEQUAL")) currs->alphatest.func = GL_LEQUAL;
-              else if (!strcmp(token,"GREATER")) currs->alphatest.func = GL_GREATER;
-              else if (!strcmp(token,"NOTEQUAL")) currs->alphatest.func = GL_NOTEQUAL;
-              else if (!strcmp(token,"GEQUAL")) currs->alphatest.func = GL_GEQUAL;
-              else if (!strcmp(token,"ALWAYS")) currs->alphatest.func = GL_ALWAYS;
-              else { strcpy(detail,"invalid alphatest func"); parseerror = true; break; }
-              SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-              if (*scan != ',') { parseerror = true; break; }
-              scan++;
-              SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-              READNUMERICALTOKEN; if (!*scan) { parseerror = true; break; }
-              currs->alphatest.ref = atof(token);
-              SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-              if (*scan != '}') { parseerror = true; break; }
-              scan++;
-              SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-              if (*scan != ';') { parseerror = true; break; }
-              scan++;
-            } else
-            // cullface
-            if (!strcmp(token, "cullface")) {
-              //con_printf("cullface\n");
-              SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-              if (*scan != '=') { parseerror = true; break; }
-              scan++;
-              SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-              READTOKEN; if (!*scan) { parseerror = true; break; }
-              if (0);
-              else if (!strcmp(token,"NONE")) currs->cullface = CULLFACE_NONE;
-              else if (!strcmp(token,"CW")) currs->cullface = CULLFACE_CW;
-              else if (!strcmp(token,"CCW")) currs->cullface = CULLFACE_CCW;
-              else { strcpy(detail,"invalid cullface mode"); parseerror = true; break; }
-              SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-              if (*scan != ';') { parseerror = true; break; }
-              scan++;
-            } else
-            // blendmode
-            if (!strcmp(token, "blendmode")) {
-              SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-              if (*scan != '=') { parseerror = true; break; }
-              scan++;
-              SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-              READTOKEN; if (!*scan) { parseerror = true; break; }
-              if (0);
-              else if (!strcmp(token,"NONE")) currs->blendmode = BLEND_NONE;
-              else if (!strcmp(token,"ADD")) currs->blendmode = BLEND_ADD;
-              else if (!strcmp(token,"MULTIPLY")) currs->blendmode = BLEND_MULTIPLY;
-              else if (!strcmp(token,"ALPHA")) currs->blendmode = BLEND_ALPHA;
-              else if (!strcmp(token,"PREMULTALPHA")) currs->blendmode = BLEND_PREMULTALPHA;
-              else { strcpy(detail,"invalid blendmode mode"); parseerror = true; break; }
-              SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-              if (*scan != ';') { parseerror = true; break; }
-              scan++;
-            } else
-            // texunit0 = <texture>;
-            if (!strcmp(token, "texunit0")) {
-              //con_printf("texunit0\n");
-              SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-              if (*scan != '=') { parseerror = true; break; }
-              scan++;
-              SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-              READTOKEN; if (!*scan) { parseerror = true; break; }
-              unsigned int iter;
-              for (iter=0; iter<tex.size(); iter++) {
-                if (!strcmp(token, tex[iter].name.c_str())) break;
-              }
-              if (iter == tex.size()) {
-                sprintf(detail,"texture name \"%s\" not found",token);
-                parseerror = true;
-                break;
-              }
-              currs->texunit[0].texindex = iter;
-              SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-              if (*scan != ';') { parseerror = true; break; }
-              scan++;
-            } else
-            if (!strcmp(token, "lighting")) {
-              SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-              if (*scan != '=') { parseerror = true; break; }
-              scan++;
-              SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-              READTOKEN; if (!*scan) { parseerror = true; break; }
-              if (0);
-              else if (!strcmp(token,"true")) currs->lighting = true;
-              else if (!strcmp(token,"false")) currs->lighting = false;
-              else { parseerror = true; break; }
-              SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-              if (*scan != ';') { parseerror = true; break; }
-              scan++;
-            } else
-            if (!strcmp(token, "lightmodeltwoside")) {
-              SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-              if (*scan != '=') { parseerror = true; break; }
-              scan++;
-              SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-              READTOKEN; if (!*scan) { parseerror = true; break; }
-              if (0);
-              else if (!strcmp(token,"true")) currs->lightmodeltwoside = true;
-              else if (!strcmp(token,"false")) currs->lightmodeltwoside = false;
-              else { parseerror = true; break; }
-              SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-              if (*scan != ';') { parseerror = true; break; }
-              scan++;
-            } else
-            {
-              strcpy(detail,"invalid render state");
-              parseerror = true; break;
-            }
-          }
-        } else {
-          parseerror = true; break;
-        }
-        if (parseerror) break;
-      }
+					// depthtest = [ true | false ];
+					if (!strcmp(token, "depthtest"))
+					{
+						//con_printf("depthtest\n");
+						SKIPWHITESPACE;
+						if (!*scan)
+						{
+							parseerror = true;
+							break;
+						}
+						if (*scan != '=')
+						{
+							parseerror = true;
+							break;
+						}
+						scan++;
+						SKIPWHITESPACE;
+						if (!*scan)
+						{
+							parseerror = true;
+							break;
+						}
+						READTOKEN;
+						if (!*scan)
+						{
+							parseerror = true;
+							break;
+						}
+						if (0);
+						else if (!strcmp(token,"true"))
+							currs->depthtest = true;
+						else if (!strcmp(token,"false"))
+							currs->depthtest = false;
+						else
+						{
+							parseerror = true;
+							break;
+						}
+						SKIPWHITESPACE;
+						if (!*scan)
+						{
+							parseerror = true;
+							break;
+						}
+						if (*scan != ';')
+						{
+							parseerror = true;
+							break;
+						}
+						scan++;
+					}
+					// alphatest = { FUNC, value };
+					else if (!strcmp(token, "alphatest"))
+					{
+						//con_printf("alphatest\n");
+						SKIPWHITESPACE;
+						if (!*scan)
+						{
+							parseerror = true;
+							break;
+						}
+						if (*scan != '=')
+						{
+							parseerror = true;
+							break;
+						}
+						scan++;
+						SKIPWHITESPACE;
+						if (!*scan)
+						{
+							parseerror = true;
+							break;
+						}
+						if (*scan != '{')
+						{
+							parseerror = true;
+							break;
+						}
+						scan++;
+						SKIPWHITESPACE;
+						if (!*scan)
+						{
+							parseerror = true;
+							break;
+						}
+						READTOKEN;
+						if (!*scan)
+						{
+							parseerror = true;
+							break;
+						}
+						if (0);
+						else if (!strcmp(token,"LESS"))
+							currs->alphatest.func = GL_LESS;
+						else if (!strcmp(token,"EQUAL"))
+							currs->alphatest.func = GL_EQUAL;
+						else if (!strcmp(token,"LEQUAL"))
+							currs->alphatest.func = GL_LEQUAL;
+						else if (!strcmp(token,"GREATER"))
+							currs->alphatest.func = GL_GREATER;
+						else if (!strcmp(token,"NOTEQUAL"))
+							currs->alphatest.func = GL_NOTEQUAL;
+						else if (!strcmp(token,"GEQUAL"))
+							currs->alphatest.func = GL_GEQUAL;
+						else if (!strcmp(token,"ALWAYS"))
+							currs->alphatest.func = GL_ALWAYS;
+						else
+						{
+							detail = "invalid alphatest func";
+							parseerror = true;
+							break;
+						}
+						SKIPWHITESPACE;
+						if (!*scan)
+						{
+							parseerror = true;
+							break;
+						}
+						if (*scan != ',')
+						{
+							parseerror = true;
+							break;
+						}
+						scan++;
+						SKIPWHITESPACE;
+						if (!*scan)
+						{
+							parseerror = true;
+							break;
+						}
+						READNUMERICALTOKEN;
+						if (!*scan)
+						{
+							parseerror = true;
+							break;
+						}
+						currs->alphatest.ref = atof(token);
+						SKIPWHITESPACE;
+						if (!*scan)
+						{
+							parseerror = true;
+							break;
+						}
+					if (*scan != '}')
+					{
+						parseerror = true;
+						break;
+					}
+					scan++;
+					SKIPWHITESPACE;
+					if (!*scan)
+					{
+						parseerror = true;
+						break;
+					}
+					if (*scan != ';')
+					{
+						parseerror = true;
+						break;
+					}
+					scan++;
+				}
+				// cullface
+				else if (!strcmp(token, "cullface"))
+				{
+					//con_printf("cullface\n");
+					SKIPWHITESPACE;
+					if (!*scan)
+					{
+						parseerror = true;
+						break;
+					}
+					if (*scan != '=')
+					{
+						parseerror = true;
+						break;
+					}
+					scan++;
+					SKIPWHITESPACE;
+					if (!*scan)
+					{
+						parseerror = true;
+						break;
+					}
+					READTOKEN;
+					if (!*scan)
+					{
+						parseerror = true;
+						break;
+					}
+					if (0);
+					else if (!strcmp(token,"NONE"))
+						currs->cullface = CULLFACE_NONE;
+					else if (!strcmp(token,"CW"))
+						currs->cullface = CULLFACE_CW;
+					else if (!strcmp(token,"CCW"))
+						currs->cullface = CULLFACE_CCW;
+					else
+					{
+						detail = "invalid cullface mode";
+						parseerror = true;
+						break;
+					}
+					SKIPWHITESPACE;
+					if (!*scan)
+					{
+						parseerror = true;
+						break;
+					}
+					if (*scan != ';')
+					{
+						parseerror = true;
+						break;
+					}
+					scan++;
+				}
+				// blendmode
+				else if (!strcmp(token, "blendmode"))
+				{
+					SKIPWHITESPACE;
+					if (!*scan)
+					{
+						parseerror = true;
+						break;
+					}
+					if (*scan != '=')
+					{
+						parseerror = true;
+						break;
+					}
+					scan++;
+					SKIPWHITESPACE;
+					if (!*scan)
+					{
+						parseerror = true;
+						break;
+					}
+					READTOKEN;
+					if (!*scan)
+					{
+						parseerror = true;
+						break;
+					}
+					if (0);
+					else if (!strcmp(token,"NONE"))
+						currs->blendmode = BLEND_NONE;
+					else if (!strcmp(token,"ADD"))
+						currs->blendmode = BLEND_ADD;
+					else if (!strcmp(token,"MULTIPLY"))
+						currs->blendmode = BLEND_MULTIPLY;
+					else if (!strcmp(token,"ALPHA"))
+						currs->blendmode = BLEND_ALPHA;
+					else if (!strcmp(token,"PREMULTALPHA"))
+						currs->blendmode = BLEND_PREMULTALPHA;
+					else
+					{
+						detail = "invalid blendmode mode";
+						parseerror = true;
+						break;
+					}
+					SKIPWHITESPACE;
+					if (!*scan)
+					{
+						parseerror = true;
+						break;
+					}
+					if (*scan != ';')
+					{
+						parseerror = true;
+						break;
+					}
+					scan++;
+				}
+				// texunit0 = <texture>;
+				else if (!strcmp(token, "texunit0"))
+				{
+					//con_printf("texunit0\n");
+					SKIPWHITESPACE;
+					if (!*scan)
+					{
+						parseerror = true;
+						break;
+					}
+					if (*scan != '=')
+					{
+						parseerror = true;
+						break;
+					}
+					scan++;
+					SKIPWHITESPACE;
+					if (!*scan)
+					{
+						parseerror = true;
+						break;
+					}
+					READTOKEN;
+					if (!*scan)
+					{
+						parseerror = true;
+						break;
+					}
+					unsigned int iter;
+					for (iter=0; iter<tex.size(); iter++)
+					{
+						if (!strcmp(token, tex[iter].name.c_str()))
+							break;
+					}
+					if (iter == tex.size())
+					{
+						detail = std::string("texture name ") + token + " not found";
+						parseerror = true;
+						break;
+					}
+					currs->texunit[0].texindex = iter;
+					SKIPWHITESPACE;
+					if (!*scan)
+					{
+						parseerror = true;
+						break;
+					}
+					if (*scan != ';')
+					{
+						parseerror = true;
+						break;
+					}
+					scan++;
+				}
+				else if (!strcmp(token, "lighting"))
+				{
+					SKIPWHITESPACE;
+					if (!*scan)
+					{
+						parseerror = true;
+						break;
+					}
+					if (*scan != '=')
+					{
+						parseerror = true;
+						break;
+					}
+					scan++;
+					SKIPWHITESPACE;
+					if (!*scan)
+					{
+						parseerror = true;
+						break;
+					}
+					READTOKEN; if (!*scan) { parseerror = true; break; }
+					if (0);
+					else if (!strcmp(token,"true")) currs->lighting = true;
+					else if (!strcmp(token,"false")) currs->lighting = false;
+					else { parseerror = true; break; }
+					SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
+					if (*scan != ';') { parseerror = true; break; }
+					scan++;
+				}
+				else if (!strcmp(token, "lightmodeltwoside"))
+				{
+					SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
+					if (*scan != '=') { parseerror = true; break; }
+					scan++;
+					SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
+					READTOKEN; if (!*scan) { parseerror = true; break; }
+					if (0);
+					else if (!strcmp(token,"true")) currs->lightmodeltwoside = true;
+					else if (!strcmp(token,"false")) currs->lightmodeltwoside = false;
+					else { parseerror = true; break; }
+					SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
+					if (*scan != ';') { parseerror = true; break; }
+					scan++;
+				}
+				else
+				{
+					detail = "invalid render state";
+					parseerror = true;
+					break;
+				}
+			}
+		}
+		else
+		{
+			parseerror = true;
+			break;
+		}
+        if (parseerror)
+			break;
+	}
     } else {
       parseerror = true; break;
     }
     if (parseerror) break;
   }
 
-  delete [] source;
+	delete [] source;
 
   if (parseerror) {
     con_printf("\"%s\": error at line %i : %s\n",name.c_str(),linec,detail);

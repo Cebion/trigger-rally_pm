@@ -4,8 +4,12 @@
 // Copyright 2004-2006 Jasmine Langridge, jas@jareiko.net
 // License: GPL version 2 (see included gpl.txt)
 
+//
+// In this file there are functions that wrap up common PHYSFS related functions
+//
 
 #include "pengine.h"
+#include "physfs_utils.h"
 
 Sint64 physfs_size(SDL_RWops *context)
 {
@@ -37,8 +41,7 @@ Sint64 physfs_seek(SDL_RWops *context, Sint64 offset, int whence)
   
     Sint64 result = PHYSFS_seek(pfile, target);
     if (! result) {
-		auto err = PHYSFS_getLastErrorCode();
-        throw MakePException("Error seeking: " + std::to_string(err) + " - " + PHYSFS_getErrorByCode(err));
+        throw MakePException("Error seeking: " + physfs_getErrorString());
     }
     
     return PHYSFS_tell(pfile);
@@ -79,4 +82,23 @@ int physfs_close(SDL_RWops *context)
   return 0;
 }
 
-
+//
+// PHYSFS 3 is pretty new, and not all the distro ship with it yet,
+// But using the deprecated functions we have plenty of warnings at compile time on version 3,
+// we change the code based on what version we build it. @todo: In the future, one
+// day, maybe consider to remove the code for PHYSFS < 3
+// Emanuele Sorce - 7/5/18
+//
+std::string physfs_getErrorString()
+{
+	std::stringstream ss;
+	#if PHYSFS_VER_MAJOR >= 3
+		auto err = PHYSFS_getLastErrorCode();
+		ss << err << " - " << PHYSFS_getErrorByCode(err);
+	// version 2.x and downwards
+	#else
+		ss << PHYSFS_getLastError();
+	#endif
+	
+	return ss.str();
+}

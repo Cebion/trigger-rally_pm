@@ -6,7 +6,7 @@
 
 
 #include "pengine.h"
-
+#include "physfs_utils.h"
 
 PSSModel::PSSModel(PApp &parentApp) : PSubsystem(parentApp)
 {
@@ -170,8 +170,7 @@ void PModel::loadOBJ(const std::string &filename, float globalScale)
 	pfile = PHYSFS_openRead(filename.c_str());
 	if(pfile == NULL)
 	{
-		auto err = PHYSFS_getLastErrorCode();
-		throw MakePException(filename + ", PhysFS: " + std::to_string(err) + " - " + PHYSFS_getErrorByCode(err));
+		throw MakePException(filename + ", PhysFS: " + physfs_getErrorString());
 	}
 
 	/* Create the single mesh (.obj isn't a multimesh file) */
@@ -323,8 +322,7 @@ void PModel::loadASE (const std::string &filename, float globalScale)
 
   PHYSFS_file *pfile = PHYSFS_openRead(filename.c_str());
   if (pfile == nullptr) {
-    auto err = PHYSFS_getLastErrorCode();
-    throw MakePException (filename + ", PhysFS: " + std::to_string(err) + " - " + PHYSFS_getErrorByCode(err));
+    throw MakePException (filename + ", PhysFS: " + physfs_getErrorString());
   }
 
   std::vector<matl_s> matlist;

@@ -7,6 +7,7 @@
 
 
 #include "main.h"
+#include "physfs_utils.h"
 
 #include <SDL2/SDL_main.h>
 #include <SDL2/SDL_thread.h>
@@ -33,9 +34,8 @@ void MainApp::config()
     for (const std::string &datadir: cfg_datadirs)
         if (PHYSFS_mount(datadir.c_str(), NULL, 1) == 0)
         {
-			auto err = PHYSFS_getLastErrorCode();
             PUtil::outLog() << "Failed to add PhysFS search directory \"" << datadir << "\"" << std::endl
-                << "PhysFS: " << err << " - " << PHYSFS_getErrorByCode(err) << std::endl;
+                << "PhysFS: " << physfs_getErrorString() << std::endl;
         }
         else
         {
@@ -477,9 +477,8 @@ void MainApp::loadConfig()
     for (const std::string &cfgpath: cfghidingplaces)
         if (PHYSFS_mount(cfgpath.c_str(), NULL, 1) == 0)
         {
-			auto err = PHYSFS_getLastErrorCode();
             PUtil::outLog() << "Failed to add PhysFS search directory \"" <<
-                cfgpath << "\"\nPhysFS: " << err << " - " << PHYSFS_getErrorByCode(err) << std::endl;
+                cfgpath << "\"\nPhysFS: " << physfs_getErrorString() << std::endl;
         }
 #endif
     PUtil::outLog() << "No user config file, copying over defaults" << std::endl;
