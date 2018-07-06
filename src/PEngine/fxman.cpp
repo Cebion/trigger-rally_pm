@@ -8,9 +8,8 @@
 #include "pengine.h"
 #include "physfs_utils.h"
 
-
+// @todo: what these two global things are?
 fx_renderstate_s def_rs;
-
 
 int max_tex_units;
 
@@ -65,7 +64,7 @@ PEffect *PSSEffect::loadEffect(const std::string &name)
   return fx;
 }
 
-
+// ???
 #define con_printf(...)
 
 
@@ -100,9 +99,10 @@ PEffect::PEffect(const std::string &filename)
 /*! Load an OBJ's MTL file as the effect definition.
  * \note: It just create a default PEffect using the material first texture,
  *        ignoring all material real things (unused by the renderer, btw) */
+#define BUF_SIZE 1024
 void PEffect::loadMTL(const std::string &filename)
 {
-   char buff[1000];             /**< File buffer */
+   char buff[BUF_SIZE];             /**< File buffer */
    PHYSFS_file* pfile;          /**< The real .obj file */
    std::string tok;             /**< Readed token from line */
    std::string value;           /**< Readed value from line */
@@ -128,7 +128,7 @@ void PEffect::loadMTL(const std::string &filename)
    name = filename;
    
    /* Loop throught all file */
-   while(PUtil::fgets2(buff,1000,pfile))
+   while(PUtil::fgets2(buff,BUF_SIZE,pfile))
    {
       if(PUtil::getToken(buff, tok, value))
       {
@@ -177,6 +177,7 @@ void PEffect::loadMTL(const std::string &filename)
    /* Done! */
    PHYSFS_close(pfile);
 }
+#undef BUF_SIZE
 
 void PEffect::loadFX(const std::string &filename)
 {
@@ -207,33 +208,48 @@ void PEffect::loadFX(const std::string &filename)
 	PHYSFS_close(pfile);
 
 #define SKIPWHITESPACE \
-  while (*scan == ' ' || *scan == '\t' || *scan == '\n' || *scan == '\r') { \
-    if (*scan == '\n') linec++; \
-    scan++; \
-  }
+{ \
+	while (*scan == ' ' || *scan == '\t' || *scan == '\n' || *scan == '\r') { \
+		if (*scan == '\n') linec++; \
+		scan++; \
+	} \
+}
 
 #define READTOKEN \
-  token = buff1; \
-  if (*scan == '\"') { \
-    scan++; \
-    while ((*scan) && (*scan != '\"')) { \
-      *(token++) = *(scan++); \
-    } *token = '\0'; token = buff1; scan++; \
-  } else { \
-    while ((*scan >= 'a' && *scan <= 'z') || \
-    (*scan >= 'A' && *scan <= 'Z') || \
-    (*scan >= '0' && *scan <= '9') || \
-    (*scan == '_')) { \
-      *(token++) = *(scan++); \
-    } *token = '\0'; token = buff1; \
-  }
+{ \
+	token = buff1; \
+	if (*scan == '\"') { \
+		scan++; \
+		while ((*scan) && (*scan != '\"')) { \
+			*(token++) = *(scan++); \
+		} *token = '\0'; token = buff1; scan++; \
+	} else { \
+		while ((*scan >= 'a' && *scan <= 'z') || \
+			(*scan >= 'A' && *scan <= 'Z') || \
+			(*scan >= '0' && *scan <= '9') || \
+			(*scan == '_')) { \
+			*(token++) = *(scan++); \
+		} *token = '\0'; token = buff1; \
+	} \
+}
 
 #define READNUMERICALTOKEN \
-  token = buff1; \
-  while ((*scan >= '0' && *scan <= '9') || \
-  (*scan == '-' || *scan == '.')) { \
-    *(token++) = *(scan++); \
-  } *token = '\0'; token = buff1;
+{ \
+	token = buff1; \
+	while ((*scan >= '0' && *scan <= '9') || \
+	(*scan == '-' || *scan == '.')) \
+	{ \
+		*(token++) = *(scan++); \
+	} \
+	*token = '\0'; \
+	token = buff1; \
+}
+
+#define FAILURE \
+{ \
+	parseerror = true; \
+	break; \
+}
 
 	char buff1[512];
   
@@ -256,10 +272,7 @@ void PEffect::loadFX(const std::string &filename)
 
 		READTOKEN;
 		if (!*scan)
-		{
-			parseerror = true;
-			break;
-		}
+			FAILURE;
 
 		if (!strcmp(token, "texture"))
 		{
@@ -270,17 +283,12 @@ void PEffect::loadFX(const std::string &filename)
 
 			SKIPWHITESPACE;
 			if (!*scan)
-			{
-				parseerror = true;
-				break;
-			}
+				FAILURE;
 
 			READTOKEN;
 			if (!*scan)
-			{
-				parseerror = true;
-				break;
-			}
+				FAILURE;
+			
 			curtex->name = token;
 
 			SKIPWHITESPACE;
@@ -290,20 +298,16 @@ void PEffect::loadFX(const std::string &filename)
 				break;
 			}
 			if (*scan != '{')
-			{
-				parseerror = true;
-				break;
-			}
+				FAILURE;
+			
 			scan++;
 
 			while (1)
 			{
 				SKIPWHITESPACE;
 				if (!*scan)
-				{
-					parseerror = true;
-					break;
-				}
+				FAILURE;
+			
 				if (*scan == '}')
 				{
 					scan++;
@@ -312,38 +316,28 @@ void PEffect::loadFX(const std::string &filename)
 
 				READTOKEN;
 				if (!*scan)
-				{
-					parseerror = true;
-					break;
-				}
+					FAILURE;
+			
 
 				// type = [ TEX_2D | TEX_3D | TEX_CUBE ];
 				if (!strcmp(token, "type"))
 				{
 					SKIPWHITESPACE;
 					if (!*scan)
-					{
-						parseerror = true;
-						break;
-					}
+						FAILURE;
+			
 					if (*scan != '=')
-					{
-						parseerror = true;
-						break;
-					}
+						FAILURE;
+			
 					scan++;
 					SKIPWHITESPACE;
 					if (!*scan)
-					{
-						parseerror = true;
-						break;
-					}
+						FAILURE;
+			
 					READTOKEN;
 					if (!*scan)
-					{
-						parseerror = true;
-						break;
-					}
+						FAILURE;
+			
 					if (!strcmp(token,"TEX_2D"))
 						curtex->type = GL_TEXTURE_2D;
 					else if (!strcmp(token,"TEX_3D"))
@@ -357,15 +351,11 @@ void PEffect::loadFX(const std::string &filename)
 					}
 					SKIPWHITESPACE;
 					if (!*scan)
-					{
-						parseerror = true;
-						break;
-					}
+						FAILURE;
+			
 					if (*scan != ';')
-					{
-						parseerror = true;
-						break;
-					}
+						FAILURE;
+			
 					scan++;
 				}
 				// src = "blah.png";
@@ -373,47 +363,32 @@ void PEffect::loadFX(const std::string &filename)
 				{
 					SKIPWHITESPACE;
 					if (!*scan)
-					{
-						parseerror = true;
-						break;
-					}
+						FAILURE;
+			
 					if (*scan != '=')
-					{
-						parseerror = true;
-						break;
-					}
+						FAILURE;
+			
 					scan++;
 					SKIPWHITESPACE;
 					if (!*scan)
-					{
-						parseerror = true;
-						break;
-					}
+						FAILURE;
+			
 					READTOKEN;
 					if (!*scan)
-					{
-						parseerror = true;
-						break;
-					}
+						FAILURE;
+			
 					curtex->filename = PUtil::assemblePath(token, filename);
 					SKIPWHITESPACE;
 					if (!*scan)
-					{
-						parseerror = true;
-						break;
-					}
+						FAILURE;
+			
 					if (*scan != ';')
-					{
-						parseerror = true;
-						break;
-					}
+						FAILURE;
+			
 					scan++;
 				}
 				else
-				{
-					parseerror = true; 
-					break;
-				}
+					FAILURE;
 			}
 		}
 		else if (!strcmp(token, "technique"))
@@ -423,506 +398,427 @@ void PEffect::loadFX(const std::string &filename)
       
 			SKIPWHITESPACE;
 			if (!*scan)
-			{
-				parseerror = true;
-				break;
-			}
+				FAILURE;
+			
 
 			READTOKEN;
 			if (!*scan)
-			{
-				parseerror = true;
-				break;
-			}
+				FAILURE;
+			
 			curtech->name = token;
 
 			SKIPWHITESPACE;
 			if (!*scan)
-			{
-				parseerror = true;
-				break;
-			}
+				FAILURE;
+			
 			if (*scan != '{')
-			{
-				parseerror = true;
-				break;
-			}
+				FAILURE;
+			
 			scan++;
 
 			while (1)
 			{
 				SKIPWHITESPACE;
 				if (!*scan)
-				{
-					parseerror = true;
-					break;
-				}
+					FAILURE;
+			
 				if (*scan == '}')
-				{
-					scan++;
-					break;
-				}
+					FAILURE;
+			
 
 				READTOKEN;
 				if (!*scan)
-				{
-					parseerror = true;
-					break;
-				}
+					FAILURE;
+			
         
-			if (!strcmp(token, "pass"))
-			{
-				curtech->pass.push_back(fx_pass_s());
-				fx_pass_s *curpass = &curtech->pass.back();
-				fx_renderstate_s *currs = &curpass->rs;
-				// set default render state for pass
-				#if 0
-				if (curtech->pass.size() > 1)
-					*currs = curtech->pass[curtech->pass.size()-2].rs;
-				else
-					*currs = def_rs;
-				#else
-					*currs = def_rs;
-				#endif
+				if (!strcmp(token, "pass"))
+				{
+					curtech->pass.push_back(fx_pass_s());
+					fx_pass_s *curpass = &curtech->pass.back();
+					fx_renderstate_s *currs = &curpass->rs;
+					// set default render state for pass
+					#if 0
+					if (curtech->pass.size() > 1)
+						*currs = curtech->pass[curtech->pass.size()-2].rs;
+					else
+						*currs = def_rs;
+					#else
+						*currs = def_rs;
+					#endif
 
-				SKIPWHITESPACE;
-				if (!*scan)
-				{
-					parseerror = true;
-					break;
-				}
-				if (*scan != '{')
-				{
-					parseerror = true;
-					break;
-				}
-				scan++;
-
-				while (1)
-				{
 					SKIPWHITESPACE;
 					if (!*scan)
-					{
-						parseerror = true;
-						break;
-					}
-					if (*scan == '}')
-					{
-						scan++;
-						break;
-					}
+						FAILURE;
+			
+					if (*scan != '{')
+						FAILURE;
+			
+					scan++;
 
-					READTOKEN;
-					if (!*scan)
+					while (1)
 					{
-						parseerror = true;
-						break;
-					}
-
-					// depthtest = [ true | false ];
-					if (!strcmp(token, "depthtest"))
-					{
-						//con_printf("depthtest\n");
 						SKIPWHITESPACE;
 						if (!*scan)
-						{
-							parseerror = true;
-							break;
-						}
-						if (*scan != '=')
-						{
-							parseerror = true;
-							break;
-						}
-						scan++;
-						SKIPWHITESPACE;
-						if (!*scan)
-						{
-							parseerror = true;
-							break;
-						}
+							FAILURE;
+			
+						if (*scan == '}')
+							FAILURE;
+			
+
 						READTOKEN;
 						if (!*scan)
+							FAILURE;
+			
+
+						// depthtest = [ true | false ];
+						if (!strcmp(token, "depthtest"))
 						{
-							parseerror = true;
-							break;
+							//con_printf("depthtest\n");
+							SKIPWHITESPACE;
+							if (!*scan)
+								FAILURE;
+			
+							if (*scan != '=')
+								FAILURE;
+			
+							scan++;
+							SKIPWHITESPACE;
+							if (!*scan)
+								FAILURE;
+			
+							READTOKEN;
+							if (!*scan)
+								FAILURE;
+			
+							if (0);
+							else if (!strcmp(token,"true"))
+								currs->depthtest = true;
+							else if (!strcmp(token,"false"))
+								currs->depthtest = false;
+							else
+								FAILURE;
+			
+							SKIPWHITESPACE;
+							if (!*scan)
+								FAILURE;
+			
+							if (*scan != ';')
+								FAILURE;
+			
+							scan++;
 						}
-						if (0);
-						else if (!strcmp(token,"true"))
-							currs->depthtest = true;
-						else if (!strcmp(token,"false"))
-							currs->depthtest = false;
+						// alphatest = { FUNC, value };
+						else if (!strcmp(token, "alphatest"))
+						{
+							//con_printf("alphatest\n");
+							SKIPWHITESPACE;
+							if (!*scan)
+								FAILURE;
+			
+							if (*scan != '=')
+								FAILURE;
+			
+							scan++;
+							SKIPWHITESPACE;
+							if (!*scan)
+								FAILURE
+			
+							if (*scan != '{')
+								FAILURE
+			
+							scan++;
+							SKIPWHITESPACE;
+							if (!*scan)
+								FAILURE
+			
+							READTOKEN;
+							if (!*scan)
+								FAILURE
+			
+							if (0);
+							else if (!strcmp(token,"LESS"))
+								currs->alphatest.func = GL_LESS;
+							else if (!strcmp(token,"EQUAL"))
+								currs->alphatest.func = GL_EQUAL;
+							else if (!strcmp(token,"LEQUAL"))
+								currs->alphatest.func = GL_LEQUAL;
+							else if (!strcmp(token,"GREATER"))
+								currs->alphatest.func = GL_GREATER;
+							else if (!strcmp(token,"NOTEQUAL"))
+								currs->alphatest.func = GL_NOTEQUAL;
+							else if (!strcmp(token,"GEQUAL"))
+								currs->alphatest.func = GL_GEQUAL;
+							else if (!strcmp(token,"ALWAYS"))
+								currs->alphatest.func = GL_ALWAYS;
+							else
+							{
+								detail = "invalid alphatest func";
+								FAILURE
+							}
+							SKIPWHITESPACE;
+							if (!*scan)
+								FAILURE;
+			
+							if (*scan != ',')
+								FAILURE;
+			
+							scan++;
+							SKIPWHITESPACE;
+							if (!*scan)
+								FAILURE;
+			
+							READNUMERICALTOKEN;
+							if (!*scan)
+								FAILURE;
+			
+							currs->alphatest.ref = atof(token);
+							SKIPWHITESPACE;
+							if (!*scan)
+								FAILURE;
+			
+							if (*scan != '}')
+								FAILURE;
+				
+							scan++;
+							SKIPWHITESPACE;
+							if (!*scan)
+								FAILURE;
+			
+							if (*scan != ';')
+								FAILURE;
+			
+							scan++;
+						}
+						// cullface
+						else if (!strcmp(token, "cullface"))
+						{
+							//con_printf("cullface\n");
+							SKIPWHITESPACE;
+							if (!*scan)
+								FAILURE;
+			
+							if (*scan != '=')
+								FAILURE;
+			
+							scan++;
+							SKIPWHITESPACE;
+							if (!*scan)
+								FAILURE;
+			
+							READTOKEN;
+							if (!*scan)
+								FAILURE;
+			
+							if (0);
+							else if (!strcmp(token,"NONE"))
+								currs->cullface = CULLFACE_NONE;
+							else if (!strcmp(token,"CW"))
+								currs->cullface = CULLFACE_CW;
+							else if (!strcmp(token,"CCW"))
+								currs->cullface = CULLFACE_CCW;
+							else
+							{
+								detail = "invalid cullface mode";
+								FAILURE
+							}
+							SKIPWHITESPACE;
+							if (!*scan)
+								FAILURE;
+			
+							if (*scan != ';')
+								FAILURE;
+			
+							scan++;
+						}
+						// blendmode
+						else if (!strcmp(token, "blendmode"))
+						{
+							SKIPWHITESPACE;
+							if (!*scan)
+								FAILURE;
+			
+							if (*scan != '=')
+								FAILURE;
+			
+							scan++;
+							SKIPWHITESPACE;
+							if (!*scan)
+								FAILURE;
+
+							READTOKEN;
+							if (!*scan)
+								FAILURE;
+			
+							if (0);
+							else if (!strcmp(token,"NONE"))
+								currs->blendmode = BLEND_NONE;
+							else if (!strcmp(token,"ADD"))
+								currs->blendmode = BLEND_ADD;
+							else if (!strcmp(token,"MULTIPLY"))
+								currs->blendmode = BLEND_MULTIPLY;
+							else if (!strcmp(token,"ALPHA"))
+								currs->blendmode = BLEND_ALPHA;
+							else if (!strcmp(token,"PREMULTALPHA"))
+								currs->blendmode = BLEND_PREMULTALPHA;
+							else
+							{
+								detail = "invalid blendmode mode";
+								FAILURE
+							}
+							SKIPWHITESPACE;
+							if (!*scan)
+								FAILURE;
+			
+							if (*scan != ';')
+								FAILURE;
+			
+							scan++;
+						}
+						// texunit0 = <texture>;
+						else if (!strcmp(token, "texunit0"))
+						{
+							//con_printf("texunit0\n");
+							SKIPWHITESPACE;
+							if (!*scan)
+								FAILURE;
+			
+							if (*scan != '=')
+								FAILURE;
+			
+							scan++;
+							SKIPWHITESPACE;
+							if (!*scan)
+								FAILURE;
+			
+							READTOKEN;
+							if (!*scan)
+								FAILURE;
+			
+							unsigned int iter;
+							for (iter=0; iter<tex.size(); iter++)
+							{
+								if (!strcmp(token, tex[iter].name.c_str()))
+									break;
+							}
+							if (iter == tex.size())
+							{
+								detail = std::string("texture name ") + token + " not found";
+								parseerror = true;
+								break;
+							}
+							currs->texunit[0].texindex = iter;
+							SKIPWHITESPACE;
+							if (!*scan)
+								FAILURE;
+			
+							if (*scan != ';')
+								FAILURE;
+			
+							scan++;
+						}
+						else if (!strcmp(token, "lighting"))
+						{
+							SKIPWHITESPACE;
+							if (!*scan)
+								FAILURE;
+			
+							if (*scan != '=')
+								FAILURE;
+			
+							scan++;
+							SKIPWHITESPACE;
+							if (!*scan)
+								FAILURE;
+			
+							READTOKEN;
+							if (!*scan)
+								FAILURE;
+			
+							if (0);
+							else if (!strcmp(token,"true"))
+								currs->lighting = true;
+							else if (!strcmp(token,"false"))
+								currs->lighting = false;
+							else
+								FAILURE;
+			
+							SKIPWHITESPACE;
+							if (!*scan)
+								FAILURE;
+			
+							if (*scan != ';')
+								FAILURE;
+			
+							scan++;
+						}
+						else if (!strcmp(token, "lightmodeltwoside"))
+						{
+							SKIPWHITESPACE;
+							if (!*scan)
+								FAILURE;
+			
+							if (*scan != '=')
+								FAILURE;
+			
+							scan++;
+							SKIPWHITESPACE;
+							if (!*scan)
+								FAILURE;
+			
+							READTOKEN;
+							if (!*scan)
+								FAILURE;
+			
+							if (0);
+							else if (!strcmp(token,"true"))
+								currs->lightmodeltwoside = true;
+							else if (!strcmp(token,"false"))
+								currs->lightmodeltwoside = false;
+							else
+								FAILURE;
+			
+							SKIPWHITESPACE;
+							if (!*scan)
+								FAILURE;
+			
+							if (*scan != ';')
+								FAILURE;
+			
+							scan++;
+						}
 						else
 						{
-							parseerror = true;
-							break;
+							detail = "invalid render state";
+							FAILURE
 						}
-						SKIPWHITESPACE;
-						if (!*scan)
-						{
-							parseerror = true;
-							break;
-						}
-						if (*scan != ';')
-						{
-							parseerror = true;
-							break;
-						}
-						scan++;
 					}
-					// alphatest = { FUNC, value };
-					else if (!strcmp(token, "alphatest"))
-					{
-						//con_printf("alphatest\n");
-						SKIPWHITESPACE;
-						if (!*scan)
-						{
-							parseerror = true;
-							break;
-						}
-						if (*scan != '=')
-						{
-							parseerror = true;
-							break;
-						}
-						scan++;
-						SKIPWHITESPACE;
-						if (!*scan)
-						{
-							parseerror = true;
-							break;
-						}
-						if (*scan != '{')
-						{
-							parseerror = true;
-							break;
-						}
-						scan++;
-						SKIPWHITESPACE;
-						if (!*scan)
-						{
-							parseerror = true;
-							break;
-						}
-						READTOKEN;
-						if (!*scan)
-						{
-							parseerror = true;
-							break;
-						}
-						if (0);
-						else if (!strcmp(token,"LESS"))
-							currs->alphatest.func = GL_LESS;
-						else if (!strcmp(token,"EQUAL"))
-							currs->alphatest.func = GL_EQUAL;
-						else if (!strcmp(token,"LEQUAL"))
-							currs->alphatest.func = GL_LEQUAL;
-						else if (!strcmp(token,"GREATER"))
-							currs->alphatest.func = GL_GREATER;
-						else if (!strcmp(token,"NOTEQUAL"))
-							currs->alphatest.func = GL_NOTEQUAL;
-						else if (!strcmp(token,"GEQUAL"))
-							currs->alphatest.func = GL_GEQUAL;
-						else if (!strcmp(token,"ALWAYS"))
-							currs->alphatest.func = GL_ALWAYS;
-						else
-						{
-							detail = "invalid alphatest func";
-							parseerror = true;
-							break;
-						}
-						SKIPWHITESPACE;
-						if (!*scan)
-						{
-							parseerror = true;
-							break;
-						}
-						if (*scan != ',')
-						{
-							parseerror = true;
-							break;
-						}
-						scan++;
-						SKIPWHITESPACE;
-						if (!*scan)
-						{
-							parseerror = true;
-							break;
-						}
-						READNUMERICALTOKEN;
-						if (!*scan)
-						{
-							parseerror = true;
-							break;
-						}
-						currs->alphatest.ref = atof(token);
-						SKIPWHITESPACE;
-						if (!*scan)
-						{
-							parseerror = true;
-							break;
-						}
-					if (*scan != '}')
-					{
-						parseerror = true;
-						break;
-					}
-					scan++;
-					SKIPWHITESPACE;
-					if (!*scan)
-					{
-						parseerror = true;
-						break;
-					}
-					if (*scan != ';')
-					{
-						parseerror = true;
-						break;
-					}
-					scan++;
-				}
-				// cullface
-				else if (!strcmp(token, "cullface"))
-				{
-					//con_printf("cullface\n");
-					SKIPWHITESPACE;
-					if (!*scan)
-					{
-						parseerror = true;
-						break;
-					}
-					if (*scan != '=')
-					{
-						parseerror = true;
-						break;
-					}
-					scan++;
-					SKIPWHITESPACE;
-					if (!*scan)
-					{
-						parseerror = true;
-						break;
-					}
-					READTOKEN;
-					if (!*scan)
-					{
-						parseerror = true;
-						break;
-					}
-					if (0);
-					else if (!strcmp(token,"NONE"))
-						currs->cullface = CULLFACE_NONE;
-					else if (!strcmp(token,"CW"))
-						currs->cullface = CULLFACE_CW;
-					else if (!strcmp(token,"CCW"))
-						currs->cullface = CULLFACE_CCW;
-					else
-					{
-						detail = "invalid cullface mode";
-						parseerror = true;
-						break;
-					}
-					SKIPWHITESPACE;
-					if (!*scan)
-					{
-						parseerror = true;
-						break;
-					}
-					if (*scan != ';')
-					{
-						parseerror = true;
-						break;
-					}
-					scan++;
-				}
-				// blendmode
-				else if (!strcmp(token, "blendmode"))
-				{
-					SKIPWHITESPACE;
-					if (!*scan)
-					{
-						parseerror = true;
-						break;
-					}
-					if (*scan != '=')
-					{
-						parseerror = true;
-						break;
-					}
-					scan++;
-					SKIPWHITESPACE;
-					if (!*scan)
-					{
-						parseerror = true;
-						break;
-					}
-					READTOKEN;
-					if (!*scan)
-					{
-						parseerror = true;
-						break;
-					}
-					if (0);
-					else if (!strcmp(token,"NONE"))
-						currs->blendmode = BLEND_NONE;
-					else if (!strcmp(token,"ADD"))
-						currs->blendmode = BLEND_ADD;
-					else if (!strcmp(token,"MULTIPLY"))
-						currs->blendmode = BLEND_MULTIPLY;
-					else if (!strcmp(token,"ALPHA"))
-						currs->blendmode = BLEND_ALPHA;
-					else if (!strcmp(token,"PREMULTALPHA"))
-						currs->blendmode = BLEND_PREMULTALPHA;
-					else
-					{
-						detail = "invalid blendmode mode";
-						parseerror = true;
-						break;
-					}
-					SKIPWHITESPACE;
-					if (!*scan)
-					{
-						parseerror = true;
-						break;
-					}
-					if (*scan != ';')
-					{
-						parseerror = true;
-						break;
-					}
-					scan++;
-				}
-				// texunit0 = <texture>;
-				else if (!strcmp(token, "texunit0"))
-				{
-					//con_printf("texunit0\n");
-					SKIPWHITESPACE;
-					if (!*scan)
-					{
-						parseerror = true;
-						break;
-					}
-					if (*scan != '=')
-					{
-						parseerror = true;
-						break;
-					}
-					scan++;
-					SKIPWHITESPACE;
-					if (!*scan)
-					{
-						parseerror = true;
-						break;
-					}
-					READTOKEN;
-					if (!*scan)
-					{
-						parseerror = true;
-						break;
-					}
-					unsigned int iter;
-					for (iter=0; iter<tex.size(); iter++)
-					{
-						if (!strcmp(token, tex[iter].name.c_str()))
-							break;
-					}
-					if (iter == tex.size())
-					{
-						detail = std::string("texture name ") + token + " not found";
-						parseerror = true;
-						break;
-					}
-					currs->texunit[0].texindex = iter;
-					SKIPWHITESPACE;
-					if (!*scan)
-					{
-						parseerror = true;
-						break;
-					}
-					if (*scan != ';')
-					{
-						parseerror = true;
-						break;
-					}
-					scan++;
-				}
-				else if (!strcmp(token, "lighting"))
-				{
-					SKIPWHITESPACE;
-					if (!*scan)
-					{
-						parseerror = true;
-						break;
-					}
-					if (*scan != '=')
-					{
-						parseerror = true;
-						break;
-					}
-					scan++;
-					SKIPWHITESPACE;
-					if (!*scan)
-					{
-						parseerror = true;
-						break;
-					}
-					READTOKEN; if (!*scan) { parseerror = true; break; }
-					if (0);
-					else if (!strcmp(token,"true")) currs->lighting = true;
-					else if (!strcmp(token,"false")) currs->lighting = false;
-					else { parseerror = true; break; }
-					SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-					if (*scan != ';') { parseerror = true; break; }
-					scan++;
-				}
-				else if (!strcmp(token, "lightmodeltwoside"))
-				{
-					SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-					if (*scan != '=') { parseerror = true; break; }
-					scan++;
-					SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-					READTOKEN; if (!*scan) { parseerror = true; break; }
-					if (0);
-					else if (!strcmp(token,"true")) currs->lightmodeltwoside = true;
-					else if (!strcmp(token,"false")) currs->lightmodeltwoside = false;
-					else { parseerror = true; break; }
-					SKIPWHITESPACE; if (!*scan) { parseerror = true; break; }
-					if (*scan != ';') { parseerror = true; break; }
-					scan++;
 				}
 				else
-				{
-					detail = "invalid render state";
-					parseerror = true;
+					FAILURE;
+			
+				if (parseerror)
 					break;
-				}
 			}
 		}
 		else
-		{
-			parseerror = true;
-			break;
-		}
-        if (parseerror)
+			FAILURE;
+		
+		if (parseerror)
 			break;
 	}
-    } else {
-      parseerror = true; break;
-    }
-    if (parseerror) break;
-  }
 
 	delete [] source;
 
-  if (parseerror) {
-    con_printf("\"%s\": error at line %i : %s\n",name.c_str(),linec,detail);
-    //*scan = '\0';
-    //con_printf("[%s]\n",source);
-    unload();
-    throw MakePException (name + ": error at line " + PUtil::formatInt (linec) + " : " + detail);
-  }
+	if (parseerror)
+	{
+		con_printf("\"%s\": error at line %i : %s\n",name.c_str(),linec,detail);
+		//*scan = '\0';
+		//con_printf("[%s]\n",source);
+		unload();
+		throw MakePException (name + ": error at line " + PUtil::formatInt (linec) + " : " + detail);
+	}
   
-  con_printf("Load complete\n");
+	con_printf("Load complete\n");
 }
 
 int PEffect::getNumTechniques()

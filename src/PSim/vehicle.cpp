@@ -46,6 +46,9 @@
 // This is a coefficent used to get the friction of a wheel or a clip with the ground
 #define FRICTION_MAGIC_COEFF 10000
 
+// How much of the wheel radius can the suspension be compressed
+#define MAX_SUSPENSION_DEPTH_COEFF 0.7
+
 ///
 /// @brief PVehicleWheel constructor
 ///
@@ -1036,8 +1039,8 @@ void PVehicle::tick(const float& delta)
         // suspension get pressed to keep the wheel above ground
         wheel.ride_pos += depth;
 
-        // suspension can't get more strecthed than the 70% of the wheel radius
-        float maxdepth = typewheel.radius * 0.7f;
+        // suspension can't get more strecthed than the MAX_SUSPENSION_DEPTH_COEFF of the wheel radius
+        float maxdepth = typewheel.radius * MAX_SUSPENSION_DEPTH_COEFF;
 
         // if the suspension get pressed too much
         if (wheel.ride_pos > maxdepth) {

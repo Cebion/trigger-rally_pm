@@ -403,6 +403,9 @@ void XMLUtil::ConvertUTF32ToUTF8( unsigned long input, char* output, int* length
 
     output += *length;
 
+	/*
+	 * OLD CODE THAT FALLS THROUGHT - why you write it this way?
+	 * 
     // Scary scary fall throughs.
     switch (*length) {
         case 4:
@@ -424,6 +427,19 @@ void XMLUtil::ConvertUTF32ToUTF8( unsigned long input, char* output, int* length
         default:
             TIXMLASSERT( false );
     }
+    */
+	
+	if(*length != 1)
+	{
+		for(unsigned int i = *length; i!=1; --i)
+		{
+			--output;
+			*output = (char)((input | BYTE_MARK) & BYTE_MASK);
+			input >>= 6;
+		}
+	}
+	--output;
+	*output = (char)(input | FIRST_BYTE_MARK[*length]);
 }
 
 
