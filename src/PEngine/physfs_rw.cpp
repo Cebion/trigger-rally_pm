@@ -2,6 +2,7 @@
 // physfs_rw.cpp [pengine]
 
 // Copyright 2004-2006 Jasmine Langridge, jas@jareiko.net
+// Copyright 2018 Emanuele Sorce, emanuele.sorce@hotmail.com
 // License: GPL version 2 (see included gpl.txt)
 
 //
@@ -56,7 +57,7 @@ size_t physfs_read(SDL_RWops *context, void *ptr, size_t size, size_t maxnum)
 {
   PHYSFS_file *pfile = (PHYSFS_file *)context->hidden.unknown.data1;
   
-  const Sint64 r = PHYSFS_readBytes(pfile, ptr, size * maxnum);
+  const Sint64 r = physfs_read(pfile, ptr, size, maxnum);
   
   // reading 0 bytes is considered an error now, thanks SDL2!
   return r == -1 ? 0 : r;
@@ -67,7 +68,7 @@ size_t physfs_write(SDL_RWops *context, const void *ptr, size_t size, size_t num
 {
   PHYSFS_file *pfile = (PHYSFS_file *)context->hidden.unknown.data1;
   
-  return PHYSFS_writeBytes(pfile, ptr, size * num);
+  return physfs_write(pfile, ptr, size, num);
 }
 
 
@@ -101,4 +102,34 @@ std::string physfs_getErrorString()
 	#endif
 	
 	return ss.str();
+}
+
+PHYSFS_sint64 physfs_read
+(
+	PHYSFS_File *  	handle,
+	void *  		buffer,
+	PHYSFS_uint32  	objSize,
+	PHYSFS_uint32  	objCount
+)
+{
+	#if PHYSFS_VER_MAJOR >= 3
+	return PHYSFS_readBytes(handle, buffer, objSize*objCount);
+	#else
+	return PHYSFS_read(handle, buffer, objSize, objCount);
+	#endif
+}
+
+PHYSFS_sint64 physfs_write
+(
+	PHYSFS_File *	handle,
+	const void *	buffer,
+	PHYSFS_uint32	objSize,
+	PHYSFS_uint32	objCount
+)
+{
+	#if PHYSFS_VER_MAJOR >= 3
+	return PHYSFS_writeBytes(handle, buffer, objSize*objCount);
+	#else
+	return PHYSFS_write(handle, buffer, objSize, objCount);
+	#endif
 }

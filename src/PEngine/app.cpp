@@ -734,8 +734,8 @@ int PApp::run(int argc, char *argv[])
         PUtil::outLog() << "Writing screenshot \"" << filename << "\"" << std::endl;
         PHYSFS_file* pfile = PHYSFS_openWrite(filename);
         if (pfile) {
-          PHYSFS_writeBytes(pfile, buff, sizeof (char) * strlen(buff));
-          PHYSFS_writeBytes(pfile, data1, sizeof (char) * cx*cy*3);
+          physfs_write(pfile, buff, sizeof(char), strlen(buff));
+          physfs_write(pfile, data1, sizeof(char), cx*cy*3);
           PHYSFS_close(pfile);
         } else {
           PUtil::outLog() << "Screenshot write failed" << std::endl;

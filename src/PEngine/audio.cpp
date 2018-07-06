@@ -192,7 +192,7 @@ PAudioSample::PAudioSample(const std::string &filename, bool positional3D)
 
     char *wavbuffer = new char[filesize];
 
-    PHYSFS_readBytes(pfile, wavbuffer, sizeof (char) * filesize);
+    physfs_read(pfile, wavbuffer, sizeof(char), filesize);
     PHYSFS_close(pfile);
 
     /* create the alut buffer from memory contents */
@@ -338,7 +338,7 @@ FMOD_RESULT F_CALLBACK fmod_file_read(void *handle, void *buffer, unsigned int s
     UNREFERENCED_PARAMETER(userdata);
 
     PHYSFS_File *hfile = reinterpret_cast<PHYSFS_File *> (handle);
-    PHYSFS_sint64 numbytes = PHYSFS_read(hfile, buffer, sizeof (char), sizebytes);
+    PHYSFS_sint64 numbytes = physfs_read(hfile, buffer, sizeof(char), sizebytes);
 
     if (numbytes == -1)
     {

@@ -32,6 +32,8 @@
 #include <vector>
 #include <physfs.h>
 
+#include "physfs_utils.h"
+
 #define GETLINE_SKIP_EMPTY_LINES(InputStream, String)   if (true) { \
     while (std::getline(InputStream, String)) {                     \
         if (!String.empty())                                        \
@@ -235,7 +237,7 @@ public:
             PHYSFS_File *pfile = PHYSFS_openRead((searchdir + '/' + *fname).c_str()); // Player File
             std::string pdata(PHYSFS_fileLength(pfile), '\0'); // Player Data
 
-            PHYSFS_readBytes(pfile, &pdata.front(), sizeof (char) * pdata.size());
+            physfs_read(pfile, &pdata.front(), sizeof(char), pdata.size());
             readPlayerData(pname, pdata);
             PHYSFS_close(pfile);
         }
@@ -795,12 +797,12 @@ private:
         if (pfile == nullptr)
         {
             std::clog << "pfname is \"" << pfname << "\"\n";
-            std::clog << "PhysFS error: " << PHYSFS_getLastError() << std::endl;
+            std::clog << "PhysFS error: " << physfs_getErrorString() << std::endl;
             return;
         }
 #endif
 
-        PHYSFS_writeBytes(pfile, sspdata.str().data(), sizeof (char) * sspdata.str().size());
+        physfs_write(pfile, sspdata.str().data(), sizeof(char), sspdata.str().size());
         PHYSFS_close(pfile);
     }
 

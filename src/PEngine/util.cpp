@@ -137,7 +137,7 @@ char* PUtil::fgets2(char *s, int size, PHYSFS_file *pfile)
     // check for EOF
     if (PHYSFS_eof(pfile)) return nullptr;
 
-    int ret = PHYSFS_readBytes(pfile, s + i, sizeof(char));
+    int ret = physfs_read(pfile, s + i, sizeof(char), 1);
 
     if (s[i] == '\n') break;
 
@@ -220,7 +220,7 @@ XMLElement *PUtil::loadRootElement(XMLDocument &doc, const std::string &filename
 
   char *xmlbuffer = new char[filesize + 1];
 
-  PHYSFS_readBytes(pfile, xmlbuffer, sizeof (char) * filesize);
+  physfs_read(pfile, xmlbuffer, sizeof (char), filesize);
   PHYSFS_close(pfile);
 
   xmlbuffer[filesize] = '\0';
@@ -295,9 +295,9 @@ bool PUtil::copyFile(const std::string &fileFrom, const std::string &fileTo)
   int readcount;
   do {
 
-    readcount = PHYSFS_readBytes(pfile_from, block, sizeof (char) * blocksize);
+    readcount = physfs_read(pfile_from, block, sizeof (char), blocksize);
 
-    PHYSFS_writeBytes(pfile_to, block, sizeof (char) * readcount);
+    physfs_write(pfile_to, block, sizeof (char), readcount);
 
   } while (readcount == blocksize);
 

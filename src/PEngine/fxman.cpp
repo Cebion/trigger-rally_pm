@@ -200,7 +200,7 @@ void PEffect::loadFX(const std::string &filename)
 	// we'll create a string storing the whole file
 	int leng = PHYSFS_fileLength(pfile);
 	char *source = new char[leng+1];
-	PHYSFS_readBytes(pfile, source, sizeof(char) * leng);
+	physfs_read(pfile, source, sizeof(char), leng);
 	source[leng] = '\0';
 	
 	// close file since we have everything in char *source
