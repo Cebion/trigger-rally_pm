@@ -185,6 +185,3 @@ void PSim::tick(float delta)
 			vehicle[i]->updateParts();
 	}
 }
-
-
-

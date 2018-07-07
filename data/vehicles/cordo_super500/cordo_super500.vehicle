@@ -7,8 +7,7 @@
 
 	<pstats
 		enginebhp="550"
-		wheeldrive="4WD"
-		handling="difficult" />
+		wheeldrive="4WD" />
 
 	<genparams
 		mass="1650.0"

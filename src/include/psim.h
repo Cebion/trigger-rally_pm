@@ -150,14 +150,15 @@ private:
 
   // the gravity vector
   vec3f gravity;
-
+  
 public:
   PSim();
   ~PSim();
 
-  void setTerrain(PTerrain *_terrain) { terrain = _terrain; }
+  inline void setTerrain(PTerrain *new_terrain) { terrain = new_terrain; }
+  inline PTerrain *getTerrain() { return terrain; }
 
-  void setGravity(const vec3f &_gravity) { gravity = _gravity; }
+  inline void setGravity(const vec3f &new_gravity) { gravity = new_gravity; }
 
   PVehicleType *loadVehicleType(const std::string &filename, PSSModel &ssModel);
 
@@ -172,9 +173,6 @@ public:
 
   // Step the simulation delta seconds
   void tick(float delta);
-
-  PTerrain *getTerrain() { return terrain; }
-
 
   friend class PRigidBody;
   friend class PVehicle;

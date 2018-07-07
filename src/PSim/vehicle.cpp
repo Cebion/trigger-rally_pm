@@ -10,10 +10,8 @@
 // default vehicle type values
 #define DEF_VEHICLE_NAME "Vehicle"
 #define DEF_VEHICLE_CLASS "Unknown"
-#define DEF_PSTAT_WEIGHT "N/A"
 #define DEF_PSTAT_ENGINE "N/A"
 #define DEF_PSTAT_WHEELDRIVE "N/A"
-#define DEF_PSTAT_HANDLING "N/A"
 
 #define DEF_VEHICLE_MASS 1
 #define DEF_VEHICLE_DIMS vec3f(1,1,1)
@@ -90,10 +88,8 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
   proper_name = DEF_VEHICLE_NAME;
   proper_class = DEF_VEHICLE_CLASS;
 
-  pstat_weightkg = DEF_PSTAT_WEIGHT;
   pstat_enginebhp = DEF_PSTAT_ENGINE;
   pstat_wheeldrive = DEF_PSTAT_WHEELDRIVE;
-  pstat_handling = DEF_PSTAT_HANDLING;
 
   mass = DEF_VEHICLE_MASS;
   dims = DEF_VEHICLE_DIMS;
@@ -176,20 +172,16 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
         val = walk->Attribute("wheeldrive");
         if (val != nullptr) pstat_wheeldrive = val;
 
-        val = walk->Attribute("handling");
-        if (val != nullptr) pstat_handling = val;
+      //  val = walk->Attribute("handling");
+      //  if (val != nullptr) pstat_handling = val;
 
 	// generic params
     } else if (!strcmp(walk->Value(), "genparams")) {
 
       val = walk->Attribute("mass");
       if (val)
-	  {
 		  mass = atof(val);
-		  std::stringstream ss;
-		  ss << mass;
-		  pstat_weightkg = ss.str();
-      }
+	  
       val = walk->Attribute("dimensions");
       if (val) {
         sscanf(val, "%f , %f , %f", &dims.x, &dims.y, &dims.z);
@@ -464,7 +456,32 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
           "\" references non-existant parent \"" << part[i].parentname << "\"\n";
     }
   }
-
+  
+  // compute road holding average
+  float road_holding = 0;
+  unsigned wheel_num = 0;
+  for(unsigned int i=0; i!=part.size(); i++)
+  {
+	for(unsigned int j=0; j!=part[i].wheel.size(); j++)
+	{
+	  ++wheel_num;
+	  road_holding += part[i].wheel[j].friction;
+	}
+  }
+  road_holding /= wheel_num;
+  pstat_roadholding = std::to_string(road_holding * 100);
+  // remove trailing spaces/points
+  while(1)
+  {
+	if(pstat_roadholding.back() == '0')
+	{
+		pstat_roadholding.pop_back();
+		continue;
+	}
+	else if(pstat_roadholding.back() == '.')
+		pstat_roadholding.pop_back();
+	break;
+  }
   if (drive_total > 0.0f)
     inverse_drive_total = 1.0f / drive_total;
   else
@@ -472,7 +489,7 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
 
   if (wheel_speed_multiplier > 0.0f)
     wheel_speed_multiplier = 1.0f / wheel_speed_multiplier;
-
+  
   return true;
 }
 
@@ -1150,7 +1167,7 @@ bool PVehicle::canHaveDustTrail()
             tci.pos.y = wclip.y;
             sim.getTerrain()->getContactInfo(tci);
 
-#define MAX_HEIGHT 1.5f
+#define MAX_HEIGHT 0.5f
             if (wclip.z - tci.pos.z <= MAX_HEIGHT)
                 return true;
 #undef MAX_HEIGHT

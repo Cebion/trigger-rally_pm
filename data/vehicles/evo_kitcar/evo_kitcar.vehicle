@@ -6,8 +6,7 @@
 
 	<pstats
 		enginebhp="240"
-		wheeldrive="FWD"
-		handling="good" />
+		wheeldrive="FWD" />
 
 	<genparams
 		mass="900.0"

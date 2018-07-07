@@ -156,10 +156,9 @@ public:
   std::string proper_name;
   std::string proper_class;  // class name (i.e. "WRC")
   
-  std::string pstat_weightkg;
   std::string pstat_enginebhp;
   std::string pstat_wheeldrive;
-  std::string pstat_handling;
+  std::string pstat_roadholding;
   
   // type of vehicle (usually car)
   v_core_type coretype;

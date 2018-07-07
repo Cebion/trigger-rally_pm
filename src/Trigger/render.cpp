@@ -705,14 +705,14 @@ glMatrixMode(GL_PROJECTION);
     glTranslatef(500.0f, 110.0f, 0.0f);
     glScalef(20.0f, 20.0f, 1.0f);
     glColor4f(gwc.weak.x, gwc.weak.y, gwc.weak.z, gwc.weak.w);
-    getSSRender().drawText("Handling", PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER);
+    getSSRender().drawText("Roadholding", PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER);
     glPopMatrix(); // 1
 
     glPushMatrix(); // 1
     glTranslatef(520.0f, 230.0f, 0.0f);
     glScalef(30.0f, 30.0f, 1.0f);
     glColor4f(gwc.strong.x, gwc.strong.y, gwc.strong.z, gwc.strong.w);
-    getSSRender().drawText(vtype->pstat_weightkg, PTEXT_HZA_LEFT | PTEXT_VTA_CENTER);
+    getSSRender().drawText(std::to_string(static_cast<int>(vtype->mass)), PTEXT_HZA_LEFT | PTEXT_VTA_CENTER);
     glPopMatrix(); // 1
 
     glPushMatrix(); // 1
@@ -733,7 +733,7 @@ glMatrixMode(GL_PROJECTION);
     glTranslatef(520.0f, 110.0f, 0.0f);
     glScalef(30.0f, 30.0f, 1.0f);
     glColor4f(gwc.strong.x, gwc.strong.y, gwc.strong.z, gwc.strong.w);
-    getSSRender().drawText(vtype->pstat_handling, PTEXT_HZA_LEFT | PTEXT_VTA_CENTER);
+    getSSRender().drawText(vtype->pstat_roadholding, PTEXT_HZA_LEFT | PTEXT_VTA_CENTER);
     glPopMatrix(); // 1
 
     std::string racename;
