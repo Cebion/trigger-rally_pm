@@ -10,8 +10,6 @@
 // default vehicle type values
 #define DEF_VEHICLE_NAME "Vehicle"
 #define DEF_VEHICLE_CLASS "Unknown"
-#define DEF_PSTAT_ENGINE "N/A"
-#define DEF_PSTAT_WHEELDRIVE "N/A"
 
 #define DEF_VEHICLE_MASS 1
 #define DEF_VEHICLE_DIMS vec3f(1,1,1)
@@ -88,9 +86,6 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
   proper_name = DEF_VEHICLE_NAME;
   proper_class = DEF_VEHICLE_CLASS;
 
-  pstat_enginebhp = DEF_PSTAT_ENGINE;
-  pstat_wheeldrive = DEF_PSTAT_WHEELDRIVE;
-
   mass = DEF_VEHICLE_MASS;
   dims = DEF_VEHICLE_DIMS;
 
@@ -164,19 +159,8 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
   for (XMLElement *walk = rootelem->FirstChildElement();
     walk; walk = walk->NextSiblingElement()) {
 
-	// stats not used by simulation displayed to user
-    if (!strcmp(walk->Value(), "pstats")) {
-        val = walk->Attribute("enginebhp");
-        if (val != nullptr) pstat_enginebhp = val;
-
-        val = walk->Attribute("wheeldrive");
-        if (val != nullptr) pstat_wheeldrive = val;
-
-      //  val = walk->Attribute("handling");
-      //  if (val != nullptr) pstat_handling = val;
-
 	// generic params
-    } else if (!strcmp(walk->Value(), "genparams")) {
+    if (!strcmp(walk->Value(), "genparams")) {
 
       val = walk->Attribute("mass");
       if (val)
@@ -482,6 +466,76 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
 		pstat_roadholding.pop_back();
 	break;
   }
+  
+  // get pstat of engine
+  pstat_enginepower = std::to_string(engine.getHorsePower());
+  // remove decimals
+  while(1)
+  {
+	if(pstat_enginepower.back() == '.')
+	{
+		pstat_enginepower.pop_back();
+		break;
+	}
+	pstat_enginepower.pop_back();
+  }
+  
+  // assign pstat of driving wheels
+  std::vector<float> wheels_drive;
+  for(unsigned int i=0; i!=part.size(); i++)
+  {
+	for(unsigned int j=0; j!=part[i].wheel.size(); j++)
+	{
+		wheels_drive.push_back(part[i].wheel[j].drive);
+	}
+  }
+  // standard four wheels layout
+  if(wheels_drive.size() == 4)
+  {
+	// 4x4
+	if
+	(
+		wheels_drive[0] > 0 &&
+		wheels_drive[1] > 0 &&
+		wheels_drive[2] > 0 &&
+		wheels_drive[3] > 0
+	)
+		pstat_wheeldrive = "4WD";
+	// forward
+	else if
+	(
+		wheels_drive[0] > 0 &&
+		wheels_drive[1] > 0 &&
+		wheels_drive[2] == 0 &&
+		wheels_drive[3] == 0
+	)
+		pstat_wheeldrive = "FWD";
+	// backward
+	else if
+	(
+		wheels_drive[0] == 0 &&
+		wheels_drive[1] == 0 &&
+		wheels_drive[2] > 0 &&
+		wheels_drive[3] > 0
+	)
+		pstat_wheeldrive = "RWD";
+	//
+	else
+		pstat_wheeldrive = "non standard layout";
+  }
+  else
+  {
+	// count how many wheels drive
+	unsigned int wd = 0;
+	for(unsigned int i=0; i!=wheels_drive.size(); i++)
+	{
+		if(wheels_drive[i] > 0)
+			++wd;
+	}
+	pstat_wheeldrive = std::to_string(wd) + " driving out of " + std::to_string(wheels_drive.size());
+  }
+  
+  // assign inverse_drive_total
   if (drive_total > 0.0f)
     inverse_drive_total = 1.0f / drive_total;
   else

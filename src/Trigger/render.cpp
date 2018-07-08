@@ -719,7 +719,7 @@ glMatrixMode(GL_PROJECTION);
     glTranslatef(520.0f, 190.0f, 0.0f);
     glScalef(30.0f, 30.0f, 1.0f);
     glColor4f(gwc.strong.x, gwc.strong.y, gwc.strong.z, gwc.strong.w);
-    getSSRender().drawText(vtype->pstat_enginebhp, PTEXT_HZA_LEFT | PTEXT_VTA_CENTER);
+    getSSRender().drawText(vtype->pstat_enginepower, PTEXT_HZA_LEFT | PTEXT_VTA_CENTER);
     glPopMatrix(); // 1
 
     glPushMatrix(); // 1

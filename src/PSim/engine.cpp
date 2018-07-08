@@ -19,6 +19,49 @@
 
 #include "engine.h"
 
+void PEngine::addPowerCurvePoint(const float& rpm, const float& power)
+{
+	// no power with the engine still
+	if (rpm <= 0.0f) return;
+    
+	// round per minute >> radians per second
+	float rps = RPM_TO_RPS(rpm);
+    
+	// add the point
+	powercurve.push_back(vec2f(rps, power));
+    
+	// if the point is out of range, adapt max or min rps
+	if (minRPS > rps)
+		minRPS = rps;
+	else if (maxRPS < rps)
+		maxRPS = rps;
+}
+
+void PEngine::addGear(const float& ratio)
+{
+	if (hasGears()) {
+		if (ratio <= getLastGearRatio()) return;
+	} else {
+		if (ratio <= 0.0f) return;
+	}
+
+	// put in the ratio
+	gear.push_back(ratio);
+}
+
+float PEngine::getHorsePower()
+{
+	float bhp = 0;
+	
+	const float k = 4.75e-6;
+	
+	// return point with higher output
+	for(unsigned int i=0; i!=powercurve.size(); i++)
+		bhp = MAX(bhp, powercurve[i][1] * RPS_TO_RPM(powercurve[i][0]) * k);
+	
+	return bhp;
+}
+
 ///
 /// @brief Get the engine power output at a rps
 /// @param rps = radians per second

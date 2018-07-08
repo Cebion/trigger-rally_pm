@@ -33,7 +33,6 @@
 /// @brief Datas about performances of an engine
 ///
 class PEngine {
-private:
 
 	// the curve graph of the power of the engine
 	// x = radians per second
@@ -67,42 +66,21 @@ public:
 	/// @brief Add a point to the power curve
 	/// @param rpm   = at 'rpm' round per minute
 	/// @param power = you get 'power' output power
-	/// @todo overload function to allow to give angular velocity directly in radians per second?
+	/// @todo function to allow to give angular velocity directly in radians per second?
 	///
-	void addPowerCurvePoint(float rpm, float power) {
-		// no power with the engine still
-		if (rpm <= 0.0f) return;
-    
-		// round per minute >> radians per second
-		float rps = RPM_TO_RPS(rpm);
-    
-		// add the point
-		powercurve.push_back(vec2f(rps, power));
-    
-		// if the point is out of range, adapt max or min rps
-		if (minRPS > rps)
-			minRPS = rps;
-		else if (maxRPS < rps)
-			maxRPS = rps;
-	}
+	void addPowerCurvePoint(const float& rpm, const float& power);
   
 	///
 	/// @brief add a gear
 	/// @param ratio = gear ratio
 	///
-	void addGear(float ratio) {
-		if (hasGears()) {
-			if (ratio <= getLastGearRatio()) return;
-		} else {
-			if (ratio <= 0.0f) return;
-		}
-
-		// put in the ratio
-		gear.push_back(ratio);
-	}
+	void addGear(const float& ratio);
   
 	bool hasGears() { return !gear.empty(); }
 	float getLastGearRatio() { return gear.back(); }
+  
+	// get engine horse power
+	float getHorsePower();
   
 	friend class PEngineInstance;
 };
@@ -111,7 +89,6 @@ public:
 /// @brief current status of the engine
 ///
 class PEngineInstance {
-private:
   
 	// reference with performance of the engine
 	PEngine *engine;

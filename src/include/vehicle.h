@@ -156,9 +156,14 @@ public:
   std::string proper_name;
   std::string proper_class;  // class name (i.e. "WRC")
   
-  std::string pstat_enginebhp;
+  // how many wheels drive
   std::string pstat_wheeldrive;
+  
+  // contains 100 times the average wheel roadholding in human readable form
   std::string pstat_roadholding;
+  
+  // contains the engine max power in human readable form
+  std::string pstat_enginepower;
   
   // type of vehicle (usually car)
   v_core_type coretype;
