@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<event name="13. Generic Dare" author="Onsemeliot" locked="no">
+
+	<unlocks file="/vehicles/cordo_super500/cordo_super500.vehicle" />
+
+	<level file="generic/generic-tarmac.level" />
+	<level file="generic/generic-dirt.level" />
+	<level file="generic/generic.level" />
+	<level file="generic/generic-gravel.level" />
+	<level file="aquamarin/aquamarin.level" />
+	<level file="southern/southern.level" />
+	
+</event>
