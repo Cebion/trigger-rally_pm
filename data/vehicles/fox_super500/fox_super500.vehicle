@@ -5,12 +5,8 @@
 	type="car"
 	locked="yes">
 
-	<pstats
-		enginebhp="550"
-		wheeldrive="4WD" />
-
 	<genparams
-		mass="1650.0"
+		mass="1400.0"
 		dimensions="1.6, 2.3, 1.2"
 		wheelmodel="fox_super500_wheel.obj"
 		wheelscale="0.033" />
@@ -67,10 +63,10 @@
 		model="fox_super500.obj"
 		scale="0.445">
 
-		<wheel drive="1.0" steer="0.85" brake1="200.0" pos="0.63, 1.24, -0.16" radius="0.3" force="70000.0" dampening="20000.0" friction="0.022" />
-		<wheel drive="1.0" steer="0.85" brake1="200.0" pos="-0.63, 1.24, -0.16" radius="0.3" force="70000.0" dampening="20000.0" friction="0.022"/>
-		<wheel drive="1.0" steer="0.0" brake1="100.0" pos="0.63, -0.99, -0.16" radius="0.3" force="70000.0" dampening="20000.0" brake2="2500.0" friction="0.022" />
-		<wheel drive="1.0" steer="0.0" brake1="100.0" pos="-0.63, -0.99, -0.16" radius="0.3" force="70000.0" dampening="20000.0" brake2="2500.0" friction="0.022" />
+		<wheel drive="1.0" steer="0.85" brake1="200.0" pos="0.63, 1.24, -0.16" radius="0.3" force="70000.0" dampening="20000.0" friction="0.025" />
+		<wheel drive="1.0" steer="0.85" brake1="200.0" pos="-0.63, 1.24, -0.16" radius="0.3" force="70000.0" dampening="20000.0" friction="0.025"/>
+		<wheel drive="1.0" steer="0.0" brake1="100.0" pos="0.63, -0.99, -0.16" radius="0.3" force="70000.0" dampening="20000.0" brake2="2500.0" friction="0.025" />
+		<wheel drive="1.0" steer="0.0" brake1="100.0" pos="-0.63, -0.99, -0.16" radius="0.3" force="70000.0" dampening="20000.0" brake2="2500.0" friction="0.025" />
 
 		<clip type="body" pos="1.0, 1.5, 1.0" force="500000.0" dampening="35000.0" />
 		<clip type="body" pos="-1.0, 1.5, 1.0" force="500000.0" dampening="35000.0" />

@@ -5,12 +5,8 @@
 	type="car"
 	locked="yes">
 
-	<pstats
-		enginebhp="300"
-		wheeldrive="4WD" />
-
 	<genparams
-		mass="1350.0"
+		mass="1100.0"
 		dimensions="1.6, 2.3, 1.2"
 		wheelmodel="fox_wrc_wheel.obj"
 		wheelscale="0.033" />
@@ -20,7 +16,7 @@
 		turnspeedrate="0.0, 0.0, 10.0" />
 
 	<drivesystem>
-		<engine powerscale="10000">
+		<engine powerscale="20000">
 			<powerpoint rpm="2000" power="0.4" />
 			<powerpoint rpm="5000" power="0.7" />
 			<powerpoint rpm="8000" power="1.0" />
@@ -41,15 +37,15 @@
 
 	<part
 		name="body"
-		pos="0.0, -0.2, 0.1"
+		pos="0.0, 0.4, 0.1"
 		orientation="1.0, 0.0, 0.0, 0.0"
 		model="fox_wrc.obj"
 		scale="0.445">
 
-		<wheel drive="1.0" steer="0.85" brake1="200.0" pos="0.63, 1.24, -0.17" radius="0.3" force="45000.0" dampening="20000.0" friction="0.022"/>
-		<wheel drive="1.0" steer="0.85" brake1="200.0" pos="-0.63, 1.24, -0.17" radius="0.3" force="45000.0" dampening="20000.0" friction="0.022"/>
-		<wheel drive="1.0" steer="0.0" brake1="100.0" pos="0.63, -0.99, -0.17" radius="0.3" force="45000.0" dampening="20000.0" brake2="1000.0" friction="0.022"/>
-		<wheel drive="1.0" steer="0.0" brake1="100.0" pos="-0.63, -0.99, -0.17" radius="0.3" force="45000.0" dampening="20000.0" brake2="1000.0" friction="0.022"/>
+		<wheel drive="0.0" steer="0.85" brake1="200.0" pos="0.63, 1.24, -0.17" radius="0.3" force="45000.0" dampening="20000.0" />
+		<wheel drive="0.0" steer="0.85" brake1="200.0" pos="-0.63, 1.24, -0.17" radius="0.3" force="45000.0" dampening="20000.0" />
+		<wheel drive="1.0" steer="0.0" brake1="100.0" pos="0.63, -0.99, -0.17" radius="0.3" force="45000.0" dampening="20000.0" brake2="1000.0" />
+		<wheel drive="1.0" steer="0.0" brake1="100.0" pos="-0.63, -0.99, -0.17" radius="0.3" force="45000.0" dampening="20000.0" brake2="1000.0" />
 
 		<clip type="body" pos="1.0, 1.5, 1.0" force="300000.0" dampening="30000.0" />
 		<clip type="body" pos="-1.0, 1.5, 1.0" force="300000.0" dampening="30000.0" />

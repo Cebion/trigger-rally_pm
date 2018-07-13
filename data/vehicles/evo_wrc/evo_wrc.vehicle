@@ -5,12 +5,8 @@
 	type="car"
 	locked="yes">
 
-	<pstats
-		enginebhp="300"
-		wheeldrive="4WD" />
-
 	<genparams
-		mass="1350.0"
+		mass="1400.0"
 		dimensions="1.5, 3.0, 1.5"
 		wheelmodel="evo_wrc_wheel.obj"
 		wheelscale="0.033" />
@@ -38,34 +34,24 @@
 			This makes an external force change the orientation of the vehicle harder at higher speed
 	-->
 	<ctrlparams
-		drag="14, 7, 18"
-		angdrag="20"
-		lift="10, -10"
 		speedrate="15.0"
-		turnspeedrate="0.0, 0.0, 10.0"
-		fineffect="10, 13" />
+		turnspeedrate="0.0, 0.0, 10.0" />
 
 	<drivesystem>
 		<engine powerscale="20000">
-			<powerpoint rpm="1000" power="0.17" />
-			<powerpoint rpm="2000" power="0.35" />
-			<powerpoint rpm="3000" power="0.55" />
-			<powerpoint rpm="4000" power="0.78" />
-			<powerpoint rpm="5000" power="0.95" />
-			<powerpoint rpm="5250" power="0.98" />
-			<powerpoint rpm="5600" power="1.0" />
-			<powerpoint rpm="5700" power="0.92" />
-			<powerpoint rpm="5900" power="0.90" />
-			<powerpoint rpm="8000" power="0.0" />
+			<powerpoint rpm="2000" power="0.4" />
+			<powerpoint rpm="5000" power="0.7" />
+			<powerpoint rpm="8000" power="1.0" />
+			<powerpoint rpm="11000" power="0.6" />
+			<powerpoint rpm="12000" power="0.0" />
 		</engine>
 
 		<gearbox>
-			<gear absolute="0.07" />
-			<gear relative="1.624" />
-			<gear relative="1.372" />
-			<gear relative="1.298" />
-			<gear relative="1.353" />
-			<gear relative="1.148" />
+			<gear absolute="0.065" />
+			<gear relative="1.37" />
+			<gear relative="1.34" />
+			<gear relative="1.31" />
+			<gear relative="1.28" />
 		</gearbox>
 	</drivesystem>
 
@@ -78,8 +64,8 @@
 
 		<wheel drive="1.0" steer="0.85" brake1="200.0" pos="0.65, 1.3, -0.15" radius="0.3" force="45000.0" dampening="17000.0" />
 		<wheel drive="1.0" steer="0.85" brake1="200.0" pos="-0.65, 1.3, -0.15" radius="0.3" force="45000.0" dampening="17000.0" />
-		<wheel drive="1.0" steer="0.0" brake1="100.0" pos="0.65, -1.0, -0.15" radius="0.3" force="45000.0" dampening="17000.0" brake2="1000.0" />
-		<wheel drive="1.0" steer="0.0" brake1="100.0" pos="-0.65, -1.0, -0.15" radius="0.3" force="45000.0" dampening="17000.0" brake2="1000.0" />
+		<wheel drive="0.0" steer="0.0" brake1="100.0" pos="0.65, -1.0, -0.15" radius="0.3" force="45000.0" dampening="17000.0" brake2="1000.0" />
+		<wheel drive="0.0" steer="0.0" brake1="100.0" pos="-0.65, -1.0, -0.15" radius="0.3" force="45000.0" dampening="17000.0" brake2="1000.0" />
 
 		<clip type="body" pos="1.0, 1.5, 1.0" force="300000.0" dampening="30000.0" />
 		<clip type="body" pos="-1.0, 1.5, 1.0" force="300000.0" dampening="30000.0" />
