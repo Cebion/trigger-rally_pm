@@ -24,10 +24,10 @@ WARNINGS        ?= -Wall -Wextra -pedantic
 OPTIMS          ?= -march=native -mtune=native -Ofast
 DMACROS         := -DNDEBUG -DUNIX -DPACKAGE_VERSION=\"$(DISTVER)\"
 INCDIRS         := -I'./include'
-CXXFLAGS        += -std=c++11 $(WARNINGS) $(OPTIMS)
-CPPFLAGS        += $(DMACROS) $(INCDIRS)
+CXXFLAGS        ?= -std=c++11 $(WARNINGS) $(OPTIMS)
+CPPFLAGS        ?= $(DMACROS) $(INCDIRS)
 EXTRA_LIBS      := -lSDL2main -lGL -lGLU -lGLEW -lSDL2 -lSDL2_image -lphysfs -lopenal -lalut -lpthread
-LDFLAGS         += $(EXTRA_LIBS)
+LDFLAGS         ?= $(EXTRA_LIBS)
 INSTALL_PROGRAM := install --mode=0755
 INSTALL_DATA    := install --mode=0644
 

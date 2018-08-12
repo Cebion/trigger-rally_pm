@@ -40,10 +40,10 @@ INCDIRS         :=                  \
 LIBDIRS         :=                  \
     -L'/usr/local/lib'              \
     -L'$(FMODAPIDIR)/lib'
-CXXFLAGS        += -std=c++11 $(MODENV) $(WARNINGS) $(OPTIMS)
-CPPFLAGS        += $(DMACROS) $(INCDIRS)
+CXXFLAGS        ?= -std=c++11 $(MODENV) $(WARNINGS) $(OPTIMS)
+CPPFLAGS        ?= $(DMACROS) $(INCDIRS)
 EXTRA_LIBS      := -lmingw32 -lSDL2main -lopengl32 -lglu32 -lglew32 -lSDL2 -lSDL2_image -lphysfs -lfmod64
-LDFLAGS         += $(MODENV) $(LIBDIRS) $(EXTRA_LIBS)
+LDFLAGS         ?= $(MODENV) $(LIBDIRS) $(EXTRA_LIBS)
 
 #
 # phony targets, whose names aren't names of resulting files
