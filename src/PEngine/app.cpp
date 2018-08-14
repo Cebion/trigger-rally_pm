@@ -148,28 +148,7 @@ int PApp::run(int argc, char *argv[])
     
     lsdbuff = physfs_getDir();
     
-    // this is a hack because PhysFS doesn't appear to live
-    // up to its claim of creating the WriteDir if necessary.
-    // set write dir to home, create ~/.whatever, then change
-    // over to that dir.
-    
-#if 1
-    PUtil::outLog() << "Set writable user directory to \"" << lsdbuff << "\"" << std::endl;
-    
-    if (PHYSFS_setWriteDir(lsdbuff.c_str()) == 0) {
-      PUtil::outLog() << "Failed to set PhysFS writable directory to \"" << lsdbuff << "\"" << std::endl
-          << "PhysFS: " << physfs_getErrorString() << std::endl;
-    }
-    
-    if (PHYSFS_mkdir(appname.c_str()) == 0) {
-      PUtil::outLog() << "Failed to create directory \"" << appname << "\"" << std::endl
-          << "PhysFS: " << physfs_getErrorString() << std::endl;
-    }
-#endif
-    
-    lsdbuff += appname;
-    
-    PUtil::outLog() << "Reset writable user directory to \"" << lsdbuff << "\"" << std::endl;
+    PUtil::outLog() << "Setting writable user directory to \"" << lsdbuff << "\"" << std::endl;
     
     if (PHYSFS_setWriteDir(lsdbuff.c_str()) == 0) {
       PUtil::outLog() << "Failed to set PhysFS writable directory to \"" << lsdbuff << "\"" << std::endl
@@ -181,14 +160,6 @@ int PApp::run(int argc, char *argv[])
         PUtil::outLog() << "Failed to create directory \"/players\"" << std::endl
             << "PhysFS: " << physfs_getErrorString() << std::endl;
     }
-    
-    // Adding "." to the search path seems to add more trouble than it's worth
-#if 0
-    if (PHYSFS_addToSearchPath(".", 1) == 0) {
-      PUtil::outLog() << "Failed to add PhysFS search directory \".\"" << std::endl
-          << "PhysFS: " << PHYSFS_getLastError() << std::endl;
-    }
-#endif
     
     std::string basedir = PHYSFS_getBaseDir();
     PUtil::outLog() << "Application base directory \"" << basedir << '\"' << std::endl;
