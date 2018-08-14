@@ -84,11 +84,16 @@ int physfs_close(SDL_RWops *context)
 }
 
 //
+// @todo:
+//
 // PHYSFS 3 is pretty new, and not all the distro ship with it yet,
 // But using the deprecated functions we have plenty of warnings at compile time on version 3,
 // we change the code based on what version we build it. @todo: In the future, one
 // day, maybe consider to remove the code for PHYSFS < 3
 // Emanuele Sorce - 7/5/18
+//
+// Update: for version 0.6.6 remove the old code for PHYSFS < 3
+// Emanuele Sorce - 8/14/18
 //
 std::string physfs_getErrorString()
 {
@@ -137,9 +142,7 @@ PHYSFS_sint64 physfs_write
 std::string physfs_getDir()
 {
 	#if PHYSFS_VER_MAJOR >= 3
-	//return PHYSFS_getPrefDir("trigger-rally-team","trigger-rally");
-	// Still use the deprecated function, because using the new one will change where config are saved
-	return PHYSFS_getUserDir();
+	return PHYSFS_getPrefDir("trigger-rally-team","trigger-rally");
 	#else
 	return PHYSFS_getUserDir();
 	#endif
