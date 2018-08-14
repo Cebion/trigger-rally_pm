@@ -37,4 +37,10 @@ PHYSFS_sint64 physfs_write
 	PHYSFS_uint32	objCount
 );
 
+// get the preferred config directory
+std::string physfs_getDir();
+
+// return if the file is a directory
+bool physfs_isDirectory(const std::string& file);
+
 #endif

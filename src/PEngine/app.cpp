@@ -146,7 +146,7 @@ int PApp::run(int argc, char *argv[])
   {
     std::string lsdbuff;
     
-    lsdbuff = (std::string)PHYSFS_getUserDir();
+    lsdbuff = physfs_getDir();
     
     // this is a hack because PhysFS doesn't appear to live
     // up to its claim of creating the WriteDir if necessary.

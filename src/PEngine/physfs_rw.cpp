@@ -133,3 +133,27 @@ PHYSFS_sint64 physfs_write
 	return PHYSFS_write(handle, buffer, objSize, objCount);
 	#endif
 }
+
+std::string physfs_getDir()
+{
+	#if PHYSFS_VER_MAJOR >= 3
+	//return PHYSFS_getPrefDir("trigger-rally-team","trigger-rally");
+	// Still use the deprecated function, because using the new one will change where config are saved
+	return PHYSFS_getUserDir();
+	#else
+	return PHYSFS_getUserDir();
+	#endif
+}
+
+bool physfs_isDirectory(const std::string& file)
+{
+	#if PHYSFS_VER_MAJOR >= 3
+	PHYSFS_Stat stat;
+	PHYSFS_stat(file.c_str(), &stat);
+	
+	return stat.filetype == PHYSFS_FILETYPE_DIRECTORY;
+	
+	#else
+	return PHYSFS_isDirectory(file.c_str());
+	#endif
+}

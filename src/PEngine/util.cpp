@@ -319,7 +319,7 @@ std::list<std::string> PUtil::findFiles(const std::string &basedir, const std::s
 
     std::string thisfile = basedir + '/' + *i;
 
-    if (PHYSFS_isDirectory(thisfile.c_str())) {
+    if (physfs_isDirectory(thisfile)) {
 
       // Recurse into subdirectory
       std::list<std::string> moreresults = findFiles(thisfile, extension);
