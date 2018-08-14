@@ -70,9 +70,9 @@ printvars:
 	@printf "\tWARNINGS     ?= %s\n" "$(WARNINGS)"
 	@printf "\n"
 	@printf "resulting values of build variables:\n"
-	@printf "\tCXXFLAGS     += %s\n" "$(CXXFLAGS)"
-	@printf "\tCPPFLAGS     += %s\n" "$(CPPFLAGS)"
-	@printf "\tLDFLAGS      += %s\n" "$(LDFLAGS)"
+	@printf "\tCXXFLAGS     ?= %s\n" "$(CXXFLAGS)"
+	@printf "\tCPPFLAGS     ?= %s\n" "$(CPPFLAGS)"
+	@printf "\tLDFLAGS      ?= %s\n" "$(LDFLAGS)"
 	@printf "\n"
 
 # installs the software (executable, data files and documentation)
