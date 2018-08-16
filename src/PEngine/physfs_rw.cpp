@@ -141,11 +141,7 @@ PHYSFS_sint64 physfs_write
 
 std::string physfs_getDir()
 {
-	#if PHYSFS_VER_MAJOR >= 3
 	return PHYSFS_getPrefDir("trigger-rally-team","trigger-rally");
-	#else
-	return PHYSFS_getUserDir();
-	#endif
 }
 
 bool physfs_isDirectory(const std::string& file)
