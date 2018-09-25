@@ -82,10 +82,10 @@ install: installdirs build
 	@$(INSTALL_DATA) "$(TR_CFGFILE)" "$(DESTDIR)$(bindir)"
 	@for file in $(TR_DATAFILES); do \
 		$(INSTALL_DATA) -D "$(TR_DATADIR)/$$file" "$(DESTDIR)$(datadir)/$(DISTNAME)/$$file"; \
-		done;
+		done
 	@for file in $(TR_DOCFILES); do \
 		$(INSTALL_DATA) -D "$(TR_DOCDIR)/$$file" "$(DESTDIR)$(docdir)/$$file"; \
-		done;
+		done
 	@printf "install [%s] end\n\n" "$(DISTNAME)"
 
 # deletes the software (executable, data files and documentation)
@@ -123,7 +123,7 @@ $(TR_EXEFILE): $(OBJFILES)
 	@printf "%s" $(CXX)
 	@for file in $(OBJFILES); do \
 		printf "\t%s\n" $$file; \
-		done;
+		done
 	@printf "\t-> %s\n" $@
 	@$(CXX) -o $@ $(OBJFILES) $(LDFLAGS)
 	@printf "strip\t%s\n" $@

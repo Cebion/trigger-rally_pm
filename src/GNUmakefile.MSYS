@@ -107,7 +107,7 @@ $(TR_EXEFILE): $(OBJFILES)
 	@printf "%s" $(CXX)
 	@for file in $(OBJFILES); do \
 		printf "\t%s\n" $$file; \
-		done;
+		done
 	@printf "\t-> %s\n" $@
 	@$(CXX) -o $@ $(OBJFILES) $(LDFLAGS)
 	@printf "strip\t%s\n" $@
