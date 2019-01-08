@@ -28,7 +28,7 @@
 #include <physfs.h>
 
 #include <GL/glew.h>
-#include <GL/glext.h>
+//#include <GL/glext.h>
 
 // TinyXML is built into the pengine library
 #include "tinyxml2.h"
