@@ -45,6 +45,9 @@
 // How much of the wheel radius can the suspension be compressed
 #define MAX_SUSPENSION_DEPTH_COEFF 0.7
 
+// How much the vehicle sinks on the ground, besed of terrain resistance
+#define SINK_COEFF 0.26
+
 ///
 /// @brief PVehicleWheel constructor
 ///
@@ -1054,6 +1057,9 @@ void PVehicle::tick(const float& delta)
       tci.pos.y = wclip.y;
 
       sim.getTerrain()->getContactInfo(tci);
+	  
+	  // apply a bit of sinking depending of the material
+	  tci.pos.z -= SINK_COEFF * mf_resis;
 
       // further interaction only if the wheel touches the ground
       if (wclip.z <= tci.pos.z) {
