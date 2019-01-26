@@ -505,6 +505,7 @@ Onsemeliot
 	maps/alignster/h.jpg (GPL)
 	maps/alignster/mm.png (GPL)
 	maps/alignster/ss.png (GPL)
+	maps/altitude (GPL)
 	maps/ancient/c.png (GPL)
 	maps/ancient/f.png (GPL)
 	maps/ancient/h.png (GPL)
@@ -637,6 +638,7 @@ Onsemeliot
 	maps/greenland/m.png (GPL)
 	maps/greenland/mm.png (GPL)
 	maps/greenland/ss.png (GPL)
+	maps/grim (GPL)
 	maps/hazy (GPL)
 	maps/highland/c.png (GPL)
 	maps/highland/f.png (GPL)
@@ -896,6 +898,7 @@ Onsemeliot
 	textures/splash/endgame.jpg (GPL)
 	textures/splash/loading.png (GPL)
 	textures/splash/splash.jpg (GPL)
+	textures/veg/berry-bush.png (CC0, PD) source: https://opengameart.org/content/60-cc0-vegetation-textures
 	textures/veg/big-bush.png (GPL)
 	textures/veg/birch.png (CC0, PD)
 	textures/veg/bland-birch.png (CC0, PD)
@@ -906,8 +909,13 @@ Onsemeliot
 	textures/veg/crooked-tree2.png (CC0, PD)
 	textures/veg/crooked-tree3.png (CC0, PD)
 	textures/veg/crooked-tree4.png (CC0, PD)
+	textures/veg/dry-grass.png (CC0, PD) source: https://opengameart.org/content/60-cc0-vegetation-textures
+	textures/veg/dry-slim-bush1.png (CC0, PD) source: https://opengameart.org/content/60-cc0-vegetation-textures
+	textures/veg/dry-slim-bush2.png (CC0, PD) source: https://opengameart.org/content/60-cc0-vegetation-textures
 	textures/veg/dusty-bush.png (CC0, PD)
+	textures/veg/first-branch.png (CC0, PD) source: https://opengameart.org/content/60-cc0-vegetation-textures
 	textures/veg/grain.png (CC0, PD)
+	textures/veg/grass2.png (CC0, PD) source: https://opengameart.org/content/60-cc0-vegetation-textures
 	textures/veg/horse-chestnut-tree.png (CC0, PD)
 	textures/veg/ivy.png (CC0, PD), source: http://opengameart.org/content/ivy
 	textures/veg/mais.png (CC0, PD), source: http://opengameart.org/content/corn-resp-maize
@@ -921,6 +929,7 @@ Onsemeliot
 	textures/veg/snowy-tree.png (CC0, PD)
 	textures/veg/spruce.png (CC0, PD), source: https://openclipart.org/detail/227626/spruce
 	textures/veg/thick-leafes.png (CC0, PD)
+	textures/veg/thin-bush.png (CC0, PD) source: https://opengameart.org/content/60-cc0-vegetation-textures
 	textures/veg/thorn-bush.png (CC0, PD)
 	textures/veg/wide-tree.png (CC0, PD)
 	textures/water/black-water.png (CC0, PD)
