@@ -100,8 +100,8 @@ Bleed - http://remusprites.carbonmade.com
 	
 
 Bruno "Fuddl" Kleinert, Andrei Bondor, Onsemeliot
-	plugins/map-banana.zip (unlicensed)
-	plugins/map-desertrush.zip (unlicenced)
+	plugins/map-banana.zip (GPL)
+	plugins/map-desertrush.zip (GPL)
 
 Chrisdesign
 	textures/veg/tree-shape1.png (CC0, PD), source: https://openclipart.org/detail/8759/tree-silhouettes
