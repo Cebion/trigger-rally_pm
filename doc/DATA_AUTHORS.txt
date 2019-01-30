@@ -120,8 +120,8 @@ David Pagnier, Andrei Bondor, Onsemeliot
 	plugins/map-tea.zip (unlicensed)
 
 Ivan, Onsemeliot
-	plugins/map-mountainclimbing.zip (unlicensed)
-	plugins/map-volcanic.zip (unlicensed)
+	plugins/map-mountainclimbing.zip (GPL)
+	plugins/map-volcanic.zip (GPL)
 
 Iwan 'qubodup' Gabovitch
 	maps/eversnake/c.jpg (GPL)
