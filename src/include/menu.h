@@ -159,7 +159,7 @@ struct GuiWidget {
   
   PTexture *tex;
   
-  GuiWidget(int t) : type(t), clickable(false), glow(0.0f) { }
+  GuiWidget(int t) : type(t), clickable(false), d1(0), d2(0), glow(0.0f) { }
 };
 
 
