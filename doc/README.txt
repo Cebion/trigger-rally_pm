@@ -150,6 +150,24 @@ http://sourceforge.net/projects/trigger-rally/support
 // Version history //
 /////////////////////
 
+25/02/2019 - Trigger 0.6.6.1
+  - Released Windows binaries
+  - Optimized data for release
+
+01/02/2019 - Trigger 0.6.6
+  - Documented and reorganized physic engine code
+  - Different tuning: Fox offroad, Evo circuit, Cordo in between
+  - Wheel sinking on the different types of terrain
+  - New freely licensed font
+  - Wheel-ground contact is now computed along wheel plane, not just straight down
+  - Vehicle selection screen shows real values of the car
+  - Vehicles can have different friction of wheels defined in the .vehicle file
+  - Optimized .obj mesh loader
+  - Updated libPhysfs code
+  - Other fixes
+  - Added 2 new events and 20 new single races (36 new maps)
+  - Added many new vegetation sprites
+
 18/12/2016 - Trigger 0.6.5
   - Fixed framerate drop caused by codriver voice on certain post-XP Windows'
   - Fixed compilation error of "hiscore1.h" by C++11 compilers
@@ -295,6 +313,7 @@ support             Bernhard Kaindl
                     Liviu Andronic
                     Ishmael Turner
                     Andrei Bondor
+                    Emanuele Sorce
 
 New levels          Tim Wintle
                     David Pagnier

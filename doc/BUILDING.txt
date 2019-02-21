@@ -103,14 +103,13 @@ in the binary folder, for compatibility with the Windows build and for code simp
 ----------------
 
 Building for Windows is supported officially with GNU Makefiles and Shell scripts.
-You will need to download and install MSYS2, CMake, TDM-GCC and the TR build scripts,
+You will need to download and install MSYS2, CMake and the TR build scripts,
 then download the development libraries and finally run the TR build scripts:
 
   SOFTWARE NAME                 OFFICIAL DOWNLOAD LINK
   ----------------------------------------------------
-  MSYS2                         https://msys2.github.io/
+  MSYS2                         https://www.msys2.org/
   CMake                         https://cmake.org/download/
-  TDM-GCC                       http://tdm-gcc.tdragon.net/download/
   TR Build Scripts              https://sourceforge.net/projects/trigger-rally/files/devkit/build_scripts/
   ----------------------------------------------------
 
@@ -153,12 +152,32 @@ A0. Developer aids
 The release version of Trigger Rally suppresses terrain information and codriver checkpoint visuals.
 Developers can turn these on by defining the INDEVEL macro before building.
 
-  $ cd trigger-rally-0.6.5/src/
+  $ cd trigger-rally-0.6.6.1/src/
   $ OPTIMS="-DINDEVEL" make
 
 ##########################################################
 A1. List of software used to build Trigger Rally (Windows)
 ##########################################################
+
+---------------------------------
+Trigger Rally 0.6.6.1 Win32/Win64
+---------------------------------
+
+  SOFTWARE                      VERSION
+  -------------------------------------
+  MSYS2                         20180531
+  GCC                           8.2.1 (64-bit), 7.4.0 (32-bit)
+  CMake                         3.13.4
+  NSIS                          3.04
+  GLEW                          2.1.0
+  SDL2                          2.0.9
+  SDL2_image                    2.0.4
+  libjpeg                       9c
+  libpng                        1.6.36
+  PhysFS                        3.0.1
+  zlib                          1.2.11
+  FMOD Studio API Windows       1.06.20
+  -------------------------------------
 
 -------------------------------
 Trigger Rally 0.6.5 Win32/Win64

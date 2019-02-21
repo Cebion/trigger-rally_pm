@@ -41,11 +41,8 @@ When Trigger Rally is run for the first time, it creates a ".trigger-rally" fold
 in your home directory, where it copies its default configuration and player profiles.
 This is also where it saves screenshots and your own player profile.
 
-    (Windows XP)
-    C:\Documents and Settings\UserName\.trigger-rally\
-
     (Windows Vista and later)
-    C:\Users\UserName\.trigger-rally\
+    C:\Users\UserName\Application Data\trigger-rally-team\trigger-rally\
 
 In this folder you will find a text file named "trigger-rally-VERSION.config" which
 can be edited with Notepad in order to change the game settings.
@@ -80,7 +77,9 @@ You can create a run log by starting the RunLog batch file:
 which is located in the "bin" folder of Trigger Rally.
 
 It will run the game and save a text file named "trigger-rally.log"
-in your Trigger Rally game configuration folder (see 2. above).
+in your temporary directory %TEMP%, which is typically located at:
+
+    C:\Users\UserName\AppData\Local\Temp\
 
 ----------------------
 5. Miscellaneous notes
