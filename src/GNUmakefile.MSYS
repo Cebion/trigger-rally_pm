@@ -16,15 +16,17 @@ DISTARC         := $(DISTDIR)-win32.zip
 TR_BINDIR       := ../bin
 TR_EXENAME      := trigger-rally.exe
 TR_EXEFILE      := $(TR_BINDIR)/$(TR_EXENAME)
-TR_DLLFILES     :=                  \
-    $(TR_BINDIR)/fmod.dll           \
-    $(TR_BINDIR)/glew32.dll         \
-    $(TR_BINDIR)/libjpeg-9.dll      \
-    $(TR_BINDIR)/libphysfs.dll      \
-    $(TR_BINDIR)/libpng16-16.dll    \
-    $(TR_BINDIR)/SDL2.dll           \
-    $(TR_BINDIR)/SDL2_image.dll     \
-    $(TR_BINDIR)/zlib1.dll
+TR_DLLFILES     :=                      \
+    $(TR_BINDIR)/fmod.dll               \
+    $(TR_BINDIR)/glew32.dll             \
+    $(TR_BINDIR)/libjpeg-9.dll          \
+    $(TR_BINDIR)/libphysfs.dll          \
+    $(TR_BINDIR)/libpng16-16.dll        \
+    $(TR_BINDIR)/SDL2.dll               \
+    $(TR_BINDIR)/SDL2_image.dll         \
+    $(TR_BINDIR)/zlib1.dll              \
+    $(TR_BINDIR)/libgcc_s_dw2-1.dll     \
+    $(TR_BINDIR)/libwinpthread-1.dll
 FMODAPIDIR      := /c/Program Files (x86)/FMOD SoundSystem/FMOD Studio API Windows/api/lowlevel
 PROJDIRS        := PEngine PSim TinyXML2 Trigger
 SRCFILES        := $(sort $(shell find $(PROJDIRS) -type f -name "*.cpp"))
@@ -44,7 +46,7 @@ LIBDIRS         :=                  \
 CXXFLAGS        ?= -std=c++11 $(MODENV) $(WARNINGS) $(OPTIMS)
 CPPFLAGS        ?= $(DMACROS) $(INCDIRS)
 EXTRA_LIBS      := -lmingw32 -lSDL2main -lopengl32 -lglu32 -lglew32 -lSDL2 -lSDL2_image -lphysfs -lfmod
-LDFLAGS         ?= -static-libgcc -static-libstdc++ $(MODENV) $(LIBDIRS) $(EXTRA_LIBS) -Wl,-Bstatic -lwinpthread
+LDFLAGS         ?= -static-libgcc -static-libstdc++ $(MODENV) $(LIBDIRS) $(EXTRA_LIBS)
 
 #
 # phony targets, whose names aren't names of resulting files
@@ -185,3 +187,9 @@ $(TR_BINDIR)/SDL2_image.dll:
 
 $(TR_BINDIR)/zlib1.dll:
 	@cp --verbose /usr/local/bin/zlib1.dll $(TR_BINDIR)
+
+$(TR_BINDIR)/libgcc_s_dw2-1.dll:
+	@cp --verbose /mingw32/bin/libgcc_s_dw2-1.dll $(TR_BINDIR)
+
+$(TR_BINDIR)/libwinpthread-1.dll:
+	@cp --verbose /mingw32/bin/libwinpthread-1.dll $(TR_BINDIR)
