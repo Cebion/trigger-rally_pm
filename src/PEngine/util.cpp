@@ -232,7 +232,7 @@ XMLElement *PUtil::loadRootElement(XMLDocument &doc, const std::string &filename
   XMLElement *rootelem = doc.FirstChildElement(rootName);
   if (!rootelem) {
     PUtil::outLog() << "Load failed: TinyXML error" << std::endl;
-    PUtil::outLog() << "TinyXML: " << doc.GetErrorStr1() << ", " << doc.GetErrorStr2() << std::endl;
+    PUtil::outLog() << "TinyXML: " << doc.ErrorStr() << std::endl;
     return nullptr;
   }
 

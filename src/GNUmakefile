@@ -16,7 +16,7 @@ TR_EXEFILE      := $(TR_BINDIR)/$(TR_EXENAME)
 TR_CFGFILE      := $(TR_BINDIR)/$(TR_CFGNAME)
 TR_DATAFILES    := $(shell cd $(TR_DATADIR); find * -type f)
 TR_DOCFILES     := $(shell cd $(TR_DOCDIR); find * -type f)
-PROJDIRS        := PEngine PSim TinyXML2 Trigger
+PROJDIRS        := PEngine PSim Trigger
 SRCFILES        := $(sort $(shell find $(PROJDIRS) -type f -name "*.cpp"))
 OBJFILES        := $(patsubst %.cpp, %.o, $(SRCFILES))
 DEPFILES        := $(patsubst %.cpp, %.d, $(SRCFILES))
@@ -26,7 +26,7 @@ DMACROS         := -DNDEBUG -DUNIX -DPACKAGE_VERSION=\"$(DISTVER)\"
 INCDIRS         := -I'./include'
 CXXFLAGS        += -std=c++11 $(WARNINGS) $(OPTIMS)
 CPPFLAGS        += $(DMACROS) $(INCDIRS)
-EXTRA_LIBS      := -lSDL2main -lGL -lGLU -lGLEW -lSDL2 -lSDL2_image -lphysfs -lopenal -lalut -lpthread
+EXTRA_LIBS      := -lSDL2main -lGL -lGLU -lGLEW -lSDL2 -lSDL2_image -lphysfs -lopenal -lalut -lpthread -ltinyxml2
 LDFLAGS         += $(EXTRA_LIBS)
 INSTALL_PROGRAM := install --mode=0755
 INSTALL_DATA    := install --mode=0644

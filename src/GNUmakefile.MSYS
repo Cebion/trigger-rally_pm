@@ -22,13 +22,15 @@ TR_DLLFILES     :=                      \
     $(TR_BINDIR)/libjpeg-9.dll          \
     $(TR_BINDIR)/libphysfs.dll          \
     $(TR_BINDIR)/libpng16-16.dll        \
+    $(TR_BINDIR)/libtinyxml2.dll        \
     $(TR_BINDIR)/SDL2.dll               \
     $(TR_BINDIR)/SDL2_image.dll         \
     $(TR_BINDIR)/zlib1.dll              \
     $(TR_BINDIR)/libgcc_s_dw2-1.dll     \
-    $(TR_BINDIR)/libwinpthread-1.dll
+    $(TR_BINDIR)/libwinpthread-1.dll    \
+    $(TR_BINDIR)/libstdc++-6.dll
 FMODAPIDIR      := /c/Program Files (x86)/FMOD SoundSystem/FMOD Studio API Windows/api/lowlevel
-PROJDIRS        := PEngine PSim TinyXML2 Trigger
+PROJDIRS        := PEngine PSim Trigger
 SRCFILES        := $(sort $(shell find $(PROJDIRS) -type f -name "*.cpp"))
 OBJFILES        := $(patsubst %.cpp, %.o, $(SRCFILES))
 DEPFILES        := $(patsubst %.cpp, %.d, $(SRCFILES))
@@ -45,8 +47,8 @@ LIBDIRS         :=                  \
     -L'$(FMODAPIDIR)/lib'
 CXXFLAGS        ?= -std=c++11 $(MODENV) $(WARNINGS) $(OPTIMS)
 CPPFLAGS        ?= $(DMACROS) $(INCDIRS)
-EXTRA_LIBS      := -lmingw32 -lSDL2main -lopengl32 -lglu32 -lglew32 -lSDL2 -lSDL2_image -lphysfs -lfmod
-LDFLAGS         ?= -static-libgcc -static-libstdc++ $(MODENV) $(LIBDIRS) $(EXTRA_LIBS)
+EXTRA_LIBS      := -lmingw32 -lSDL2main -lopengl32 -lglu32 -lglew32 -lSDL2 -lSDL2_image -lphysfs -ltinyxml2.dll -lfmod
+LDFLAGS         ?= $(MODENV) $(LIBDIRS) $(EXTRA_LIBS)
 
 #
 # phony targets, whose names aren't names of resulting files
@@ -179,6 +181,9 @@ $(TR_BINDIR)/libphysfs.dll:
 $(TR_BINDIR)/libpng16-16.dll:
 	@cp --verbose /usr/local/bin/libpng16-16.dll $(TR_BINDIR)
 
+$(TR_BINDIR)/libtinyxml2.dll:
+	@cp --verbose /usr/local/bin/libtinyxml2.dll $(TR_BINDIR)
+
 $(TR_BINDIR)/SDL2.dll:
 	@cp --verbose /usr/local/bin/SDL2.dll $(TR_BINDIR)
 
@@ -193,3 +198,6 @@ $(TR_BINDIR)/libgcc_s_dw2-1.dll:
 
 $(TR_BINDIR)/libwinpthread-1.dll:
 	@cp --verbose /mingw32/bin/libwinpthread-1.dll $(TR_BINDIR)
+
+$(TR_BINDIR)/libstdc++-6.dll:
+	@cp --verbose /mingw32/bin/libstdc++-6.dll $(TR_BINDIR)

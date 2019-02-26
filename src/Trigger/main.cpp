@@ -500,7 +500,7 @@ void MainApp::loadConfig()
   XMLElement *rootelem = PUtil::loadRootElement(xmlfile, cfgfilename, "config");
   if (!rootelem) {
     PUtil::outLog() << "Error: Couldn't load configuration file" << std::endl;
-    PUtil::outLog() << "TinyXML: " << xmlfile.GetErrorStr1() << ", " << xmlfile.GetErrorStr2() << std::endl;
+    PUtil::outLog() << "TinyXML: " << xmlfile.ErrorStr() << std::endl;
     PUtil::outLog() << "Your data paths are probably not set up correctly" << std::endl;
     throw MakePException ("Boink");
   }
