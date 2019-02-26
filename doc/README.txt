@@ -16,8 +16,8 @@ the license later in this file. If you don't agree
 to it, you should delete this software.
 
 
-Look at ~/.trigger/trigger.config in your favourite text editor
-for configuration options.
+Look at ~/.local/share/trigger-rally/trigger-rally-0.6.x.config
+in your favourite text editor for configuration options.
 
 
 ///////////////////
@@ -27,7 +27,7 @@ for configuration options.
 
 Defaults:
 
- key     action
+key     action
 Up      Accelerate
 Down    Foot brake / Reverse
 Left    Steer left
@@ -76,11 +76,7 @@ Please see DATA_AUTHORS.txt for this information.
 A. Car models
 -------------
 
-Trigger ships car models in both .ase and .obj formats. The historic 
-.ase models are used by default. You can easily switch to the FOSS 
-.obj textures by renaming `{car}-foss.vehicle` files to `{car}.vehicle`.
-For example, (optionally) backup `focus.vehicle`, then rename 
-`focus-foss.vehicle` to `focus.vehicle`.
+Trigger ships car models in .obj formats.
 
 You can add completely new cars in the Wavefront .obj format with the
 following restrictions:
@@ -111,7 +107,7 @@ B. Levels/maps/tracks
 Use any tool that saves .png or .jpg images, for example GIMP and Inkscape.
 
 You will need to create a heightmap, color map and need to assign coordinates.
-You can create optional foliage and hud-map image files.
+You can create optional foliage, hud-map, road-map, terrain-map image files.
 
 View existing .level files in data/maps or data/plugins/ to learn.
 
@@ -135,10 +131,10 @@ You might have to get the following freely licensed fonts from sites like http:/
 /////////////////////
 
 
-If something goes wrong, the you should check
-your settings in ~/.trigger/trigger.config. You can
-delete that file to reset everything to default. (It
-will be recreated next time you run Trigger.)
+If something goes wrong, the you should check your settings in
+~/.local/share/trigger-rally/trigger-rally-0.6.x.config. You can
+delete that file to reset everything to default. (It will be
+recreated next time you run Trigger.)
 
 Failing that, please visit Sourceforge to ask for help
 on the forums or file a bug on the tracker:
