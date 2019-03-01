@@ -146,9 +146,10 @@ http://sourceforge.net/projects/trigger-rally/support
 // Version history //
 /////////////////////
 
-25/02/2019 - Trigger 0.6.6.1
+04/03/2019 - Trigger 0.6.6.1
   - Released Windows binaries
   - Optimized data for release
+  - Removed internal TinyXML-2 source from Trigger code tree
 
 01/02/2019 - Trigger 0.6.6
   - Documented and reorganized physic engine code

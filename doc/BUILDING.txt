@@ -30,11 +30,12 @@ To build Trigger Rally, your system must satisfy the following requirements:
   PhysFS                http://icculus.org/physfs/downloads/
   SDL2                  https://www.libsdl.org/download-2.0.php
   SDL2_image            https://www.libsdl.org/projects/SDL_image/
+  TinyXML-2             https://github.com/leethomason/tinyxml2/releases
   --------------------------------------------------------------------
 
   LIBRARY NAME      DEB DISTRO              RPM DISTRO
   ----------------------------------------------------
-  GL                libgl1-mesa-dev         N/A
+  GL                libgl1-mesa-dev         mesa-libGL-devel
   GLU               libglu1-mesa-dev        mesa-libGLU-devel
   GLEW              libglew-dev             glew-devel
   OpenAL            libopenal-dev           openal-soft-devel
@@ -42,6 +43,7 @@ To build Trigger Rally, your system must satisfy the following requirements:
   PhysFS            libphysfs-dev           physfs-devel
   SDL2              libsdl2-dev             SDL2-devel + SDL2-static
   SDL2_image        libsdl2-image-dev       SDL2_image-devel
+  TinyXML-2         libtinyxml2-dev         tinyxml2-devel
   ----------------------------------------------------
 
 To build Trigger Rally you must run "make" in the "src" directory where
@@ -121,6 +123,7 @@ Of course, you're expected to read the "build_readme.txt" file provided with the
   PhysFS                        http://icculus.org/physfs/downloads/
   SDL2                          https://www.libsdl.org/download-2.0.php
   SDL2_image                    https://www.libsdl.org/projects/SDL_image/
+  TinyXML-2                     https://github.com/leethomason/tinyxml2/releases
   libjpeg                       http://ijg.org/
   libpng                        http://libpng.org/pub/png/libpng.html
   zlib                          http://zlib.net/
@@ -172,6 +175,7 @@ Trigger Rally 0.6.6.1 Win32/Win64
   GLEW                          2.1.0
   SDL2                          2.0.9
   SDL2_image                    2.0.4
+  TinyXML-2                     7.0.1
   libjpeg                       9c
   libpng                        1.6.36
   PhysFS                        3.0.1

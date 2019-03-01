@@ -37,15 +37,16 @@ These key bindings can be changed in the game configuration...
 2. Game configuration
 ---------------------
 
-When Trigger Rally is run for the first time, it creates a ".trigger-rally" folder
-in your home directory, where it copies its default configuration and player profiles.
-This is also where it saves screenshots and your own player profile.
+When Trigger Rally is run for the first time, it creates a "trigger-rally"
+folder in your AppData directory, where it copies its default configuration and
+player profiles. This is also where it saves screenshots and your own player
+profile.
 
     (Windows Vista and later)
     C:\Users\UserName\Application Data\trigger-rally-team\trigger-rally\
 
-In this folder you will find a text file named "trigger-rally-VERSION.config" which
-can be edited with Notepad in order to change the game settings.
+In this folder you will find a text file named "trigger-rally-VERSION.config"
+which can be edited with Notepad in order to change the game settings.
 
 ---------------------
 3. Installing plugins
