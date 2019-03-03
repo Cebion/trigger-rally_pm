@@ -98,7 +98,7 @@
 	</terrain>
 	
 	<weather
-		cloudtexture="/textures/sky/dark-blue.jpg"
+		cloudtexture="/textures/sky/dark-blue.png"
 		fogcolor="0.8, 0.9, 1"
 		fogdensity="0.0007"
 		fogdensitysky="0.7"
