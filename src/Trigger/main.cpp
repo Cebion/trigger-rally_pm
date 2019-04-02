@@ -1174,7 +1174,8 @@ bool MainApp::loadAll()
   if (cfg_enable_sound) {
     if (!(aud_engine = getSSAudio().loadSample("/sounds/engine.wav", false))) return false;
     if (!(aud_wind = getSSAudio().loadSample("/sounds/wind.wav", false))) return false;
-    if (!(aud_gearchange = getSSAudio().loadSample("/sounds/gear.wav", false))) return false;
+    if (!(aud_shiftup = getSSAudio().loadSample("/sounds/shiftup.wav", false))) return false;
+    if (!(aud_shiftdown = getSSAudio().loadSample("/sounds/shiftdown.wav", false))) return false;
     if (!(aud_gravel = getSSAudio().loadSample("/sounds/gravel.wav", false))) return false;
     if (!(aud_crash1 = getSSAudio().loadSample("/sounds/bang.wav", false))) return false;
 
@@ -1911,10 +1912,27 @@ void MainApp::tickStateGame(float delta)
     audinst_gravel->setPitch(1.0f);//vehic->getEngineRPM() / 7500.0f);
 
     if (vehic->getFlagGearChange()) {
-      audinst.push_back(new PAudioInstance(aud_gearchange));
-      audinst.back()->setPitch(1.0f + randm11*0.02f);
-      audinst.back()->setGain(0.3f * cfg_volume_sfx);
-      audinst.back()->play();
+      switch (vehic->iengine.getShiftDirection())
+      {
+        case 1: // Shift up
+        {
+            audinst.push_back(new PAudioInstance(aud_shiftup));
+            audinst.back()->setPitch(0.7f + randm11*0.02f);
+            audinst.back()->setGain(1.0f * cfg_volume_sfx);
+            audinst.back()->play();
+            break;
+        }
+        case -1: // Shift down
+        {
+            audinst.push_back(new PAudioInstance(aud_shiftdown));
+            audinst.back()->setPitch(0.8f + randm11*0.12f);
+            audinst.back()->setGain(1.0f * cfg_volume_sfx);
+            audinst.back()->play();
+            break;
+        }
+        default:
+            break; // Shift flag but neither up nor down?
+      }
     }
 
     if (crashnoise_timeout <= 0.0f) {

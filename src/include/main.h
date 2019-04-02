@@ -530,7 +530,8 @@ private:
 	// Tones
 	PAudioSample *aud_engine,
 				*aud_wind,
-				*aud_gearchange,
+				*aud_shiftup,
+				*aud_shiftdown,
 				*aud_gravel,
 				*aud_crash1;
 

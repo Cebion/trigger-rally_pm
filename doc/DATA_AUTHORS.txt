@@ -151,8 +151,9 @@ Jared Buckner, Onsemeliot
 Keistutis, Onsemeliot
 	textures/veg/bush-low.png (CC0) https://openclipart.org/detail/202745/bush
 
-kougloff, Iwan Gabovitch, Liviu Andronic
-	sounds/gear.wav (CC0, PD) source: http://www.freesound.org/people/kougloff/sounds/117558/
+Bruno Kleinert, rubberduck
+	sounds/shiftdown.wav (CC0, PD) https://opengameart.org/content/25-cc0-bang-firework-sfx
+	sounds/shiftup.wav (CC0, PD) https://opengameart.org/content/25-cc0-bang-firework-sfx
 
 Laxminarayan G Kamath A, Andrei Bondor, Onsemeliot
 	plugins/map-ghats.zip (unlicenced)
