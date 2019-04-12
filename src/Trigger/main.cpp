@@ -20,6 +20,15 @@ bool MainApp::cfg_foliage = true;
 bool MainApp::cfg_roadsigns = true;
 bool MainApp::cfg_weather = true;
 
+// current camera views: Chase, Bumper, Side, Hood, Periscope, [Piggyback - disabled]
+#define CAMERA_VIEW_CHASE		0
+#define CAMERA_VIEW_BUMPER		1
+#define CAMERA_VIEW_SIDE		2
+#define CAMERA_VIEW_HOOD		3
+#define CAMERA_VIEW_PERISCOPE	4
+#define CAMERA_VIEW_PIGGYBACK	-1
+#define CAMERA_VIEW_NUMBER		5
+
 void MainApp::config()
 {
     PUtil::setDebugLevel(DEBUGLEVEL_DEVELOPER);
@@ -1236,7 +1245,7 @@ bool MainApp::loadAll()
 
   cprotate = 0.0f;
 
-  cameraview = 0;
+  cameraview = CAMERA_VIEW_CHASE;
   camera_user_angle = 0.0f;
 
   showmap = true;
@@ -1725,7 +1734,7 @@ void MainApp::tickStateGame(float delta)
   int cameraview_mod = cameraview;
 
   if (game->gamestate == Gamestate::finished) {
-    cameraview_mod = 0;
+    cameraview_mod = CAMERA_VIEW_CHASE;
     static float spinner = 0.0f;
     spinner += 1.4f * delta;
     tempo.fromThreeAxisAngle(vec3f(-PI*0.5f,0.0f,spinner));
@@ -1733,7 +1742,7 @@ void MainApp::tickStateGame(float delta)
     tempo.fromThreeAxisAngle(vec3f(-PI*0.5f,0.0f,0.0f));
   }
 
-  renderowncar = (cameraview_mod != 1);
+  renderowncar = (cameraview_mod != CAMERA_VIEW_HOOD && cameraview_mod != CAMERA_VIEW_BUMPER);
 
   campos_prev = campos;
 
@@ -1748,9 +1757,9 @@ void MainApp::tickStateGame(float delta)
   mat44f cammat;
 
   switch (cameraview_mod) {
-      // Chase
-    default:
-  case 0: {
+  
+  default:
+  case CAMERA_VIEW_CHASE: {
     quatf temp2;
     temp2.fromZAngle(forwangle + camera_user_angle);
 
@@ -1793,7 +1802,7 @@ void MainApp::tickStateGame(float delta)
     } break;
 
     // Side (right wheel)
-  case 2: {
+  case CAMERA_VIEW_SIDE: {
     quatf temp2;
     temp2.fromZAngle(camera_user_angle);
 
@@ -1817,7 +1826,7 @@ void MainApp::tickStateGame(float delta)
     } break;
 
     // Hood
-  case 3: {
+  case CAMERA_VIEW_HOOD: {
     quatf temp2;
     temp2.fromZAngle(camera_user_angle);
 
@@ -1840,7 +1849,7 @@ void MainApp::tickStateGame(float delta)
     } break;
 
     // Periscope view
-  case 4:{
+  case CAMERA_VIEW_PERISCOPE:{
     quatf temp2;
     temp2.fromZAngle(camera_user_angle);
 
@@ -1865,7 +1874,7 @@ void MainApp::tickStateGame(float delta)
     //
     // TODO: broken because of "world turns upside down" bug
     //
-  case -1:{
+  case CAMERA_VIEW_PIGGYBACK:{
     quatf temp2, temp3, temp4;
     temp2.fromZAngle(forwangle + camera_user_angle);
     temp3.fromXAngle(noseangle);
@@ -2132,7 +2141,7 @@ void MainApp::keyEvent(const SDL_KeyboardEvent &ke)
       }
       if (ctrl.map[ActionCamMode].type == UserControl::TypeKey &&
         ctrl.map[ActionCamMode].key.sym == ke.keysym.sym) {
-        cameraview = (cameraview + 1) % 5;
+        cameraview = (cameraview + 1) % CAMERA_VIEW_NUMBER;
         camera_user_angle = 0.0f;
         return;
       }
@@ -2248,8 +2257,7 @@ void MainApp::joyButtonEvent(int which, int button, bool down)
       }
       if (ctrl.map[ActionCamMode].type == UserControl::TypeJoyButton &&
         ctrl.map[ActionCamMode].joybutton.button == button) {
-        cameraview = (cameraview + 1) % 5;
-        // current camera views: Chase, Bumper, Side, Hood, Periscope, [Piggyback - disabled]
+        cameraview = (cameraview + 1) % CAMERA_VIEW_NUMBER;
         camera_user_angle = 0.0f;
         return;
       }

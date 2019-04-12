@@ -135,6 +135,7 @@ struct PVehicleTypePart {
   int parent;
   
   PReferenceFrame ref_local;
+  PReferenceFrame render_ref_local;
   
   std::vector<vehicle_clip_s> clip;
   

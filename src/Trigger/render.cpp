@@ -492,6 +492,7 @@ void MainApp::renderStateEnd(float eyetranslation)
     glMatrixMode(GL_MODELVIEW);
 }
 
+// render the car selection menu
 void MainApp::renderStateChoose(float eyetranslation)
 {
     PVehicleType *vtype = game->vehiclechoices[choose_type];
@@ -581,50 +582,49 @@ glMatrixMode(GL_PROJECTION);
     glRotatef(90.0f, -1.0f, 0.0f, 0.0f);
     glRotatef(DEGREES(tmp), 0.0f, 0.0f, 1.0f);
 
+    // render vehicle
+    for (unsigned int i=0; i<vtype->part.size(); ++i)
     {
-        for (unsigned int i=0; i<vtype->part.size(); ++i)
-        {
-            glPushMatrix(); // 1
+		glPushMatrix(); // 1
 
-            vec3f vpos = vtype->part[i].ref_local.pos;
-            glTranslatef(vpos.x, vpos.y, vpos.z);
+		vec3f vpos = vtype->part[i].render_ref_local.pos;
+		glTranslatef(vpos.x, vpos.y, vpos.z);
 
-            mat44f vorim = vtype->part[i].ref_local.ori_mat_inv;
-            glMultMatrixf(vorim);
-            if (vtype->part[i].model)
-            {
+		mat44f vorim = vtype->part[i].render_ref_local.ori_mat_inv;
+		glMultMatrixf(vorim);
+		if (vtype->part[i].model)
+		{
+			glPushMatrix(); // 2
 
-                glPushMatrix(); // 2
+			float scale = vtype->part[i].scale;
+			glScalef(scale,scale,scale);
+			drawModel(*vtype->part[i].model);
 
-                float scale = vtype->part[i].scale;
-                glScalef(scale,scale,scale);
-                drawModel(*vtype->part[i].model);
+			glPopMatrix(); // 2
+		}
 
-                glPopMatrix(); // 2
-            }
+		// render wheels
+		if (vtype->wheelmodel)
+		{
+			for (unsigned int j=0; j<vtype->part[i].wheel.size(); j++)
+			{
 
-            if (vtype->wheelmodel)
-            {
-                for (unsigned int j=0; j<vtype->part[i].wheel.size(); j++)
-                {
+				glPushMatrix(); // 2
 
-                    glPushMatrix(); // 2
+				vec3f &wpos = vtype->part[i].wheel[j].pt;
+				glTranslatef(wpos.x, wpos.y, wpos.z);
 
-                    vec3f &wpos = vtype->part[i].wheel[j].pt;
-                    glTranslatef(wpos.x, wpos.y, wpos.z);
+				float scale = vtype->wheelscale * vtype->part[i].wheel[j].radius;
+				glScalef(scale,scale,scale);
 
-                    float scale = vtype->wheelscale * vtype->part[i].wheel[j].radius;
-                    glScalef(scale,scale,scale);
+				drawModel(*vtype->wheelmodel);
 
-                    drawModel(*vtype->wheelmodel);
+				glPopMatrix(); // 2
+			}
+		}
 
-                    glPopMatrix(); // 2
-                }
-            }
-
-            glPopMatrix(); // 1
-        }
-    }
+		glPopMatrix(); // 1
+	}
 
     glPopMatrix(); // 0
 

@@ -300,6 +300,17 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
         if (sscanf(val, "%f , %f , %f", &pos.x, &pos.y, &pos.z) == 3)
           vtp->ref_local.setPosition(pos * allscale);
       }
+	  
+	  val = walk->Attribute("render_pos");
+      if (val) {
+        vec3f render_pos;
+        if (sscanf(val, "%f , %f , %f", &render_pos.x, &render_pos.y, &render_pos.z) == 3)
+          vtp->render_ref_local.setPosition(render_pos * allscale);
+      }
+	  else {
+		  // render pos is optional, it will fallback to the normal pos if missing
+		  vtp->render_ref_local = vtp->ref_local;
+	  }
 
       val = walk->Attribute("orientation");
       if (val) {
@@ -307,6 +318,7 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
         // note: w first, as per usual mathematical notation
         if (sscanf(val, "%f , %f , %f , %f", &ori.w, &ori.x, &ori.y, &ori.z) == 4)
           vtp->ref_local.setOrientation(ori);
+		  vtp->render_ref_local.setOrientation(ori);
       }
 
       val = walk->Attribute("scale");
