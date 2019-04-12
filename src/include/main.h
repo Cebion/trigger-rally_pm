@@ -77,6 +77,18 @@ enum class Gamestate {
 	// race ended
 	finished
 };
+///
+/// @brief Camera view mode
+///
+enum class CameraMode{
+	chase = 0,
+	bumper,
+	side,
+	hood,
+	periscope,
+	count,
+	piggyback
+};
 
 ///
 /// @brief class containing information about the race is being played
@@ -551,11 +563,13 @@ private:
 
 	float cprotate;
 
-	int cameraview;
+	// what view mode the camera is
+	CameraMode cameraview;
 	float camera_angle;
 	float camera_user_angle;
 
-	bool renderowncar; // this is determined from cameraview
+	// If with the the vehicle should be rendered (depends on cameraview)
+	bool renderowncar;
 
 	bool showmap;
 
