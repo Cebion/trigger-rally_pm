@@ -85,7 +85,18 @@ void PApp::setScreenModeFastFullScreen()
    eye = half the eye separation; positive for the right eye subfield,
    negative for the left eye subfield.
 */
-void PApp::stereoGLProject(float xmin, float xmax, float ymin, float ymax, float znear, float zfar, float zzps, float dist, float eye)
+void PApp::stereoGLProject
+(
+	const float& xmin,
+	const float& xmax,
+	const float& ymin,
+	const float& ymax,
+	const float& znear,
+	const float& zfar,
+	const float& zzps,
+	const float& dist,
+	const float& eye
+)
 {
   float xmid, ymid, clip_near, clip_far, top, bottom, left, right, dx, dy, n_over_d;
 
@@ -113,7 +124,17 @@ void PApp::stereoGLProject(float xmin, float xmax, float ymin, float ymax, float
 
 // I'm afraid I didn't understand how stereoGLProject worked, so I rewrote it
 
-void PApp::stereoFrustum(float xmin, float xmax, float ymin, float ymax, float znear, float zfar, float zzps, float eye)
+void PApp::stereoFrustum
+(
+	const float& xmin,
+	const float& xmax,
+	const float& ymin,
+	const float& ymax,
+	const float& znear,
+	const float& zfar,
+	const float& zzps,
+	const float& eye
+)
 {
   // xmove = eye * (zzps - znear) / zzps - eye, simplifies to
   

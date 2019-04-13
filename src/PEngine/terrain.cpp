@@ -899,53 +899,57 @@ void PTerrain::render(const vec3f &campos, const mat44f &camorim)
   glDisable(GL_ALPHA_TEST);
 }
 
-void PTerrain::drawSplat(float x, float y, float scale, float angle)
+void PTerrain::drawSplat(const float& posx, const float& posy, const float& arg_scale, const float& angle)
 {
-  float *hmd = &hmap[0];
-  int cx = totsize;
-  int cy = totsize;
+	float x = posx * scale_hz_inv;
+	float y = posy * scale_hz_inv;
 
-  x *= scale_hz_inv;
-  y *= scale_hz_inv;
+	float scale = arg_scale * 0.5;
 
-  scale *= 0.5f;
+	float *hmd = &hmap[0];
+	int cx = totsize;
+	int cy = totsize;
 
-  int miny = (int)(y - scale);
-  if ((y - scale) < 0.0f) miny--;
-  int maxy = (int)(y + scale) + 1;
-  if ((y + scale) < 0.0f) maxy--;
-  int minx = (int)(x - scale);
-  if ((x - scale) < 0.0f) minx--;
-  int maxx = (int)(x + scale) + 2;
-  if ((x + scale) < 0.0f) maxx--;
+	int miny = (int)(y - scale);
+	if ((y - scale) < 0.0f)
+		miny--;
+	int maxy = (int)(y + scale) + 1;
+	if ((y + scale) < 0.0f)
+		maxy--;
+	int minx = (int)(x - scale);
+	if ((x - scale) < 0.0f)
+		minx--;
+	int maxx = (int)(x + scale) + 2;
+	if ((x + scale) < 0.0f)
+		maxx--;
 
-  glMatrixMode(GL_TEXTURE);
+	glMatrixMode(GL_TEXTURE);
 
-  glPushMatrix();
-  glTranslatef(0.5f, 0.5f, 0.0f);
-  glRotatef(DEGREES(angle), 0.0f, 0.0f, 1.0f);
-  glScalef(0.5f / scale, 0.5f / scale, 1.0f);
-  glTranslatef(-x, -y, 0.0f);
+	glPushMatrix();
+	glTranslatef(0.5f, 0.5f, 0.0f);
+	glRotatef(DEGREES(angle), 0.0f, 0.0f, 1.0f);
+	glScalef(0.5f / scale, 0.5f / scale, 1.0f);
+	glTranslatef(-x, -y, 0.0f);
 
-  for (int y2=miny; y2<maxy; y2++) {
-    int yc = y2 & (cy-1),
-      ycp1 = (yc+1) & (cy-1),
-      yc_cx = yc * cx,
-      ycp1_cx = ycp1 * cx;
+	for (int y2=miny; y2<maxy; y2++) {
+		int yc = y2 & (cy-1),
+			ycp1 = (yc+1) & (cy-1),
+			yc_cx = yc * cx,
+			ycp1_cx = ycp1 * cx;
 
-    glBegin(GL_TRIANGLE_STRIP);
-    for (int x2=minx; x2<maxx; x2++) {
-      int xc = x2 & (cx - 1);
-      glTexCoord2i(x2, y2 + 1);
-      glVertex3f(x2 * scale_hz, (y2 + 1) * scale_hz, hmd[ycp1_cx + xc]);
-      glTexCoord2i(x2, y2);
-      glVertex3f(x2 * scale_hz, y2 * scale_hz, hmd[yc_cx + xc]);
-    }
-    glEnd();
-  }
-  glPopMatrix();
+		glBegin(GL_TRIANGLE_STRIP);
+		for (int x2=minx; x2<maxx; x2++) {
+			int xc = x2 & (cx - 1);
+			glTexCoord2i(x2, y2 + 1);
+			glVertex3f(x2 * scale_hz, (y2 + 1) * scale_hz, hmd[ycp1_cx + xc]);
+			glTexCoord2i(x2, y2);
+			glVertex3f(x2 * scale_hz, y2 * scale_hz, hmd[yc_cx + xc]);
+		}
+		glEnd();
+	}
+	glPopMatrix();
 
-  glMatrixMode(GL_MODELVIEW);
+	glMatrixMode(GL_MODELVIEW);
 }
 
 

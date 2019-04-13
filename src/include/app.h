@@ -214,8 +214,29 @@ class PApp
 
         void drawModel(PModel &model);
 
-        void stereoGLProject(float xmin, float xmax, float ymin, float ymax, float znear, float zfar, float zzps, float dist, float eye);
-        void stereoFrustum(float xmin, float xmax, float ymin, float ymax, float znear, float zfar, float zzps, float eye);
+        void stereoGLProject
+		(
+			const float& xmin,
+			const float& xmax,
+			const float& ymin,
+			const float& ymax,
+			const float& znear,
+			const float& zfar,
+			const float& zzps,
+			const float& dist,
+			const float& eye
+		);
+        void stereoFrustum
+		(
+			const float& xmin,
+			const float& xmax,
+			const float& ymin,
+			const float& ymax,
+			const float& znear,
+			const float& zfar,
+			const float& zzps,
+			const float& eye
+		);
 
         // config stuff
 
