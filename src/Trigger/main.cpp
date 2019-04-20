@@ -1929,8 +1929,14 @@ void MainApp::tickStateGame(float delta)
             audinst.back()->play();
             break;
         }
-        default:
-            break; // Shift flag but neither up nor down?
+        default: // Shift flag but neither up nor down?
+        {
+            audinst.push_back(new PAudioInstance(aud_shiftup));
+            audinst.back()->setPitch(0.9f + randm11*0.09f);
+            audinst.back()->setGain(1.0f * cfg_volume_sfx);
+            audinst.back()->play();
+            break;
+        }
       }
     }
 
