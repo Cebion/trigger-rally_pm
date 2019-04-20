@@ -309,7 +309,7 @@ void PParticleSystem::addParticle(const vec3f &pos, const vec3f &linvel)
 }
 
 
-void PParticleSystem::tick(const float& delta)
+void PParticleSystem::tick(float delta)
 {
   float decr = delta * decay;
 

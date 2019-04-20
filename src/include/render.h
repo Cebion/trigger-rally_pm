@@ -67,7 +67,7 @@ public:
 
   void addParticle(const vec3f &pos, const vec3f &linvel);
 
-  void tick(const float& delta);
+  void tick(float delta);
 
   friend class PSSRender;
 };
@@ -125,7 +125,7 @@ private:
 public:
   PImage () : data (nullptr) { }
   PImage (const std::string &filename) : data (nullptr) { load (filename); }
-  PImage (const int& _cx, const int& _cy, const int& _cc) : data (nullptr) { load (_cx, _cy, _cc); }
+  PImage (int _cx, int _cy, int _cc) : data (nullptr) { load (_cx, _cy, _cc); }
   ~PImage ();
 
   void load (const std::string &filename);
@@ -328,6 +328,9 @@ public:
   uint32 vt[3];
   uint32 tc[3];
   uint32 nr[3];
+
+public:
+//    PFace(vec
 };
 
 
@@ -353,8 +356,8 @@ public:
   PModel (const std::string &filename, float globalScale = 1.0);
 
 private:
-  void loadASE (const std::string &filename, const float& globalScale);
-  void loadOBJ (const std::string &filename, const float& globalScale);
+  void loadASE (const std::string &filename, float globalScale);
+  void loadOBJ (const std::string &filename, float globalScale);
 };
 
 struct PTerrainFoliageBand {
@@ -620,7 +623,7 @@ public:
 
   void render(const vec3f &campos, const mat44f &camorim);
 
-  void drawSplat(const float& x, const float& y, const float& scale, const float& angle);
+  void drawSplat(float x, float y, float scale, float angle);
 
 
   struct ContactInfo {

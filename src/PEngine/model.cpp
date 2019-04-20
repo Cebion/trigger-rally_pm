@@ -147,7 +147,7 @@ PModel::PModel (const std::string &filename, float globalScale)
 
 #define OBJ_BUFFER_SIZE 65552
 
-void PModel::loadOBJ(const std::string &filename, const float& globalScale)
+void PModel::loadOBJ(const std::string &filename, float globalScale)
 {
 	std::vector<char> buff (OBJ_BUFFER_SIZE);	/**< File buffer */
 	PHYSFS_file* pfile;          /**< The real .obj file */
@@ -268,13 +268,13 @@ void PModel::loadOBJ(const std::string &filename, const float& globalScale)
 					<< "\" has more than one object defined!" << std::endl;
 				}
 			}
-			else if(tok[0] == '#' || tok == "usemtl" || tok == "s")
+			else  if(tok[0] == '#')
 			{
-				// tok[0] == '#'
 				/* Comment. Just ignore. */
-				
-				// tok == "usemtl"
-				/* Face material usage.
+			}
+			else if(tok == "usemtl")
+			{
+				/* Face material usage. (usemtl). 
 				* FIXME: Ignoring, as the pengine renderer is 
 				* using only a single "fx" per mesh.
 				*
@@ -288,8 +288,9 @@ void PModel::loadOBJ(const std::string &filename, const float& globalScale)
 				* I'm do either of them, but just mark it as a restriction to
 				* .obj files on trigger. Someone must remove this restriction 
 				* latter */
-				
-				// tok == "s"
+			}
+			else if(tok == "s")
+			{
 				/* Smooth toggle. Ignoring. */
 			}
 			else
@@ -301,7 +302,7 @@ void PModel::loadOBJ(const std::string &filename, const float& globalScale)
 	}
 
 	/* Verify if normals were defined */
-	if(curMesh->norm.empty())
+	if(curMesh->norm.size() == 0)
 	{
 		PUtil::outLog() << "Warning: Object file \"" << filename 
 		<< "\" had no normals defined!" << std::endl;
@@ -314,7 +315,7 @@ void PModel::loadOBJ(const std::string &filename, const float& globalScale)
 
 
 
-void PModel::loadASE (const std::string &filename, const float& globalScale)
+void PModel::loadASE (const std::string &filename, float globalScale)
 {
   if (PUtil::isDebugLevel(DEBUGLEVEL_TEST))
     PUtil::outLog() << "Loading ASE model \"" << filename << "\"" << std::endl;
