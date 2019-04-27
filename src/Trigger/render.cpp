@@ -1629,7 +1629,7 @@ void MainApp::renderStateGame(float eyetranslation)
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     tex_fontSourceCodeOutlined->bind();
     getSSRender().drawText(std::string("true time penalty: ") +
-        std::to_string(game->offroadtime_total * game->offroadtime_penalty_multiplier),
+        std::to_string(game->getOffroadTime() * game->offroadtime_penalty_multiplier),
         PTEXT_HZA_CENTER | PTEXT_VTA_TOP);
     glPopMatrix();
 #endif

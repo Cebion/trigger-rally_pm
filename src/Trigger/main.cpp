@@ -50,7 +50,7 @@ void MainApp::config()
     player_unlocks = best_times.getUnlockData();
 
 #ifndef NDEBUG
-    PUtil::outLog() << "Player \"" cfg_playername << "\" unlocks:\n";
+    PUtil::outLog() << "Player \"" << cfg_playername << "\" unlocks:\n";
 
     for (const auto &s: player_unlocks)
         PUtil::outLog() << '\t' << s << '\n';
@@ -1742,11 +1742,11 @@ void MainApp::tickStateGame(float delta)
 
   vec3f forw = makevec3f(rf->getOrientationMatrix().row[0]);
   float forwangle = atan2(forw.y, forw.x);
-  
+
   mat44f cammat;
 
   switch (cameraview_mod) {
-  
+
 	default:
 	case CameraMode::chase: {
     quatf temp2;
@@ -1866,7 +1866,7 @@ void MainApp::tickStateGame(float delta)
 	{
 		vec3f nose = makevec3f(rf->getOrientationMatrix().row[1]);
 		float noseangle = atan2(nose.z, nose.y);
-		
+
 		quatf temp2,temp3,temp4;
 		temp2.fromZAngle(forwangle + camera_user_angle);
 		temp3.fromXAngle(noseangle);
