@@ -3,84 +3,114 @@
 
 // Copyright 2004-2006 Jasmine Langridge, jas@jareiko.net
 // Copyright 2018 Emanuele Sorce, emanuele.sorce@hotmail.com
+// Copyright 2019 Andrei Bondor, ab396356@users.sourceforge.net
 // License: GPL version 2 (see included gpl.txt)
 
 //
 // In this file there are functions that wrap up common PHYSFS related functions
 //
 
+#include <cassert>
 #include "pengine.h"
 #include "physfs_utils.h"
 
+///
+/// @brief Retrieves the size of the file.
+/// @param [in] context     RWops context.
+/// @return Size of the file.
+/// @retval -1      Size unknown or error encountered.
+///
 Sint64 physfs_size(SDL_RWops *context)
 {
-    PHYSFS_file *pfile = (PHYSFS_file *)context->hidden.unknown.data1;
+    PHYSFS_File * const file = reinterpret_cast<PHYSFS_File *> (context->hidden.unknown.data1);
 
-    return PHYSFS_fileLength(pfile);
+    return PHYSFS_fileLength(file);
 }
 
+///
+/// @brief Seeks to an `offset` in the file, depending on the `whence`
+///     starting position.
+/// @param [in] context     RWops context.
+/// @param [in] offset      Offset to target.
+/// @param [in] whence      Starting position.
+/// @return The final offset achieved.
+/// @retval -1      An error was encountered.
+///
 Sint64 physfs_seek(SDL_RWops *context, Sint64 offset, int whence)
 {
-  PHYSFS_file *pfile = (PHYSFS_file *)context->hidden.unknown.data1;
-  
-  Sint64 target;
-  
-  Sint64 curpos = PHYSFS_tell(pfile);
-  
-  switch (whence) {
-  default:
-  case SEEK_SET:
-    target = offset;
-    break;
-  case SEEK_CUR:
-    target = curpos + offset;
-    break;
-  case SEEK_END:
-    target = PHYSFS_fileLength(pfile) + offset;
-    break;
-  }
-  
-    Sint64 result = PHYSFS_seek(pfile, target);
-    if (! result) {
-        throw MakePException("Error seeking: " + physfs_getErrorString());
+    PHYSFS_File * const file = reinterpret_cast<PHYSFS_File *> (context->hidden.unknown.data1);
+    PHYSFS_sint64 const curr = PHYSFS_tell(file);
+    PHYSFS_sint64 const end = PHYSFS_fileLength(file);
+    Sint64 pos = offset;
+
+    assert(curr != -1);
+    assert(end != -1);
+
+    switch (whence)
+    {
+        case RW_SEEK_SET:
+            // do nothing
+            break;
+
+        case RW_SEEK_CUR:
+            pos += curr;
+            break;
+
+        case RW_SEEK_END:
+            pos += end;
+            break;
     }
-    
-    return PHYSFS_tell(pfile);
-  
-    PHYSFS_seek(pfile, target);
-  
-  return curpos;
+
+    return PHYSFS_seek(file, pos) == 0 ? -1 : pos;
 }
 
-
+///
+/// @brief Reads `maxnum` objects of size `size` from the file.
+/// @param [in] context     RWops context.
+/// @param [out] ptr        Destination of data to be read.
+/// @param [in] size        Size of one object.
+/// @param [in] maxnum      Maximum number of objects.
+/// @return Number of objects read.
+/// @retval 0   Error encountered and/or no objects read.
+///
 size_t physfs_read(SDL_RWops *context, void *ptr, size_t size, size_t maxnum)
 {
-  PHYSFS_file *pfile = (PHYSFS_file *)context->hidden.unknown.data1;
-  
-  const Sint64 r = physfs_read(pfile, ptr, size, maxnum);
-  
-  // reading 0 bytes is considered an error now, thanks SDL2!
-  return r == -1 ? 0 : r;
+    PHYSFS_File * const file = reinterpret_cast<PHYSFS_File *> (context->hidden.unknown.data1);
+    PHYSFS_sint64 const r = PHYSFS_readBytes(file, ptr, size * maxnum);
+
+    return r == -1 ? 0 : r / size;
 }
 
-
+///
+/// @brief Writes `num` objects or size `size` to the file.
+/// @param [in] context     RWops context.
+/// @param [in] ptr         Source of data to be written.
+/// @param [in] size        Size of one object.
+/// @param [in] num         Number of objects.
+/// @return Number of objects written.
+/// @retval 0   Error encountered and/or no objects written.
+///
 size_t physfs_write(SDL_RWops *context, const void *ptr, size_t size, size_t num)
 {
-  PHYSFS_file *pfile = (PHYSFS_file *)context->hidden.unknown.data1;
-  
-  return physfs_write(pfile, ptr, size, num);
+    PHYSFS_File * const file = reinterpret_cast<PHYSFS_File *> (context->hidden.unknown.data1);
+    PHYSFS_sint64 const r = PHYSFS_writeBytes(file, ptr, size * num);
+
+    return r == -1 ? 0 : r / size;
 }
 
-
+///
+/// @brief Closes the file and frees the `context`.
+/// @param [in] context     RWops context.
+/// @return Whether or not closing was successful.
+/// @retval 0   Success.
+/// @retval -1  Failure.
+///
 int physfs_close(SDL_RWops *context)
 {
-  PHYSFS_file *pfile = (PHYSFS_file *)context->hidden.unknown.data1;
-  
-  PHYSFS_close(pfile);
-  
-  SDL_FreeRW(context);
-  
-  return 0;
+    PHYSFS_File * const file = reinterpret_cast<PHYSFS_File *> (context->hidden.unknown.data1);
+
+    SDL_FreeRW(context);
+    return PHYSFS_close(file) == 0 ? -1 : 0;
 }
 
 //
@@ -105,7 +135,7 @@ std::string physfs_getErrorString()
 	#else
 		ss << PHYSFS_getLastError();
 	#endif
-	
+
 	return ss.str();
 }
 
@@ -149,9 +179,9 @@ bool physfs_isDirectory(const std::string& file)
 	#if PHYSFS_VER_MAJOR >= 3
 	PHYSFS_Stat stat;
 	PHYSFS_stat(file.c_str(), &stat);
-	
+
 	return stat.filetype == PHYSFS_FILETYPE_DIRECTORY;
-	
+
 	#else
 	return PHYSFS_isDirectory(file.c_str());
 	#endif
