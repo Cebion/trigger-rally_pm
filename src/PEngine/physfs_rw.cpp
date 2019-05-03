@@ -28,8 +28,7 @@ Sint64 physfs_size(SDL_RWops *context)
 }
 
 ///
-/// @brief Seeks to an `offset` in the file, depending on the `whence`
-///     starting position.
+/// @brief Seeks to an `offset` in the file, depending on the `whence` starting position.
 /// @param [in] context     RWops context.
 /// @param [in] offset      Offset to target.
 /// @param [in] whence      Starting position.
@@ -41,7 +40,7 @@ Sint64 physfs_seek(SDL_RWops *context, Sint64 offset, int whence)
     PHYSFS_File * const file = reinterpret_cast<PHYSFS_File *> (context->hidden.unknown.data1);
     PHYSFS_sint64 const curr = PHYSFS_tell(file);
     PHYSFS_sint64 const end = PHYSFS_fileLength(file);
-    Sint64 pos = offset;
+    Sint64 pos;
 
     assert(curr != -1);
     assert(end != -1);
@@ -49,15 +48,16 @@ Sint64 physfs_seek(SDL_RWops *context, Sint64 offset, int whence)
     switch (whence)
     {
         case RW_SEEK_SET:
-            // do nothing
+        default:
+            pos = 0 + offset;
             break;
 
         case RW_SEEK_CUR:
-            pos += curr;
+            pos = curr + offset;
             break;
 
         case RW_SEEK_END:
-            pos += end;
+            pos = end + offset;
             break;
     }
 
