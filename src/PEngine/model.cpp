@@ -222,7 +222,7 @@ void PModel::loadOBJ(const std::string &filename, float globalScale)
 			{
 				/* Vertex st texture coordinate */
 			
-				if (curMesh->texco.size() == curMesh->texco.size())
+				if (curMesh->texco.size() == curMesh->texco.capacity())
 					curMesh->texco.reserve(curMesh->texco.size() + 256);
 			
 				if(sscanf(value.c_str(), "%f %f", &v2.x, &v2.y) == 2)
