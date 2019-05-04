@@ -87,6 +87,7 @@ enum class CameraMode{
 	hood,
 	periscope,
 	count,
+	// disabled
 	piggyback
 };
 
@@ -599,7 +600,7 @@ protected:
 
 	bool startGame(const std::string &filename);
 	void toggleSounds(bool to);
-	void startGame2();
+	void initAudio();
 	void endGame(Gamefinish state);
 
 	void quitGame()

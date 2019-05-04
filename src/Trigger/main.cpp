@@ -1326,7 +1326,7 @@ bool MainApp::startGame(const std::string &filename)
             game->targettime = bct;
     }
 
-    startGame2();
+    initAudio();
     appstate = AS_IN_GAME;
   }
 
@@ -1397,17 +1397,20 @@ void MainApp::toggleSounds(bool to)
 ///
 /// @brief Initialize game sounds instances
 ///
-void MainApp::startGame2()
+void MainApp::initAudio()
 {
   if (cfg_enable_sound) {
+	// engine sound
     audinst_engine = new PAudioInstance(aud_engine, true);
     audinst_engine->setGain(0.0);
     audinst_engine->play();
 
+	// wind sound
     audinst_wind = new PAudioInstance(aud_wind, true);
     audinst_wind->setGain(0.0);
     audinst_wind->play();
 
+	// terrain sound
     audinst_gravel = new PAudioInstance(aud_gravel, true);
     audinst_gravel->setGain(0.0);
     audinst_gravel->play();
@@ -2099,7 +2102,7 @@ void MainApp::keyEvent(const SDL_KeyboardEvent &ke)
       case SDLK_RETURN:
       case SDLK_KP_ENTER:
       {
-        startGame2();
+        initAudio();
         game->chooseVehicle(game->vehiclechoices[choose_type]);
 
         if (lss.state == AM_TOP_LVL_PREP)
