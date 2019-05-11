@@ -92,8 +92,8 @@ install: installdirs build
 	@for file in $(TR_DOCFILES); do \
 		$(INSTALL_DATA) -D "$(TR_DOCDIR)/$$file" "$(DESTDIR)$(docdir)/$$file"; \
 		done
-	@$(INSTALL_DATA) "$(TR_DESKTOPFILE)" "$(LOC_DESKTOPFILE)"
-	@$(INSTALL_DATA) "$(TR_APPDATAFILE)" "$(LOC_APPDATAFILE)"
+	@$(INSTALL_DATA) "$(TR_DESKTOPFILE)" "$(DESTDIR)$(LOC_DESKTOPFILE)"
+	@$(INSTALL_DATA) "$(TR_APPDATAFILE)" "$(DESTDIR)$(LOC_APPDATAFILE)"
 	@printf "install [%s] end\n\n" "$(DISTNAME)"
 
 # deletes the software (executable, data files and documentation)
@@ -102,8 +102,8 @@ uninstall:
 	-@$(RM) --verbose "$(DESTDIR)$(bindir)/$(TR_CFGNAME)"
 	-@$(RM) --verbose --recursive "$(DESTDIR)$(datadir)/$(DISTNAME)"
 	-@$(RM) --verbose --recursive "$(DESTDIR)$(docdir)"
-	-@$(RM) --verbose "$(LOC_DESKTOPFILE)/$(TR_DESKTOPNAME)"
-	-@$(RM) --verbose "$(LOC_APPDATAFILE)/$(TR_APPDATANAME)"
+	-@$(RM) --verbose "$(DESTDIR)$(LOC_DESKTOPFILE)/$(TR_DESKTOPNAME)"
+	-@$(RM) --verbose "$(DESTDIR)$(LOC_APPDATAFILE)/$(TR_APPDATANAME)"
 
 # creates the installation directories if they do not exist
 installdirs:
