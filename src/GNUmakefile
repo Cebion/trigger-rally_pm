@@ -118,7 +118,7 @@ dist: clean
 	@cd ../..; \
 		md5sum "$(DISTARC)" > "$(DISTARC).md5"
 
-# links the object files into the executable, which it then strips
+# links the object files into the executable
 $(TR_EXEFILE): $(OBJFILES)
 	@printf "%s" $(CXX)
 	@for file in $(OBJFILES); do \
@@ -126,8 +126,6 @@ $(TR_EXEFILE): $(OBJFILES)
 		done
 	@printf "\t-> %s\n" $@
 	@$(CXX) -o $@ $(OBJFILES) $(LDFLAGS)
-	@printf "strip\t%s\n" $@
-	@strip $@
 
 #
 # removes object files, dependency files, executable and
