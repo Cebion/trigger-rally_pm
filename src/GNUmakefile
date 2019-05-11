@@ -14,8 +14,14 @@ TR_DATADIR      := ../data
 TR_DOCDIR       := ../doc
 TR_EXEFILE      := $(TR_BINDIR)/$(TR_EXENAME)
 TR_CFGFILE      := $(TR_BINDIR)/$(TR_CFGNAME)
+TR_DESKTOPNAME  := trigger-rally.desktop
+TR_APPDATANAME  := trigger-rally.appdata.xml
+TR_DESKTOPFILE  := $(TR_DATADIR)/icon/$(TR_DESKTOPNAME)
+TR_APPDATAFILE  := $(TR_DATADIR)/icon/$(TR_APPDATANAME)
 TR_DATAFILES    := $(shell cd $(TR_DATADIR); find * -type f)
 TR_DOCFILES     := $(shell cd $(TR_DOCDIR); find * -type f)
+LOC_DESKTOPFILE := /usr/share/applications
+LOC_APPDATAFILE := /usr/share/metainfo
 PROJDIRS        := PEngine PSim Trigger
 SRCFILES        := $(sort $(shell find $(PROJDIRS) -type f -name "*.cpp"))
 OBJFILES        := $(patsubst %.cpp, %.o, $(SRCFILES))
@@ -86,6 +92,8 @@ install: installdirs build
 	@for file in $(TR_DOCFILES); do \
 		$(INSTALL_DATA) -D "$(TR_DOCDIR)/$$file" "$(DESTDIR)$(docdir)/$$file"; \
 		done
+	@$(INSTALL_DATA) "$(TR_DESKTOPFILE)" "$(LOC_DESKTOPFILE)"
+	@$(INSTALL_DATA) "$(TR_APPDATAFILE)" "$(LOC_APPDATAFILE)"
 	@printf "install [%s] end\n\n" "$(DISTNAME)"
 
 # deletes the software (executable, data files and documentation)
@@ -94,6 +102,8 @@ uninstall:
 	-@$(RM) --verbose "$(DESTDIR)$(bindir)/$(TR_CFGNAME)"
 	-@$(RM) --verbose --recursive "$(DESTDIR)$(datadir)/$(DISTNAME)"
 	-@$(RM) --verbose --recursive "$(DESTDIR)$(docdir)"
+	-@$(RM) --verbose "$(LOC_DESKTOPFILE)/$(TR_DESKTOPNAME)"
+	-@$(RM) --verbose "$(LOC_APPDATAFILE)/$(TR_APPDATANAME)"
 
 # creates the installation directories if they do not exist
 installdirs:
