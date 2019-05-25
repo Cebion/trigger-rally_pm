@@ -76,9 +76,15 @@ Sint64 physfs_seek(SDL_RWops *context, Sint64 offset, int whence)
 size_t physfs_read(SDL_RWops *context, void *ptr, size_t size, size_t maxnum)
 {
     PHYSFS_File * const file = reinterpret_cast<PHYSFS_File *> (context->hidden.unknown.data1);
+    #if PHYSFS_VER_MAJOR >= 3
     PHYSFS_sint64 const r = PHYSFS_readBytes(file, ptr, size * maxnum);
 
     return r == -1 ? 0 : r / size;
+    #else
+    PHYSFS_sint64 const r = PHYSFS_read(file, ptr, size, maxnum);
+
+    return r == -1 ? 0 : r;
+    #endif
 }
 
 ///
@@ -93,9 +99,15 @@ size_t physfs_read(SDL_RWops *context, void *ptr, size_t size, size_t maxnum)
 size_t physfs_write(SDL_RWops *context, const void *ptr, size_t size, size_t num)
 {
     PHYSFS_File * const file = reinterpret_cast<PHYSFS_File *> (context->hidden.unknown.data1);
+    #if PHYSFS_VER_MAJOR >= 3
     PHYSFS_sint64 const r = PHYSFS_writeBytes(file, ptr, size * num);
 
     return r == -1 ? 0 : r / size;
+    #else
+    PHYSFS_sint64 const r = PHYSFS_write(file, ptr, size, num);
+
+    return r == -1 ? 0 : r;
+    #endif
 }
 
 ///
@@ -171,7 +183,14 @@ PHYSFS_sint64 physfs_write
 
 std::string physfs_getDir()
 {
+	#if PHYSFS_VER_MAJOR >= 3
 	return PHYSFS_getPrefDir("trigger-rally-team","trigger-rally");
+	#else
+	const std::string trdir = ".trigger-rally";
+	PHYSFS_setWriteDir(PHYSFS_getUserDir());
+	PHYSFS_mkdir(trdir.c_str());
+	return PHYSFS_getUserDir() + trdir;
+	#endif
 }
 
 bool physfs_isDirectory(const std::string& file)
