@@ -3,6 +3,7 @@ Author and licence info for files under data/ directory.
 GPL = GNU General Public License v2 or later ( http://www.gnu.org/licenses/gpl.txt )
 CC0 (PD) = Creative Commons Zero 1.0 Universal Public Domain Dedication ( http://creativecommons.org/publicdomain/zero/1.0/ )
 CCBY 3.0 = Creative Commons Attribution 3.0 Unported ( http://creativecommons.org/licenses/by/3.0/ )
+Pixabay = Pixabay License ( https://pixabay.com/service/license/ )
 
 DATA OPTIMIZATION NOTICE:
 	Starting from version 0.6.4, the released game data is optimized for smaller size and faster loading.
@@ -97,7 +98,10 @@ Bleed - http://remusprites.carbonmade.com
 	textures/veg/thick-tree.png (CCBY 3.0), source: http://opengameart.org/content/tree-collection-v26-bleeds-game-art
 	textures/veg/wide-tree2.png (CCBY 3.0), source: http://opengameart.org/content/tree-collection-v26-bleeds-game-art
 	textures/veg/willow.png (CCBY 3.0), source: http://opengameart.org/content/tree-collection-v26-bleeds-game-art
-	
+
+Åsa K, Onsemeliot
+	maps/castlerock/castle.png (Pixabay), https://pixabay.com/photos/eilean-donan-castle-castle-scotland-1650071
+	maps/castlerock/small.castle (Pixabay), https://pixabay.com/photos/castle-grey-stone-kinvara-ireland-2539741
 
 Bruno "Fuddl" Kleinert, Andrei Bondor, Onsemeliot
 	plugins/map-banana.zip (GPL)
@@ -543,6 +547,14 @@ Onsemeliot
 	maps/blunt/ss.png (GPL)
 	maps/brittania (GPL)
 	maps/bunnykingdom (GPL)
+	maps/castlerock/c.png (GPL)
+	maps/castlerock/f.png (GPL)
+	maps/castlerock/h.png (GPL)
+	maps/castlerock/m.png (GPL)
+	maps/castlerock/mm.png (GPL)
+	maps/castlerock/r.png (GPL)
+	maps/castlerock/ss.png (GPL)
+	maps/castlerock/t.png (GPL)
 	maps/coastline (GPL)
 	maps/coffee/c.jpg (GPL)
 	maps/coffee/f.png (GPL)
@@ -582,6 +594,7 @@ Onsemeliot
 	maps/dry/mm.png (GPL)
 	maps/dry/ss.png (GPL)
 	maps/duned (GPL)
+	maps/dusthopper (GPL)
 	maps/dusty (GPL)
 	maps/edge/c.png (GPL)
 	maps/edge/f.png (GPL)
