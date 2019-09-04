@@ -86,7 +86,8 @@ enum class CameraMode{
 	side,
 	hood,
 	periscope,
-	piggyback,
+	// disabled
+	//piggyback,
 	count
 };
 
