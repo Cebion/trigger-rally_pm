@@ -1876,13 +1876,24 @@ void MainApp::tickStateGame(float delta)
 
 		quatf temp2,temp3,temp4;
 		temp2.fromZAngle(forwangle + camera_user_angle);
-		temp3.fromXAngle(noseangle);
+		//temp3.fromXAngle(noseangle);
+		temp3.fromXAngle
+		(
+			atan2
+			(
+				rf->getWorldToLocPoint(rf->getPosition()).z,
+				rf->getWorldToLocPoint(rf->getPosition()).x
+				//(rf->getLocToWorldPoint(vec3f(1,0,0))-rf->getPosition()).x,
+				//(rf->getLocToWorldPoint(vec3f(0,1,0))-rf->getPosition()).y
+			)
+		);
 
-		temp4 = temp3 * temp2;
+		temp4 = temp3;// * temp2;
 
 		quatf target = tempo * temp4;
 
-		if (target.dot(camori) < 0.0f) target = target * -1.0f;
+		if (target.dot(camori) < 0.0f)
+			target = target * -1.0f;
 		//if (camori.dot(target) < 0.0f) camori = camori * -1.0f;
 
 		PULLTOWARD(camori, target, delta * 3.0f);
@@ -1894,7 +1905,7 @@ void MainApp::tickStateGame(float delta)
 		//campos = rf->getPosition() + makevec3f(cammat.row[2]) * 100.0;
 		campos = rf->getPosition() +
 			makevec3f(cammat.row[1]) * 1.6f +
-			makevec3f(cammat.row[2]) * 6.0f;
+			makevec3f(cammat.row[2]) * 6.5f;
 	}
     break;
   }
@@ -1937,13 +1948,7 @@ void MainApp::tickStateGame(float delta)
             break;
         }
         default: // Shift flag but neither up nor down?
-        {
-            audinst.push_back(new PAudioInstance(aud_shiftup));
-            audinst.back()->setPitch(0.9f + randm11*0.09f);
-            audinst.back()->setGain(1.0f * cfg_volume_sfx);
-            audinst.back()->play();
             break;
-        }
       }
     }
 

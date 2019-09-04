@@ -109,8 +109,10 @@ void PEngineInstance::tick(float delta, float throttle, float wheel_rps)
 	reverse = (throttle < 0.0f);
 
 	// if reverse changes, there is a gear change
-	if (wasreverse != reverse) flag_gearchange = true;
-
+	if (wasreverse != reverse) {
+		flag_gearchange = true;
+		shiftdirection = reverse ? -1 : 1;
+	}
 	// rps and throttle will be set here always positive
 	if (reverse)
 	{
@@ -182,6 +184,7 @@ void PEngineInstance::tick(float delta, float throttle, float wheel_rps)
 				gearch = engine->gearch_repeat;
 				// there is a gear change
 				flag_gearchange = true;
+				shiftdirection = targetgear_rel;
 			}
 		} else {
 			// update targetgear_rel, and set gearch

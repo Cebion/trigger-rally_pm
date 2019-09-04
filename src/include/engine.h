@@ -113,7 +113,10 @@ class PEngineInstance {
   
 	// if the vehicle has changed gear recently
 	bool flag_gearchange;
-  
+
+	// direction of the last gear shift
+	int shiftdirection;
+
 public:
 	PEngineInstance(PEngine *neweng) :
 		engine(neweng),
@@ -122,7 +125,8 @@ public:
 		gearch(0.0f),
 		reverse(false),
 		out_torque(0.0f),
-		flag_gearchange(false) { }
+		flag_gearchange(false),
+		shiftdirection(0) { }
 
 	// Simulation tick
 	void tick(float delta, float throttle, float wheel_rps);
@@ -151,7 +155,7 @@ public:
 
   int getShiftDirection()
   {
-    return targetgear_rel;
+    return shiftdirection;
   }
   
 	///
