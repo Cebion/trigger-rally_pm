@@ -1868,7 +1868,7 @@ void MainApp::tickStateGame(float delta)
     //
     // TODO: broken because of "world turns upside down" bug
 	//		the problem is in noseangle
-    //
+    /*
 	case CameraMode::piggyback:
 	{
 		vec3f nose = makevec3f(rf->getOrientationMatrix().row[1]);
@@ -1907,7 +1907,8 @@ void MainApp::tickStateGame(float delta)
 			makevec3f(cammat.row[1]) * 1.6f +
 			makevec3f(cammat.row[2]) * 6.5f;
 	}
-    break;
+	break;
+	*/
   }
 
   forw = makevec3f(cammat.row[0]);
