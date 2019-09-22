@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
-<event name="13. Generic Dare" author="Onsemeliot" locked="no">
+<event name="13. Generic Dare" author="Onsemeliot" locked="yes">
 
-	<unlocks file="/vehicles/cordo_super500/cordo_super500.vehicle" />
+	<unlocks file="/events/14-smoothglobe/smoothglobe.event" />
 
 	<level file="generic/generic-tarmac.level" />
 	<level file="generic/generic-dirt.level" />
