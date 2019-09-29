@@ -102,7 +102,7 @@ Bleed - http://remusprites.carbonmade.com
 Åsa K, Onsemeliot
 	maps/castlerock/castle.png (Pixabay), https://pixabay.com/photos/eilean-donan-castle-castle-scotland-1650071
 	maps/castlerock/small.castle (Pixabay), https://pixabay.com/photos/castle-grey-stone-kinvara-ireland-2539741
-
+	
 Bruno "Fuddl" Kleinert, Andrei Bondor, Onsemeliot
 	plugins/map-banana.zip (GPL)
 	plugins/map-desertrush.zip (GPL)
@@ -705,7 +705,8 @@ Onsemeliot
 	maps/mudbath/m.png (GPL)
 	maps/mudbath/mm.png (GPL)
 	maps/mudbath/ss.png (GPL)
-	maps/narrowvalley/* (GPL)
+	maps/narrowvalley (GPL)
+	maps/nightly (GPL)
 	maps/northern/c.png (GPL)
 	maps/northern/f.png (GPL)
 	maps/northern/h.png (GPL)
