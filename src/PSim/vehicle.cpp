@@ -40,13 +40,17 @@
 #define VEHICLE_UPSIDEDOWN_RESET_TIME 4
 
 // This is a coefficent used to get the friction of a wheel or a clip with the ground
-#define FRICTION_MAGIC_COEFF 10000
+#define FRICTION_MAGIC_COEFF_CLIP 10000
+#define FRICTION_MAGIC_COEFF_WHEEL (FRICTION_MAGIC_COEFF_CLIP * 50)
 
 // How much of the wheel radius can the suspension be compressed
 #define MAX_SUSPENSION_DEPTH_COEFF 0.7
 
 // How much the vehicle sinks on the ground, besed of terrain resistance
 #define SINK_COEFF 0.26
+
+// How fast the wheel rotation velocity match with the velocity of the ground below
+#define WHEEL_SPIN_VEL_UPDATE_RATIO 0.1
 
 ///
 /// @brief PVehicleWheel constructor
@@ -950,7 +954,7 @@ void PVehicle::tick(const float& delta)
 
             // if the clip pushes against the ground
             if (perpforce > 0.0f) {
-              vec2f friction = vec2f(-surfvel.x, -surfvel.y) * FRICTION_MAGIC_COEFF;
+              vec2f friction = vec2f(-surfvel.x, -surfvel.y) * FRICTION_MAGIC_COEFF_CLIP;
 
               float maxfriction = perpforce * 0.9f;
               float testfriction = perpforce * 1.2f;
@@ -1149,7 +1153,7 @@ void PVehicle::tick(const float& delta)
 
 		  // proportional to the actual velocity right and forward
 		  //vec2f friction = vec2f(-surfvel.x, -surfvel.y) * 10000.0f;
-		  vec2f friction = vec2f(-surfvel.x, -surfvel.y) * typewheel.friction * 50.0f * FRICTION_MAGIC_COEFF;
+		  vec2f friction = vec2f(-surfvel.x, -surfvel.y) * typewheel.friction * FRICTION_MAGIC_COEFF_WHEEL;
 
           // max friction available proportional to the pressure of the wheel to the ground and ground own friction coefficent
           float maxfriction = perpforce * mf_coef;
@@ -1175,7 +1179,7 @@ void PVehicle::tick(const float& delta)
               surf_forward * friction.y);
 
           // update wheel spin velocity
-          wheel.spin_vel -= (friction.y * typewheel.radius) * 0.1f * delta;
+          wheel.spin_vel -= (friction.y * typewheel.radius) * delta * WHEEL_SPIN_VEL_UPDATE_RATIO;
 
           //wheel.turn_vel -= friction.x * 1.0f * delta;
 

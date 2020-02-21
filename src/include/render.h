@@ -4,11 +4,11 @@
 // Copyright 2004-2006 Jasmine Langridge, jas@jareiko.net
 // License: GPL version 2 (see included gpl.txt)
 
+#ifndef RENDER_H_INCLUDED
+#define RENDER_H_INCLUDED
 
 #include <cmath>
 #include "vbuffer.h"
-
-
 
 struct PParticle_s {
   vec3f pos,linvel;
@@ -561,9 +561,12 @@ protected:
   //std::vector<uint8> hmap;
   std::vector<float> hmap;
 
+  // color map
   PImage cmap;
-  PImage tmap; ///< Terrain map.
-  RoadMap rmap; ///< Road map.
+  // terrain map
+  PImage tmap;
+  // road map
+  RoadMap rmap;
 
   std::vector<float> fmap;
   std::vector<PTerrainFoliageBand> foliageband;
@@ -771,9 +774,12 @@ public:
   /// @brief get the information about a contact point (its coordinates and normal) with the ground
   ///
   void getContactInfo(ContactInfo &tci) {
+
     float x = tci.pos.x * scale_hz_inv;
+    // int part of x
     int xi = (int)x;
     if (x < 0.0) xi--;
+    // x is the decimal part
     x -= (float)xi;
     int xiw = xi & totmask, xiw2 = (xi+1) & totmask;
 
@@ -828,6 +834,4 @@ public:
   float getMapSize() const { return totsize * scale_hz; }
 };
 
-
-
-
+#endif // RENDER_H_INCLUDED
