@@ -52,6 +52,9 @@
 // How fast the wheel rotation velocity match with the velocity of the ground below
 #define WHEEL_SPIN_VEL_UPDATE_RATIO 0.1
 
+// under what distance from the ground the wheel will create a dust trail
+#define MAX_DUST_TRAIL_HEIGHT 0.05
+
 ///
 /// @brief PVehicleWheel constructor
 ///
@@ -1243,10 +1246,8 @@ bool PVehicle::canHaveDustTrail()
             tci.pos.y = wclip.y;
             sim.getTerrain()->getContactInfo(tci);
 
-#define MAX_HEIGHT 0.5f
-            if (wclip.z - tci.pos.z <= MAX_HEIGHT)
+            if (wclip.z - tci.pos.z <= MAX_DUST_TRAIL_HEIGHT)
                 return true;
-#undef MAX_HEIGHT
         }
     }
 
