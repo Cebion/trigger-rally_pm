@@ -6,7 +6,6 @@
 
 	<genparams
 		mass="870.0"
-		dimensions="1.6, 2.3, 1.2"
 		wheelmodel="cordo_kitcar_wheel.obj"
 		wheelscale="0.033" />
 	

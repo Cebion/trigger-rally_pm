@@ -113,11 +113,15 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
   param.lift = DEF_VEHICLE_LIFT;
   param.fineffect = DEF_VEHICLE_FINEFFECT;
 
-  float allscale = 1.0;
+	// the scale of the values in the file
+	float allscale = 1.0;
 
   float drive_total = 0.0f;
 
   wheel_speed_multiplier = 0.0f;
+
+	// if the dimensions will be specificed in the file or just assumed using the 3D model
+	bool custom_dims = false;
 
   // Read stats from file
 
@@ -170,17 +174,18 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
     walk; walk = walk->NextSiblingElement()) {
 
 	// generic params
-    if (!strcmp(walk->Value(), "genparams")) {
+	if (!strcmp(walk->Value(), "genparams")) {
 
-      val = walk->Attribute("mass");
-      if (val)
-		  mass = atof(val);
+		val = walk->Attribute("mass");
+		if (val)
+			mass = atof(val);
 	  
-      val = walk->Attribute("dimensions");
-      if (val) {
-        sscanf(val, "%f , %f , %f", &dims.x, &dims.y, &dims.z);
-        dims *= allscale;
-      }
+		val = walk->Attribute("dimensions");
+		if (val) {
+			custom_dims = true;
+			sscanf(val, "%f , %f , %f", &dims.x, &dims.y, &dims.z);
+			dims *= allscale;
+		}
 
       val = walk->Attribute("wheelscale");
       if (val) wheelscale = atof(val);
@@ -557,6 +562,15 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
 	pstat_wheeldrive = std::to_string(wd) + " driving out of " + std::to_string(wheels_drive.size());
   }
   
+	// Use model of the first part to compute dimensions
+	if(!custom_dims){
+		std::pair<vec3f,vec3f> extents = part[0].model->getExtents();
+		dims.x = (extents.second.x - extents.first.x) * part[0].scale;
+		dims.y = (extents.second.y - extents.first.y) * part[0].scale;
+		dims.z = (extents.second.z - extents.first.z) * part[0].scale;
+	}
+	
+	
   // assign inverse_drive_total
   if (drive_total > 0.0f)
     inverse_drive_total = 1.0f / drive_total;

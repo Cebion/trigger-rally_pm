@@ -7,7 +7,6 @@
 
 	<genparams
 		mass="1100.0"
-		dimensions="1.6, 2.3, 1.2"
 		wheelmodel="fox_wrc_wheel.obj"
 		wheelscale="0.033" />
 

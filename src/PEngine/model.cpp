@@ -103,15 +103,15 @@ std::pair<vec3f, vec3f> PModel::getExtents() const
     for (unsigned int b=0; b<mesh[a].vert.size(); ++b) {
       if (v_min.x > mesh[a].vert[b].x)
         v_min.x = mesh[a].vert[b].x;
-      if (v_max.x < mesh[a].vert[b].x)
+      else if (v_max.x < mesh[a].vert[b].x)
         v_max.x = mesh[a].vert[b].x;
       if (v_min.y > mesh[a].vert[b].y)
         v_min.y = mesh[a].vert[b].y;
-      if (v_max.y < mesh[a].vert[b].y)
+      else if (v_max.y < mesh[a].vert[b].y)
         v_max.y = mesh[a].vert[b].y;
       if (v_min.z > mesh[a].vert[b].z)
         v_min.z = mesh[a].vert[b].z;
-      if (v_max.z < mesh[a].vert[b].z)
+      else if (v_max.z < mesh[a].vert[b].z)
         v_max.z = mesh[a].vert[b].z;
     }
   }

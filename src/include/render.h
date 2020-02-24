@@ -347,17 +347,13 @@ public:
 
 
 class PModel : public PResource {
-public:
-  std::vector<PMesh> mesh;
-
-  std::pair<vec3f, vec3f> getExtents() const;
+	void loadASE (const std::string &filename, float globalScale);
+	void loadOBJ (const std::string &filename, float globalScale);
 
 public:
-  PModel (const std::string &filename, float globalScale = 1.0);
-
-private:
-  void loadASE (const std::string &filename, float globalScale);
-  void loadOBJ (const std::string &filename, float globalScale);
+	PModel (const std::string &filename, float globalScale = 1.0);
+	std::vector<PMesh> mesh;
+	std::pair<vec3f, vec3f> getExtents() const;
 };
 
 struct PTerrainFoliageBand {
