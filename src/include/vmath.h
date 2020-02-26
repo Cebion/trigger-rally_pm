@@ -105,17 +105,17 @@ class vec3
 public:
   T x,y,z;
 
-  vec3 () { }
-  vec3 (T _x, T _y, T _z) { x=_x; y=_y; z=_z; }
-  vec3 (const vec3<T> &vec) { x=vec.x; y=vec.y; z=vec.z; }
-  vec3 (const T *vecptr) { x=vecptr[0]; y=vecptr[1]; z=vecptr[2]; }
+  vec3 (): x(0), y(0), z(0) {}
+  vec3 (T _x, T _y, T _z): x(_x), y(_y), z(_z) {}
+  vec3 (const vec3<T> &vec): x(vec.x), y(vec.y), z(vec.z) {}
+  vec3 (const T *vecptr): x(vecptr[0]), y(vecptr[1]), z(vecptr[2]) {}
 
   T &operator [] (int i) { return (&x)[i]; }
   operator const T* () const { return &x; }
   operator T* () { return &x; }
 
   //operator vec2<T> () const { return vec2<T>(x,y); }
-
+  
   vec3<T> operator + (const vec3<T> &vec) const { return vec3<T>(x+vec.x, y+vec.y, z+vec.z); }
   vec3<T> operator - (const vec3<T> &vec) const { return vec3<T>(x-vec.x, y-vec.y, z-vec.z); }
   vec3<T> operator * (T factor) const { return vec3<T>(x*factor, y*factor, z*factor); }
@@ -128,6 +128,7 @@ public:
   vec3<T> &operator -= (const vec3<T> &vec) { *this = *this - vec; return *this; }
   vec3<T> &operator *= (const T factor) { *this = *this * factor; return *this; }
   vec3<T> &operator /= (const T factor) { *this = *this / factor; return *this; }
+  vec3<T> &operator = (const vec3<T> &vec) { *this = vec; return *this; }
   
 
   T dot (const vec3<T> &vec) const { return (x*vec.x + y*vec.y + z*vec.z); }
@@ -177,11 +178,11 @@ class vec4
 public:
   T x,y,z,w;
 
-  vec4 () { }
-  vec4 (T _x, T _y, T _z, T _w) { x=_x; y=_y; z=_z; w=_w; }
-  vec4 (const vec3<T> &vec) { x=vec.x; y=vec.y; z=vec.z; }
-  vec4 (const vec4<T> &vec) { x=vec.x; y=vec.y; z=vec.z; w=vec.w; }
-  vec4 (const vec3<T> &vec, T _w) { x=vec.x; y=vec.y; z=vec.z; w=_w; }
+  vec4 (): x(0), y(0), z(0), w(0) {}
+  vec4 (T _x, T _y, T _z, T _w): x(_x), y(_y), z(_z), w(_w) {}
+  vec4 (const vec3<T> &vec): x(vec.x), y(vec.y), z(vec.z), w(0) {}
+  vec4 (const vec4<T> &vec): x(vec.x), y(vec.y), z(vec.z), w(vec.w) {}
+  vec4 (const vec3<T> &vec, T _w): x(vec.x), y(vec.y), z(vec.z), w(_w) {}
 
   T &operator [] (int i) { return (&x)[i]; }
   operator const T* () const { return &x; }
@@ -196,6 +197,8 @@ public:
   vec4<T> &operator += (const vec4<T> &vec) { *this = *this + vec; return *this; }
   vec4<T> &operator -= (const vec4<T> &vec) { *this = *this - vec; return *this; }
   vec4<T> &operator *= (const T factor) { *this = *this * factor; return *this; }
+  
+  vec4<T> &operator = (const vec4<T> &vec) { *this = vec; return *this; }
   
   T dot (const vec4<T> &vec) const { return (x*vec.x + y*vec.y + z*vec.z + w*vec.w); }
   T operator * (const vec4<T> &vec) const { return dot(vec); }
@@ -327,7 +330,7 @@ class mat44
 public:
   vec4<T> row[4];
 
-  mat44 () { }
+  mat44 () {*this = identity();}
 
   T &operator [] (int i) { return row[0][i]; }
   operator T* () { return &row[0].x; }
