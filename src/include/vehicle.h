@@ -8,6 +8,9 @@
 // This file contains definitions and classes related to Vehicles
 //
 
+#ifndef VEHICLE_H_INCLUDED
+#define VEHICLE_H_INCLUDED
+
 #include "engine.h"
 
 // vehicle core types
@@ -183,6 +186,9 @@ public:
   
   // wheel model
   PModel *wheelmodel;
+  
+  // number of driving wheels - float because wheels can drive at a partial power 
+  float driving_wheels_num;
   
   // Car statistics (powercurve, gears...)
   PEngine engine;
@@ -373,3 +379,5 @@ private:
 	// it's more low level that the doReset() one
 	void reset();
 };
+
+#endif // VEHICLE_H_INCLUDED

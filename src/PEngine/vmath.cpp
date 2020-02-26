@@ -7,8 +7,6 @@
 
 #include "pengine.h"
 
-
-
 template <class T>
 frustum<T> &frustum<T>::construct(const mat44<T> &mat)
 {

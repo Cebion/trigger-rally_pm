@@ -112,6 +112,8 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
   param.angdrag = DEF_VEHICLE_ANGDRAG;
   param.lift = DEF_VEHICLE_LIFT;
   param.fineffect = DEF_VEHICLE_FINEFFECT;
+  
+	driving_wheels_num = 0;
 
 	// the scale of the values in the file
 	float allscale = 1.0;
@@ -468,19 +470,29 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
     }
   }
   
-  // compute road holding average
-  float road_holding = 0;
-  unsigned wheel_num = 0;
-  for(unsigned int i=0; i!=part.size(); i++)
-  {
-	for(unsigned int j=0; j!=part[i].wheel.size(); j++)
+	// compute road holding average
+	// and count number of driving wheels in the meantime
+	float road_holding = 0;
+	unsigned wheel_num = 0;
+	for(unsigned int i=0; i!=part.size(); i++)
 	{
-	  ++wheel_num;
-	  road_holding += part[i].wheel[j].friction;
+		for(unsigned int j=0; j!=part[i].wheel.size(); j++)
+		{
+			++wheel_num;
+			road_holding += part[i].wheel[j].friction;
+		
+			// count number of drving wheels
+			driving_wheels_num += part[i].wheel[j].drive;
+		}
 	}
-  }
-  road_holding /= wheel_num;
-  pstat_roadholding = std::to_string(road_holding * 100);
+	road_holding /= wheel_num;
+	pstat_roadholding = std::to_string(road_holding * 100);
+	
+	// avoid 0 as number of driving wheels
+	// it's to avoid division by 0 - but won't affect physic
+	if (driving_wheels_num == 0)
+		driving_wheels_num = 1;
+	
   // remove trailing spaces/points
   while(1)
   {
@@ -882,8 +894,10 @@ void PVehicle::tick(const float& delta)
   // handle engine (output torque, change gear if needed...)
   iengine.tick(delta, state.throttle, wheel_angvel);
 
-  // Output engine power
-  float drivetorque = iengine.getOutputTorque();
+  // Output engine power delivered to each wheel
+  // the power will be shared equally to each wheel
+  // TODO: ABS and differential should be implemented to share the power between wheels better (26-2-2020)
+  float drivetorque = iengine.getOutputTorque() / type->driving_wheels_num;
 
   float turnfactor = state.turn.z;// /
     //(1.0f + fabsf(wheel_angvel) / 70.0f);

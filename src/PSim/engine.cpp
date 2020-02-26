@@ -53,7 +53,10 @@ float PEngine::getHorsePower()
 {
 	float bhp = 0;
 	
-	const float k = 4.75e-6;
+	// @todo:
+	// this is an empiric (magic) constant and algorithm to produce reasonable BHP values
+	// Implement a real BHP calculation!
+	const float k = 1e-6;
 	
 	// return point with higher output
 	for(unsigned int i=0; i!=powercurve.size(); i++)
