@@ -20,7 +20,7 @@
 #define DEF_VEHICLE_TURNSPEED_A 1
 #define DEF_VEHICLE_TURNSPEED_B 0
 
-#define DEF_VEHICLE_DRAG vec3f::zero()
+#define DEF_VEHICLE_DRAG vec3f(1,1,1)
 #define DEF_VEHICLE_ANGDRAG 0
 #define DEF_VEHICLE_LIFT vec2f::zero()
 #define DEF_VEHICLE_FINEFFECT vec2f::zero()
@@ -814,11 +814,39 @@ void PVehicle::tick(const float& delta)
   body->addTorque(vec3f(angvel.x*fabsf(angvel.x), angvel.y*fabsf(angvel.y), angvel.z*fabsf(angvel.z)) * -type->param.angdrag);
 
   // linear drag
-  vec3f frc = -vec3f(
-    loclinvel.x * fabsf(loclinvel.x) * type->param.drag.x,
-    loclinvel.y * fabsf(loclinvel.y) * type->param.drag.y,
-    loclinvel.z * fabsf(loclinvel.z) * type->param.drag.z);
+  // @todo: when in reverse drag is different!
+  // @todo: most of these calculation could be done once and not done each tick
+  // HACK looks like that for some scaling issue, cars are littler than what they should be
+  //    this affects drag calculation. We use a constant to resize areas accordingly
+  // @todo: solve the real problem, that is that cars are underscaled
+  const float drag_hack_area = 1.78;
+  // We use the formula:
+  //
+  // F = cd x p x u^2 x A x 1/2
+  //
+  // Where:
+  // F is the drag force we're looking for
+  // cd is the drag coefficent, typical of each car.
+  //    It is different for each model (0.20 to 0.45), we assume it's on average 0.30
+  //    then we apply the car type variation coefficent.
+  const float drag_coefficent_front = 0.3 * type->param.drag.y;
+  //    For the lateral and vertical sides, since cars are not built to be aerodynamic there we use custom consts
+  const float drag_coefficent_side = 0.8 * type->param.drag.x;
+  const float drag_coefficent_bottom = 0.9 * type->param.drag.z;
+  // p is the fluid density (for air = ~1.2 Kg/m3)
+  const float air_density = 1.2;
+  // u is the linear velocity in the direction
+  // A is the reference area.
+  //     We use the relevant dimensions of the car as area, and we apply coefficent to adjust
+  const float drag_reference_area_front = type->dims.x * type->dims.z * drag_hack_area * 0.9;
+  const float drag_reference_area_side = type->dims.y * type->dims.z * drag_hack_area * 0.75;
+  const float drag_reference_area_bottom = type->dims.x * type->dims.y * drag_hack_area * 0.97;
 
+  vec3f frc = -vec3f(
+    drag_coefficent_side * air_density * loclinvel.x * fabsf(loclinvel.x) * drag_reference_area_side * 0.5,
+    drag_coefficent_front * air_density * loclinvel.y * fabsf(loclinvel.y) * drag_reference_area_front * 0.5,
+    drag_coefficent_bottom * air_density * loclinvel.z * fabsf(loclinvel.z) * drag_reference_area_bottom * 0.5 );
+  
   // lift
   frc += -vec3f(
     loclinvel.x * type->param.lift.x * loclinvel.y,
@@ -1087,7 +1115,7 @@ void PVehicle::tick(const float& delta)
       wheel.dirtthrow = 0.0f;
 
       // the suspension force is proportional to how much the suspension
-      // is tensed up and the proper suspension force
+      // is tensed up and the suspension elasticity of the type of wheel
       float suspension_force = wheel.ride_pos * typewheel.force;
 
       // update suspension velocity

@@ -33,6 +33,7 @@
 			This makes an external force change the orientation of the vehicle harder at higher speed
 	-->
 	<ctrlparams
+		drag="1.0, 0.86, 1.0"
 		speedrate="15.0"
 		turnspeedrate="0.0, 0.0, 10.0" />
 
