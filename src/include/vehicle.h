@@ -318,8 +318,13 @@ public:
   // current controls situation (eg. brakes, turn)
   v_control_s ctrl;
   
+  // real current velocity on the y axis, from the front to the back of the car
   float forwardspeed;
+  
+  // sum of all the angular velocties of all the driving wheels
   float wheel_angvel;
+  
+  // sum of the linear speed (at the edge of the wheel) of all the wheels
   float wheel_speed;
   
   // how much noise for the drifting of the wheels. 0 means none
