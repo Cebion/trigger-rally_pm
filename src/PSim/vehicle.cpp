@@ -108,8 +108,6 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
   param.turnspeed = DEF_VEHICLE_TURNSPEED;
   param.turnspeed_a = DEF_VEHICLE_TURNSPEED_A;
   param.turnspeed_b = DEF_VEHICLE_TURNSPEED_B;
-  param.drag = DEF_VEHICLE_DRAG;
-  param.angdrag = DEF_VEHICLE_ANGDRAG;
   param.lift = DEF_VEHICLE_LIFT;
   param.fineffect = DEF_VEHICLE_FINEFFECT;
   
@@ -119,6 +117,11 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
 	float allscale = 1.0;
 
   float drive_total = 0.0f;
+  
+	// temp values that store the respective .vehicle coefficents
+	// not stored in param struct because will be done calculation on them
+	vec3f drag = DEF_VEHICLE_DRAG;
+	float angdrag = DEF_VEHICLE_ANGDRAG;
 
   wheel_speed_multiplier = 0.0f;
 
@@ -205,10 +208,10 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
       if (val) sscanf(val, "%f , %f , %f", &param.turnspeed.x, &param.turnspeed.y, &param.turnspeed.z);
 
       val = walk->Attribute("drag");
-      if (val) sscanf(val, "%f , %f , %f", &param.drag.x, &param.drag.y, &param.drag.z);
+      if (val) sscanf(val, "%f , %f , %f", &drag.x, &drag.y, &drag.z);
 
       val = walk->Attribute("angdrag");
-      if (val) param.angdrag = atof(val);
+      if (val) angdrag = atof(val);
 
       val = walk->Attribute("lift");
       if (val) sscanf(val, "%f , %f", &param.lift.x, &param.lift.y);
@@ -582,6 +585,47 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
 		dims.z = (extents.second.z - extents.first.z) * part[0].scale;
 	}
 	
+	// linear drag coefficent
+	// @todo: when in reverse drag is different!
+	// @todo: most of these calculation could be done once and not done each tick
+	// HACK looks like that for some scaling issue, cars are littler than what they should be
+	//    this affects drag calculation. We use a constant to resize areas accordingly
+	// @todo: solve the real problem, that is that cars are underscaled
+	const float drag_hack_area = 1.777777;
+	// We use the formula:
+	//
+	// F = cd x p x u^2 x A x 1/2
+	//
+	// Where:
+	// F is the drag force we're looking for
+	// cd is the drag coefficent, typical of each car.
+	//    It is different for each model (0.20 to 0.45), we assume it's on average 0.30
+	//    then we apply the car type variation coefficent.
+	const float drag_coefficent_front = 0.3 * drag.y;
+	//    For the lateral and vertical sides, since cars are not built to be aerodynamic there we use custom consts
+	const float drag_coefficent_side = 0.8 * drag.x;
+	const float drag_coefficent_bottom = 0.9 * drag.z;
+	// p is the fluid density (for air = ~1.2 Kg/m3)
+	const float air_density = 1.2;
+	// u is the linear velocity in the direction
+	// A is the reference area.
+	//     We use the relevant dimensions of the car as area, and we apply coefficent to adjust
+	const float drag_reference_area_front = dims.x * dims.z * drag_hack_area * 0.9;
+	const float drag_reference_area_side = dims.y * dims.z * drag_hack_area * 0.75;
+	const float drag_reference_area_bottom = dims.x * dims.y * drag_hack_area * 0.97;
+
+	drag_coeff = vec3f(
+		drag_coefficent_side * air_density * drag_reference_area_side * 0.5,
+		drag_coefficent_front * air_density * drag_reference_area_front * 0.5,
+		drag_coefficent_bottom * air_density * drag_reference_area_bottom * 0.5 );
+    
+	// angular drag
+	// This is an empiric formula... there is no clear easy right way to do it
+	ang_drag_coeff = vec3f(
+		62 * (dims.y + dims.z) * angdrag,
+		62 * (dims.x + dims.z) * angdrag,
+		62 * (dims.y + dims.x) * angdrag );
+	
 	
   // assign inverse_drive_total
   if (drive_total > 0.0f)
@@ -809,56 +853,18 @@ void PVehicle::tick(const float& delta)
 
   // fin effect (torque due to drag)
   body->addLocTorque(vec3f(-loclinvel.z * type->param.fineffect.y, 0.0, loclinvel.x * type->param.fineffect.x));
-
-  // linear drag
-  // @todo: when in reverse drag is different!
-  // @todo: most of these calculation could be done once and not done each tick
-  // HACK looks like that for some scaling issue, cars are littler than what they should be
-  //    this affects drag calculation. We use a constant to resize areas accordingly
-  // @todo: solve the real problem, that is that cars are underscaled
-  const float drag_hack_side = 1.3333;
-  const float drag_hack_area = drag_hack_side * drag_hack_side;
-  // We use the formula:
-  //
-  // F = cd x p x u^2 x A x 1/2
-  //
-  // Where:
-  // F is the drag force we're looking for
-  // cd is the drag coefficent, typical of each car.
-  //    It is different for each model (0.20 to 0.45), we assume it's on average 0.30
-  //    then we apply the car type variation coefficent.
-  const float drag_coefficent_front = 0.3 * type->param.drag.y;
-  //    For the lateral and vertical sides, since cars are not built to be aerodynamic there we use custom consts
-  const float drag_coefficent_side = 0.8 * type->param.drag.x;
-  const float drag_coefficent_bottom = 0.9 * type->param.drag.z;
-  // p is the fluid density (for air = ~1.2 Kg/m3)
-  const float air_density = 1.2;
-  // u is the linear velocity in the direction
-  // A is the reference area.
-  //     We use the relevant dimensions of the car as area, and we apply coefficent to adjust
-  const float drag_reference_area_front = type->dims.x * type->dims.z * drag_hack_area * 0.9;
-  const float drag_reference_area_side = type->dims.y * type->dims.z * drag_hack_area * 0.75;
-  const float drag_reference_area_bottom = type->dims.x * type->dims.y * drag_hack_area * 0.97;
-
-  const float drag_x_coeff = drag_coefficent_side * air_density * drag_reference_area_side * 0.5;
-  const float drag_y_coeff = drag_coefficent_front * air_density * drag_reference_area_front * 0.5;
-  const float drag_z_coeff = drag_coefficent_bottom * air_density * drag_reference_area_bottom * 0.5;
-  
-  vec3f frc = -vec3f(
-	loclinvel.x * fabsf(loclinvel.x) * drag_x_coeff,
-	loclinvel.y * fabsf(loclinvel.y) * drag_y_coeff,
-	loclinvel.z * fabsf(loclinvel.z) * drag_z_coeff );
+	
+	// linear drag
+	vec3f frc = -vec3f(
+		loclinvel.x * fabsf(loclinvel.x) * type->drag_coeff.x,
+		loclinvel.y * fabsf(loclinvel.y) * type->drag_coeff.y,
+		loclinvel.z * fabsf(loclinvel.z) * type->drag_coeff.z );
   
 	// angular drag
-	// This is an empiric formula... there is no clear easy right way to do it
-	const float ang_drag_x_coeff = 62 * (type->dims.y + type->dims.z) * type->param.angdrag;
-	const float ang_drag_y_coeff = 62 * (type->dims.x + type->dims.z) * type->param.angdrag;
-	const float ang_drag_z_coeff = 62 * (type->dims.y + type->dims.x) * type->param.angdrag;
-	
-	body->addLocTorque(-vec3f(
-		ang_drag_x_coeff * locangvel.x * fabsf(locangvel.x),
-		ang_drag_y_coeff * locangvel.y * fabsf(locangvel.y),
-		ang_drag_z_coeff * locangvel.z * fabsf(locangvel.z)
+	body->addLocTorque( -vec3f(
+		locangvel.x * fabsf(locangvel.x) * type->ang_drag_coeff.x,
+		locangvel.y * fabsf(locangvel.y) * type->ang_drag_coeff.y,
+		locangvel.z * fabsf(locangvel.z) * type->ang_drag_coeff.z
 		)
 	);
   

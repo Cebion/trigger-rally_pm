@@ -208,7 +208,12 @@ public:
     vec2f lift; // x = fin lift (hz), y = wing lift (vt)
     vec2f fineffect; // x = rudder/fin (hz), y = tail (vt)
   } param;
-
+  
+  // final drag coefficent, already computed
+  vec3f drag_coeff;
+  // final anglar drag coefficent, already computed
+  vec3f ang_drag_coeff;
+  
   // vehicle specific control specifications
   v_control_s ctrlrate;
 
