@@ -22,7 +22,7 @@
 
 #define DEF_VEHICLE_DRAG vec3f(1,1,1)
 #define DEF_VEHICLE_ANGDRAG 1
-#define DEF_VEHICLE_LIFT vec2f::zero()
+#define DEF_VEHICLE_LIFT 1
 #define DEF_VEHICLE_FINEFFECT vec2f::zero()
 
 #define DEF_WHEEL_RADIUS 1
@@ -108,7 +108,6 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
   param.turnspeed = DEF_VEHICLE_TURNSPEED;
   param.turnspeed_a = DEF_VEHICLE_TURNSPEED_A;
   param.turnspeed_b = DEF_VEHICLE_TURNSPEED_B;
-  param.lift = DEF_VEHICLE_LIFT;
   param.fineffect = DEF_VEHICLE_FINEFFECT;
   
 	driving_wheels_num = 0;
@@ -122,6 +121,7 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
 	// not stored in param struct because will be done calculation on them
 	vec3f drag = DEF_VEHICLE_DRAG;
 	float angdrag = DEF_VEHICLE_ANGDRAG;
+	float lift = DEF_VEHICLE_LIFT;
 
   wheel_speed_multiplier = 0.0f;
 
@@ -214,7 +214,8 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
       if (val) angdrag = atof(val);
 
       val = walk->Attribute("lift");
-      if (val) sscanf(val, "%f , %f", &param.lift.x, &param.lift.y);
+      //if (val) sscanf(val, "%f , %f", &param.lift.x, &param.lift.y);
+	  if(val) sscanf(val, "%f", &lift);
 
       val = walk->Attribute("speedrate");
       if (val) ctrlrate.throttle = atof(val);
@@ -626,6 +627,23 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
 		62 * (dims.x + dims.z) * angdrag,
 		62 * (dims.y + dims.x) * angdrag );
 	
+	// lift (downforce)
+	// Its formula is similar to the drag one 
+	//
+	// L = 0.5 x W x h x F x p x V^2
+	//
+	// Where:
+	// L = result downforce
+	// W = wingspan
+	const float wingspan = dims.x;
+	// h = wing cord
+	const float chord = dims.y;
+	// F = lift coefficent - we assume an average rally car has just a bit of downforce
+	const float F = -0.1 * lift;
+	// p = air density
+	// V = is the speed in the forward direction
+	// and we also apply the area hack (see above)
+	lift_coeff = 0.5 * wingspan * chord * F * air_density * drag_hack_area;
 	
   // assign inverse_drive_total
   if (drive_total > 0.0f)
@@ -848,7 +866,6 @@ void PVehicle::tick(const float& delta)
     state.turn.y * type->param.turnspeed.y,
     state.turn.z * type->param.turnspeed.z);
   body->addLocTorque(desiredturn * type->param.turnspeed_a);
-
   body->addLocTorque((desiredturn - locangvel) * (type->param.turnspeed_b * loclinvel.y));
 
   // fin effect (torque due to drag)
@@ -868,12 +885,12 @@ void PVehicle::tick(const float& delta)
 		)
 	);
   
-  // lift
-  frc += -vec3f(
-    loclinvel.x * type->param.lift.x * loclinvel.y,
-    0.0,
-    loclinvel.z * type->param.lift.y * loclinvel.y);
-
+	// lift
+	//frc += -vec3f(
+	//  loclinvel.x * type->param.lift.x * loclinvel.y,
+	//  0.0,
+	//  loclinvel.z * type->param.lift.y * loclinvel.y);
+	frc += vec3f(0, 0, SQUARED(forwardspeed) * type->lift_coeff);
 
   // VEHICLE TYPE POINT
 

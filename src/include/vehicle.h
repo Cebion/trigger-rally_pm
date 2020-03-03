@@ -203,9 +203,9 @@ public:
     float speed;
     vec3f turnspeed;
     float turnspeed_a, turnspeed_b; // turnspeed = a + b * speed
-    vec3f drag;
-    float angdrag; // angular drag
-    vec2f lift; // x = fin lift (hz), y = wing lift (vt)
+    //vec3f drag;
+    //float angdrag; // angular drag
+    //vec2f lift; // x = fin lift (hz), y = wing lift (vt)
     vec2f fineffect; // x = rudder/fin (hz), y = tail (vt)
   } param;
   
@@ -213,6 +213,8 @@ public:
   vec3f drag_coeff;
   // final anglar drag coefficent, already computed
   vec3f ang_drag_coeff;
+  // final lift coefficent, already comupted
+  float lift_coeff;
   
   // vehicle specific control specifications
   v_control_s ctrlrate;
