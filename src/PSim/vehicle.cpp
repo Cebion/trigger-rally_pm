@@ -639,7 +639,7 @@ bool PVehicleType::load(const std::string &filename, PSSModel &ssModel)
 	// h = wing cord
 	const float chord = dims.y;
 	// F = lift coefficent - we assume an average rally car has just a bit of downforce
-	const float F = -0.1 * lift;
+	const float F = -0.02 * lift;
 	// p = air density
 	// V = is the speed in the forward direction
 	// and we also apply the area hack (see above)
