@@ -500,6 +500,7 @@ Onsemeliot
 	events/12-encountered (GPL)
 	events/13-generic (GPL)
 	events/14-smoothglobe (GPL)
+	events/15-roughvoyage (GPL)
 	icon/* (GPL)
 	maps/aegyptian/c.png (GPL)
 	maps/aegyptian/f.png (GPL)

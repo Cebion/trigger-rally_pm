@@ -2,7 +2,6 @@
 <event name="11. Tight Trophy" author="Onsemeliot" locked="yes">
 
 	<unlocks file="/events/12-encountered/encountered.event" />
-	<unlocks file="/vehicles/fox_super500/fox_super500.vehicle" />
 
 	<level file="promenade/promenade.level" />
 	<level file="lovely/lovely.level" />

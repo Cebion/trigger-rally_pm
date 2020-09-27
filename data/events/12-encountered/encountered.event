@@ -2,6 +2,7 @@
 <event name="12. Encountered Challenges" author="Onsemeliot" locked="yes">
 
 	<unlocks file="/events/13-generic/generic.event" />
+	<unlocks file="/vehicles/cordo_super500/cordo_super500.vehicle" />
 
 	<level file="swiss/swiss.level" />
 	<level file="merciless/merciless.level" />

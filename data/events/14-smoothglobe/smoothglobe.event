@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <event name="14. Smooth Globe" author="Onsemeliot" locked="yes">
 
-	<unlocks file="/vehicles/cordo_super500/cordo_super500.vehicle" />
+	<unlocks file="/events/15-roughvoyage/roughvoyage.event" />
 
 	<level file="highpass/highmorning.level" />
 	<level file="smoothie/smoothie.level" />
