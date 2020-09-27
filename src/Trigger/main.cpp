@@ -2291,6 +2291,44 @@ void MainApp::joyButtonEvent(int which, int button, bool down)
   }
 }
 
+bool MainApp::joyAxisEvent(int which, int axis, float value, bool down)
+{
+  if (which == 0) {
+
+    switch (appstate) {
+    case AS_CHOOSE_VEHICLE:
+
+      if (ctrl.map[ActionLeft].type == UserControl::TypeJoyAxis &&
+        ctrl.map[ActionLeft].joyaxis.axis == axis &&
+        ctrl.map[ActionLeft].joyaxis.sign * value > 0.5) {
+        if (!down)
+          if (--choose_type < 0)
+            choose_type = (int)game->vehiclechoices.size()-1;
+        return true;
+      }
+      else if (ctrl.map[ActionRight].type == UserControl::TypeJoyAxis &&
+        ctrl.map[ActionRight].joyaxis.axis == axis &&
+        ctrl.map[ActionRight].joyaxis.sign * value > 0.5) {
+        if (!down)
+          if (++choose_type >= (int)game->vehiclechoices.size())
+            choose_type = 0;
+        return true;
+      }
+      else if ((ctrl.map[ActionLeft].type == UserControl::TypeJoyAxis &&
+        ctrl.map[ActionLeft].joyaxis.axis == axis &&
+        ctrl.map[ActionLeft].joyaxis.sign * value <= 0.5) ||
+        (ctrl.map[ActionRight].type == UserControl::TypeJoyAxis &&
+        ctrl.map[ActionRight].joyaxis.axis == axis &&
+        ctrl.map[ActionRight].joyaxis.sign * value <= 0.5)) {
+          return false;
+      }
+
+      break;
+    }
+  }
+  return down;
+}
+
 int main(int argc, char *argv[])
 {
     return MainApp("Trigger Rally", ".trigger-rally").run(argc, argv);

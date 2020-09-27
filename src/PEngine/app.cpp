@@ -488,7 +488,7 @@ int PApp::run(int argc, char *argv[])
 
   srand(rand() + SDL_GetTicks());
 
-  bool active = true, repaint = true;
+  bool active = true, repaint = true, axis_down = false;
   uint32 curtime = SDL_GetTicks() - 1;
 
   while (1) {
@@ -541,6 +541,7 @@ int PApp::run(int argc, char *argv[])
       case SDL_JOYAXISMOTION:
         sdl_joy[event.jaxis.which].axis[event.jaxis.axis] =
           ((float)event.jaxis.value + 0.5f) / 32767.5f;
+        axis_down = joyAxisEvent(event.jaxis.which,event.jaxis.axis,sdl_joy[event.jaxis.which].axis[event.jaxis.axis],axis_down);
         break;
 
       case SDL_JOYBUTTONDOWN:
@@ -858,6 +859,12 @@ void PApp::cursorMoveEvent(int posx, int posy)
 void PApp::joyButtonEvent(int which, int button, bool down)
 {
   which = which; button = button; down = down;
+}
+
+bool PApp::joyAxisEvent(int which, int axis, float value, bool down)
+{
+  which = which; axis = axis; value = value; down = down;
+  return false;
 }
 
 
