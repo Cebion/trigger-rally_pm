@@ -752,6 +752,15 @@ glMatrixMode(GL_PROJECTION);
     getSSRender().drawText(racename, PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
     glPopMatrix(); // 1
 
+    if (vtype->getLocked()) {
+      glPushMatrix(); // 1
+      glTranslatef(400.0f, 400.0f, 0.0f);
+      glScalef(40.0f, 40.0f, 1.0f);
+      glColor4f(gwc.marked.x, gwc.marked.y, gwc.marked.z, gwc.marked.w);
+      getSSRender().drawText("Locked", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
+      glPopMatrix(); // 1
+    }
+
     glPopMatrix(); // 0
 
     glBlendFunc(GL_ONE, GL_ZERO);

@@ -226,6 +226,11 @@ public:
 public:
   bool load(const std::string &filename, PSSModel &ssModel);
   void unload();
+  void setLocked(bool setLocked);
+  bool getLocked();
+
+private:
+  bool locked;
 };
 
 

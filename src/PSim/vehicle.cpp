@@ -665,7 +665,21 @@ void PVehicleType::unload()
   part.clear();
 }
 
+///
+/// @brief Sets if the vehicle is locked 
+///
+void PVehicleType::setLocked(bool setLocked)
+{
+  locked = setLocked;
+}
 
+///
+/// @brief Gets if the vehicle is locked 
+///
+bool PVehicleType::getLocked()
+{
+  return locked;
+}
 
 //TNL_IMPLEMENT_NETOBJECT(PVehicle);
 
