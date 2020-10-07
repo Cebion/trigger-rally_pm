@@ -753,12 +753,23 @@ glMatrixMode(GL_PROJECTION);
     glPopMatrix(); // 1
 
     if (vtype->getLocked()) {
+      const std::string unlockevent = getVehicleUnlockEvent(vtype->getName());
+
       glPushMatrix(); // 1
-      glTranslatef(400.0f, 400.0f, 0.0f);
+      glTranslatef(400.0f, 425.0f, 0.0f);
       glScalef(40.0f, 40.0f, 1.0f);
       glColor4f(gwc.marked.x, gwc.marked.y, gwc.marked.z, gwc.marked.w);
       getSSRender().drawText("Locked", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
       glPopMatrix(); // 1
+
+      if (unlockevent != "") {
+        glPushMatrix(); // 1
+        glTranslatef(400.0f, 375.0f, 0.0f);
+        glScalef(20.0f, 20.0f, 20.0f);
+        glColor4f(gwc.marked.x, gwc.marked.y, gwc.marked.z, gwc.marked.w);
+        getSSRender().drawText("Complete " + unlockevent + " to unlock", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
+        glPopMatrix(); // 1
+      }
     }
 
     glPopMatrix(); // 0

@@ -495,6 +495,8 @@ private:
 	std::vector<TriggerLevel> levels;
 	std::vector<TriggerEvent> events;
 
+	std::string getVehicleUnlockEvent(const std::string &vehiclename) const;
+
 	// for level screen
 	Gui gui;
 

@@ -404,6 +404,23 @@ void MainApp::copyDefaultPlayers() const
 }
 
 ///
+/// @brief Returns event that unlocks the vehicle
+/// @param [in] vehiclename  Vehicle name
+/// @returns Event name
+///
+std::string MainApp::getVehicleUnlockEvent(const std::string &vehiclename) const
+{
+    for (unsigned int i = 0; i < events.size(); i++) {
+        for (UnlockData::const_iterator iter = events[i].unlocks.begin(); iter != events[i].unlocks.end(); ++iter) {
+            if (*iter == vehiclename) {
+                return events[i].name;
+            }
+        }
+    }
+    return std::string();
+}
+
+///
 /// @brief Load configurations from files
 /// @todo Since C++11 introduced default members initializers, the defaults could
 ///  be set in the class declaration directly rather than in this function.
