@@ -767,7 +767,7 @@ glMatrixMode(GL_PROJECTION);
         glTranslatef(400.0f, 375.0f, 0.0f);
         glScalef(20.0f, 20.0f, 20.0f);
         glColor4f(gwc.marked.x, gwc.marked.y, gwc.marked.z, gwc.marked.w);
-        getSSRender().drawText("Complete " + unlockevent + " to unlock", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
+        getSSRender().drawText("Complete event " + unlockevent + " to unlock", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
         glPopMatrix(); // 1
       }
     }
