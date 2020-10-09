@@ -430,6 +430,7 @@ private:
 	float cfg_drivingassist;
 	bool cfg_enable_sound;
 	bool cfg_enable_codriversigns;
+	bool cfg_enable_fps;
 
 	long int cfg_skip_saves;
 
@@ -594,6 +595,12 @@ private:
 	float choose_spin;
 
 	int choose_type;
+
+	// Time and count to calculate frames per second
+	float fpstime;
+	unsigned int fpscount;
+	float fps;
+	void tickCalculateFps(float delta);
 
 protected:
 

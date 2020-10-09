@@ -137,6 +137,7 @@
 		codriversignsposx="0.0"
 		codriversignsposy="0.45"
 		codriversignsscale="0.2"
+		enablefps="no"
 		/>
 		<!-- Possible values for speedunit:
 			kph - Kilometres per hour
