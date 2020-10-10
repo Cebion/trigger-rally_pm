@@ -1506,9 +1506,9 @@ void MainApp::renderStateGame(float eyetranslation)
             if (timepen >= 0.1f)
             {
                 glColor4f(1.0f, 1.0f, 0.5f, 1.0f);
-                glTranslatef(0.0f, -1.60f, 0.0f);
+                glTranslatef(0.0f, -0.8f, 0.0f);
                 getSSRender().drawText(PUtil::formatTime(timepen) + '+', PTEXT_HZA_LEFT | PTEXT_VTA_TOP);
-                time_offset = 1.6;
+                time_offset = 0.8;
             }
         }
 
