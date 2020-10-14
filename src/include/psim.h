@@ -8,6 +8,9 @@
 // This file contains basic classes the physic engine uses
 //
 
+#ifndef PSIMH
+#define PSIMH
+
 #include <pengine.h>
 
 
@@ -177,3 +180,5 @@ public:
   friend class PRigidBody;
   friend class PVehicle;
 };
+
+#endif

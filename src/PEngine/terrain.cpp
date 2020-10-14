@@ -25,8 +25,8 @@ void PTerrain::unload()
 }
 
 
-PTerrain::PTerrain (XMLElement *element, const std::string &filepath, PSSTexture &ssTexture) :
-  loaded (false)
+PTerrain::PTerrain (XMLElement *element, const std::string &filepath, PSSTexture &ssTexture, const PRigidity &rigidity) :
+    loaded (false), rigidity(rigidity)
 {
   unload();
 
@@ -436,7 +436,43 @@ PTerrain::PTerrain (XMLElement *element, const std::string &filepath, PSSTexture
   loaded = true;
 }
 
+///
+/// @brief Gets terrain tile for each world position
+/// @param pos = world position
+/// @retval Pointer to terrain tile
+///
+const PTerrainTile *PTerrain::getTileAtPos(const vec3f &pos) const
+{
+  int tilex = pos.x * scale_tile_inv;
+  int tiley = pos.y * scale_tile_inv;
 
+  if (pos.x < 0.0)
+    --tilex;
+  if (pos.y < 0.0)
+    --tiley;
+
+  for (std::list<PTerrainTile>::const_iterator iter = tile.begin(); iter != tile.end(); ++iter) {
+    if (iter->posx == tilex && iter->posy == tiley) {
+      return &*iter;
+    }
+  }
+  return nullptr;
+}
+
+///
+/// @brief Gets vector of objects on tile at world position
+/// @param pos = world position
+/// @retval Pointer to world objects on terrain tile
+///
+const std::vector<PTerrainFoliage> *PTerrain::getFoliageAtPos(const vec3f &pos) const
+{
+  const PTerrainTile *tile = getTileAtPos(pos);
+
+  if (tile) {
+    return &tile->straight;
+  }
+  return nullptr;
+}
 
 PTerrainTile *PTerrain::getTile(int tilex, int tiley)
 {
@@ -527,7 +563,7 @@ PTerrainTile *PTerrain::getTile(int tilex, int tiley)
     // Create foliage instances
 
     for (int i = 0; i < foliageband[b].trycount; i++) {
-
+      float rigidityvalue = 0.0f;
       vec2f ftry = vec2f(
         (float)((tileptr->posx * tilesize) + rand01 * tilesize) * scale_hz,
         (float)((tileptr->posy * tilesize) + rand01 * tilesize) * scale_hz);
@@ -544,6 +580,12 @@ PTerrainTile *PTerrain::getTile(int tilex, int tiley)
       //tileptr->foliage[b].inst.back().scale = (1.0f + fol * 0.5f) * (rand01 * rand01 + 0.5) * 1.4;
       //tileptr->foliage[b].inst.back().scale = (foliageband[b].scalemin + fol * 0.5f) * (rand01 * rand01 + 0.5) * foliageband[b].scalemax;
       tileptr->foliage[b].inst.back().scale = (foliageband[b].scale + fol * 0.5f) * (rand01 * rand01 + 0.5) * 1.4;
+
+      rigidityvalue = rigidity.getRigidity(foliageband[b].sprite_tex->getName());
+      if (rigidityvalue != 0.0) {
+        tileptr->foliage[b].inst.back().rigidity = rigidityvalue;
+        tileptr->straight.push_back(tileptr->foliage[b].inst.back());
+      }
     }
 
     // Create vertex buffers for rendering
@@ -622,6 +664,7 @@ PTerrainTile *PTerrain::getTile(int tilex, int tiley)
 
     for (unsigned int b=0; b < roadsigns.size(); ++b)
     {
+	float rigidityvalue = 0.0f;
 /*
         vec2f ftry = vec2f(
             (float)((tileptr->posx * tilesize) + roadsigns[b].x) * scale_hz,
@@ -638,6 +681,13 @@ PTerrainTile *PTerrain::getTile(int tilex, int tiley)
         tileptr->roadsignset[b].inst.back().pos.z    = getHeight(ftry.x, ftry.y);
         tileptr->roadsignset[b].inst.back().ang      = roadsigns[b].deg;
         tileptr->roadsignset[b].inst.back().scale    = roadsigns[b].scale;
+        tileptr->straight.push_back(tileptr->roadsignset[b].inst.back());
+
+        rigidityvalue = rigidity.getRigidity(roadsigns[b].sprite->getName());
+        if (rigidityvalue != 0.0) {
+          tileptr->roadsignset[b].inst.back().rigidity = rigidityvalue;
+          tileptr->straight.push_back(tileptr->roadsignset[b].inst.back());
+        }
 
         ramfile1.clear();
         ramfile2.clear();

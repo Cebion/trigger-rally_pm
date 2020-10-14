@@ -40,7 +40,8 @@ TriggerGame::TriggerGame(MainApp *parent):
 	randomseed(0),
 	terrain(nullptr),
 	cdvoice(app->getCodriverWords(), app->getCodriverVolume()),
-	cdsigns(app->getCodriverSigns(), app->getCodriverUserConfig())
+	cdsigns(app->getCodriverSigns(), app->getCodriverUserConfig()),
+	rigidity()
 {}
 
 TriggerGame::~TriggerGame()
@@ -168,7 +169,7 @@ bool TriggerGame::loadLevel(const std::string &filename)
 		{
 			try
 			{
-				terrain = new PTerrain (walk, filename, app->getSSTexture ());
+				terrain = new PTerrain (walk, filename, app->getSSTexture (), rigidity);
 			}
 			catch (PException &e)
 			{

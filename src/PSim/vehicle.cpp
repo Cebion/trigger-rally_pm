@@ -6,6 +6,7 @@
 // License: GPL version 2 (see included gpl.txt)
 
 #include "psim.h"
+#include "collision.h"
 
 // default vehicle type values
 #define DEF_VEHICLE_NAME "Vehicle"
@@ -1326,6 +1327,39 @@ void PVehicle::tick(const float& delta)
       wheel_angvel += wheel.spin_vel * typewheel.drive;
 
       wheel_speed += wheel.spin_vel * typewheel.radius;
+    }
+
+    // Calculate collisions with world objects
+    PCollision collision(type->part[i].clip, part[i].ref_world);
+    const std::vector<PTerrainFoliage> *foliage = sim.getTerrain()->getFoliageAtPos(body->pos);
+
+    if (foliage) {
+      const std::vector<PTerrainFoliage> contact = collision.checkContact(foliage);
+
+      for (unsigned int i = 0; i < contact.size(); ++i) {
+        vec3f crashforce = vec3f::zero();
+        vec3f ptvel = body->getLinearVelAtPoint(body->pos);
+
+        // Prevent that vehicle gets stuck in an object
+        if (collision.towardsContact(body->pos, contact[i].pos, ptvel * delta)) {
+          const float crashthreshold = 0.025f;
+
+          ptvel.x = -ptvel.x * contact[i].rigidity;
+          ptvel.y = -ptvel.y * contact[i].rigidity;
+          ptvel.z = 0.0f;
+
+          // apply crash force [N] at center of object (F=v*m/t)
+          if (delta != 0.0f)
+            crashforce = ptvel * type->mass / delta;
+          body->addForceAtPoint(crashforce, contact[i].pos);
+
+          // Trigger crash sound or amplify gravel sound
+          if (contact[i].rigidity > crashthreshold)
+            CLAMP_LOWER(crunch_level, crashforce.length() * 0.00001f);
+          else
+            skid_level += crashforce.length();
+        }
+      }
     }
   }
 

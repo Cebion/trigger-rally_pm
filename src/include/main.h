@@ -22,7 +22,7 @@
 #include <pengine.h>
 #include <psim.h>
 #include <unordered_map>
-
+#include "rigidity.h"
 
 // Forward declaration for TriggerGame to use
 class MainApp;
@@ -133,6 +133,9 @@ private:
 	// Codriver voice and sign set
 	PCodriverVoice cdvoice;
 	PCodriverSigns cdsigns;
+
+	// Rigidity map for foliage and road signs
+	PRigidity rigidity;
 
 public:
 

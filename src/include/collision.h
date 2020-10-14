@@ -1,0 +1,47 @@
+//
+// Copyright (C) 2020 Martin Scherer, martinscherer84@gmail.com
+//
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+//
+
+#ifndef COLLISIONH
+#define COLLISIONH
+
+#include "psim.h"
+#include "vehicle.h"
+
+///
+/// @brief Handling of collisions with world objects
+///
+class PCollision {
+public:
+  PCollision(const std::vector<vehicle_clip_s> &clip, PReferenceFrame &ref_world);
+  const std::vector<PTerrainFoliage> checkContact(const std::vector<PTerrainFoliage> *foliage) const;
+  bool towardsContact(vec3f body, vec3f contact, vec3f diff) const;
+private:
+  PCollision();
+  PCollision(const PCollision&);
+  PCollision& operator=(const PCollision&);
+
+  void calcmin(const vec3f &a);
+  void calcmax(const vec3f &a);
+
+  // 2D minimum position of AABB box
+  vec2f boxmin;
+  // 2D maximum position of AABB box
+  vec2f boxmax;
+};
+
+#endif

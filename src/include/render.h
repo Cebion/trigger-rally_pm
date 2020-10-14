@@ -8,6 +8,7 @@
 #define RENDER_H_INCLUDED
 
 #include <cmath>
+#include "rigidity.h"
 #include "vbuffer.h"
 
 struct PParticle_s {
@@ -375,6 +376,7 @@ struct PTerrainFoliage {
   vec3f pos;
   float ang;
   float scale;
+  float rigidity;
 };
 
 struct PTerrainFoliageSet {
@@ -402,10 +404,10 @@ struct PTerrainTile {
 
   vec3f mins,maxs; // AABB
 
-  //
-
   std::vector<PTerrainFoliageSet> foliage;
   std::vector<PRoadSignSet> roadsignset;
+  // Straight vector for rapid search by collision detection
+  std::vector<PTerrainFoliage> straight;
 };
 
 ///
@@ -615,7 +617,7 @@ protected:
   }
 
 public:
-  PTerrain(XMLElement *element, const std::string &filepath, PSSTexture &ssTexture);
+  PTerrain(XMLElement *element, const std::string &filepath, PSSTexture &ssTexture, const PRigidity &rigidity);
   ~PTerrain();
 
   void unload();
@@ -624,6 +626,7 @@ public:
 
   void drawSplat(float x, float y, float scale, float angle);
 
+  const std::vector<PTerrainFoliage> *getFoliageAtPos(const vec3f &pos) const;
 
   struct ContactInfo {
     vec3f pos;
@@ -828,6 +831,12 @@ public:
   PTexture *getHUDMapTexture() { return tex_hud_map; }
 
   float getMapSize() const { return totsize * scale_hz; }
+
+private:
+  const PTerrainTile *getTileAtPos(const vec3f &pos) const;
+
+  // Rigidity map for foliage and road signs
+  const PRigidity &rigidity;
 };
 
 #endif // RENDER_H_INCLUDED
