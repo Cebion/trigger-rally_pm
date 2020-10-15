@@ -1343,15 +1343,16 @@ void PVehicle::tick(const float& delta)
         // Prevent that vehicle gets stuck in an object
         if (collision.towardsContact(body->pos, contact[i].pos, ptvel * delta)) {
           const float crashthreshold = 0.025f;
+          vec3f crashpoint = collision.getCrashPoint(body->pos, contact[i]);
 
           ptvel.x = -ptvel.x * contact[i].rigidity;
           ptvel.y = -ptvel.y * contact[i].rigidity;
           ptvel.z = 0.0f;
 
-          // apply crash force [N] at center of object (F=v*m/t)
+          // apply crash force [N] at center of object in X/Y direction (F=v*m/t)
           if (delta != 0.0f)
             crashforce = ptvel * type->mass / delta;
-          body->addForceAtPoint(crashforce, contact[i].pos);
+          body->addForceAtPoint(crashforce, crashpoint);
 
           // Trigger crash sound or amplify gravel sound
           if (contact[i].rigidity > crashthreshold)

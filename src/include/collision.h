@@ -29,7 +29,9 @@ class PCollision {
 public:
   PCollision(const std::vector<vehicle_clip_s> &clip, PReferenceFrame &ref_world);
   const std::vector<PTerrainFoliage> checkContact(const std::vector<PTerrainFoliage> *foliage) const;
-  bool towardsContact(vec3f body, vec3f contact, vec3f diff) const;
+  bool towardsContact(const vec3f &body, const vec3f &contact, const vec3f &diff) const;
+  const vec3f &getCrashPoint(const vec3f &body, const PTerrainFoliage &foliage);
+
 private:
   PCollision();
   PCollision(const PCollision&);
@@ -38,10 +40,12 @@ private:
   void calcmin(const vec3f &a);
   void calcmax(const vec3f &a);
 
-  // 2D minimum position of AABB box
-  vec2f boxmin;
-  // 2D maximum position of AABB box
-  vec2f boxmax;
+  // 3D minimum position of AABB box
+  vec3f boxmin;
+  // 3D maximum position of AABB box
+  vec3f boxmax;
+  // Position to apply crash force
+  vec3f crashpoint;
 };
 
 #endif

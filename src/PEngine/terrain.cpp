@@ -582,7 +582,7 @@ PTerrainTile *PTerrain::getTile(int tilex, int tiley)
       tileptr->foliage[b].inst.back().scale = (foliageband[b].scale + fol * 0.5f) * (rand01 * rand01 + 0.5) * 1.4;
 
       rigidityvalue = rigidity.getRigidity(foliageband[b].sprite_tex->getName());
-      if (rigidityvalue != 0.0) {
+      if (rigidityvalue != 0.0f) {
         tileptr->foliage[b].inst.back().rigidity = rigidityvalue;
         tileptr->straight.push_back(tileptr->foliage[b].inst.back());
       }
@@ -681,10 +681,9 @@ PTerrainTile *PTerrain::getTile(int tilex, int tiley)
         tileptr->roadsignset[b].inst.back().pos.z    = getHeight(ftry.x, ftry.y);
         tileptr->roadsignset[b].inst.back().ang      = roadsigns[b].deg;
         tileptr->roadsignset[b].inst.back().scale    = roadsigns[b].scale;
-        tileptr->straight.push_back(tileptr->roadsignset[b].inst.back());
 
         rigidityvalue = rigidity.getRigidity(roadsigns[b].sprite->getName());
-        if (rigidityvalue != 0.0) {
+        if (rigidityvalue != 0.0f) {
           tileptr->roadsignset[b].inst.back().rigidity = rigidityvalue;
           tileptr->straight.push_back(tileptr->roadsignset[b].inst.back());
         }
