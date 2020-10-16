@@ -519,30 +519,27 @@ public:
 // so let's be stupid for now...
 //
 #if 0
-    struct road_sign_location
-    {
+  struct road_sign_location
+  {
     public:
+      float x;
+      float y;
+      float deg;
 
-        float x;
-        float y;
-        float deg;
-
-        road_sign_location(float x=0, float y=0, float deg=0):
-            x(x), y(y), deg(deg)
-        {
-        }
-    };
-
-    std::vector<road_sign_location> location;
+      road_sign_location(float x=0, float y=0, float deg=0):
+          x(x), y(y), deg(deg)
+      {
+      }
+  };
+  std::vector<road_sign_location> location;
 #endif
 
-    PTexture   *sprite  = nullptr;
-//  PTexture   *front   = nullptr;
-//  PTexture   *back    = nullptr;
-    float       scale   = 1.0f;
-    float       x       = 0.0f;
-    float       y       = 0.0f;
-    float       deg     = 0.0f;
+  PTexture *sprite  = nullptr;
+  float scale   = 1.0f;
+  float x = 0.0f;
+  float y = 0.0f;
+  float deg = 0.0f;
+  int sprite_count = 1;
 };
 
 class PTerrain // TODO: make this RAII conformant
