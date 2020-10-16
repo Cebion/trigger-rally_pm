@@ -660,110 +660,107 @@ PTerrainTile *PTerrain::getTile(int tilex, int tiley)
     }
   }
 
-    tileptr->roadsignset.resize(roadsigns.size());
+  tileptr->roadsignset.resize(roadsigns.size());
 
-    for (unsigned int b=0; b < roadsigns.size(); ++b)
-    {
-	float rigidityvalue = 0.0f;
-/*
-        vec2f ftry = vec2f(
-            (float)((tileptr->posx * tilesize) + roadsigns[b].x) * scale_hz,
-            (float)((tileptr->posy * tilesize) + roadsigns[b].y) * scale_hz);
-*/
-        vec2f ftry = vec2f(
-            roadsigns[b].x * scale_hz,
-            roadsigns[b].y * scale_hz);
+  for (unsigned int b=0; b < roadsigns.size(); ++b) {
+    float rigidityvalue = 0.0f;
+    vec2f ftry = vec2f(
+      roadsigns[b].x * scale_hz,
+      roadsigns[b].y * scale_hz);
+    vec2f tilemin = vec2f(
+      tileptr->posx * tilesize * scale_hz,
+      tileptr->posy * tilesize * scale_hz);
+    vec2f tilemax = vec2f(
+      (tileptr->posx * tilesize + tilesize) * scale_hz,
+      (tileptr->posy * tilesize + tilesize) * scale_hz);
 
-        tileptr->roadsignset[b].inst.clear();
-        tileptr->roadsignset[b].inst.push_back(PTerrainFoliage());
-        tileptr->roadsignset[b].inst.back().pos.x    = ftry.x;
-        tileptr->roadsignset[b].inst.back().pos.y    = ftry.y;
-        tileptr->roadsignset[b].inst.back().pos.z    = getHeight(ftry.x, ftry.y);
-        tileptr->roadsignset[b].inst.back().ang      = roadsigns[b].deg;
-        tileptr->roadsignset[b].inst.back().scale    = roadsigns[b].scale;
+    if (ftry.x >= tilemin.x && ftry.x <= tilemax.x && ftry.y >= tilemin.y && ftry.y <= tilemax.y) {
+      tileptr->roadsignset[b].inst.clear();
+      tileptr->roadsignset[b].inst.push_back(PTerrainFoliage());
+      tileptr->roadsignset[b].inst.back().pos.x    = ftry.x;
+      tileptr->roadsignset[b].inst.back().pos.y    = ftry.y;
+      tileptr->roadsignset[b].inst.back().pos.z    = getHeight(ftry.x, ftry.y);
+      tileptr->roadsignset[b].inst.back().ang      = roadsigns[b].deg;
+      tileptr->roadsignset[b].inst.back().scale    = roadsigns[b].scale;
 
-        rigidityvalue = rigidity.getRigidity(roadsigns[b].sprite->getName());
-        if (rigidityvalue != 0.0f) {
-          tileptr->roadsignset[b].inst.back().rigidity = rigidityvalue;
-          tileptr->straight.push_back(tileptr->roadsignset[b].inst.back());
+      rigidityvalue = rigidity.getRigidity(roadsigns[b].sprite->getName());
+      if (rigidityvalue != 0.0f) {
+        tileptr->roadsignset[b].inst.back().rigidity = rigidityvalue;
+        tileptr->straight.push_back(tileptr->roadsignset[b].inst.back());
+      }
+
+      ramfile1.clear();
+      ramfile2.clear();
+
+      tileptr->roadsignset[b].numvert = 0;
+      tileptr->roadsignset[b].numelem = 0;
+
+      float angincr = PI / 1.0f;
+
+      for (unsigned int j=0; j<tileptr->roadsignset[b].inst.size(); j++) {
+        for (float anga = 0.0f; anga < PI - 0.01f; anga += angincr) {
+          float interang = tileptr->roadsignset[b].inst[j].ang + anga;
+          int stv = tileptr->roadsignset[b].numvert;
+          PVert_tv tmpv;
+
+          tmpv.xyz = tileptr->roadsignset[b].inst[j].pos +
+            vec3f(cos(interang)*HMULT,sin(interang)*HMULT,0.0f) *
+            tileptr->roadsignset[b].inst[j].scale;
+          tmpv.st = vec2f(1.0f,0.0f);
+          ramfile1.write(&tmpv,sizeof(PVert_tv));
+          tileptr->roadsignset[b].numvert++;
+
+          tmpv.xyz = tileptr->roadsignset[b].inst[j].pos +
+            vec3f(-cos(interang)*HMULT,-sin(interang)*HMULT,0.0f) *
+            tileptr->roadsignset[b].inst[j].scale;
+          tmpv.st = vec2f(0.0f,0.0f);
+          ramfile1.write(&tmpv,sizeof(PVert_tv));
+          tileptr->roadsignset[b].numvert++;
+
+          tmpv.xyz = tileptr->roadsignset[b].inst[j].pos +
+            vec3f(-cos(interang)*HMULT,-sin(interang)*HMULT,VMULT) *
+            tileptr->roadsignset[b].inst[j].scale;
+          tmpv.st = vec2f(0.0f,1.0f/*-1.0f/32.0f*/);
+          ramfile1.write(&tmpv,sizeof(PVert_tv));
+          tileptr->roadsignset[b].numvert++;
+
+          tmpv.xyz = tileptr->roadsignset[b].inst[j].pos +
+            vec3f(cos(interang)*HMULT,sin(interang)*HMULT,VMULT) *
+            tileptr->roadsignset[b].inst[j].scale;
+          tmpv.st = vec2f(1.0f,1.0f/*-1.0f/32.0f*/);
+          ramfile1.write(&tmpv,sizeof(PVert_tv));
+          tileptr->roadsignset[b].numvert++;
+
+          int ind;
+          ind = stv + 0;
+          ramfile2.write(&ind,sizeof(uint32));
+          tileptr->roadsignset[b].numelem++;
+          ind = stv + 1;
+          ramfile2.write(&ind,sizeof(uint32));
+          tileptr->roadsignset[b].numelem++;
+          ind = stv + 2;
+          ramfile2.write(&ind,sizeof(uint32));
+          tileptr->roadsignset[b].numelem++;
+          ind = stv + 0;
+          ramfile2.write(&ind,sizeof(uint32));
+          tileptr->roadsignset[b].numelem++;
+          ind = stv + 2;
+          ramfile2.write(&ind,sizeof(uint32));
+          tileptr->roadsignset[b].numelem++;
+          ind = stv + 3;
+          ramfile2.write(&ind,sizeof(uint32));
+          tileptr->roadsignset[b].numelem++;
         }
+      }
 
-        ramfile1.clear();
-        ramfile2.clear();
-
-        tileptr->roadsignset[b].numvert = 0;
-        tileptr->roadsignset[b].numelem = 0;
-
-        float angincr = PI / 1.0f;
-
-        for (unsigned int j=0; j<tileptr->roadsignset[b].inst.size(); j++)
-        {
-            for (float anga = 0.0f; anga < PI - 0.01f; anga += angincr)
-            {
-                float interang = tileptr->roadsignset[b].inst[j].ang + anga;
-                int stv = tileptr->roadsignset[b].numvert;
-                PVert_tv tmpv;
-
-                tmpv.xyz = tileptr->roadsignset[b].inst[j].pos +
-                    vec3f(cos(interang)*HMULT,sin(interang)*HMULT,0.0f) *
-                    tileptr->roadsignset[b].inst[j].scale;
-                tmpv.st = vec2f(1.0f,0.0f);
-                ramfile1.write(&tmpv,sizeof(PVert_tv));
-                tileptr->roadsignset[b].numvert++;
-
-                tmpv.xyz = tileptr->roadsignset[b].inst[j].pos +
-                    vec3f(-cos(interang)*HMULT,-sin(interang)*HMULT,0.0f) *
-                    tileptr->roadsignset[b].inst[j].scale;
-                tmpv.st = vec2f(0.0f,0.0f);
-                ramfile1.write(&tmpv,sizeof(PVert_tv));
-                tileptr->roadsignset[b].numvert++;
-
-                tmpv.xyz = tileptr->roadsignset[b].inst[j].pos +
-                    vec3f(-cos(interang)*HMULT,-sin(interang)*HMULT,VMULT) *
-                    tileptr->roadsignset[b].inst[j].scale;
-                tmpv.st = vec2f(0.0f,1.0f/*-1.0f/32.0f*/);
-                ramfile1.write(&tmpv,sizeof(PVert_tv));
-                tileptr->roadsignset[b].numvert++;
-
-                tmpv.xyz = tileptr->roadsignset[b].inst[j].pos +
-                    vec3f(cos(interang)*HMULT,sin(interang)*HMULT,VMULT) *
-                    tileptr->roadsignset[b].inst[j].scale;
-                tmpv.st = vec2f(1.0f,1.0f/*-1.0f/32.0f*/);
-                ramfile1.write(&tmpv,sizeof(PVert_tv));
-                tileptr->roadsignset[b].numvert++;
-
-                int ind;
-                ind = stv + 0;
-                ramfile2.write(&ind,sizeof(uint32));
-                tileptr->roadsignset[b].numelem++;
-                ind = stv + 1;
-                ramfile2.write(&ind,sizeof(uint32));
-                tileptr->roadsignset[b].numelem++;
-                ind = stv + 2;
-                ramfile2.write(&ind,sizeof(uint32));
-                tileptr->roadsignset[b].numelem++;
-                ind = stv + 0;
-                ramfile2.write(&ind,sizeof(uint32));
-                tileptr->roadsignset[b].numelem++;
-                ind = stv + 2;
-                ramfile2.write(&ind,sizeof(uint32));
-                tileptr->roadsignset[b].numelem++;
-                ind = stv + 3;
-                ramfile2.write(&ind,sizeof(uint32));
-                tileptr->roadsignset[b].numelem++;
-            }
-        }
-
-        if (tileptr->roadsignset[b].numelem)
-        {
-            tileptr->roadsignset[b].buff[0].create(ramfile1.getSize(),
-                PVBuffer::VertexContent, PVBuffer::StaticUsage, ramfile1.getData());
-            tileptr->roadsignset[b].buff[1].create(ramfile2.getSize(),
-                PVBuffer::IndexContent, PVBuffer::StaticUsage, ramfile2.getData());
-        }
+      if (tileptr->roadsignset[b].numelem) {
+          tileptr->roadsignset[b].buff[0].create(ramfile1.getSize(),
+            PVBuffer::VertexContent, PVBuffer::StaticUsage, ramfile1.getData());
+          tileptr->roadsignset[b].buff[1].create(ramfile2.getSize(),
+            PVBuffer::IndexContent, PVBuffer::StaticUsage, ramfile2.getData());
+      }
     }
-
-  //PUtil::outLog() << "2: " << tileptr->posx << " " << tileptr->posy << std::endl;
+  }
   return tileptr;
 }
 
@@ -912,32 +909,26 @@ void PTerrain::render(const vec3f &campos, const mat44f &camorim)
     }
   }
 
-    PVBuffer::unbind();
+  PVBuffer::unbind();
 
-    // draw road signs
-    for (unsigned int b=0; b < roadsigns.size(); ++b)
-    {
-        roadsigns[b].sprite->bind();
+  // draw road signs
+  for (unsigned int b=0; b < roadsigns.size(); ++b) {
+    roadsigns[b].sprite->bind();
 
-        if (!drawtile.empty())
-        //for (PTerrainTile *t: drawtile)
-        {
-            PTerrainTile *t = drawtile.front();
+    for (std::list<PTerrainTile *>::iterator t = drawtile.begin(); t != drawtile.end(); t++) {
+      if ((*t)->roadsignset[b].numelem) {
+        (*t)->roadsignset[b].buff[0].bind();
+        (*t)->roadsignset[b].buff[1].bind();
 
-            if (t->roadsignset[b].numelem)
-            {
-                t->roadsignset[b].buff[0].bind();
-                t->roadsignset[b].buff[1].bind();
+        glTexCoordPointer(2, GL_FLOAT, sizeof(PVert_tv), (*t)->roadsignset[b].buff[0].getPointer(0));
+        glVertexPointer(3, GL_FLOAT, sizeof(PVert_tv), (*t)->roadsignset[b].buff[0].getPointer(sizeof(float)*2));
 
-                glTexCoordPointer(2, GL_FLOAT, sizeof(PVert_tv), t->roadsignset[b].buff[0].getPointer(0));
-                glVertexPointer(3, GL_FLOAT, sizeof(PVert_tv), t->roadsignset[b].buff[0].getPointer(sizeof(float)*2));
-
-                glDrawRangeElements(GL_TRIANGLES, 0,
-                    t->roadsignset[b].numvert, t->roadsignset[b].numelem,
-                    GL_UNSIGNED_INT, t->roadsignset[b].buff[1].getPointer(0));
-            }
-        }
+        glDrawRangeElements(GL_TRIANGLES, 0,
+          (*t)->roadsignset[b].numvert, (*t)->roadsignset[b].numelem,
+          GL_UNSIGNED_INT, (*t)->roadsignset[b].buff[1].getPointer(0));
+      }
     }
+  }
 
   #endif
 
