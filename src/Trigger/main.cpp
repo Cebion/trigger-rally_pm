@@ -454,6 +454,7 @@ void MainApp::loadConfig()
   cfg_snowflaketype = SnowFlakeType::point;
   cfg_dirteffect = true;
   cfg_enable_fps = false;
+  cfg_enable_ghost = false;
 
   cfg_datadirs.clear();
 
@@ -785,6 +786,14 @@ void MainApp::loadConfig()
           cfg_enable_fps = true;
         else if (!strcmp(val, "no"))
           cfg_enable_fps = false;
+      }
+
+      val = walk->Attribute("enableghost");
+      if (val) {
+        if (!strcmp(val, "yes"))
+          cfg_enable_ghost= true;
+        else if (!strcmp(val, "no"))
+          cfg_enable_ghost = false;
       }
 
       val = walk->Attribute("codriver");
@@ -1345,6 +1354,8 @@ bool MainApp::startGame(const std::string &filename)
     appstate = AS_CHOOSE_VEHICLE;
   } else {
     game->chooseVehicle(game->vehiclechoices[choose_type]);
+    if (cfg_enable_ghost)
+      ghost.recordStart(filename, game->vehiclechoices[choose_type]->getName());
 
     if (lss.state == AM_TOP_LVL_PREP)
     {
@@ -1382,6 +1393,10 @@ bool MainApp::startGame(const std::string &filename)
   // if there is none load water default
   if (tex_water == nullptr)
     tex_water = tex_waterdefault;
+
+  fpstime = 0.0f;
+  fpscount = 0;
+  fps = 0.0f;
 
   return true;
 }
@@ -1469,6 +1484,10 @@ void MainApp::endGame(Gamefinish state)
         if (lss.state == AM_TOP_PRAC_SEL_PREP)
             lss.state = AM_TOP_PRAC_TIMES;
     }
+
+  if (cfg_enable_ghost && state != Gamefinish::not_finished) {
+    ghost.recordStop(race_data.totaltime);
+  }
 
   if (audinst_engine) {
     delete audinst_engine;
@@ -1693,6 +1712,11 @@ void MainApp::tickStateGame(float delta)
   //PULLTOWARD(vehic->ctrl.aim.y, 0.0, delta * 2.0);
 
   game->tick(delta);
+
+  // Record ghost car (assumes first vehicle is player vehicle)
+  if (cfg_enable_ghost && game->vehicle[0]) {
+    ghost.recordSample(delta, game->vehicle[0]->part[0]);
+  }
 
     if (cfg_dirteffect)
     {
@@ -1956,6 +1980,11 @@ void MainApp::tickStateGame(float delta)
   nextcpangle = -atan2(diff.y, diff.x) - forwangle + PI*0.5f;
 
   if (cfg_enable_sound) {
+    SDL_Haptic *haptic = nullptr;
+
+    if (getNumJoysticks() > 0)
+      haptic = getJoyHaptic(0);
+
     audinst_engine->setGain(cfg_volume_engine);
     audinst_engine->setPitch(vehic->getEngineRPM() / 9000.0f);
 
@@ -1964,8 +1993,13 @@ void MainApp::tickStateGame(float delta)
     audinst_wind->setGain(windlevel * 0.03f * cfg_volume_sfx);
     audinst_wind->setPitch(windlevel * 0.02f + 0.9f);
 
-    audinst_gravel->setGain(vehic->getSkidLevel() * 0.1f * cfg_volume_sfx);
+    float skidlevel = vehic->getSkidLevel();
+
+    audinst_gravel->setGain(skidlevel * 0.1f * cfg_volume_sfx);
     audinst_gravel->setPitch(1.0f);//vehic->getEngineRPM() / 7500.0f);
+
+    if(haptic != nullptr && skidlevel > 500.0f)
+      SDL_HapticRumblePlay(haptic, skidlevel * 0.0002f, MAX(1000, (unsigned int)(skidlevel * 0.1f)));
 
     if (vehic->getFlagGearChange()) {
       switch (vehic->iengine.getShiftDirection())
@@ -1998,6 +2032,9 @@ void MainApp::tickStateGame(float delta)
         audinst.back()->setPitch(1.0f + randm11*0.02f);
         audinst.back()->setGain(logf(1.0f + crashlevel) * cfg_volume_sfx);
         audinst.back()->play();
+
+        if (haptic != nullptr)
+          SDL_HapticRumblePlay(haptic, crashlevel * 0.05f, MAX(1000, (unsigned int)(crashlevel * 20.0f)));
       }
       crashnoise_timeout = rand01 * 0.1f + 0.01f;
     } else {
@@ -2155,6 +2192,8 @@ void MainApp::keyEvent(const SDL_KeyboardEvent &ke)
         if (!game->vehiclechoices[choose_type]->getLocked()) {
           initAudio();
           game->chooseVehicle(game->vehiclechoices[choose_type]);
+          if (cfg_enable_ghost)
+            ghost.recordStart(race_data.mapname, game->vehiclechoices[choose_type]->getName());
 
           if (lss.state == AM_TOP_LVL_PREP)
           {
@@ -2166,9 +2205,6 @@ void MainApp::keyEvent(const SDL_KeyboardEvent &ke)
                   game->targettime = bct;
           }
 
-          fpstime = 0.0f;
-          fpscount = 0;
-          fps = 0.0f;
           appstate = AS_IN_GAME;
           return;
         }

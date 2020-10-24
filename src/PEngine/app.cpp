@@ -367,6 +367,14 @@ int PApp::run(int argc, char *argv[])
       sdl_joy[i].axis.size() << " axis, " <<
       sdl_joy[i].button.size() << " button, " <<
       sdl_joy[i].hat.size() << " hat" << std::endl;
+
+    sdl_joy[i].sdl_haptic = SDL_HapticOpenFromJoystick(sdl_joy[i].sdl_joystick);
+    if (sdl_joy[i].sdl_haptic) {
+      if (SDL_HapticRumbleInit(sdl_joy[i].sdl_haptic) != 0) {
+        SDL_HapticClose(sdl_joy[i].sdl_haptic);
+        sdl_joy[i].sdl_haptic = nullptr;
+      }
+    }
   }
   
   SDL_JoystickEventState(SDL_ENABLE);
@@ -760,7 +768,7 @@ void PApp::grabMouse(bool grab)
   grabinput = grab;
 }
 
-void PApp::drawModel(PModel &model)
+void PApp::drawModel(PModel &model, float alpha)
 {
   for (std::vector<PMesh>::iterator mesh = model.mesh.begin();
     mesh != model.mesh.end();
@@ -770,12 +778,17 @@ void PApp::drawModel(PModel &model)
 
     int numPasses = 0;
     if (mesh->effect->renderBegin(&numPasses, getSSTexture())) {
+      if (alpha < 1.0f) {
+        glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+        glEnable(GL_BLEND);
+        glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
+      }
+
       for (int i=0; i<numPasses; i++) {
         mesh->effect->renderPass(i);
         glBegin(GL_TRIANGLES);
         for (unsigned int f=0; f<mesh->face.size(); f++) {
           //glNormal3fv(mesh->face[f].facenormal);
-
           glNormal3fv(mesh->norm[mesh->face[f].nr[0]]);
           glTexCoord2fv(mesh->texco[mesh->face[f].tc[0]]);
           glVertex3fv(mesh->vert[mesh->face[f].vt[0]]);
@@ -790,6 +803,8 @@ void PApp::drawModel(PModel &model)
         }
         glEnd();
       }
+      if (alpha < 1.0f)
+        glBlendFunc(GL_ONE,GL_ZERO);
       mesh->effect->renderEnd();
     }
   }

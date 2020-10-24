@@ -91,8 +91,6 @@ void MainApp::levelScreenAction(int action, int index)
     break;
 
   case AA_START_EVT:
-    startGame(events[lss.currentevent].levels[lss.currentlevel].filename);
-    return;
   case AA_START_PRAC:
     startGame(events[lss.currentevent].levels[lss.currentlevel].filename);
     return;

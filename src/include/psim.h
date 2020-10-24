@@ -50,7 +50,7 @@ public:
 
   // Position
   void setPosition(const vec3f &_pos) { pos = _pos; }
-  vec3f getPosition() { return pos; }
+  vec3f getPosition() const { return pos; }
 
   // Orientation
   void setOrientation(const quatf &_ori) { ori = _ori; }

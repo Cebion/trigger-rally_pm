@@ -19,6 +19,7 @@
 struct joystick_s
 {
     SDL_Joystick       *sdl_joystick;
+    SDL_Haptic         *sdl_haptic;
     std::string         name;
     std::vector<float>  axis;
     std::vector<bool>   button;
@@ -91,7 +92,7 @@ class PApp
             best_times("/players")
         {
             //PUtil::outLog() << "Initialising SDL" << std::endl;
-            const int si = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_JOYSTICK);
+            const int si = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_JOYSTICK | SDL_INIT_HAPTIC);
 
             if (si < 0)
             {
@@ -163,6 +164,11 @@ class PApp
             return (sdl_joy[j].hat[h]);
         }
 
+        SDL_Haptic *getJoyHaptic(int j)
+        {
+            return (sdl_joy[j].sdl_haptic);
+        }
+
         PSSRender & getSSRender()
         {
             return *ssrdr;
@@ -212,7 +218,7 @@ class PApp
 
         void grabMouse(bool grab = true);
 
-        void drawModel(PModel &model);
+        void drawModel(PModel &model, float alpha);
 
         void stereoGLProject(float xmin, float xmax, float ymin, float ymax, float znear, float zfar, float zzps, float dist, float eye);
         void stereoFrustum(float xmin, float xmax, float ymin, float ymax, float znear, float zfar, float zzps, float eye);

@@ -598,7 +598,7 @@ glMatrixMode(GL_PROJECTION);
 
 			float scale = vtype->part[i].scale;
 			glScalef(scale,scale,scale);
-			drawModel(*vtype->part[i].model);
+			drawModel(*vtype->part[i].model, 1.0f);
 
 			glPopMatrix(); // 2
 		}
@@ -617,7 +617,7 @@ glMatrixMode(GL_PROJECTION);
 				float scale = vtype->wheelscale * vtype->part[i].wheel[j].radius;
 				glScalef(scale,scale,scale);
 
-				drawModel(*vtype->wheelmodel);
+				drawModel(*vtype->wheelmodel, 1.0f);
 
 				glPopMatrix(); // 2
 			}
@@ -879,48 +879,41 @@ void MainApp::renderStateGame(float eyetranslation)
         PVehicle *vehic = game->vehicle[v];
         for (unsigned int i=0; i<vehic->part.size(); ++i)
         {
-            if (vehic->type->part[i].model)
-            {
-                glPushMatrix(); // 1
-
-                vec3f vpos = vehic->part[i].ref_world.pos;
-                glTranslatef(vpos.x, vpos.y, vpos.z);
-
-                mat44f vorim = vehic->part[i].ref_world.ori_mat_inv;
-                glMultMatrixf(vorim);
-
-                float scale = vehic->type->part[i].scale;
-                glScalef(scale,scale,scale);
-
-                drawModel(*vehic->type->part[i].model);
-
-                glPopMatrix(); // 1
-            }
-
-            if (vehic->type->wheelmodel)
-            {
-                for (unsigned int j=0; j<vehic->type->part[i].wheel.size(); j++)
-                {
-                    glPushMatrix(); // 1
-
-                    vec3f wpos = vehic->part[i].wheel[j].ref_world.getPosition();
-                    glTranslatef(wpos.x,wpos.y,wpos.z);
-
-                    mat44f worim = vehic->part[i].wheel[j].ref_world.ori_mat_inv;
-                    glMultMatrixf(worim);
-
-                    float scale = vehic->type->wheelscale * vehic->type->part[i].wheel[j].radius;
-                    glScalef(scale,scale,scale);
-
-                    drawModel(*vehic->type->wheelmodel);
-
-                    glPopMatrix(); // 1
-                }
-            }
+            renderVehiclePart(*vehic->type, vehic->part[i], vehic->type->part[i], 1.0f);
         }
     }
 
     glDisable(GL_LIGHTING);
+
+    PGhost::GhostData ghostdata;
+    std::string vehiclename = "";
+
+    if (cfg_enable_ghost && ghost.getReplayData(ghostdata, vehiclename))
+    {
+        PVehiclePart vehiclepart;
+
+        vehiclepart.ref_world.pos = ghostdata.pos;
+        vehiclepart.ref_world.ori = ghostdata.ori;
+        vehiclepart.ref_world.updateMatrices();
+
+        for (unsigned int i = 0; i < ghostdata.wheel.size(); ++i)
+        {
+            PVehicleWheel wheel;
+
+            wheel.ref_world.pos = ghostdata.wheel[i].pos;
+            wheel.ref_world.ori = ghostdata.wheel[i].ori;
+            wheel.ref_world.updateMatrices();
+            vehiclepart.wheel.push_back(wheel);
+        }
+
+        for (unsigned int i = 0; i < game->vehiclechoices.size(); ++i) {
+          if (game->vehiclechoices[i]->getName() == vehiclename) {
+            renderVehiclePart(*game->vehiclechoices[i], vehiclepart,
+                game->vehiclechoices[i]->part[0], 0.5f);
+            break;
+          }
+        }
+    }
 
     glDepthMask(GL_FALSE);
     glDisable(GL_CULL_FACE);
@@ -1856,4 +1849,47 @@ void MainApp::renderStateGame(float eyetranslation)
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_LIGHTING);
+}
+
+void MainApp::renderVehiclePart(const PVehicleType &type, const PVehiclePart &part,
+    const PVehicleTypePart &typepart, float alpha)
+{
+    if (typepart.model)
+    {
+        glPushMatrix();
+
+        vec3f vpos = part.ref_world.pos;
+        glTranslatef(vpos.x, vpos.y, vpos.z);
+
+        mat44f vorim = part.ref_world.ori_mat_inv;
+        glMultMatrixf(vorim);
+
+        float scale = typepart.scale;
+        glScalef(scale,scale,scale);
+
+        drawModel(*typepart.model, alpha);
+
+        glPopMatrix();
+    }
+
+    if (type.wheelmodel)
+    {
+        for (unsigned int i=0; i<typepart.wheel.size(); ++i)
+        {
+            glPushMatrix();
+
+            vec3f wpos = part.wheel[i].ref_world.getPosition();
+            glTranslatef(wpos.x,wpos.y,wpos.z);
+
+            mat44f worim = part.wheel[i].ref_world.ori_mat_inv;
+            glMultMatrixf(worim);
+
+            float scale = type.wheelscale * typepart.wheel[i].radius;
+            glScalef(scale,scale,scale);
+
+            drawModel(*type.wheelmodel, alpha);
+
+            glPopMatrix();
+        }
+    }
 }

@@ -22,6 +22,7 @@
 #include <pengine.h>
 #include <psim.h>
 #include <unordered_map>
+#include "ghost.h"
 #include "rigidity.h"
 
 // Forward declaration for TriggerGame to use
@@ -434,6 +435,7 @@ private:
 	bool cfg_enable_sound;
 	bool cfg_enable_codriversigns;
 	bool cfg_enable_fps;
+	bool cfg_enable_ghost;
 
 	long int cfg_skip_saves;
 
@@ -605,6 +607,9 @@ private:
 	float fps;
 	void tickCalculateFps(float delta);
 
+	// Record and display of ghost vehicles
+	PGhost ghost;
+
 protected:
 
 	void renderWater();
@@ -629,7 +634,8 @@ protected:
 public:
 	MainApp(const std::string &title, const std::string &name):
 
-    PApp(title, name)
+    PApp(title, name),
+    ghost(0.1f)
 	{
 	}
 	//MainApp::~MainApp(); // should not have destructor, use unload
@@ -664,6 +670,9 @@ public:
 	void renderStateChoose(float eyetranslation);
 	void tickStateGame(float delta);
 	void renderStateGame(float eyetranslation);
+
+	void renderVehiclePart(const PVehicleType &type, const PVehiclePart &part,
+	    const PVehicleTypePart &typepart, float alpha);
 
 	void keyEvent(const SDL_KeyboardEvent &ke);
 	void mouseMoveEvent(int dx, int dy);
