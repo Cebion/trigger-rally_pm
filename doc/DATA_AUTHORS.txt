@@ -630,6 +630,7 @@ Onsemeliot
 	maps/frozen/mm.png (GPL)
 	maps/frozen/ss.png (GPL)
 	maps/frozen/t.png (GPL)
+	maps/galewarning (GPL)
 	maps/gardendare (GPL)
 	maps/ghats/mm.png (GPL)
 	maps/ghats/ss.png (GPL)
