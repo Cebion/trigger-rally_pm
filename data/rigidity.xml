@@ -29,9 +29,9 @@
 	<rigidity sprite="textures/veg/crooked-tree3.png" value="1.0"/>
 	<rigidity sprite="textures/veg/crooked-tree4.png" value="1.0"/>
 	<rigidity sprite="textures/veg/dry-grass.png" value="0.001"/>
-	<rigidity sprite="textures/veg/dry-slim-bush1.png" value="0.003"/>
-	<rigidity sprite="textures/veg/dry-slim-bush2.png" value="0.003"/>
-	<rigidity sprite="textures/veg/dusty-bush.png" value="0.004"/>
+	<rigidity sprite="textures/veg/dry-slim-bush1.png" value="0.004"/>
+	<rigidity sprite="textures/veg/dry-slim-bush2.png" value="0.004"/>
+	<rigidity sprite="textures/veg/dusty-bush.png" value="0.005"/>
 	<rigidity sprite="textures/veg/fine-tree.png" value="1.0"/>
 	<rigidity sprite="textures/veg/fir.png" value="1.0"/>
 	<rigidity sprite="textures/veg/first-branch.png" value="0.002"/>
@@ -46,7 +46,7 @@
 	<rigidity sprite="textures/veg/ivy.png" value="0.002"/>
 	<rigidity sprite="textures/veg/mais.png" value="0.006"/>
 	<rigidity sprite="textures/veg/needle.png" value="0.1"/>
-	<rigidity sprite="textures/veg/olive-bush.png" value="0.005"/>
+	<rigidity sprite="textures/veg/olive-bush.png" value="0.02"/>
 	<rigidity sprite="textures/veg/palm-tree.png" value="1.0"/>
 	<rigidity sprite="textures/veg/palm-tree2.png" value="1.0"/>
 	<rigidity sprite="textures/veg/palm3.png" value="1.0"/>
