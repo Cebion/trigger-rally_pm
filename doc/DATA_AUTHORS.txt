@@ -680,6 +680,7 @@ Onsemeliot
 	maps/iconic (GPL)
 	maps/icypeak/mm.png (GPL)
 	maps/icypeak/ss.png (GPL)
+	maps/jeopardy (GPL)
 	maps/jumpy/c.png (GPL)
 	maps/jumpy/f.png (GPL)
 	maps/jumpy/h.png (GPL)
