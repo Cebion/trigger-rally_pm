@@ -525,6 +525,7 @@ Onsemeliot
 	maps/arizonachase/h.png (GPL)
 	maps/arizonachase/mm.png (GPL)
 	maps/arizonachase/ss.png (GPL)
+	maps/authentic (GPL)
 	maps/banana/mm.png (GPL)
 	maps/banana/ss.png (GPL)
 	maps/banned/c.png (GPL)
