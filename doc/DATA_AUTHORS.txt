@@ -700,6 +700,7 @@ Onsemeliot
 	maps/littleisland/h.png (GPL)
 	maps/littleisland/mm.png (GPL)
 	maps/littleisland/ss.png (GPL)
+	maps/mist (GPL)
 	maps/monotonous (GPL)
 	maps/mountainpass/mm.png (GPL)
 	maps/mountainpass/ss.png (GPL)
