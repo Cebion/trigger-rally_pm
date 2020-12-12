@@ -616,6 +616,7 @@ Onsemeliot
 	maps/eversnake/mm.png (GPL)
 	maps/eversnake/ss.png (GPL)
 	maps/fineline (GPL)
+	maps/fire (GPL)
 	maps/forced/c.png (GPL)
 	maps/forced/f.png (GPL)
 	maps/forced/h.png (GPL)
@@ -934,8 +935,10 @@ Onsemeliot
 	textures/sky/orange.png (GPL)
 	textures/sky/overcast-blue.jpg (GPL)
 	textures/sky/stormy.jpg (GPL)
+	textures/sky/sunrise.jpg (GPL)
 	textures/splash/endgame.jpg (GPL)
 	textures/splash/loading.png (GPL)
+	textures/splash/splash.jpg (GPL)
 	textures/splash/splash.jpg (GPL)
 	textures/veg/berry-bush.png (CC0, PD) source: https://opengameart.org/content/60-cc0-vegetation-textures
 	textures/veg/big-bush.png (GPL)
