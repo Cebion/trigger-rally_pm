@@ -740,6 +740,7 @@ Onsemeliot
 	maps/old/ss_bis.png (GPL)
 	maps/old/ss_quinquies.png (GPL)
 	maps/old/ss_sexies.png (GPL)
+	maps/orange (GPL)
 	maps/ozon (GPL)
 	maps/palmbeach/c.png (GPL)
 	maps/palmbeach/f.png (GPL)
