@@ -1176,6 +1176,11 @@ bool MainApp::loadAll()
 
   if (!(tex_snowflake = getSSTexture().loadTexture("/textures/snowflake.png"))) return false;
 
+  if (!(tex_damage_front_left = getSSTexture().loadTexture("/textures/damage_front_left.png"))) return false;
+  if (!(tex_damage_front_right = getSSTexture().loadTexture("/textures/damage_front_right.png"))) return false;
+  if (!(tex_damage_rear_left = getSSTexture().loadTexture("/textures/damage_rear_left.png"))) return false;
+  if (!(tex_damage_rear_right = getSSTexture().loadTexture("/textures/damage_rear_right.png"))) return false;
+
     if (cfg_enable_codriversigns && !cfg_codriversigns.empty())
     {
         const std::string origdir(std::string("/textures/CodriverSigns/") + cfg_codriversigns);
@@ -1999,7 +2004,7 @@ void MainApp::tickStateGame(float delta)
     audinst_gravel->setPitch(1.0f);//vehic->getEngineRPM() / 7500.0f);
 
     if(haptic != nullptr && skidlevel > 500.0f)
-      SDL_HapticRumblePlay(haptic, skidlevel * 0.0002f, MAX(1000, (unsigned int)(skidlevel * 0.1f)));
+      SDL_HapticRumblePlay(haptic, skidlevel * 0.0001f, MAX(1000, (unsigned int)(skidlevel * 0.05f)));
 
     if (vehic->getFlagGearChange()) {
       switch (vehic->iengine.getShiftDirection())
@@ -2034,7 +2039,7 @@ void MainApp::tickStateGame(float delta)
         audinst.back()->play();
 
         if (haptic != nullptr)
-          SDL_HapticRumblePlay(haptic, crashlevel * 0.05f, MAX(1000, (unsigned int)(crashlevel * 20.0f)));
+          SDL_HapticRumblePlay(haptic, crashlevel * 0.2f, MAX(1000, (unsigned int)(crashlevel * 20.0f)));
       }
       crashnoise_timeout = rand01 * 0.1f + 0.01f;
     } else {

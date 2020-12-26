@@ -12,6 +12,9 @@
 #define VEHICLE_H_INCLUDED
 
 #include "engine.h"
+#include "psim.h"
+#include "damage.h"
+#include <string>
 
 // vehicle core types
 enum class v_core_type{
@@ -281,6 +284,9 @@ struct PVehiclePart {
   PReferenceFrame ref_local, ref_world;
   
   std::vector<PVehicleWheel> wheel;
+
+  // Contains the damage received through collisions
+  PDamage damage;
 };
 
 ///
@@ -392,9 +398,9 @@ public:
   float getSkidLevel() { return skid_level; }
 
 private:
-	// subroutines that reset and stops status of the car
-	// it's more low level that the doReset() one
-	void reset();
+  // subroutines that reset and stops status of the car
+  // it's more low level that the doReset() one
+  void reset();
 };
 
 #endif // VEHICLE_H_INCLUDED

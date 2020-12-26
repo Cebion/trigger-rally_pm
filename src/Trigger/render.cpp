@@ -18,6 +18,7 @@
 //
 
 #include <cmath>
+#include "damage.h"
 #include "main.h"
 
 void MainApp::resize()
@@ -906,6 +907,8 @@ void MainApp::renderStateGame(float eyetranslation)
             vehiclepart.wheel.push_back(wheel);
         }
 
+        // Theoretically there can be multiple vehicles with multiple parts.
+        // However, the assumption is, that the model of the first part is relevant.
         for (unsigned int i = 0; i < game->vehiclechoices.size(); ++i) {
           if (game->vehiclechoices[i]->getName() == vehiclename) {
             renderVehiclePart(*game->vehiclechoices[i], vehiclepart,
@@ -1628,6 +1631,8 @@ void MainApp::renderStateGame(float eyetranslation)
             glPopMatrix(); // 2
         }
 
+        renderDamageIndicatorGroup();
+
 #ifndef NDEBUG
         // draw revs for debugging
         glPushMatrix(); // 2
@@ -1849,6 +1854,74 @@ void MainApp::renderStateGame(float eyetranslation)
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_LIGHTING);
+}
+
+void MainApp::renderDamageIndicator(
+        const PTexture *texture, float posx, float posy, float scalex, float scaley, float damage)
+{
+    float red = 0.0f;
+    float green = 0.0f;
+    float blue = 0.0f;
+
+    if (damage > 1.0f)
+        damage = 1.0f;
+
+    if (damage < 0.0f)
+    {
+        red = 1.0;
+        green = 1.0;
+        blue = 1.0;
+    }
+    else if (damage < 0.5f)
+    {
+        red = 2.0f * damage;
+        green = 1.0;
+    }
+    else
+    {
+        red = 1.0;
+        green = 2.0 * (1.0 - damage);
+    }
+
+    glPushMatrix(); // 2
+
+    glTranslatef(posx, posy, 0.0f);
+    glScalef(scalex, scaley, 1.0f);
+    texture->bind();
+    glColor4f(red, green, blue, 0.5f);
+
+    glBegin(GL_QUADS);
+    glTexCoord2f(1.0f,1.0f);
+    glVertex2f(1.0f,1.0f);
+    glTexCoord2f(0.0f,1.0f);
+    glVertex2f(-1.0f,1.0f);
+    glTexCoord2f(0.0f,0.0f);
+    glVertex2f(-1.0f,-1.0f);
+    glTexCoord2f(1.0f,0.0f);
+    glVertex2f(1.0f,-1.0f);
+    glEnd();
+
+    glPopMatrix(); // 2
+}
+
+void MainApp::renderDamageIndicatorGroup()
+{
+    // Theoretically there can be multiple vehicles with multiple parts.
+    // However, the assumption is, that the damage of the first part of the first vehicle is relevant.
+    PVehiclePart &part = game->vehicle[0]->part[0];
+
+    renderDamageIndicator(
+        tex_damage_front_left, hratio * 45.0f/50.0f - 0.075f, -vratio * 32.5f/50.0f + 0.032f, 0.025f, 0.032f,
+        part.damage.getDamage(PDamage::DamageSide::DamageFrontLeft));
+    renderDamageIndicator(
+        tex_damage_front_right, hratio * 45.0f/50.0f - 0.025f, -vratio * 32.5f/50.0f + 0.032f, 0.025f, 0.032f,
+        part.damage.getDamage(PDamage::DamageSide::DamageFrontRight));
+    renderDamageIndicator(
+        tex_damage_rear_left, hratio * 45.0f/50.0f - 0.075f, -vratio * 32.5f/50.0f - 0.032f, 0.025f, 0.032f,
+        part.damage.getDamage(PDamage::DamageSide::DamageRearLeft));
+    renderDamageIndicator(
+        tex_damage_rear_right, hratio * 45.0f/50.0f - 0.025f, -vratio * 32.5f/50.0f - 0.032f, 0.025f, 0.032f,
+        part.damage.getDamage(PDamage::DamageSide::DamageRearRight));
 }
 
 void MainApp::renderVehiclePart(const PVehicleType &type, const PVehiclePart &part,

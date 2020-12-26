@@ -725,6 +725,7 @@ PVehicle::PVehicle(PSim &sim_parent, PVehicleType *_type) :
 		for (unsigned int j=0; j<part[i].wheel.size(); j++) {
 			part[i].wheel[j].ref_world.setPosition(vec3f(0,0,1000000)); // FIXME
 		}
+		part[i].damage.setClip(type->part[i].clip);
 	}
 
 	updateParts();
@@ -1015,7 +1016,6 @@ void PVehicle::tick(const float& delta)
 
       // if the clip touches the ground
       if (wclip.z <= tci.pos.z) {
-
         // how much the clip enters the groud along the normal
         float depth = (tci.pos - wclip) * tci.normal;
 
@@ -1080,6 +1080,7 @@ void PVehicle::tick(const float& delta)
                   surf_right * friction.x +
                   surf_forward * friction.y);
 
+              part[i].damage.addDamage(tci.pos, perpforce * 0.0000001f, part[i].ref_world);
               CLAMP_LOWER(crunch_level, perpforce * 0.00001f);
             }
             #endif
@@ -1275,6 +1276,9 @@ void PVehicle::tick(const float& delta)
           // the intensity of the friction
           float leng = friction.length();
 
+          // damage of a vehicle side impacting wheel
+          float damage = part[i].damage.getDamage(typewheel.pt);
+
           // if there is some friction, and it is bigger than testfriction
           if (leng > 0.0f && leng > testfriction)
             // friction will be put equal to maxfriction with a little gain
@@ -1284,11 +1288,11 @@ void PVehicle::tick(const float& delta)
           // the force of the wheel
           frc += (
               // the perpendicular force along the normal
-		      tci.normal * perpforce +
-		      // laterally
-              surf_right * friction.x +
+              tci.normal * perpforce +
+              // laterally
+              (surf_right * friction.x +
               // in the forward direction
-              surf_forward * friction.y);
+              surf_forward * friction.y) * (1.0f - 0.5f * damage));
 
           // update wheel spin velocity
           wheel.spin_vel -= (friction.y * typewheel.radius) * delta * WHEEL_SPIN_VEL_UPDATE_RATIO;
@@ -1336,26 +1340,27 @@ void PVehicle::tick(const float& delta)
     if (foliage) {
       const std::vector<PTerrainFoliage> contact = collision.checkContact(foliage);
 
-      for (unsigned int i = 0; i < contact.size(); ++i) {
+      for (unsigned int j = 0; j < contact.size(); ++j) {
         vec3f crashforce = vec3f::zero();
         vec3f ptvel = body->getLinearVelAtPoint(body->pos);
 
         // Prevent that vehicle gets stuck in an object
-        if (collision.towardsContact(body->pos, contact[i].pos, ptvel * delta)) {
+        if (collision.towardsContact(body->pos, contact[j].pos, ptvel * delta)) {
           const float crashthreshold = 0.025f;
-          vec3f crashpoint = collision.getCrashPoint(body->pos, contact[i]);
+          vec3f crashpoint = collision.getCrashPoint(body->pos, contact[j]);
 
-          ptvel.x = -ptvel.x * contact[i].rigidity;
-          ptvel.y = -ptvel.y * contact[i].rigidity;
+          ptvel.x = -ptvel.x * contact[j].rigidity;
+          ptvel.y = -ptvel.y * contact[j].rigidity;
           ptvel.z = 0.0f;
 
           // apply crash force [N] at center of object in X/Y direction (F=v*m/t)
           if (delta != 0.0f)
             crashforce = ptvel * type->mass / delta;
           body->addForceAtPoint(crashforce, crashpoint);
+          part[i].damage.addDamage(crashpoint, crashforce.length() * 0.0000001f, part[i].ref_world);
 
           // Trigger crash sound or amplify gravel sound
-          if (contact[i].rigidity > crashthreshold)
+          if (contact[j].rigidity > crashthreshold)
             CLAMP_LOWER(crunch_level, crashforce.length() * 0.00001f);
           else
             skid_level += crashforce.length();

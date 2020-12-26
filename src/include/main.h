@@ -541,7 +541,12 @@ private:
 			*tex_race_no_screenshot,
 			*tex_race_no_minimap,
 			*tex_button_next,
-			*tex_button_prev;
+			*tex_button_prev,
+			*tex_damage_front_left,
+			*tex_damage_front_right,
+			*tex_damage_rear_left,
+			*tex_damage_rear_right;
+
 
 	std::unordered_map<std::string, PTexture *> tex_codriversigns;
 	std::unordered_map<std::string, PAudioSample *> aud_codriverwords;
@@ -671,6 +676,9 @@ public:
 	void tickStateGame(float delta);
 	void renderStateGame(float eyetranslation);
 
+	void renderDamageIndicator(
+	    const PTexture *texture, float posx, float posy, float scalex, float scaley, float damage);
+	void renderDamageIndicatorGroup();
 	void renderVehiclePart(const PVehicleType &type, const PVehiclePart &part,
 	    const PVehicleTypePart &typepart, float alpha);
 
