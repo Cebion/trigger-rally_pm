@@ -543,6 +543,7 @@ Onsemeliot
 	maps/between/mm.png (GPL)
 	maps/between/ss.png (GPL)
 	maps/bitethedust/ (GPL)
+	maps/bliss (GPL)
 	maps/bluenoon (GPL)
 	maps/blunt/c.png (GPL)
 	maps/blunt/f.png (GPL)
