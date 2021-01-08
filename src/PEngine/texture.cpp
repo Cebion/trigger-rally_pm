@@ -4,14 +4,11 @@
 // Copyright 2004-2006 Jasmine Langridge, jas@jareiko.net
 // License: GPL version 2 (see included gpl.txt)
 
-
+#include "exception.h"
+#include "main.h"
 #include "pengine.h"
 #include "physfs_utils.h"
-#include "main.h"
-
 #include <SDL2/SDL_image.h>
-
-
 
 // SDL_image doesn't need init/shutdown code
 
@@ -35,7 +32,8 @@ PTexture *PSSTexture::loadTexture(const std::string &name, bool genMipmaps, bool
   if (!tex) {
     try
     {
-      tex = new PTexture(name,genMipmaps,clamp);
+      GLfloat cfgAnisotropy = static_cast<MainApp &>(app).cfg.getAnisotropy();
+      tex = new PTexture(name, cfgAnisotropy, genMipmaps, clamp);
     }
     catch (PException &e)
     {
@@ -134,14 +132,14 @@ void PTexture::unload()
   }
 }
 
-void PTexture::load (const std::string &filename, bool genMipmaps, bool clamp)
+void PTexture::load (const std::string &filename, GLfloat cfgAnisotropy, bool genMipmaps, bool clamp)
 {
   PImage image (filename);
-  load (image, genMipmaps, clamp);
+  load (image, cfgAnisotropy, genMipmaps, clamp);
   name = filename;
 }
 
-void PTexture::load (PImage &img, bool genMipmaps, bool clamp)
+void PTexture::load (PImage &img, GLfloat cfgAnisotropy, bool genMipmaps, bool clamp)
 {
   unload();
 
@@ -193,7 +191,7 @@ void PTexture::load (PImage &img, bool genMipmaps, bool clamp)
   bind();
 
     if (GLEW_EXT_texture_filter_anisotropic)
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, MainApp::cfg_anisotropy);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, cfgAnisotropy);
     else
         PUtil::outLog() << "Warning: anisotropic filtering is not supported." << std::endl;
 

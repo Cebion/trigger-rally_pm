@@ -16,14 +16,17 @@
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 //
 
-#include <limits>
-#include <physfs.h>
-#include <ostream>
 #include "ghost.h"
 #include "pengine.h"
 #include "physfs_utils.h"
 #include "psim.h"
 #include "vehicle.h"
+#include <algorithm>
+#include <istream>
+#include <limits>
+#include <physfs.h>
+#include <ostream>
+#include <sstream>
 
 ///
 /// @brief Writes a GhostWheel object to an output stream.
@@ -145,7 +148,7 @@ void PGhost::recordStart(const std::string &map, const std::string &vehicle)
   std::string replaytimestring;
 
   mapname = map + ".ghost";
-  replace(mapname.begin(), mapname.end(), '/', '_');
+  std::replace(mapname.begin(), mapname.end(), '/', '_');
 
   vehiclename = vehicle;
   lastsample = std::numeric_limits<float>::lowest();

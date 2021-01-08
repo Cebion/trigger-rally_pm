@@ -4,8 +4,8 @@
 // Copyright 2004-2006 Jasmine Langridge, jas@jareiko.net
 // License: GPL version 2 (see included gpl.txt)
 
-
 #include "pengine.h"
+#include "vmath.h"
 
 template <class T>
 frustum<T> &frustum<T>::construct(const mat44<T> &mat)

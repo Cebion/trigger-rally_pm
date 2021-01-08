@@ -17,8 +17,7 @@
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 //
 
-#ifndef ENGINEH
-#define ENGINEH
+#pragma once
 
 #include <vector>
 #include "vmath.h"
@@ -169,5 +168,3 @@ public:
 		out_torque = 0.0f;
 	}
 };
-
-#endif

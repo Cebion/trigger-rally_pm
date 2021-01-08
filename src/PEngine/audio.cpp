@@ -37,6 +37,8 @@
 #define USE_FMOD
 #endif
 
+#include "audio.h"
+#include "exception.h"
 #include "pengine.h"
 #include "physfs_utils.h"
 

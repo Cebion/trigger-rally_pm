@@ -5,13 +5,10 @@
 // License: GPL version 2 (see included gpl.txt)
 
 
-#ifndef PENGINE_H_INCLUDED
-#define PENGINE_H_INCLUDED
+#pragma once
 
 #include <stdlib.h>
-
 #include <iostream>
-
 #include <vector>
 #include <list>
 #include <string>
@@ -23,51 +20,15 @@
 //#include "SDL.h"
 #include <SDL2/SDL.h>
 
-
 // The PhysicsFS game file system
 #include <physfs.h>
 
 #include <GL/glew.h>
-//#include <GL/glext.h>
 
 #include <tinyxml2.h>
 using namespace tinyxml2;
 
 // Some maths utils and macros
-#include "vmath.h"
-
-
-
-class PUtil;
-
-class PApp;
-class PSubsystem;
-class   PSSRender;
-class     PParticleType;
-struct    PParticle_s;
-class   PSSTexture;
-class     PImage;
-class     PTexture;
-class   PSSAudio;
-class     PAudioSample;
-class     PAudioInstance;
-class   PSSEffect;
-class     PEffect;
-class   PSSModel;
-class     PFace;
-class     PMesh;
-class     PModel;
-class   PTerrain;
-
-class PException;
-class   PUserException;
-class   PFileException;
-class   PParseException;
-
-class PCodriverVoice;
-
-#include "exception.h"
-
 
 // Utility
 
@@ -194,17 +155,3 @@ public:
   // RWops created must be freed by using SDL freesrc on load
   static SDL_RWops *allocPhysFSops(PHYSFS_file *pfile);
 };
-
-
-
-#include "hiscore1.h"
-#include "app.h"
-#include "subsys.h"
-#include "audio.h"
-#include "render.h"
-#include "codriver.h"
-
-
-#endif // PENGINE_H_INCLUDED
-
-

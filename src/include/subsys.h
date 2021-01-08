@@ -18,9 +18,12 @@
 
 #pragma once
 
+#include "pengine.h"
+#include "vmath.h"
 #include <string>
 #include <vector>
 
+class PApp;
 
 ///
 /// @brief A PResource basically is just a name

@@ -5,8 +5,9 @@
 // Copyright 2018      Emanuele Sorce,    emanuele.sorce@hotmail.com
 // License: GPL version 2 (see included gpl.txt)
 
-#include "psim.h"
 #include "collision.h"
+#include "psim.h"
+#include "render.h"
 
 // default vehicle type values
 #define DEF_VEHICLE_NAME "Vehicle"

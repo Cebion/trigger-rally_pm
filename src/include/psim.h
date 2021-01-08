@@ -8,18 +8,16 @@
 // This file contains basic classes the physic engine uses
 //
 
-#ifndef PSIMH
-#define PSIMH
+#pragma once
 
-#include <pengine.h>
-
+#include "subsys.h"
+#include "vmath.h"
 
 class PSim;
-class PRigidBody;
-
-class PVehicleType;
-class PVehicleTypePart;
+class PSSModel;
+class PTerrain;
 class PVehicle;
+class PVehicleType;
 
 ///
 /// @brief Store a Reference oriented point (stores coordinates and orientation)
@@ -128,11 +126,6 @@ public:
   friend class PSim;
 };
 
-
-
-
-#include "vehicle.h"
-
 ///
 /// @brief class that stores information about a physic simulation instance
 ///
@@ -180,5 +173,3 @@ public:
   friend class PRigidBody;
   friend class PVehicle;
 };
-
-#endif

@@ -16,6 +16,18 @@
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 //
 
+#pragma once
+
+#include "hiscore1.h"
+#include "vmath.h"
+
+class PSSAudio;
+class PModel;
+class PSSEffect;
+class PSSModel;
+class PSSRender;
+class PSSTexture;
+
 struct joystick_s
 {
     SDL_Joystick       *sdl_joystick;
@@ -29,7 +41,6 @@ struct joystick_s
 class PApp
 {
     public:
-
         enum StereoMode
         {
             StereoNone,
@@ -40,8 +51,9 @@ class PApp
             StereoYellowBlue
         };
 
-    private:
+        HiScore1 best_times;
 
+    private:
         std::string appname, apptitle;
 
         SDL_Window *screen; // TODO: rename this to "window" maybe
@@ -51,12 +63,9 @@ class PApp
         bool autoVideo = false;
 
     protected:
-
         int cx, cy, bpp;
-        HiScore1 best_times;
 
     private:
-
         bool fullscr, noframe;
         bool reqRGB, reqAlpha, reqDepth, reqStencil;
         bool grabinput;
@@ -78,38 +87,13 @@ class PApp
         PSSAudio *ssaud;
 
     protected:
-
         // the derived app should keep these up to date
         vec3f cam_pos;
         mat44f cam_orimat;
         vec3f cam_linvel;
 
     public:
-
-        PApp(const std::string &title = "PGame", const std::string &name = ".pgame"):
-            appname(name), // for ~/.name
-            apptitle(title), // for window title
-            best_times("/players")
-        {
-            //PUtil::outLog() << "Initialising SDL" << std::endl;
-            const int si = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_JOYSTICK | SDL_INIT_HAPTIC);
-
-            if (si < 0)
-            {
-                PUtil::outLog() << "Failed to initialize SDL: " << SDL_GetError() << std::endl;
-            }
-
-            cx = cy = 0;
-            bpp = 0;
-            fullscr = false;
-            noframe = false;
-            exit_requested = false;
-            screenshot_requested = false;
-            reqRGB = reqAlpha = reqDepth = reqStencil = false;
-            stereo = StereoNone;
-            stereoEyeTranslation = 0.0f;
-            grabinput = false;
-        }
+        PApp(const std::string &title = "PGame", const std::string &name = ".pgame");
 
         virtual ~PApp()
         {
@@ -118,7 +102,6 @@ class PApp
         int run(int argc, char *argv[]);
 
     public:
-
         int getWidth() const
         {
             return cx;
@@ -194,81 +177,6 @@ class PApp
             return *ssaud;
         }
 
-    protected:
-
-        bool keyDown(int key)
-        {
-            return (sdl_keymap[key] != 0);
-        }
-
-        bool mouseButtonDown(int bt)
-        {
-            return ((sdl_mousemap & SDL_BUTTON(bt)) != 0);
-        }
-
-        void requestExit()
-        {
-            exit_requested = true;
-        }
-
-        void saveScreenshot()
-        {
-            screenshot_requested = true;
-        }
-
-        void grabMouse(bool grab = true);
-
-        void drawModel(PModel &model, float alpha);
-
-        void stereoGLProject(float xmin, float xmax, float ymin, float ymax, float znear, float zfar, float zzps, float dist, float eye);
-        void stereoFrustum(float xmin, float xmax, float ymin, float ymax, float znear, float zfar, float zzps, float eye);
-
-        // config stuff
-
-        void setScreenMode(int w, int h, bool fullScreen = false, bool hideFrame = false)
-        {
-            // use automatic video mode
-            if (autoVideo)
-            {
-                SDL_DisplayMode dm;
-
-                if (SDL_GetCurrentDisplayMode(0, &dm) == 0)
-                {
-                    cx = dm.w;
-                    cy = dm.h;
-                    fullscr = fullScreen;
-                    noframe = hideFrame;
-                    PUtil::outLog() << "Automatic video mode resolution: " << cx << 'x' << cy << std::endl;
-                }
-                else
-                {
-                    PUtil::outLog() << "SDL error, SDL_GetCurrentDisplayMode(): " << SDL_GetError() << std::endl;
-                    autoVideo = false;
-                }
-            }
-
-            // not written as an `else` branch because `autoVideo` may have
-            // been updated in the case that automatic video mode failed
-            if (!autoVideo)
-            {
-                cx = w;
-                cy = h;
-                fullscr = fullScreen;
-                noframe = hideFrame;
-            }
-        }
-
-        void setScreenBPP(int _bpp)
-        {
-            if (autoVideo)
-                return;
-
-            bpp = _bpp;
-        }
-
-        void setScreenModeAutoWindow();
-        void setScreenModeFastFullScreen();
-
         void automaticVideoMode(bool av = false)
         {
             autoVideo = av;
@@ -304,8 +212,49 @@ class PApp
             stereoEyeTranslation = distance * 0.5f;
         }
 
-        // callbacks for derived classes
+    protected:
+        bool keyDown(int key)
+        {
+            return (sdl_keymap[key] != 0);
+        }
 
+        bool mouseButtonDown(int bt)
+        {
+            return ((sdl_mousemap & SDL_BUTTON(bt)) != 0);
+        }
+
+        void requestExit()
+        {
+            exit_requested = true;
+        }
+
+        void saveScreenshot()
+        {
+            screenshot_requested = true;
+        }
+
+        void grabMouse(bool grab = true);
+
+        void drawModel(PModel &model, float alpha);
+
+        void stereoGLProject(float xmin, float xmax, float ymin, float ymax, float znear, float zfar, float zzps, float dist, float eye);
+        void stereoFrustum(float xmin, float xmax, float ymin, float ymax, float znear, float zfar, float zzps, float eye);
+
+        // config stuff
+        void setScreenMode(int w, int h, bool fullScreen = false, bool hideFrame = false);
+
+        void setScreenBPP(int _bpp)
+        {
+            if (autoVideo)
+                return;
+
+            bpp = _bpp;
+        }
+
+        void setScreenModeAutoWindow();
+        void setScreenModeFastFullScreen();
+
+        // callbacks for derived classes
         virtual void config() /* throw (PUserException) */ ; // very light setup/config func
         virtual void load() /* throw (PUserException) */ ; // main resource loading
         virtual void unload(); // free resources
@@ -320,4 +269,3 @@ class PApp
         virtual void joyButtonEvent(int which, int button, bool down);
         virtual bool joyAxisEvent(int which, int axis, float value, bool down);
 };
-

@@ -17,9 +17,10 @@
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 //
 
-#include <cmath>
 #include "damage.h"
 #include "main.h"
+#include "vehicle.h"
+#include <cmath>
 
 void MainApp::resize()
 {
@@ -889,7 +890,7 @@ void MainApp::renderStateGame(float eyetranslation)
     PGhost::GhostData ghostdata;
     std::string vehiclename = "";
 
-    if (cfg_enable_ghost && ghost.getReplayData(ghostdata, vehiclename))
+    if (cfg.getEnableGhost() && ghost.getReplayData(ghostdata, vehiclename))
     {
         PVehiclePart vehiclepart;
 
@@ -966,14 +967,14 @@ void MainApp::renderStateGame(float eyetranslation)
 
     GLfloat ops; // Original Point Size, for to be restored
 
-    if (cfg_snowflaketype == SnowFlakeType::point)
+    if (cfg.getSnowflaketype() == PConfig::SnowFlakeType::point)
     {
         glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
         glGetFloatv(GL_POINT_SIZE, &ops);
         glPointSize(SNOWFLAKE_POINT_SIZE);
     }
     else
-    if (cfg_snowflaketype == SnowFlakeType::textured)
+    if (cfg.getSnowflaketype() == PConfig::SnowFlakeType::textured)
     {
         glEnable(GL_TEXTURE_2D);
         glBlendFunc(GL_SRC_COLOR, GL_ONE);
@@ -1000,7 +1001,7 @@ void MainApp::renderStateGame(float eyetranslation)
         else
             alpha = 1.0f;
 
-        if (cfg_snowflaketype == SnowFlakeType::point)
+        if (cfg.getSnowflaketype() == PConfig::SnowFlakeType::point)
         {
             glBegin(GL_POINTS);
             glColor4f(1.0f, 1.0f, 1.0f, alpha);
@@ -1016,7 +1017,7 @@ void MainApp::renderStateGame(float eyetranslation)
             zag.normalize();
             zag *= SBS;
 
-            if (cfg_snowflaketype == SnowFlakeType::square)
+            if (cfg.getSnowflaketype() == PConfig::SnowFlakeType::square)
             {
                 glBegin(GL_TRIANGLE_STRIP);
                 glColor4f(1.0f, 1.0f, 1.0f, alpha);
@@ -1044,11 +1045,11 @@ void MainApp::renderStateGame(float eyetranslation)
         }
     }
 
-    if (cfg_snowflaketype == SnowFlakeType::point)
+    if (cfg.getSnowflaketype() == PConfig::SnowFlakeType::point)
         glPointSize(ops); // restore original point size
 
     // disable textures
-    if (cfg_snowflaketype == SnowFlakeType::textured)
+    if (cfg.getSnowflaketype() == PConfig::SnowFlakeType::textured)
     {
         glDisable(GL_TEXTURE_2D);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -1563,7 +1564,7 @@ void MainApp::renderStateGame(float eyetranslation)
             glPopMatrix(); // 2
         }
 
-        if (cfg_enable_fps)
+        if (cfg.getEnableFps())
         {
             std::stringstream stream;
 
@@ -1611,7 +1612,7 @@ void MainApp::renderStateGame(float eyetranslation)
             getSSRender().drawText(buff, PTEXT_HZA_CENTER | PTEXT_VTA_CENTER);
 
             // speed number
-            const int speed = std::fabs(vehic->getWheelSpeed()) * hud_speedo_mps_speed_mult;
+            const int speed = std::fabs(vehic->getWheelSpeed()) * cfg.getHudSpeedoMpsSpeedMult();
             std::string speedstr = std::to_string(speed);
 
             //glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
@@ -1623,7 +1624,7 @@ void MainApp::renderStateGame(float eyetranslation)
             glTranslatef(0.0f, -0.82f, 0.0f);
             glScalef(0.5f, 0.5f, 1.0f);
 
-            if (cfg_speed_unit == MainApp::Speedunit::mph)
+            if (cfg.getSpeedUnit() == PConfig::Speedunit::mph)
                 getSSRender().drawText("MPH", PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER);
             else
                 getSSRender().drawText("km/h", PTEXT_HZA_RIGHT | PTEXT_VTA_CENTER);

@@ -4,9 +4,10 @@
 // Copyright 2004-2006 Jasmine Langridge, jas@jareiko.net
 // License: GPL version 2 (see included gpl.txt)
 
-
+#include "exception.h"
 #include "pengine.h"
 #include "physfs_utils.h"
+#include "render.h"
 
 // @todo: what these two global things are?
 fx_renderstate_s def_rs;

@@ -4,10 +4,9 @@
 // Copyright 2004-2006 Jasmine Langridge, jas@jareiko.net
 // License: GPL version 2 (see included gpl.txt)
 
-
-#include "pengine.h"
-
+#include "exception.h"
 #include "main.h"
+#include "pengine.h"
 
 PTerrain::~PTerrain ()
 {
@@ -25,7 +24,8 @@ void PTerrain::unload()
 }
 
 
-PTerrain::PTerrain (XMLElement *element, const std::string &filepath, PSSTexture &ssTexture, const PRigidity &rigidity) :
+PTerrain::PTerrain (XMLElement *element, const std::string &filepath, PSSTexture &ssTexture,
+    const PRigidity &rigidity, bool cfgFoliage, bool cfgRoadsigns) :
     loaded (false), rigidity(rigidity)
 {
   unload();
@@ -59,7 +59,7 @@ PTerrain::PTerrain (XMLElement *element, const std::string &filepath, PSSTexture
   if (val != nullptr) roadmap = val;
 
   val = element->Attribute("foliagemap");
-  if (val && MainApp::cfg_foliage) foliagemap = val;
+  if (val && cfgFoliage) foliagemap = val;
 
   val = element->Attribute("hudmap");
   if (val) hudmap = val;
@@ -97,7 +97,7 @@ PTerrain::PTerrain (XMLElement *element, const std::string &filepath, PSSTexture
   for (XMLElement *walk = element->FirstChildElement();
     walk; walk = walk->NextSiblingElement()) {
 
-    if (strcmp(walk->Value(), "roadsign") == 0 && MainApp::cfg_roadsigns) {
+    if (strcmp(walk->Value(), "roadsign") == 0 && cfgRoadsigns) {
       road_sign temprs;
 
       val = walk->Attribute("sprite");
@@ -138,7 +138,7 @@ PTerrain::PTerrain (XMLElement *element, const std::string &filepath, PSSTexture
         }
       }
     }
-    else if (!strcmp(walk->Value(), "foliageband") && MainApp::cfg_foliage) {
+    else if (!strcmp(walk->Value(), "foliageband") && cfgFoliage) {
       PTerrainFoliageBand tfb;
       tfb.middle = 0.5f;
       tfb.range = 0.5f;

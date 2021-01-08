@@ -8,13 +8,18 @@
 // This file contains definitions and classes related to Vehicles
 //
 
-#ifndef VEHICLE_H_INCLUDED
-#define VEHICLE_H_INCLUDED
+#pragma once
 
+#include "damage.h"
 #include "engine.h"
 #include "psim.h"
-#include "damage.h"
+#include "subsys.h"
 #include <string>
+#include <vector>
+
+class PModel;
+class PSSModel;
+class PTerrain;
 
 // vehicle core types
 enum class v_core_type{
@@ -402,5 +407,3 @@ private:
   // it's more low level that the doReset() one
   void reset();
 };
-
-#endif // VEHICLE_H_INCLUDED

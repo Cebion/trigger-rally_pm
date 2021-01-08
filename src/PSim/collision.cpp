@@ -17,6 +17,8 @@
 //
 
 #include "collision.h"
+#include "render.h"
+#include <limits>
 
 ///
 /// @brief Calculates AABB box from clip positions in world coordinates

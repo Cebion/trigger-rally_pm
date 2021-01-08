@@ -4,7 +4,10 @@
 // Copyright 2004-2006 Jasmine Langridge, jas@jareiko.net
 // License: GPL version 2 (see included gpl.txt)
 
+#pragma once
 
+#include "vmath.h"
+#include <GL/glew.h>
 
 #define BUFFER_OFFSET(i) ((char *)nullptr + (i))
 

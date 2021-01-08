@@ -11,6 +11,10 @@
 // omitting it, but if you find it causes build problems, you may
 // want to re-enable it below. - jaz 20/10/2006
 
+#pragma once
+
+#include "subsys.h"
+
 #if defined( USE_OPENAL )
 #define INCLUDE_OPENAL_HEADER
 #endif
@@ -24,17 +28,6 @@
 #define INCLUDE_FMOD_HEADER
 #include <fmod.h>
 #endif
-
-class PSSAudio : public PSubsystem {
-private:
-    PResourceList<PAudioSample> samplist;
-
-public:
-    PSSAudio(PApp &parentApp);
-    ~PSSAudio();
-    void tick();
-    PAudioSample *loadSample(const std::string &name, bool positional3D = true);
-};
 
 class PAudioSample : public PResource {
 private:
@@ -55,6 +48,17 @@ public:
     void unload();
 
     friend class PAudioInstance;
+};
+
+class PSSAudio : public PSubsystem {
+private:
+    PResourceList<PAudioSample> samplist;
+
+public:
+    PSSAudio(PApp &parentApp);
+    ~PSSAudio();
+    void tick();
+    PAudioSample *loadSample(const std::string &name, bool positional3D = true);
 };
 
 class PAudioInstance {
@@ -85,4 +89,3 @@ public:
 #ifdef INCLUDE_OPENAL_HEADER
 #undef INCLUDE_OPENAL_HEADER
 #endif
-

@@ -11,6 +11,7 @@
 //
 
 #include <cassert>
+#include <sstream>
 #include "pengine.h"
 #include "physfs_utils.h"
 

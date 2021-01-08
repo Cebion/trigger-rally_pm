@@ -4,10 +4,10 @@
 // Copyright 2004-2006 Jasmine Langridge, jas@jareiko.net
 // License: GPL version 2 (see included gpl.txt)
 
-
-
+#include "exception.h"
 #include "main.h"
 #include "physfs_utils.h"
+#include "vehicle.h"
 
 #include <SDL2/SDL_main.h>
 #include <SDL2/SDL_thread.h>
@@ -15,23 +15,18 @@
 #include <cctype>
 #include <regex>
 
-GLfloat MainApp::cfg_anisotropy = 1.0f;
-bool MainApp::cfg_foliage = true;
-bool MainApp::cfg_roadsigns = true;
-bool MainApp::cfg_weather = true;
-
 void MainApp::config()
 {
     PUtil::setDebugLevel(DEBUGLEVEL_DEVELOPER);
 
-    loadConfig();
-    setScreenMode(cfg_video_cx, cfg_video_cy, cfg_video_fullscreen);
+    cfg.loadConfig();
+    setScreenMode(cfg.getVideoCx(), cfg.getVideoCy(), cfg.getVideoFullscreen());
     calcScreenRatios();
 
-    if (cfg_datadirs.empty())
+    if (cfg.getDatadirs().empty())
         throw MakePException("Data directory paths are empty: check your trigger-rally.config file.");
 
-    for (const std::string &datadir: cfg_datadirs)
+    for (const std::string &datadir: cfg.getDatadirs())
         if (PHYSFS_mount(datadir.c_str(), NULL, 1) == 0)
         {
             PUtil::outLog() << "Failed to add PhysFS search directory \"" << datadir << "\"" << std::endl
@@ -43,14 +38,14 @@ void MainApp::config()
             break;
         }
 
-    if (cfg_copydefplayers)
+    if (cfg.getCopydefplayers())
         copyDefaultPlayers();
 
     best_times.loadAllTimes();
     player_unlocks = best_times.getUnlockData();
 
 #ifndef NDEBUG
-    PUtil::outLog() << "Player \"" << cfg_playername << "\" unlocks:\n";
+    PUtil::outLog() << "Player \"" << cfg.getPlayername() << "\" unlocks:\n";
 
     for (const auto &s: player_unlocks)
         PUtil::outLog() << '\t' << s << '\n';
@@ -85,32 +80,29 @@ void MainApp::load()
   // Check that controls are available where requested
   // (can't be done in config because joy info not available)
 
-  for (int i = 0; i < ActionCount; i++) {
+  for (int i = 0; i < PConfig::ActionCount; i++) {
 
-    switch(ctrl.map[i].type) {
-    case UserControl::TypeUnassigned:
+    switch(cfg.getCtrl().map[i].type) {
+    case PConfig::UserControl::TypeUnassigned:
       break;
 
-    case UserControl::TypeKey:
-      if (ctrl.map[i].key.sym <= 0 /* || ctrl.map[i].key.sym >= SDLK_LAST */) // `SDLK_LAST` unavailable in SDL2
-        ctrl.map[i].type = UserControl::TypeUnassigned;
+    case PConfig::UserControl::TypeKey:
+      if (cfg.getCtrl().map[i].key.sym <= 0 /* || ctrl.map[i].key.sym >= SDLK_LAST */) // `SDLK_LAST` unavailable in SDL2
+        cfg.getCtrl().map[i].type = PConfig::UserControl::TypeUnassigned;
       break;
 
-    case UserControl::TypeJoyButton:
-      if (0 >= getNumJoysticks() || ctrl.map[i].joybutton.button >= getJoyNumButtons(0))
-        ctrl.map[i].type = UserControl::TypeUnassigned;
+    case PConfig::UserControl::TypeJoyButton:
+      if (0 >= getNumJoysticks() || cfg.getCtrl().map[i].joybutton.button >= getJoyNumButtons(0))
+        cfg.getCtrl().map[i].type = PConfig::UserControl::TypeUnassigned;
       break;
 
-    case UserControl::TypeJoyAxis:
-      if (0 >= getNumJoysticks() || ctrl.map[i].joyaxis.axis >= getJoyNumAxes(0))
-        ctrl.map[i].type = UserControl::TypeUnassigned;
+    case PConfig::UserControl::TypeJoyAxis:
+      if (0 >= getNumJoysticks() || cfg.getCtrl().map[i].joyaxis.axis >= getJoyNumAxes(0))
+        cfg.getCtrl().map[i].type = PConfig::UserControl::TypeUnassigned;
       break;
     }
   }
 }
-
-namespace
-{
 
 ///
 /// @brief X-macro defining supported SDL keymaps.
@@ -359,14 +351,12 @@ namespace
 /// @param [in] s   The string to be converted.
 /// @returns The keycode.
 ///
-SDL_Keycode getSdlKeySym(const std::string &s)
+SDL_Keycode MainApp::getSdlKeySym(const std::string &s)
 {
 #define X(SdlKey)   if (s == #SdlKey) return SdlKey;
     STRING_TO_SDL_KEYMAP
 #undef X
     return SDLK_HELP;
-}
-
 }
 
 ///
@@ -403,6 +393,16 @@ void MainApp::copyDefaultPlayers() const
     PHYSFS_freeList(rc);
 }
 
+float MainApp::getCodriverVolume() const
+{
+    return cfg.getVolumeCodriver();
+}
+
+PCodriverUserConfig MainApp::getCodriverUserConfig() const
+{
+    return cfg.getCodriveruserconfig();
+}
+
 ///
 /// @brief Returns event that unlocks the vehicle
 /// @param [in] vehiclename  Vehicle name
@@ -418,549 +418,6 @@ std::string MainApp::getVehicleUnlockEvent(const std::string &vehiclename) const
         }
     }
     return std::string();
-}
-
-///
-/// @brief Load configurations from files
-/// @todo Since C++11 introduced default members initializers, the defaults could
-///  be set in the class declaration directly rather than in this function.
-///
-void MainApp::loadConfig()
-{
-  PUtil::outLog() << "Loading game configuration" << std::endl;
-
-  // Set defaults
-
-  cfg_playername = "Player";
-  cfg_copydefplayers = true;
-
-  cfg_video_cx = 640;
-  cfg_video_cy = 480;
-  cfg_video_fullscreen = false;
-
-  cfg_drivingassist = 1.0f;
-  cfg_enable_sound = true;
-  cfg_enable_codriversigns = true;
-  cfg_skip_saves = 5;
-  cfg_volume_engine = 0.33f;
-  cfg_volume_sfx = 1.0f;
-  cfg_volume_codriver = 1.0f;
-  cfg_anisotropy = 1.0f;
-  cfg_foliage = true;
-  cfg_roadsigns = true;
-  cfg_weather = true;
-  cfg_speed_unit = mph;
-  cfg_speed_style = analogue;
-  cfg_snowflaketype = SnowFlakeType::point;
-  cfg_dirteffect = true;
-  cfg_enable_fps = false;
-  cfg_enable_ghost = false;
-
-  cfg_datadirs.clear();
-
-  hud_speedo_start_deg = MPH_ZERO_DEG;
-  hud_speedo_mps_deg_mult = MPS_MPH_DEG_MULT;
-  hud_speedo_mps_speed_mult = MPS_MPH_SPEED_MULT;
-
-  ctrl.action_name[ActionForward] = std::string("forward");
-  ctrl.action_name[ActionBack] = std::string("back");
-  ctrl.action_name[ActionLeft] = std::string("left");
-  ctrl.action_name[ActionRight] = std::string("right");
-  ctrl.action_name[ActionHandbrake] = std::string("handbrake");
-  ctrl.action_name[ActionRecover] = std::string("recover");
-  ctrl.action_name[ActionRecoverAtCheckpoint] = std::string("recoveratcheckpoint");
-  ctrl.action_name[ActionCamMode] = std::string("cammode");
-  ctrl.action_name[ActionCamLeft] = std::string("camleft");
-  ctrl.action_name[ActionCamRight] = std::string("camright");
-  ctrl.action_name[ActionShowMap] = std::string("showmap");
-  ctrl.action_name[ActionPauseRace] = std::string("pauserace");
-  ctrl.action_name[ActionShowUi] = std::string("showui");
-  ctrl.action_name[ActionShowCheckpoint] = std::string("showcheckpoint");
-  ctrl.action_name[ActionNext] = std::string("next");
-
-  for (int i = 0; i < ActionCount; i++) {
-    ctrl.map[i].type = UserControl::TypeUnassigned;
-    ctrl.map[i].value = 0.0f;
-  }
-
-  // Do config file management
-
-  std::string cfgfilename = "trigger-rally-" PACKAGE_VERSION ".config";
-
-  if (!PHYSFS_exists(cfgfilename.c_str())) {
-#ifdef UNIX
-    const std::vector<std::string> cfghidingplaces {
-        "/usr/share/games/trigger-rally/"
-    };
-
-    for (const std::string &cfgpath: cfghidingplaces)
-        if (PHYSFS_mount(cfgpath.c_str(), NULL, 1) == 0)
-        {
-            PUtil::outLog() << "Failed to add PhysFS search directory \"" <<
-                cfgpath << "\"\nPhysFS: " << physfs_getErrorString() << std::endl;
-        }
-#endif
-    PUtil::outLog() << "No user config file, copying over defaults" << std::endl;
-
-    std::string cfgdefaults = "trigger-rally.config.defs";
-
-    if (!PUtil::copyFile(cfgdefaults, cfgfilename)) {
-
-      PUtil::outLog() << "Couldn't create user config file. Proceeding with defaults." << std::endl;
-
-      cfgfilename = cfgdefaults;
-    }
-  }
-
-  // Load actual settings from file
-
-  XMLDocument xmlfile;
-
-  XMLElement *rootelem = PUtil::loadRootElement(xmlfile, cfgfilename, "config");
-  if (!rootelem) {
-    PUtil::outLog() << "Error: Couldn't load configuration file" << std::endl;
-#if TINYXML2_MAJOR_VERSION >= 6
-    PUtil::outLog() << "TinyXML: " << xmlfile.ErrorStr() << std::endl;
-#else
-    PUtil::outLog() << "TinyXML: " << xmlfile.GetErrorStr1() << ' ' << xmlfile.GetErrorStr2() << std::endl;
-#endif
-    PUtil::outLog() << "Your data paths are probably not set up correctly" << std::endl;
-    throw MakePException ("Boink");
-  }
-
-  const char *val;
-
-  for (XMLElement *walk = rootelem->FirstChildElement();
-    walk; walk = walk->NextSiblingElement()) {
-
-    if (strcmp(walk->Value(), "player") == 0)
-    {
-        val = walk->Attribute("name");
-
-        if (val != nullptr)
-        {
-            cfg_playername = val;
-            best_times.setPlayerName(val);
-        }
-
-        val = walk->Attribute("copydefplayers");
-
-        if (val != nullptr && std::string(val) == "no")
-            cfg_copydefplayers = false;
-        else
-            cfg_copydefplayers = true;
-
-        val = walk->Attribute("skipsaves");
-
-        if (val != nullptr)
-            cfg_skip_saves = std::stol(val);
-
-        best_times.setSkipSaves(cfg_skip_saves);
-    }
-    else
-    if (!strcmp(walk->Value(), "video")) {
-
-        val = walk->Attribute("automatic");
-
-        if (val != nullptr && std::string(val) == "yes")
-            automaticVideoMode(true);
-        else
-            automaticVideoMode(false);
-
-      val = walk->Attribute("width");
-      if (val) cfg_video_cx = atoi(val);
-
-      val = walk->Attribute("height");
-      if (val) cfg_video_cy = atoi(val);
-
-      val = walk->Attribute("fullscreen");
-      if (val) {
-        if (!strcmp(val, "yes"))
-          cfg_video_fullscreen = true;
-        else if (!strcmp(val, "no"))
-          cfg_video_fullscreen = false;
-      }
-
-      val = walk->Attribute("requirergb");
-      if (val) {
-        if (!strcmp(val, "yes"))
-          requireRGB(true);
-        else if (!strcmp(val, "no"))
-          requireRGB(false);
-      }
-
-      val = walk->Attribute("requirealpha");
-      if (val) {
-        if (!strcmp(val, "yes"))
-          requireAlpha(true);
-        else if (!strcmp(val, "no"))
-          requireAlpha(false);
-      }
-
-      val = walk->Attribute("requiredepth");
-      if (val) {
-        if (!strcmp(val, "yes"))
-          requireDepth(true);
-        else if (!strcmp(val, "no"))
-          requireDepth(false);
-      }
-
-      val = walk->Attribute("requirestencil");
-      if (val) {
-        if (!strcmp(val, "yes"))
-          requireStencil(true);
-        else if (!strcmp(val, "no"))
-          requireStencil(false);
-      }
-
-      val = walk->Attribute("stereo");
-      if (val) {
-        if (!strcmp(val, "none"))
-          setStereoMode(PApp::StereoNone);
-        else if (!strcmp(val, "quadbuffer"))
-          setStereoMode(PApp::StereoQuadBuffer);
-        else if (!strcmp(val, "red-blue"))
-          setStereoMode(PApp::StereoRedBlue);
-        else if (!strcmp(val, "red-green"))
-          setStereoMode(PApp::StereoRedGreen);
-        else if (!strcmp(val, "red-cyan"))
-          setStereoMode(PApp::StereoRedCyan);
-        else if (!strcmp(val, "yellow-blue"))
-          setStereoMode(PApp::StereoYellowBlue);
-      }
-
-      float sepMult = 1.0f;
-      val = walk->Attribute("stereoswapeyes");
-      if (val && !strcmp(val, "yes"))
-        sepMult = -1.0f;
-
-      val = walk->Attribute("stereoeyeseparation");
-      if (val) {
-        setStereoEyeSeperation(atof(val) * sepMult);
-      }
-    }
-    else
-    if (!strcmp(walk->Value(), "audio"))
-    {
-        val = walk->Attribute("enginevolume");
-
-        if (val != nullptr)
-            cfg_volume_engine = atof(val);
-
-        val = walk->Attribute("sfxvolume");
-
-        if (val != nullptr)
-            cfg_volume_sfx = atof(val);
-
-        val = walk->Attribute("codrivervolume");
-
-        if (val != nullptr)
-            cfg_volume_codriver = atof(val);
-    }
-    else
-    if (!strcmp(walk->Value(), "graphics"))
-    {
-        val = walk->Attribute("anisotropy");
-
-        if (val)
-        {
-            if (!strcmp(val, "off"))
-            {
-                cfg_anisotropy = 1.0f;
-            }
-            else
-            if (!strcmp(val, "max"))
-            {
-                glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &cfg_anisotropy);
-            }
-            else // TODO: listen to the user, but don't trust him
-            {
-                cfg_anisotropy = atof(val);
-                CLAMP_LOWER(cfg_anisotropy, 1.0f);
-            }
-        }
-
-        val = walk->Attribute("foliage");
-
-        if (val)
-        {
-            if (!strcmp(val, "no"))
-                cfg_foliage = false;
-            else // "yes"
-                cfg_foliage = true;
-        }
-
-        val = walk->Attribute("roadsigns");
-
-        if (val != nullptr)
-        {
-            if (strcmp(val, "no") == 0)
-                cfg_roadsigns = false;
-            else // yes
-                cfg_roadsigns = true;
-        }
-
-        val = walk->Attribute("weather");
-
-        if (val)
-        {
-            if (!strcmp(val, "no"))
-                cfg_weather = false;
-            else // "yes"
-                cfg_weather = true;
-        }
-
-        val = walk->Attribute("snowflaketype");
-
-        if (val)
-        {
-            if (!strcmp(val, "square"))
-                cfg_snowflaketype = SnowFlakeType::square;
-            else
-            if (!strcmp(val, "textured"))
-                cfg_snowflaketype = SnowFlakeType::textured;
-            else // default
-                cfg_snowflaketype = SnowFlakeType::point;
-        }
-
-        val = walk->Attribute("dirteffect");
-
-        if (val)
-        {
-            if (!strcmp(val, "yes"))
-                cfg_dirteffect = true;
-            else
-                cfg_dirteffect = false;
-        }
-    }
-    else
-    if (!strcmp(walk->Value(), "datadirectory"))
-    {
-        for (XMLElement *walk2 = walk->FirstChildElement(); walk2; walk2 = walk2->NextSiblingElement())
-            if (!strcmp(walk2->Value(), "data"))
-                cfg_datadirs.push_back(walk2->Attribute("path"));
-    }
-    else if (!strcmp(walk->Value(), "parameters")) {
-
-      val = walk->Attribute("drivingassist");
-      if (val) cfg_drivingassist = atof(val);
-
-      val = walk->Attribute("enablesound");
-      if (val) {
-        if (!strcmp(val, "yes"))
-          cfg_enable_sound = true;
-        else if (!strcmp(val, "no"))
-          cfg_enable_sound = false;
-      }
-
-        val = walk->Attribute("enablecodriversigns");
-
-        if (val != nullptr)
-        {
-            if (strcmp(val, "yes") == 0)
-                cfg_enable_codriversigns = true;
-            else
-            if (strcmp(val, "no") == 0)
-                cfg_enable_codriversigns = false;
-        }
-
-      val = walk->Attribute("speedunit");
-      if (val) {
-        if (!strcmp(val, "mph")) {
-            cfg_speed_unit = mph;
-            hud_speedo_start_deg = MPH_ZERO_DEG;
-            hud_speedo_mps_deg_mult = MPS_MPH_DEG_MULT;
-            hud_speedo_mps_speed_mult = MPS_MPH_SPEED_MULT;
-          }
-        else if (!strcmp(val, "kph")) {
-           cfg_speed_unit = kph;
-           hud_speedo_start_deg = KPH_ZERO_DEG;
-           hud_speedo_mps_deg_mult = MPS_KPH_DEG_MULT;
-           hud_speedo_mps_speed_mult = MPS_KPH_SPEED_MULT;
-         }
-      }
-
-      val = walk->Attribute("enablefps");
-      if (val) {
-        if (!strcmp(val, "yes"))
-          cfg_enable_fps = true;
-        else if (!strcmp(val, "no"))
-          cfg_enable_fps = false;
-      }
-
-      val = walk->Attribute("enableghost");
-      if (val) {
-        if (!strcmp(val, "yes"))
-          cfg_enable_ghost= true;
-        else if (!strcmp(val, "no"))
-          cfg_enable_ghost = false;
-      }
-
-      val = walk->Attribute("codriver");
-
-      if (val != nullptr)
-        cfg_codrivername = val;
-
-      val = walk->Attribute("codriversigns");
-
-        if (val != nullptr)
-            cfg_codriversigns = val;
-
-        val = walk->Attribute("codriversignslife");
-
-        if (val != nullptr)
-            cfg_codriveruserconfig.life = std::stof(val);
-
-        val = walk->Attribute("codriversignsposx");
-
-        if (val != nullptr)
-            cfg_codriveruserconfig.posx = std::stof(val);
-
-        val = walk->Attribute("codriversignsposy");
-
-        if (val != nullptr)
-            cfg_codriveruserconfig.posy = std::stof(val);
-
-        val = walk->Attribute("codriversignsscale");
-
-        if (val != nullptr)
-            cfg_codriveruserconfig.scale = std::stof(val);
-
-    } else if (!strcmp(walk->Value(), "controls")) {
-
-      for (XMLElement *walk2 = walk->FirstChildElement();
-        walk2; walk2 = walk2->NextSiblingElement()) {
-
-        if (!strcmp(walk2->Value(), "keyboard")) {
-
-          val = walk2->Attribute("enable");
-          if (val && !strcmp(val, "no"))
-            continue;
-
-          for (XMLElement *walk3 = walk2->FirstChildElement();
-            walk3; walk3 = walk3->NextSiblingElement()) {
-
-            if (!strcmp(walk3->Value(), "key")) {
-
-              val = walk3->Attribute("action");
-
-              int a;
-              for (a = 0; a < ActionCount; a++)
-                if (ctrl.action_name[a] == val) break;
-
-              if (a >= ActionCount) {
-                PUtil::outLog() << "Config ctrls: Unknown action \"" << val << "\"" << std::endl;
-                continue;
-              }
-              /*
-              // TODO: implement string to keycode mapping
-              val = walk3->Attribute("code");
-              if (!val) {
-                PUtil::outLog() << "Config ctrls: Key has no code" << std::endl;
-                continue;
-              }
-              */
-
-              val = walk3->Attribute("id");
-
-              if (!val)
-              {
-                  PUtil::outLog() << "Config ctrls: Key has no ID" << std::endl;
-                  continue;
-              }
-
-              ctrl.map[a].type = UserControl::TypeKey;
-              //ctrl.map[a].key.sym = (SDLKey) atoi(val);
-              ctrl.map[a].key.sym = getSdlKeySym(val);
-            }
-          }
-
-        } else if (!strcmp(walk2->Value(), "joystick")) {
-
-          val = walk2->Attribute("enable");
-          if (val && !strcmp(val, "no"))
-            continue;
-
-          for (XMLElement *walk3 = walk2->FirstChildElement();
-            walk3; walk3 = walk3->NextSiblingElement()) {
-
-            if (!strcmp(walk3->Value(), "button")) {
-
-              val = walk3->Attribute("action");
-
-              int a;
-              for (a = 0; a < ActionCount; a++)
-                if (ctrl.action_name[a] == val) break;
-
-              if (a >= ActionCount) {
-                PUtil::outLog() << "Config ctrls: Unknown action \"" << val << "\"" << std::endl;
-                continue;
-              }
-
-              val = walk3->Attribute("index");
-              if (!val) {
-                PUtil::outLog() << "Config ctrls: Joy button has no index" << std::endl;
-                continue;
-              }
-
-              ctrl.map[a].type = UserControl::TypeJoyButton;
-              ctrl.map[a].joybutton.button = atoi(val);
-
-            } else if (!strcmp(walk3->Value(), "axis")) {
-
-              val = walk3->Attribute("action");
-
-              int a;
-              for (a = 0; a < ActionCount; a++)
-                if (ctrl.action_name[a] == val) break;
-
-              if (a >= ActionCount) {
-                PUtil::outLog() << "Config ctrls: Unknown action \"" << val << "\"" << std::endl;
-                continue;
-              }
-
-              val = walk3->Attribute("index");
-              if (!val) {
-                PUtil::outLog() << "Config ctrls: Joy axis has no index" << std::endl;
-                continue;
-              }
-
-              int index = atoi(val);
-
-              bool positive;
-
-              val = walk3->Attribute("direction");
-              if (!val) {
-                PUtil::outLog() << "Config ctrls: Joy axis has no direction" << std::endl;
-                continue;
-              }
-              if (!strcmp(val, "+"))
-                positive = true;
-              else if (!strcmp(val, "-"))
-                positive = false;
-              else {
-                PUtil::outLog() << "Config ctrls: Joy axis direction \"" << val <<
-                  "\" is neither \"+\" nor \"-\"" << std::endl;
-                continue;
-              }
-
-              ctrl.map[a].type = UserControl::TypeJoyAxis;
-              ctrl.map[a].joyaxis.axis = index;
-              ctrl.map[a].joyaxis.sign = positive ? 1.0f : -1.0f;
-              ctrl.map[a].joyaxis.deadzone = 0.0f;
-              ctrl.map[a].joyaxis.maxrange = 1.0f;
-
-              val = walk3->Attribute("deadzone");
-              if (val) ctrl.map[a].joyaxis.deadzone = atof(val);
-
-              val = walk3->Attribute("maxrange");
-              if (val) ctrl.map[a].joyaxis.maxrange = atof(val);
-            }
-          }
-        }
-      }
-    }
-  }
 }
 
 bool MainApp::loadLevel(TriggerLevel &tl)
@@ -1181,41 +638,9 @@ bool MainApp::loadAll()
   if (!(tex_damage_rear_left = getSSTexture().loadTexture("/textures/damage_rear_left.png"))) return false;
   if (!(tex_damage_rear_right = getSSTexture().loadTexture("/textures/damage_rear_right.png"))) return false;
 
-    if (cfg_enable_codriversigns && !cfg_codriversigns.empty())
-    {
-        const std::string origdir(std::string("/textures/CodriverSigns/") + cfg_codriversigns);
+  loadCodriversigns();
 
-        char **rc = PHYSFS_enumerateFiles(origdir.c_str());
-
-        for (char **fname = rc; *fname != nullptr; ++fname)
-        {
-            PTexture *tex_cdsign = getSSTexture().loadTexture(origdir + '/' + *fname);
-
-            if (tex_cdsign != nullptr) // failed loads are ignored
-            {
-                // remove the extension from the filename
-                std::smatch mr; // Match Results
-                std::regex pat(R"(^(\w+)(\..+)$)"); // Pattern
-                std::string fn(*fname); // Filename
-
-                if (!std::regex_search(fn, mr, pat))
-                    continue;
-
-                std::string basefname = mr[1];
-
-                // make the base filename lowercase
-                for (char &c: basefname)
-                    c = std::tolower(static_cast<unsigned char> (c));
-
-                tex_codriversigns[basefname] = tex_cdsign;
-                //PUtil::outLog() << "Loaded codriver sign for: \"" << basefname << '"' << std::endl;
-            }
-        }
-
-        PHYSFS_freeList(rc);
-    }
-
-  if (cfg_enable_sound) {
+  if (cfg.getEnableSound()) {
     if (!(aud_engine = getSSAudio().loadSample("/sounds/engine.wav", false))) return false;
     if (!(aud_wind = getSSAudio().loadSample("/sounds/wind.wav", false))) return false;
     if (!(aud_shiftup = getSSAudio().loadSample("/sounds/shiftup.wav", false))) return false;
@@ -1223,39 +648,7 @@ bool MainApp::loadAll()
     if (!(aud_gravel = getSSAudio().loadSample("/sounds/gravel.wav", false))) return false;
     if (!(aud_crash1 = getSSAudio().loadSample("/sounds/bang.wav", false))) return false;
 
-    if (!cfg_codrivername.empty() && cfg_codrivername != "mime")
-    {
-        const std::string origdir(std::string("/sounds/codriver/") + cfg_codrivername);
-
-        char **rc = PHYSFS_enumerateFiles(origdir.c_str());
-
-        for (char **fname = rc; *fname != nullptr; ++fname)
-        {
-            PAudioSample *aud_cdword = getSSAudio().loadSample(origdir + '/' + *fname, false);
-
-            if (aud_cdword != nullptr) // failed loads are ignored
-            {
-                // remove the extension from the filename
-                std::smatch mr; // Match Results
-                std::regex pat(R"(^(\w+)(\..+)$)"); // Pattern
-                std::string fn(*fname); // Filename
-
-                if (!std::regex_search(fn, mr, pat))
-                    continue;
-
-                std::string basefname = mr[1];
-
-                // make the base filename lowercase
-                for (char &c: basefname)
-                    c = std::tolower(static_cast<unsigned char> (c));
-
-                aud_codriverwords[basefname] = aud_cdword;
-                //PUtil::outLog() << "Loaded codriver word for: \"" << basefname << '"' << std::endl;
-            }
-        }
-
-        PHYSFS_freeList(rc);
-    }
+    loadCodrivername();
   }
 
   if (!gui.loadColors("/menu.colors"))
@@ -1293,7 +686,7 @@ bool MainApp::loadAll()
 
   crashnoise_timeout = 0.0f;
 
-    if (cfg_dirteffect)
+    if (cfg.getDirteffect())
     {
         psys_dirt = new DirtParticleSystem();
         psys_dirt->setColorStart(0.5f, 0.4f, 0.2f, 1.0f);
@@ -1313,6 +706,85 @@ bool MainApp::loadAll()
   choose_spin = 0.0f;
 
   return true;
+}
+
+void MainApp::loadCodriversigns()
+{
+  if (cfg.getEnableCodriversigns() && !cfg.getCodriversigns().empty())
+  {
+    const std::string origdir(std::string("/textures/CodriverSigns/") + cfg.getCodriversigns());
+    char **rc = PHYSFS_enumerateFiles(origdir.c_str());
+
+    for (char **fname = rc; *fname != nullptr; ++fname)
+    {
+      PTexture *tex_cdsign = getSSTexture().loadTexture(origdir + '/' + *fname);
+
+      if (tex_cdsign != nullptr) // failed loads are ignored
+      {
+        // remove the extension from the filename
+        std::smatch mr; // Match Results
+        std::regex pat(R"(^(\w+)(\..+)$)"); // Pattern
+        std::string fn(*fname); // Filename
+
+        if (!std::regex_search(fn, mr, pat))
+          continue;
+
+        std::string basefname = mr[1];
+
+        // make the base filename lowercase
+        for (char &c: basefname)
+          c = std::tolower(static_cast<unsigned char> (c));
+
+        tex_codriversigns[basefname] = tex_cdsign;
+        //PUtil::outLog() << "Loaded codriver sign for: \"" << basefname << '"' << std::endl;
+      }
+    }
+    PHYSFS_freeList(rc);
+  }
+}
+
+void MainApp::loadCodrivername()
+{
+  if (!cfg.getCodrivername().empty() && cfg.getCodrivername() != "mime")
+  {
+    const std::string origdir(std::string("/sounds/codriver/") + cfg.getCodrivername());
+    char **rc = PHYSFS_enumerateFiles(origdir.c_str());
+
+    for (char **fname = rc; *fname != nullptr; ++fname)
+    {
+      PAudioSample *aud_cdword = getSSAudio().loadSample(origdir + '/' + *fname, false);
+
+      if (aud_cdword != nullptr) // failed loads are ignored
+      {
+        // remove the extension from the filename
+        std::smatch mr; // Match Results
+        std::regex pat(R"(^(\w+)(\..+)$)"); // Pattern
+        std::string fn(*fname); // Filename
+
+        if (!std::regex_search(fn, mr, pat))
+          continue;
+
+        std::string basefname = mr[1];
+
+        // make the base filename lowercase
+        for (char &c: basefname)
+          c = std::tolower(static_cast<unsigned char> (c));
+
+        aud_codriverwords[basefname] = aud_cdword;
+        //PUtil::outLog() << "Loaded codriver word for: \"" << basefname << '"' << std::endl;
+      }
+    }
+    PHYSFS_freeList(rc);
+  }
+}
+
+void MainApp::reloadAll()
+{
+  tex_codriversigns.clear();
+  loadCodriversigns();
+
+  aud_codriverwords.clear();
+  loadCodrivername();
 }
 
 void MainApp::unload()
@@ -1350,7 +822,7 @@ bool MainApp::startGame(const std::string &filename)
   }
 
   // useful datas
-  race_data.playername  = cfg_playername; // TODO: move to a better place
+  race_data.playername  = cfg.getPlayername(); // TODO: move to a better place
   race_data.mapname     = filename;
   choose_type = 0;
 
@@ -1359,7 +831,7 @@ bool MainApp::startGame(const std::string &filename)
     appstate = AS_CHOOSE_VEHICLE;
   } else {
     game->chooseVehicle(game->vehiclechoices[choose_type]);
-    if (cfg_enable_ghost)
+    if (cfg.getEnableGhost())
       ghost.recordStart(filename, game->vehiclechoices[choose_type]->getName());
 
     if (lss.state == AM_TOP_LVL_PREP)
@@ -1413,7 +885,7 @@ bool MainApp::startGame(const std::string &filename)
 ///
 void MainApp::toggleSounds(bool to)
 {
-    if (cfg_enable_sound)
+    if (cfg.getEnableSound())
     {
         if (audinst_engine != nullptr)
         {
@@ -1449,7 +921,7 @@ void MainApp::toggleSounds(bool to)
 ///
 void MainApp::initAudio()
 {
-  if (cfg_enable_sound) {
+  if (cfg.getEnableSound()) {
 	// engine sound
     audinst_engine = new PAudioInstance(aud_engine, true);
     audinst_engine->setGain(0.0);
@@ -1490,7 +962,7 @@ void MainApp::endGame(Gamefinish state)
             lss.state = AM_TOP_PRAC_TIMES;
     }
 
-  if (cfg_enable_ghost && state != Gamefinish::not_finished) {
+  if (cfg.getEnableGhost() && state != Gamefinish::not_finished) {
     ghost.recordStop(race_data.totaltime);
   }
 
@@ -1629,27 +1101,28 @@ void MainApp::tickStateGame(float delta)
 
   // Do input/control processing
 
-  for (int a = 0; a < ActionCount; a++) {
+  for (int a = 0; a < PConfig::ActionCount; a++) {
 
-    switch(ctrl.map[a].type) {
-    case UserControl::TypeUnassigned:
+    switch(cfg.getCtrl().map[a].type) {
+    case PConfig::UserControl::TypeUnassigned:
       break;
 
-    case UserControl::TypeKey:
-      ctrl.map[a].value = keyDown(SDL_GetScancodeFromKey(ctrl.map[a].key.sym)) ? 1.0f : 0.0f;
+    case PConfig::UserControl::TypeKey:
+      cfg.getCtrl().map[a].value = keyDown(SDL_GetScancodeFromKey(cfg.getCtrl().map[a].key.sym)) ? 1.0f : 0.0f;
       break;
 
-    case UserControl::TypeJoyButton:
-      ctrl.map[a].value = getJoyButton(0, ctrl.map[a].joybutton.button) ? 1.0f : 0.0f;
+    case PConfig::UserControl::TypeJoyButton:
+      cfg.getCtrl().map[a].value = getJoyButton(0, cfg.getCtrl().map[a].joybutton.button) ? 1.0f : 0.0f;
       break;
 
-    case UserControl::TypeJoyAxis:
-      ctrl.map[a].value = ctrl.map[a].joyaxis.sign *
-        getJoyAxis(0, ctrl.map[a].joyaxis.axis);
+    case PConfig::UserControl::TypeJoyAxis:
+      cfg.getCtrl().map[a].value = cfg.getCtrl().map[a].joyaxis.sign *
+        getJoyAxis(0, cfg.getCtrl().map[a].joyaxis.axis);
 
-      RANGEADJUST(ctrl.map[a].value, ctrl.map[a].joyaxis.deadzone, ctrl.map[a].joyaxis.maxrange, 0.0f, 1.0f);
+      RANGEADJUST(cfg.getCtrl().map[a].value, cfg.getCtrl().map[a].joyaxis.deadzone,
+          cfg.getCtrl().map[a].joyaxis.maxrange, 0.0f, 1.0f);
 
-      CLAMP_LOWER(ctrl.map[a].value, 0.0f);
+      CLAMP_LOWER(cfg.getCtrl().map[a].value, 0.0f);
       break;
     }
   }
@@ -1657,14 +1130,14 @@ void MainApp::tickStateGame(float delta)
   // Bit of a hack for turning, because you simply can't handle analogue
   // and digital steering the same way, afaics
 
-  if (ctrl.map[ActionLeft].type == UserControl::TypeJoyAxis ||
-    ctrl.map[ActionRight].type == UserControl::TypeJoyAxis) {
+  if (cfg.getCtrl().map[PConfig::ActionLeft].type == PConfig::UserControl::TypeJoyAxis ||
+      cfg.getCtrl().map[PConfig::ActionRight].type == PConfig::UserControl::TypeJoyAxis) {
 
     // Analogue mode
 
     vehic->ctrl.turn.z = 0.0f;
-    vehic->ctrl.turn.z -= ctrl.map[ActionLeft].value;
-    vehic->ctrl.turn.z += ctrl.map[ActionRight].value;
+    vehic->ctrl.turn.z -= cfg.getCtrl().map[PConfig::ActionLeft].value;
+    vehic->ctrl.turn.z += cfg.getCtrl().map[PConfig::ActionRight].value;
 
   } else {
 
@@ -1672,11 +1145,11 @@ void MainApp::tickStateGame(float delta)
 
     static float turnaccel = 0.0f;
 
-    if (ctrl.map[ActionLeft].value > 0.0f) {
+    if (cfg.getCtrl().map[PConfig::ActionLeft].value > 0.0f) {
       if (turnaccel > -0.0f) turnaccel = -0.0f;
       turnaccel -= 8.0f * delta;
       vehic->ctrl.turn.z += turnaccel * delta;
-    } else if (ctrl.map[ActionRight].value > 0.0f) {
+    } else if (cfg.getCtrl().map[PConfig::ActionRight].value > 0.0f) {
       if (turnaccel < 0.0f) turnaccel = 0.0f;
       turnaccel += 8.0f * delta;
       vehic->ctrl.turn.z += turnaccel * delta;
@@ -1688,29 +1161,29 @@ void MainApp::tickStateGame(float delta)
 
   // Computer aided steering
   if (vehic->forwardspeed > 1.0f)
-    vehic->ctrl.turn.z -= vehic->body->getAngularVel().z * cfg_drivingassist / (1.0f + vehic->forwardspeed);
+    vehic->ctrl.turn.z -= vehic->body->getAngularVel().z * cfg.getDrivingassist() / (1.0f + vehic->forwardspeed);
 
 
   float throttletarget = 0.0f;
   float braketarget = 0.0f;
 
-  if (ctrl.map[ActionForward].value > 0.0f) {
+  if (cfg.getCtrl().map[PConfig::ActionForward].value > 0.0f) {
     if (vehic->wheel_angvel > -10.0f)
-      throttletarget = ctrl.map[ActionForward].value;
+      throttletarget = cfg.getCtrl().map[PConfig::ActionForward].value;
     else
-      braketarget = ctrl.map[ActionForward].value;
+      braketarget = cfg.getCtrl().map[PConfig::ActionForward].value;
   }
-  if (ctrl.map[ActionBack].value > 0.0f) {
+  if (cfg.getCtrl().map[PConfig::ActionBack].value > 0.0f) {
     if (vehic->wheel_angvel < 10.0f)
-      throttletarget = -ctrl.map[ActionBack].value;
+      throttletarget = -cfg.getCtrl().map[PConfig::ActionBack].value;
     else
-      braketarget = ctrl.map[ActionBack].value;
+      braketarget = cfg.getCtrl().map[PConfig::ActionBack].value;
   }
 
   PULLTOWARD(vehic->ctrl.throttle, throttletarget, delta * 15.0f);
   PULLTOWARD(vehic->ctrl.brake1, braketarget, delta * 25.0f);
 
-  vehic->ctrl.brake2 = ctrl.map[ActionHandbrake].value;
+  vehic->ctrl.brake2 = cfg.getCtrl().map[PConfig::ActionHandbrake].value;
 
 
   //PULLTOWARD(vehic->ctrl.aim.x, 0.0, delta * 2.0);
@@ -1719,11 +1192,11 @@ void MainApp::tickStateGame(float delta)
   game->tick(delta);
 
   // Record ghost car (assumes first vehicle is player vehicle)
-  if (cfg_enable_ghost && game->vehicle[0]) {
+  if (cfg.getEnableGhost() && game->vehicle[0]) {
     ghost.recordSample(delta, game->vehicle[0]->part[0]);
   }
 
-    if (cfg_dirteffect)
+    if (cfg.getDirteffect())
     {
 
 #define BRIGHTEN_ADD        0.20f
@@ -1786,8 +1259,8 @@ void MainApp::tickStateGame(float delta)
     }
 
   float angtarg = 0.0f;
-  angtarg -= ctrl.map[ActionCamLeft].value;
-  angtarg += ctrl.map[ActionCamRight].value;
+  angtarg -= cfg.getCtrl().map[PConfig::ActionCamLeft].value;
+  angtarg += cfg.getCtrl().map[PConfig::ActionCamRight].value;
   angtarg *= PI*0.75f;
 
   PULLTOWARD(camera_user_angle, angtarg, delta * 4.0f);
@@ -1984,23 +1457,23 @@ void MainApp::tickStateGame(float delta)
   vec2f diff = makevec2f(game->checkpt[vehic->nextcp].pt) - makevec2f(vehic->body->getPosition());
   nextcpangle = -atan2(diff.y, diff.x) - forwangle + PI*0.5f;
 
-  if (cfg_enable_sound) {
+  if (cfg.getEnableSound()) {
     SDL_Haptic *haptic = nullptr;
 
     if (getNumJoysticks() > 0)
       haptic = getJoyHaptic(0);
 
-    audinst_engine->setGain(cfg_volume_engine);
+    audinst_engine->setGain(cfg.getVolumeEngine());
     audinst_engine->setPitch(vehic->getEngineRPM() / 9000.0f);
 
     float windlevel = fabsf(vehic->forwardspeed) * 0.6f;
 
-    audinst_wind->setGain(windlevel * 0.03f * cfg_volume_sfx);
+    audinst_wind->setGain(windlevel * 0.03f * cfg.getVolumeSfx());
     audinst_wind->setPitch(windlevel * 0.02f + 0.9f);
 
     float skidlevel = vehic->getSkidLevel();
 
-    audinst_gravel->setGain(skidlevel * 0.1f * cfg_volume_sfx);
+    audinst_gravel->setGain(skidlevel * 0.1f * cfg.getVolumeSfx());
     audinst_gravel->setPitch(1.0f);//vehic->getEngineRPM() / 7500.0f);
 
     if(haptic != nullptr && skidlevel > 500.0f)
@@ -2013,7 +1486,7 @@ void MainApp::tickStateGame(float delta)
         {
             audinst.push_back(new PAudioInstance(aud_shiftup));
             audinst.back()->setPitch(0.7f + randm11*0.02f);
-            audinst.back()->setGain(1.0f * cfg_volume_sfx);
+            audinst.back()->setGain(1.0f * cfg.getVolumeSfx());
             audinst.back()->play();
             break;
         }
@@ -2021,7 +1494,7 @@ void MainApp::tickStateGame(float delta)
         {
             audinst.push_back(new PAudioInstance(aud_shiftdown));
             audinst.back()->setPitch(0.8f + randm11*0.12f);
-            audinst.back()->setGain(1.0f * cfg_volume_sfx);
+            audinst.back()->setGain(1.0f * cfg.getVolumeSfx());
             audinst.back()->play();
             break;
         }
@@ -2035,7 +1508,7 @@ void MainApp::tickStateGame(float delta)
       if (crashlevel > 0.0f) {
         audinst.push_back(new PAudioInstance(aud_crash1));
         audinst.back()->setPitch(1.0f + randm11*0.02f);
-        audinst.back()->setGain(logf(1.0f + crashlevel) * cfg_volume_sfx);
+        audinst.back()->setGain(logf(1.0f + crashlevel) * cfg.getVolumeSfx());
         audinst.back()->play();
 
         if (haptic != nullptr)
@@ -2175,16 +1648,16 @@ void MainApp::keyEvent(const SDL_KeyboardEvent &ke)
       return;
     case AS_CHOOSE_VEHICLE:
 
-      if (ctrl.map[ActionLeft].type == UserControl::TypeKey &&
-        ctrl.map[ActionLeft].key.sym == ke.keysym.sym) {
+      if (cfg.getCtrl().map[PConfig::ActionLeft].type == PConfig::UserControl::TypeKey &&
+          cfg.getCtrl().map[PConfig::ActionLeft].key.sym == ke.keysym.sym) {
         if (--choose_type < 0)
           choose_type = (int)game->vehiclechoices.size()-1;
         return;
       }
-      if ((ctrl.map[ActionRight].type == UserControl::TypeKey &&
-        ctrl.map[ActionRight].key.sym == ke.keysym.sym) ||
-        (ctrl.map[ActionNext].type == UserControl::TypeKey &&
-        ctrl.map[ActionNext].key.sym == ke.keysym.sym)) {
+      if ((cfg.getCtrl().map[PConfig::ActionRight].type == PConfig::UserControl::TypeKey &&
+          cfg.getCtrl().map[PConfig::ActionRight].key.sym == ke.keysym.sym) ||
+        (cfg.getCtrl().map[PConfig::ActionNext].type == PConfig::UserControl::TypeKey &&
+            cfg.getCtrl().map[PConfig::ActionNext].key.sym == ke.keysym.sym)) {
         if (++choose_type >= (int)game->vehiclechoices.size())
           choose_type = 0;
         return;
@@ -2197,7 +1670,7 @@ void MainApp::keyEvent(const SDL_KeyboardEvent &ke)
         if (!game->vehiclechoices[choose_type]->getLocked()) {
           initAudio();
           game->chooseVehicle(game->vehiclechoices[choose_type]);
-          if (cfg_enable_ghost)
+          if (cfg.getEnableGhost())
             ghost.recordStart(race_data.mapname, game->vehiclechoices[choose_type]->getName());
 
           if (lss.state == AM_TOP_LVL_PREP)
@@ -2224,43 +1697,43 @@ void MainApp::keyEvent(const SDL_KeyboardEvent &ke)
       break;
     case AS_IN_GAME:
 
-      if (ctrl.map[ActionRecover].type == UserControl::TypeKey &&
-        ctrl.map[ActionRecover].key.sym == ke.keysym.sym) {
+      if (cfg.getCtrl().map[PConfig::ActionRecover].type == PConfig::UserControl::TypeKey &&
+          cfg.getCtrl().map[PConfig::ActionRecover].key.sym == ke.keysym.sym) {
         game->vehicle[0]->doReset();
         return;
       }
-      if (ctrl.map[ActionRecoverAtCheckpoint].type == UserControl::TypeKey &&
-        ctrl.map[ActionRecoverAtCheckpoint].key.sym == ke.keysym.sym)
+      if (cfg.getCtrl().map[PConfig::ActionRecoverAtCheckpoint].type == PConfig::UserControl::TypeKey &&
+          cfg.getCtrl().map[PConfig::ActionRecoverAtCheckpoint].key.sym == ke.keysym.sym)
       {
           game->resetAtCheckpoint(game->vehicle[0]);
           return;
       }
-      if (ctrl.map[ActionCamMode].type == UserControl::TypeKey &&
-        ctrl.map[ActionCamMode].key.sym == ke.keysym.sym) {
+      if (cfg.getCtrl().map[PConfig::ActionCamMode].type == PConfig::UserControl::TypeKey &&
+          cfg.getCtrl().map[PConfig::ActionCamMode].key.sym == ke.keysym.sym) {
         cameraview = static_cast<CameraMode>((static_cast<int>(cameraview) + 1) % static_cast<int>(CameraMode::count));
         camera_user_angle = 0.0f;
         return;
       }
-      if (ctrl.map[ActionShowMap].type == UserControl::TypeKey &&
-        ctrl.map[ActionShowMap].key.sym == ke.keysym.sym) {
+      if (cfg.getCtrl().map[PConfig::ActionShowMap].type == PConfig::UserControl::TypeKey &&
+          cfg.getCtrl().map[PConfig::ActionShowMap].key.sym == ke.keysym.sym) {
         showmap = !showmap;
         return;
       }
-      if (ctrl.map[ActionPauseRace].type == UserControl::TypeKey &&
-        ctrl.map[ActionPauseRace].key.sym == ke.keysym.sym)
+      if (cfg.getCtrl().map[PConfig::ActionPauseRace].type == PConfig::UserControl::TypeKey &&
+          cfg.getCtrl().map[PConfig::ActionPauseRace].key.sym == ke.keysym.sym)
       {
           toggleSounds(pauserace);
           pauserace = !pauserace;
           return;
       }
-      if (ctrl.map[ActionShowUi].type == UserControl::TypeKey &&
-        ctrl.map[ActionShowUi].key.sym == ke.keysym.sym) {
+      if (cfg.getCtrl().map[PConfig::ActionShowUi].type == PConfig::UserControl::TypeKey &&
+          cfg.getCtrl().map[PConfig::ActionShowUi].key.sym == ke.keysym.sym) {
         showui = !showui;
         return;
       }
 
-      if (ctrl.map[ActionShowCheckpoint].type == UserControl::TypeKey &&
-        ctrl.map[ActionShowCheckpoint].key.sym == ke.keysym.sym) {
+      if (cfg.getCtrl().map[PConfig::ActionShowCheckpoint].type == PConfig::UserControl::TypeKey &&
+          cfg.getCtrl().map[PConfig::ActionShowCheckpoint].key.sym == ke.keysym.sym) {
             showcheckpoint = !showcheckpoint;
             return;
       }
@@ -2321,16 +1794,16 @@ void MainApp::joyButtonEvent(int which, int button, bool down)
     switch (appstate) {
     case AS_CHOOSE_VEHICLE:
 
-      if (ctrl.map[ActionLeft].type == UserControl::TypeJoyButton &&
-        ctrl.map[ActionLeft].joybutton.button == button) {
+      if (cfg.getCtrl().map[PConfig::ActionLeft].type == PConfig::UserControl::TypeJoyButton &&
+          cfg.getCtrl().map[PConfig::ActionLeft].joybutton.button == button) {
         if (--choose_type < 0)
           choose_type = (int)game->vehiclechoices.size()-1;
         return;
       }
-      if ((ctrl.map[ActionRight].type == UserControl::TypeJoyButton &&
-        ctrl.map[ActionRight].joybutton.button == button) ||
-        (ctrl.map[ActionNext].type == UserControl::TypeJoyButton &&
-        ctrl.map[ActionNext].joybutton.button == button)) {
+      if ((cfg.getCtrl().map[PConfig::ActionRight].type == PConfig::UserControl::TypeJoyButton &&
+          cfg.getCtrl().map[PConfig::ActionRight].joybutton.button == button) ||
+        (cfg.getCtrl().map[PConfig::ActionNext].type == PConfig::UserControl::TypeJoyButton &&
+            cfg.getCtrl().map[PConfig::ActionNext].joybutton.button == button)) {
         if (++choose_type >= (int)game->vehiclechoices.size())
           choose_type = 0;
         return;
@@ -2340,37 +1813,37 @@ void MainApp::joyButtonEvent(int which, int button, bool down)
 
     case AS_IN_GAME:
 
-      if (ctrl.map[ActionRecover].type == UserControl::TypeJoyButton &&
-        ctrl.map[ActionRecover].joybutton.button == button) {
+      if (cfg.getCtrl().map[PConfig::ActionRecover].type == PConfig::UserControl::TypeJoyButton &&
+          cfg.getCtrl().map[PConfig::ActionRecover].joybutton.button == button) {
         game->vehicle[0]->doReset();
         return;
       }
-      if (ctrl.map[ActionRecoverAtCheckpoint].type == UserControl::TypeJoyButton &&
-        ctrl.map[ActionRecoverAtCheckpoint].joybutton.button == button)
+      if (cfg.getCtrl().map[PConfig::ActionRecoverAtCheckpoint].type == PConfig::UserControl::TypeJoyButton &&
+          cfg.getCtrl().map[PConfig::ActionRecoverAtCheckpoint].joybutton.button == button)
       {
           game->resetAtCheckpoint(game->vehicle[0]);
           return;
       }
-      if (ctrl.map[ActionCamMode].type == UserControl::TypeJoyButton &&
-        ctrl.map[ActionCamMode].joybutton.button == button) {
+      if (cfg.getCtrl().map[PConfig::ActionCamMode].type == PConfig::UserControl::TypeJoyButton &&
+          cfg.getCtrl().map[PConfig::ActionCamMode].joybutton.button == button) {
 		cameraview = static_cast<CameraMode>((static_cast<int>(cameraview) + 1) % static_cast<int>(CameraMode::count));
         camera_user_angle = 0.0f;
         return;
       }
-      if (ctrl.map[ActionShowMap].type == UserControl::TypeJoyButton &&
-        ctrl.map[ActionShowMap].joybutton.button == button) {
+      if (cfg.getCtrl().map[PConfig::ActionShowMap].type == PConfig::UserControl::TypeJoyButton &&
+          cfg.getCtrl().map[PConfig::ActionShowMap].joybutton.button == button) {
         showmap = !showmap;
         return;
       }
-      if (ctrl.map[ActionPauseRace].type == UserControl::TypeJoyButton &&
-        ctrl.map[ActionPauseRace].joybutton.button == button)
+      if (cfg.getCtrl().map[PConfig::ActionPauseRace].type == PConfig::UserControl::TypeJoyButton &&
+          cfg.getCtrl().map[PConfig::ActionPauseRace].joybutton.button == button)
         {
             toggleSounds(pauserace);
             pauserace = !pauserace;
             return;
         }
-      if (ctrl.map[ActionShowUi].type == UserControl::TypeJoyButton &&
-        ctrl.map[ActionShowUi].joybutton.button == button) {
+      if (cfg.getCtrl().map[PConfig::ActionShowUi].type == PConfig::UserControl::TypeJoyButton &&
+          cfg.getCtrl().map[PConfig::ActionShowUi].joybutton.button == button) {
         showui = !showui;
         return;
       }
@@ -2385,28 +1858,28 @@ bool MainApp::joyAxisEvent(int which, int axis, float value, bool down)
     switch (appstate) {
     case AS_CHOOSE_VEHICLE:
 
-      if (ctrl.map[ActionLeft].type == UserControl::TypeJoyAxis &&
-        ctrl.map[ActionLeft].joyaxis.axis == axis &&
-        ctrl.map[ActionLeft].joyaxis.sign * value > 0.5) {
+      if (cfg.getCtrl().map[PConfig::ActionLeft].type == PConfig::UserControl::TypeJoyAxis &&
+          cfg.getCtrl().map[PConfig::ActionLeft].joyaxis.axis == axis &&
+          cfg.getCtrl().map[PConfig::ActionLeft].joyaxis.sign * value > 0.5) {
         if (!down)
           if (--choose_type < 0)
             choose_type = (int)game->vehiclechoices.size()-1;
         return true;
       }
-      else if (ctrl.map[ActionRight].type == UserControl::TypeJoyAxis &&
-        ctrl.map[ActionRight].joyaxis.axis == axis &&
-        ctrl.map[ActionRight].joyaxis.sign * value > 0.5) {
+      else if (cfg.getCtrl().map[PConfig::ActionRight].type == PConfig::UserControl::TypeJoyAxis &&
+          cfg.getCtrl().map[PConfig::ActionRight].joyaxis.axis == axis &&
+          cfg.getCtrl().map[PConfig::ActionRight].joyaxis.sign * value > 0.5) {
         if (!down)
           if (++choose_type >= (int)game->vehiclechoices.size())
             choose_type = 0;
         return true;
       }
-      else if ((ctrl.map[ActionLeft].type == UserControl::TypeJoyAxis &&
-        ctrl.map[ActionLeft].joyaxis.axis == axis &&
-        ctrl.map[ActionLeft].joyaxis.sign * value <= 0.5) ||
-        (ctrl.map[ActionRight].type == UserControl::TypeJoyAxis &&
-        ctrl.map[ActionRight].joyaxis.axis == axis &&
-        ctrl.map[ActionRight].joyaxis.sign * value <= 0.5)) {
+      else if ((cfg.getCtrl().map[PConfig::ActionLeft].type == PConfig::UserControl::TypeJoyAxis &&
+          cfg.getCtrl().map[PConfig::ActionLeft].joyaxis.axis == axis &&
+          cfg.getCtrl().map[PConfig::ActionLeft].joyaxis.sign * value <= 0.5) ||
+        (cfg.getCtrl().map[PConfig::ActionRight].type == PConfig::UserControl::TypeJoyAxis &&
+            cfg.getCtrl().map[PConfig::ActionRight].joyaxis.axis == axis &&
+            cfg.getCtrl().map[PConfig::ActionRight].joyaxis.sign * value <= 0.5)) {
           return false;
       }
 

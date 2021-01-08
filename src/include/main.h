@@ -19,14 +19,24 @@
 
 #pragma once
 
-#include <pengine.h>
-#include <psim.h>
-#include <unordered_map>
+#include "app.h"
+#include "codriver.h"
+#include "config.h"
 #include "ghost.h"
+#include "hiscore1.h"
+#include "option.h"
 #include "rigidity.h"
+#include "vmath.h"
+#include <unordered_map>
 
 // Forward declaration for TriggerGame to use
 class MainApp;
+class PParticleSystem;
+class PSim;
+class PTerrain;
+class PVehicle;
+class PVehicleType;
+class PVehicleTypePart;
 
 ///
 /// @brief This struct stores a checkpoint
@@ -139,17 +149,13 @@ private:
 	PRigidity rigidity;
 
 public:
-
     const float offroadtime_penalty_multiplier = 2.5f;
 
     ///
     /// @brief Used for "real-time" counting of seconds, to scare the player.
     /// @details it read offroad time of the user vehicle
     ///
-    float getOffroadTime() const
-    {
-        return uservehicle->offroadtime_total + (coursetime - uservehicle->offroadtime_begin);
-    }
+    float getOffroadTime() const;
 
 private:
 
@@ -210,15 +216,9 @@ public:
 	TriggerGame(MainApp *parent);
 	~TriggerGame();
 
-	void resetAtCheckpoint(PVehicle *veh)
-	{
-		veh->doReset(lastCkptPos, lastCkptOri);
-	}
+	void resetAtCheckpoint(PVehicle *veh);
 
-	void renderCodriverSigns()
-	{
-		cdsigns.render(coursetime);
-	}
+	void renderCodriverSigns();
 
 	bool loadVehicles();
 
@@ -228,25 +228,11 @@ public:
 
 	void tick(float delta);
 
-	bool isFinished() const
-	{
-		return (gamestate == Gamestate::finished) && (othertime <= 0.0f);
-	}
+	bool isFinished() const;
 
-	bool isRacing() const
-	{
-		return gamestate == Gamestate::racing;
-	}
+	bool isRacing() const;
 
-	Gamefinish getFinishState()
-	{
-		if (gamestate != Gamestate::finished)
-			return Gamefinish::not_finished;
-		if (coursetime + uservehicle->offroadtime_total * offroadtime_penalty_multiplier <= targettime)
-			return Gamefinish::pass;
-		else
-			return Gamefinish::fail;
-	}
+	Gamefinish getFinishState();
 };
 
 
@@ -318,62 +304,14 @@ struct SnowFlake
     float prevlife;
 };
 
-struct UserControl {
-	enum {
-		TypeUnassigned,
-		TypeKey,
-		TypeJoyButton,
-		TypeJoyAxis
-	} type;
-	union {
-		struct {
-			SDL_Keycode sym;
-		} key;
-		struct {
-			int button;
-		} joybutton;
-		struct {
-			int axis;
-			float sign;
-			float deadzone;
-			float maxrange;
-		} joyaxis; // more like half-axis, really
-	};
-
-	// from 0.0 to 1.0 depending on activation level
-	float value;
-};
-
 ///
 /// @brief this class is the whole Trigger Rally game. Create a MainApp object is the only thing main() does
 ///
 class MainApp : public PApp {
 public:
-	enum Speedunit {
-		mph,
-		kph
-	};
-
-	enum Speedstyle {
-		analogue,
-		hybrid
-	};
-
-	enum SnowFlakeType
-	{
-		point,
-		square,
-		textured
-	};
-
-	// TODO: these shouldn't be static+public, but the simplicity is worth it for now
-	static GLfloat    cfg_anisotropy;     ///< Anisotropic filter quality.
-	static bool       cfg_foliage;        ///< Foliage on/off flag.
-	static bool       cfg_roadsigns;      ///< Road signs on/off flag.
-	static bool       cfg_weather;        ///< Weather on/off flag.
+	SDL_Keycode getSdlKeySym(const std::string &s);
 
 private:
-
 	int appstate;
 
 	// TODO: use `aspect` instead of these?
@@ -384,7 +322,6 @@ private:
 	UnlockData player_unlocks; ///< Unlocks for current player, see `HiScore1`.
 
 public:
-
     ///
     /// @brief Checks if the given data was unlocked by the current player.
     /// @param [in] udata       Unlock data to be checked.
@@ -422,81 +359,7 @@ public:
     }
 
 private:
-
-	// Config settings
-
-	std::string cfg_playername;
-	bool cfg_copydefplayers;
-
-	int cfg_video_cx, cfg_video_cy;
-	bool cfg_video_fullscreen;
-
-	float cfg_drivingassist;
-	bool cfg_enable_sound;
-	bool cfg_enable_codriversigns;
-	bool cfg_enable_fps;
-	bool cfg_enable_ghost;
-
-	long int cfg_skip_saves;
-
-	/// Basic volume control.
-	float cfg_volume_engine       = 0.33f;    ///< Engine.
-	float cfg_volume_sfx          = 1.00f;    ///< Sound effects (wind, gear change, crash, skid, etc.)
-	float cfg_volume_codriver     = 1.00f;    ///< Codriver voice.
-
-	/// Search paths for the data directory, as read from the configuration.
-	std::list<std::string> cfg_datadirs;
-
-	/// Name of the codriver whose words to load.
-	/// Must be a valid directory in /data/sounds/codriver/.
-	std::string cfg_codrivername;
-
-	/// Name of the codriver icon set to load.
-	/// Must be a valid directory in /data/textures/CodriverSigns/.
-	std::string cfg_codriversigns;
-
-	/// User settings for codriver signs: position, scale, fade start time.
-	PCodriverUserConfig cfg_codriveruserconfig;
-
-	Speedunit cfg_speed_unit;
-	Speedstyle cfg_speed_style;
-	float hud_speedo_start_deg;
-	float hud_speedo_mps_deg_mult;
-	float hud_speedo_mps_speed_mult;
-
-	SnowFlakeType cfg_snowflaketype = SnowFlakeType::point;
-
-	bool cfg_dirteffect = true;
-
-	enum Action {
-		ActionForward,
-		ActionBack,
-		ActionLeft,
-		ActionRight,
-		ActionHandbrake,
-		ActionRecover,
-		ActionRecoverAtCheckpoint,
-		ActionCamMode,
-		ActionCamLeft,
-		ActionCamRight,
-		ActionShowMap,
-		ActionShowUi,
-		ActionShowCheckpoint,
-		ActionPauseRace,
-		ActionNext,
-		ActionCount
-	};
-
-	struct {
-		std::string action_name[ActionCount];
-		UserControl map[ActionCount];
-	} ctrl;
-
-	//
-
 	float splashtimeout;
-
-	//
 
 	std::vector<TriggerLevel> levels;
 	std::vector<TriggerEvent> events;
@@ -505,13 +368,16 @@ private:
 
 	// for level screen
 	Gui gui;
+	// for option screen
+	POption option;
 
 public:
-
 	LevelState lss;
 
-private:
+	// for handling configuration
+	PConfig cfg;
 
+private:
 	HISCORE1_SORT hs_sort_method = HISCORE1_SORT::BY_TOTALTIME_ASC;
 	RaceData race_data;
 	std::vector<TimeEntry> current_times;
@@ -546,7 +412,6 @@ private:
 			*tex_damage_front_right,
 			*tex_damage_rear_left,
 			*tex_damage_rear_right;
-
 
 	std::unordered_map<std::string, PTexture *> tex_codriversigns;
 	std::unordered_map<std::string, PAudioSample *> aud_codriverwords;
@@ -598,8 +463,6 @@ private:
 	std::vector<RainDrop> rain;
 	std::vector<SnowFlake> snowfall;
 
-	//
-
 	int loadscreencount;
 
 	float choose_spin;
@@ -615,8 +478,11 @@ private:
 	// Record and display of ghost vehicles
 	PGhost ghost;
 
-protected:
+	void loadCodriversigns();
+	void loadCodrivername();
+    void reloadAll();
 
+protected:
 	void renderWater();
 	void renderSky(const mat44f &cammat);
 
@@ -637,25 +503,22 @@ protected:
 	void finishRace(Gamefinish state, float coursetime);
 
 public:
-	MainApp(const std::string &title, const std::string &name):
-
-    PApp(title, name),
-    ghost(0.1f)
+	MainApp(const std::string &title, const std::string &name) :
+            PApp(title, name),
+            option(gui, cfg),
+            cfg(this),
+            ghost(0.1f)
 	{
 	}
 	//MainApp::~MainApp(); // should not have destructor, use unload
 
-	float getCodriverVolume() const
-	{
-		return cfg_volume_codriver;
-	}
+	float getCodriverVolume() const;
 
 	void config();
 	void load();
 	void unload();
 
 	void copyDefaultPlayers() const;
-	void loadConfig();
 	bool loadAll();
 	bool loadLevelsAndEvents();
 	bool loadLevel(TriggerLevel &tl);
@@ -699,8 +562,5 @@ public:
         return tex_codriversigns;
     }
 
-    PCodriverUserConfig getCodriverUserConfig() const
-    {
-        return cfg_codriveruserconfig;
-    }
+    PCodriverUserConfig getCodriverUserConfig() const;
 };

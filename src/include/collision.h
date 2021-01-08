@@ -16,11 +16,12 @@
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 //
 
-#ifndef COLLISIONH
-#define COLLISIONH
+#pragma once
 
 #include "psim.h"
 #include "vehicle.h"
+
+class PTerrainFoliage;
 
 ///
 /// @brief Handling of collisions with world objects
@@ -47,5 +48,3 @@ private:
   // Position to apply crash force
   vec3f crashpoint;
 };
-
-#endif

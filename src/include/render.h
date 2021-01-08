@@ -4,12 +4,20 @@
 // Copyright 2004-2006 Jasmine Langridge, jas@jareiko.net
 // License: GPL version 2 (see included gpl.txt)
 
-#ifndef RENDER_H_INCLUDED
-#define RENDER_H_INCLUDED
+#pragma once
 
-#include <cmath>
-#include "rigidity.h"
+#include "subsys.h"
 #include "vbuffer.h"
+#include <cmath>
+
+class MainApp;
+class PEffect;
+class PException;
+class PModel;
+class PRigidity;
+class PSSEffect;
+class PSSTexture;
+class PTexture;
 
 struct PParticle_s {
   vec3f pos,linvel;
@@ -84,6 +92,7 @@ struct PVert_tv {
 #define PTEXT_VTA_BOTTOM  0x00000000 // default
 #define PTEXT_VTA_CENTER  0x00000100
 #define PTEXT_VTA_TOP     0x00000200
+#define PTEXT_HIGHLIGHT   0x00010000
 
 class PSSRender : public PSubsystem {
 private:
@@ -172,12 +181,14 @@ private:
 
 public:
   PTexture () : texid (0) { }
-  PTexture (const std::string &filename, bool genMipmaps, bool clamp) : texid (0) { load (filename, genMipmaps, clamp); }
-  PTexture (PImage &img, bool genMipmaps, bool clamp) : texid (0) { load (img, genMipmaps, clamp); }
+  PTexture (const std::string &filename, GLfloat cfgAnisotropy, bool genMipmaps, bool clamp) : texid (0) {
+    load (filename, cfgAnisotropy, genMipmaps, clamp); }
+  PTexture (PImage &img, GLfloat cfgAnisotropy, bool genMipmaps, bool clamp) : texid (0) {
+    load (img, cfgAnisotropy, genMipmaps, clamp); }
   ~PTexture() { unload (); }
 
-  void load (const std::string &filename, bool genMipmaps, bool clamp);
-  void load(PImage &img, bool genMipmaps = true, bool clamp = false);
+  void load (const std::string &filename, GLfloat cfgAnisotropy, bool genMipmaps, bool clamp);
+  void load(PImage &img, GLfloat cfgAnisotropy, bool genMipmaps = true, bool clamp = false);
   void loadPiece(PImage &img, int offx, int offy, int sizex, int sizey, bool genMipmaps = true, bool clamp = false);
   void loadAlpha(const std::string &filename, bool genMipmaps = true, bool clamp = false);
   void loadAlpha(PImage &img, bool genMipmaps = true, bool clamp = false);
@@ -614,7 +625,8 @@ protected:
   }
 
 public:
-  PTerrain(XMLElement *element, const std::string &filepath, PSSTexture &ssTexture, const PRigidity &rigidity);
+  PTerrain(XMLElement *element, const std::string &filepath, PSSTexture &ssTexture,
+      const PRigidity &rigidity, bool cfgFoliage, bool cfgRoadsigns);
   ~PTerrain();
 
   void unload();
@@ -835,5 +847,3 @@ private:
   // Rigidity map for foliage and road signs
   const PRigidity &rigidity;
 };
-
-#endif // RENDER_H_INCLUDED

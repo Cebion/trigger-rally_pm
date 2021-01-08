@@ -4,11 +4,10 @@
 // Functions protoypes for functions that wrap common PHYSFS functionalities
 //
 
-#ifndef PHYSFS_UTILSH
-#define PHYSFS_UTILSH
+#pragma once
 
+#include <SDL2/SDL.h>
 #include <string>
-
 
 Sint64 physfs_size(SDL_RWops *context);
 Sint64 physfs_seek(SDL_RWops *context, Sint64 offset, int whence);
@@ -42,5 +41,3 @@ std::string physfs_getDir();
 
 // return if the file is a directory
 bool physfs_isDirectory(const std::string& file);
-
-#endif

@@ -5,6 +5,7 @@
 // License: GPL version 2 (see included gpl.txt)
 
 #include "pengine.h"
+#include "render.h"
 
 PSSRender::PSSRender(PApp &parentApp) : PSubsystem(parentApp)
 {
@@ -240,6 +241,9 @@ void PSSRender::drawText(const std::string &text, uint32 flags)
     const GLfloat addx = 1.0f / 12.0f;
     const GLfloat addy = 1.0f / 8.0f;
 
+    float color[4];
+    glGetFloatv(GL_CURRENT_COLOR, color);
+
     glPushMatrix();
 
     if (flags & PTEXT_VTA_CENTER)
@@ -254,12 +258,12 @@ void PSSRender::drawText(const std::string &text, uint32 flags)
     if (flags & PTEXT_HZA_RIGHT)
         glTranslatef(-1.0f * text.length() * font_aspect, 0.0f, 0.0f);
 
-    for (char c: text)
+    for (auto it = text.cbegin() ; it != text.cend(); ++it)
     {
         GLfloat tx;
         GLfloat ty;
 
-        switch (c)
+        switch (*it)
         {
 #define X(Char, Row, Column)    case Char: tx = Column * addx; ty = Row * addy; break;
             PTEXT_HARDCODED_POSITIONS
@@ -270,6 +274,37 @@ void PSSRender::drawText(const std::string &text, uint32 flags)
                 break;
         }
 
+        if (flags & PTEXT_HIGHLIGHT) {
+            float ystart = 0.0f;
+            float yend = font_aspect;
+
+            if (text.cbegin() != text.cend() - 1) {
+              if (it == text.cbegin())
+                yend = font_aspect * 0.875f;
+              else if (it == text.cend() - 1)
+                ystart = font_aspect * 0.125f;
+              else {
+                ystart = font_aspect * 0.125f;
+                yend = font_aspect * 0.875f;
+              }
+            }
+
+            glScalef(4.0f/3.0f, 4.0f/3.0f, 1.0f);
+            glTranslatef(-1.0f/12.0f, -1.0f/12.0f, 0.0f);
+            glDisable(GL_TEXTURE_2D);
+            glColor4f(0.0f, 0.0f, 0.0f, 0.25f);
+            glBegin(GL_TRIANGLE_STRIP);
+            glVertex2f(ystart, 0.0f);
+            glVertex2f(yend, 0.0f);
+            glVertex2f(ystart, 1.0f);
+            glVertex2f(yend, 1.0f);
+            glEnd();
+            glEnable(GL_TEXTURE_2D);
+            glTranslatef(1.0f/12.0f, 1.0f/12.0f, 0.0f);
+            glScalef(0.75f, 0.75f, 1.0f);
+        }
+
+        glColor4fv(color);
         glBegin(GL_TRIANGLE_STRIP);
         glTexCoord2f(tx, ty);
         glVertex2f(0.0f, 0.0f);

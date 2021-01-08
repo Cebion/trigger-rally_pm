@@ -16,8 +16,9 @@
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 //
 
-#ifndef RIGIDITYH
-#define RIGIDITYH
+#pragma once
+
+#include <map>
 
 class PRigidity {
 public:
@@ -30,5 +31,3 @@ private:
   // Core data containing sprite name value pairs
   std::map<std::string, float> rigiditymap;
 };
-
-#endif

@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "audio.h"
+#include "render.h"
 #include <cstddef>
 #include <forward_list>
 #include <iterator>

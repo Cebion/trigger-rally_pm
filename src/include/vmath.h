@@ -4,8 +4,7 @@
 // Copyright 2004-2006 Jasmine Langridge, jas@jareiko.net
 // License: GPL version 2 (see included gpl.txt)
 
-#ifndef VMATHH
-#define VMATHH
+#pragma once
 
 #include <cstdlib>
 #include <math.h>
@@ -671,6 +670,3 @@ template<class T> inline T intersect_plane_ray(const plane<T> &pln, const vec3<T
     return (T)0;
   }
 }
-
-
-#endif

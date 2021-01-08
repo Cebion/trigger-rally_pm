@@ -16,8 +16,7 @@
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 //
 
-#ifndef DAMAGEH
-#define DAMAGEH
+#pragma once
 
 #include "vmath.h"
 #include <vector>
@@ -25,6 +24,7 @@
 class PReferenceFrame;
 struct vehicle_clip_s;
 
+///
 /// @brief Damage indicator in racing UI
 ///
 class PDamage {
@@ -53,5 +53,3 @@ private:
   // Indicator flashes on impact
   bool flash[DamageSide::DamageSideSize];
 };
-
-#endif
