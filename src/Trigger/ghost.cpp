@@ -32,7 +32,7 @@
 /// @brief Writes a GhostWheel object to an output stream.
 /// @param [in,out] os  Output stream
 /// @param [in] gw      Ghost wheel to be written
-/// @returns The output stream
+/// @return The output stream
 ///
 inline std::ostream & operator << (std::ostream &os, const PGhost::GhostWheel &gw)
 {

@@ -23,9 +23,8 @@
 #include "vehicle.h"
 
 ///
-/// @brief Load configurations from files
-/// @todo Since C++11 introduced default members initializers, the defaults could
-///  be set in the class declaration directly rather than in this function.
+/// @brief Constructor without functionality
+/// @param [in] app Used by load function to change a few settings
 ///
 PConfig::PConfig(MainApp *app) :
     mainapp(app),
@@ -34,6 +33,11 @@ PConfig::PConfig(MainApp *app) :
 {
 }
 
+///
+/// @brief Load configurations from files
+/// @todo Since C++11 introduced default members initializers, the defaults could
+///  be set in the class declaration directly rather than in this function.
+///
 void PConfig::loadConfig()
 {
   PUtil::outLog() << "Loading game configuration" << std::endl;
@@ -58,7 +62,6 @@ void PConfig::loadConfig()
   cfg_roadsigns = true;
   cfg_weather = true;
   cfg_speed_unit = mph;
-  cfg_speed_style = analogue;
   cfg_snowflaketype = SnowFlakeType::point;
   cfg_dirteffect = true;
   cfg_enable_fps = false;
@@ -567,6 +570,9 @@ void PConfig::loadConfig()
   }
 }
 
+///
+/// @brief Store configuration to XML file
+///
 void PConfig::storeConfig()
 {
   XMLPrinter printer;

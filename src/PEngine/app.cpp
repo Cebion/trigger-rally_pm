@@ -150,6 +150,13 @@ void PApp::stereoFrustum(float xmin, float xmax, float ymin, float ymax, float z
   glFrustum(xmin + xmove, xmax + xmove, ymin, ymax, znear, zfar);
 }
 
+///
+/// @brief Set size of game screen
+/// @param [in] w           Pixel width of screen
+/// @param [in] h           Pixel height of screen
+/// @param [in] fullScreen  Fullscreen mode
+/// @param [in] hideFrame   Display frame of OS
+///
 void PApp::setScreenMode(int w, int h, bool fullScreen, bool hideFrame)
 {
     // use automatic video mode

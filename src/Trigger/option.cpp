@@ -22,6 +22,11 @@
 #include "render.h"
 #include <algorithm>
 
+///
+/// @brief Constructor initializing data of options displayed in menu
+/// @param [in] parent  Game menu used to add labels to
+/// @param [in] config  Configuration data of game from XML file
+///
 POption::POption(Gui &parent, PConfig &config) :
     parent(parent),
     cfg(config),
@@ -57,6 +62,9 @@ POption::POption(Gui &parent, PConfig &config) :
     { "off", "on" }, 0 });
 }
 
+///
+/// @brief Renders option menu
+///
 void POption::render()
 {
   pos = 0;
@@ -71,6 +79,10 @@ void POption::render()
   }
 }
 
+///
+/// @brief Called when an option is clicked
+/// @param [in] index   Lower word holds row, higher word holds index
+///
 void POption::select(int index)
 {
   unsigned int row = index & 0xFFFF;
@@ -140,6 +152,10 @@ void POption::select(int index)
   }
 }
 
+///
+/// @brief Render a single option row
+/// @param [in] option  Data of option item
+///
 void POption::addOption(Option &option)
 {
   unsigned int cursor = 0;
@@ -162,6 +178,10 @@ void POption::addOption(Option &option)
   ++pos;
 }
 
+///
+/// @brief Retrieves configuration data to select active option
+/// @param [in] option  Data of option item
+///
 void POption::updateSelect(Option &option)
 {
   switch(option.id) {
@@ -236,6 +256,12 @@ void POption::updateSelect(Option &option)
   }
 }
 
+///
+/// @brief Return index of string in string vector
+/// @param [in] str String to find
+/// @param [in] vec Vector of strings
+/// @return Index of string or index 0 if not found
+///
 unsigned int POption::findStringPos(const std::string &str, std::vector<std::string> &vec)
 {
   std::vector<std::string>::iterator it = std::find(vec.begin(), vec.end(), str);

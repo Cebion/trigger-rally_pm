@@ -26,7 +26,7 @@ class GuiWidget;
 class PConfig;
 
 ///
-/// @brief Item in options menu
+/// @brief Options menu
 ///
 class POption {
 public:
@@ -53,11 +53,12 @@ private:
     OptionDirtEffect,
     OptionMaxSize
   };
+  /// Data of one option item
   struct Option {
-    OptionId id;
-    std::string text;
-    std::vector<std::string> values;
-    unsigned int select;
+    OptionId id;                        ///< Identifier of option from enum
+    std::string text;                   ///< Text displayed in options menu
+    std::vector<std::string> values;    ///< Options that can be selected in menu
+    unsigned int select;                ///< Index of option currently selected
   };
 
   POption();
@@ -68,8 +69,8 @@ private:
   void updateSelect(Option &option);
   unsigned int findStringPos(const std::string &str, std::vector<std::string> &vec);
 
-  Gui &parent;
-  PConfig &cfg;
-  unsigned int pos;
-  std::vector<Option> options;
+  Gui &parent;                  ///< Holds functions to add labels
+  PConfig &cfg;                 ///< Configuration data of the game
+  unsigned int pos;             ///< Index of of each option row
+  std::vector<Option> options;  ///< Data of each option item
 };

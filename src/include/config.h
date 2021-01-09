@@ -24,22 +24,21 @@
 
 class MainApp;
 
+///
+/// @brief Loading and storing of configuration settings
+///
 class PConfig {
 public:
+  /// Unit of vehicle speed
   enum Speedunit {
-    mph,
-    kph
+    mph,        ///< Miles per hour
+    kph         ///< Kilometers per hour
   };
-
-  enum Speedstyle {
-    analogue,
-    hybrid
-  };
-
+  /// Snow flake style
   enum SnowFlakeType {
-    point,
-    square,
-    textured
+    point,      ///< Point shape
+    square,     ///< Square shape
+    textured    ///< Textured snow flake
   };
 
   struct UserControl {
@@ -143,11 +142,11 @@ private:
   PConfig(const PConfig&);
   PConfig& operator=(const PConfig&);
 
-  MainApp *mainapp;
+  MainApp *mainapp;         ///< Used to some change settings in load function
 
-  XMLDocument xmlfile;
-  XMLElement *rootelem;
-  std::string cfgfilename;
+  XMLDocument xmlfile;      ///< In-memory copy of config file
+  XMLElement *rootelem;     ///< Root element of XML config file
+  std::string cfgfilename;  ///< Path to XML configuration file
 
   // Config settings
   std::string cfg_playername;
@@ -184,7 +183,6 @@ private:
   PCodriverUserConfig cfg_codriveruserconfig;
 
   Speedunit cfg_speed_unit;
-  Speedstyle cfg_speed_style;
   float hud_speedo_start_deg;
   float hud_speedo_mps_deg_mult;
   float hud_speedo_mps_speed_mult;
