@@ -39,6 +39,7 @@ the game. Ick.
 #define AM_TOP_LVL_BTIMES     33  // Show best times for Single level (button)
 #define AM_TOP_PRAC_BTIMES    34  // Show best times for Practice level (button)
 #define AM_TOP_OPT            40  // Options menu
+#define AM_TOP_CTRL           41  // Controls menu
 
 // actions
 #define AA_INIT               1
@@ -65,6 +66,8 @@ the game. Ick.
 #define AA_GO_OPT             70
 #define AA_PICK_OPT           71
 #define AA_RELOAD_ALL         72
+#define AA_GO_CTRL            73
+#define AA_PICK_CTRL          74
 
 // best times table actions for columns
 #define AA_SORT_BY_PLAYERNAME       1001

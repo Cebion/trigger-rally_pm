@@ -168,23 +168,23 @@
 
 	<controls>
 		<keyboard enable="yes">
-			<key action="forward" id="SDLK_UP" />
-			<key action="back" id="SDLK_DOWN" />
-			<key action="left" id="SDLK_LEFT" />
-			<key action="right" id="SDLK_RIGHT" />
-			<key action="handbrake" id="SDLK_SPACE" />
-			<key action="recover" id="SDLK_r" />
-			<key action="recoveratcheckpoint" id="SDLK_q" />
-			<key action="cammode" id="SDLK_c" />
-			<key action="camleft" id="SDLK_PERIOD" />
-			<key action="camright" id="SDLK_COMMA" />
-			<key action="showmap" id="SDLK_m" />
-			<key action="pauserace" id="SDLK_p" />
-			<key action="showui" id="SDLK_n" />
-			<key action="showcheckpoint" id="SDLK_k" />
-			<key action="next" id="SDLK_COMMA" />
+			<key action="forward" id="Up" />
+			<key action="back" id="Down" />
+			<key action="left" id="Left" />
+			<key action="right" id="Right" />
+			<key action="handbrake" id="Space" />
+			<key action="recover" id="R" />
+			<key action="recoveratcheckpoint" id="Q" />
+			<key action="cammode" id="C" />
+			<key action="camleft" id="." />
+			<key action="camright" id="," />
+			<key action="showmap" id="M" />
+			<key action="pauserace" id="P" />
+			<key action="showui" id="N" />
+			<key action="showcheckpoint" id="K" />
+			<key action="next" id="," />
 		</keyboard>
-		<!-- For a list of SDLKey ID's visit:
+		<!-- For a list of SDL key names visit:
 			http://wiki.libsdl.org/SDL_Keycode
 		-->
 

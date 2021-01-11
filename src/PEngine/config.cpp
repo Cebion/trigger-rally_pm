@@ -478,7 +478,7 @@ void PConfig::loadConfig()
 
               ctrl.map[a].type = UserControl::TypeKey;
               //ctrl.map[a].key.sym = (SDLKey) atoi(val);
-              ctrl.map[a].key.sym = mainapp->getSdlKeySym(val);
+              ctrl.map[a].key.sym = SDL_GetKeyFromName(val);
             }
           }
 
@@ -660,6 +660,31 @@ void PConfig::storeConfig()
       walk->SetAttribute("codriver", cfg_codrivername.c_str());
 
       walk->SetAttribute("codriversigns", cfg_codriversigns.c_str());
+    }
+    else if (!strcmp(walk->Value(), "controls")) {
+      for (XMLElement *walk2 = walk->FirstChildElement(); walk2; walk2 = walk2->NextSiblingElement()) {
+        if (!strcmp(walk2->Value(), "keyboard")) {
+          for (XMLElement *walk3 = walk2->FirstChildElement(); walk3; walk3 = walk3->NextSiblingElement()) {
+            if (!strcmp(walk3->Value(), "key")) {
+              const char *val = walk3->Attribute("action");
+              unsigned int i = 0;
+
+              while (i < ActionCount) {
+                if (ctrl.action_name[i] == val && ctrl.map[i].type == UserControl::TypeKey) {
+                  walk3->SetAttribute("id", SDL_GetKeyName(ctrl.map[i].key.sym));
+                  break;
+                }
+                ++i;
+              }
+
+              if (i >= ActionCount) {
+                PUtil::outLog() << "Config ctrls: Unknown action \"" << val << "\"" << std::endl;
+                continue;
+              }
+            }
+          }
+        }
+      }
     }
   }
 

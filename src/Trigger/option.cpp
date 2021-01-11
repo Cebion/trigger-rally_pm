@@ -24,8 +24,8 @@
 
 ///
 /// @brief Constructor initializing data of options displayed in menu
-/// @param [in] parent  Game menu used to add labels to
-/// @param [in] config  Configuration data of game from XML file
+/// @param[in] parent   Game menu used to add labels to
+/// @param[in] config   Configuration data of game from XML file
 ///
 POption::POption(Gui &parent, PConfig &config) :
     parent(parent),
@@ -81,7 +81,7 @@ void POption::render()
 
 ///
 /// @brief Called when an option is clicked
-/// @param [in] index   Lower word holds row, higher word holds index
+/// @param[in] index    Lower word holds row, higher word holds index
 ///
 void POption::select(int index)
 {

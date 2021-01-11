@@ -184,6 +184,14 @@ void MainApp::levelScreenAction(int action, int index)
       option.select(index);
       break;
 
+    case AA_GO_CTRL:
+      lss.state = AM_TOP_CTRL;
+      break;
+
+    case AA_PICK_CTRL:
+      control.select(index);
+      break;
+
   default:
     PUtil::outLog() << "ERROR: invalid action code " << action << std::endl;
     requestExit();
@@ -201,11 +209,13 @@ void MainApp::levelScreenAction(int action, int index)
     gui.makeClickable(
       gui.addLabel(400.0f,400.0f, "options", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER, 40.0f), AA_GO_OPT, 0);
     gui.makeClickable(
-      gui.addLabel(400.0f,350.0f, "events", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER, 40.0f), AA_GO_EVT, 0);
+      gui.addLabel(400.0f,350.0f, "controls", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER, 40.0f), AA_GO_CTRL, 0);
     gui.makeClickable(
-      gui.addLabel(400.0f,300.0f, "practice", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER, 40.0f), AA_GO_PRAC, 0);
+      gui.addLabel(400.0f,300.0f, "events", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER, 40.0f), AA_GO_EVT, 0);
     gui.makeClickable(
-      gui.addLabel(400.0f,250.0f, "single race", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER, 40.0f), AA_GO_LVL, 0);
+      gui.addLabel(400.0f,250.0f, "practice", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER, 40.0f), AA_GO_PRAC, 0);
+    gui.makeClickable(
+      gui.addLabel(400.0f,200.0f, "single race", PTEXT_HZA_CENTER | PTEXT_VTA_CENTER, 40.0f), AA_GO_LVL, 0);
     gui.makeClickable(
       gui.addLabel(10.0f,30.0f, "quit", PTEXT_HZA_LEFT | PTEXT_VTA_CENTER, 40.0f), AA_GO_QUIT, 0);
 
@@ -832,6 +842,10 @@ void MainApp::levelScreenAction(int action, int index)
     option.render();
     break;
 
+  case AM_TOP_CTRL:
+    control.render();
+    break;
+
   default:
     gui.addLabel(400.0f,300.0f, "Error in menu system, sorry", PTEXT_HZA_CENTER | PTEXT_VTA_TOP, 30.0f, LabelStyle::Marked);
     gui.makeClickable(
@@ -953,6 +967,12 @@ void MainApp::mouseButtonEvent(const SDL_MouseButtonEvent &mbe)
 //
 void MainApp::handleLevelScreenKey(const SDL_KeyboardEvent &ke)
 {
+  if (lss.state == AM_TOP_CTRL)
+    if (control.handleKey(ke)) {
+      levelScreenAction(AA_GO_CTRL, 0);
+      return;
+    }
+
   switch (ke.keysym.sym) {
   case SDLK_ESCAPE:
     switch(lss.state) {
@@ -984,6 +1004,9 @@ void MainApp::handleLevelScreenKey(const SDL_KeyboardEvent &ke)
         levelScreenAction(AA_PICK_PRAC_LVL, lss.currentlevel);
         break;
     case AM_TOP_OPT:
+      levelScreenAction(AA_RELOAD_ALL, 0);
+      break;
+    case AM_TOP_CTRL:
       levelScreenAction(AA_RELOAD_ALL, 0);
       break;
     default:
@@ -1431,7 +1454,11 @@ void Gui::render()
     case GWT_GRAPHIC: {
       vec4f colc = vec4f(1.0f, 1.0f, 1.0f, 1.0f);
 
-      if (widget[i].clickable) {
+      // Work-around for drawing transparent background
+      if (!widget[i].tex) {
+        colc = vec4f(0.0f, 0.0f, 0.0f, 0.25f);
+      }
+      else if (widget[i].clickable) {
         colc = INTERP(widget[i].colclick, widget[i].colhover, widget[i].glow);
       } else {
         colc = widget[i].colnormal;
@@ -1440,7 +1467,10 @@ void Gui::render()
       vec2f min = widget[i].pos;
       vec2f max = widget[i].pos + widget[i].dims_min;
 
-      widget[i].tex->bind();
+      if (widget[i].tex)
+        widget[i].tex->bind();
+      else
+        glDisable(GL_TEXTURE_2D);
 
       glColor4fv(colc);
 
@@ -1450,6 +1480,9 @@ void Gui::render()
       glTexCoord2f(1.0f, 1.0f); glVertex2f(max.x, max.y);
       glTexCoord2f(0.0f, 1.0f); glVertex2f(min.x, max.y);
       glEnd();
+
+      if (!widget[i].tex)
+        glEnable(GL_TEXTURE_2D);
       } break;
     }
   }
