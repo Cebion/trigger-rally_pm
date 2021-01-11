@@ -116,7 +116,10 @@ void POption::select(int index)
     }
     break;
   case OptionTextureQuality:
-    cfg.setAnisotropy(pow(2, column - 1));
+    if (column)
+      cfg.setAnisotropy(pow(2, column - 1));
+    else
+      cfg.setAnisotropy(0.0f);
     break;
   case OptionSnowflakes:
     if (column) {
