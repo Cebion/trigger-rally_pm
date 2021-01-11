@@ -109,12 +109,11 @@ void PControl::addControl(Control &control, bool active)
   if (!active) {
     SDL_Keycode keycode = cfg.getCtrl().map[control.action].key.sym;
 
-    if (keycode == SDLK_UNKNOWN)
+    keyname = SDL_GetKeyName(cfg.getCtrl().map[control.action].key.sym);
+    if (keycode == SDLK_UNKNOWN || keyname == "" || !isascii(keyname[0]))
       keyname = "NOT ASSIGNED";
-    else {
-      keyname = SDL_GetKeyName(cfg.getCtrl().map[control.action].key.sym);
+    else
       transform(keyname.begin(), keyname.end(), keyname.begin(), ::tolower);
-    }
   }
 
   parent.addLabel(80.0f, 490.0f - (float)pos * 30.0f,
