@@ -1648,6 +1648,14 @@ bool MainApp::joyAxisEvent(int which, int axis, float value, bool down)
   return down;
 }
 
+float MainApp::getCtrlActionBackValue() {
+  return cfg.getCtrl().map[PConfig::ActionBack].value;
+}
+
+int MainApp::getVehicleCurrentGear() {
+  return game->vehicle.front()->getCurrentGear();
+}
+
 int main(int argc, char *argv[])
 {
     return MainApp("Trigger Rally", ".trigger-rally").run(argc, argv);

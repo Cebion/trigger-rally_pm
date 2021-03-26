@@ -268,4 +268,7 @@ class PApp
         virtual void cursorMoveEvent(int posx, int posy);
         virtual void joyButtonEvent(int which, int button, bool down);
         virtual bool joyAxisEvent(int which, int axis, float value, bool down);
+
+        virtual float getCtrlActionBackValue();
+        virtual int getVehicleCurrentGear();
 };

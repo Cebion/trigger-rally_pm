@@ -844,36 +844,44 @@ void PApp::drawModel(PModel &model, float alpha)
     if (!mesh->effect)
       mesh->effect = getSSEffect().loadEffect(mesh->fxname);
 
-    int numPasses = 0;
-    if (mesh->effect->renderBegin(&numPasses, getSSTexture())) {
-      if (alpha < 1.0f) {
-        glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-        glEnable(GL_BLEND);
-        glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
-      }
+    for (int j=0; j<mesh->effect->getNumTechniques(); j++) {
+      mesh->effect->setCurrentTechnique(j);
 
-      for (int i=0; i<numPasses; i++) {
-        mesh->effect->renderPass(i);
-        glBegin(GL_TRIANGLES);
-        for (unsigned int f=0; f<mesh->face.size(); f++) {
-          //glNormal3fv(mesh->face[f].facenormal);
-          glNormal3fv(mesh->norm[mesh->face[f].nr[0]]);
-          glTexCoord2fv(mesh->texco[mesh->face[f].tc[0]]);
-          glVertex3fv(mesh->vert[mesh->face[f].vt[0]]);
-
-          glNormal3fv(mesh->norm[mesh->face[f].nr[1]]);
-          glTexCoord2fv(mesh->texco[mesh->face[f].tc[1]]);
-          glVertex3fv(mesh->vert[mesh->face[f].vt[1]]);
-
-          glNormal3fv(mesh->norm[mesh->face[f].nr[2]]);
-          glTexCoord2fv(mesh->texco[mesh->face[f].tc[2]]);
-          glVertex3fv(mesh->vert[mesh->face[f].vt[2]]);
+      int numPasses = 0;
+      if (mesh->effect->renderBegin(&numPasses, getSSTexture())) {
+        if (mesh->effect->getTechniqueName(j) == "EmissionTechMTL"
+            && (getCtrlActionBackValue() < 0.5f || getVehicleCurrentGear() == -1 || alpha < 1.0f)) {
+          continue;
         }
-        glEnd();
+        if (alpha < 1.0f) {
+          glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+          glEnable(GL_BLEND);
+          glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
+        }
+
+        for (int i=0; i<numPasses; i++) {
+          mesh->effect->renderPass(i);
+          glBegin(GL_TRIANGLES);
+          for (unsigned int f=0; f<mesh->face.size(); f++) {
+            //glNormal3fv(mesh->face[f].facenormal);
+            glNormal3fv(mesh->norm[mesh->face[f].nr[0]]);
+            glTexCoord2fv(mesh->texco[mesh->face[f].tc[0]]);
+            glVertex3fv(mesh->vert[mesh->face[f].vt[0]]);
+
+            glNormal3fv(mesh->norm[mesh->face[f].nr[1]]);
+            glTexCoord2fv(mesh->texco[mesh->face[f].tc[1]]);
+            glVertex3fv(mesh->vert[mesh->face[f].vt[1]]);
+
+            glNormal3fv(mesh->norm[mesh->face[f].nr[2]]);
+            glTexCoord2fv(mesh->texco[mesh->face[f].tc[2]]);
+            glVertex3fv(mesh->vert[mesh->face[f].vt[2]]);
+          }
+          glEnd();
+        }
+        mesh->effect->renderEnd();
       }
       if (alpha < 1.0f)
         glBlendFunc(GL_ONE,GL_ZERO);
-      mesh->effect->renderEnd();
     }
   }
 }
@@ -950,4 +958,11 @@ bool PApp::joyAxisEvent(int which, int axis, float value, bool down)
   return false;
 }
 
+float PApp::getCtrlActionBackValue()
+{
+  return 0.0f;
+}
 
+int PApp::getVehicleCurrentGear() {
+  return 0;
+}

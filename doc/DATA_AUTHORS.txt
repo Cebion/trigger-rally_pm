@@ -155,6 +155,9 @@ Jared Buckner, Onsemeliot
 Keistutis, Onsemeliot
 	textures/veg/bush-low.png (CC0) https://openclipart.org/detail/202745/bush
 
+kirada, Onsemeliot
+	vehicles/cordo_kitcar/cordo_kitcar_emission.png (GPL)
+
 Bruno Kleinert, rubberduck
 	sounds/shiftdown.wav (CC0, PD) https://opengameart.org/content/25-cc0-bang-firework-sfx
 	sounds/shiftup.wav (CC0, PD) https://opengameart.org/content/25-cc0-bang-firework-sfx
@@ -993,6 +996,8 @@ Onsemeliot
 	vehicles/fox_kitcar/fox_kitcar.png (GPL)
 	vehicles/fox_super500/fox_super500.png (GPL)
 	vehicles/fox_wrc/fox_wrc.png (GPL)
+	vehicles/evo_kitcar/evo_kitcar-emission.png (GPL)
+	vehicles/fox_kitcar/fox_kitcar_emission.png (GPL)
 
 Onsemeliot, Andrei Bondor
 	events/02-alps/dawn/dawn.level (GPL)

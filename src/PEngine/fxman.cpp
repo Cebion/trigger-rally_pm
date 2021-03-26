@@ -168,6 +168,36 @@ void PEffect::loadMTL(const std::string &filename)
             currs->cullface = CULLFACE_CW;
             currs->texunit[0].texindex = 0;
          }
+         else if(tok == "map_Ke")
+         {
+            /* Define the FX single texture */
+            tex.push_back(fx_texture_s());
+            fx_texture_s *curtex = &tex.back();
+            /* Already as 2D texture. */
+            curtex->texobject = NULL;
+            curtex->name = value;
+            curtex->type = GL_TEXTURE_2D;
+            curtex->filename = PUtil::assemblePath(value, filename);
+
+            /* Define the emission Technique */
+            tech.push_back(fx_technique_s());
+            fx_technique_s *curtech = &tech.back();
+            curtech->name = "EmissionTechMTL";
+            /* And its default pass and render state */
+            curtech->pass.push_back(fx_pass_s());
+            fx_pass_s *curpass = &curtech->pass.back();
+            fx_renderstate_s *currs = &curpass->rs;
+            /* Uhm? Copyed from the loadFX bellow... Just set some defaults,
+             * and the the texture to the only one defined. */
+            *currs = def_rs;
+            currs->depthtest = true;
+            currs->cullface = CULLFACE_CW;
+            currs->lighting = false;
+            currs->blendmode = BLEND_ADD;
+            currs->alphatest.func = GL_GREATER;
+            currs->alphatest.ref = 0.5f;
+            currs->texunit[0].texindex = 1;
+         }
          else
          {
             /* Ignore everithing, as the FX will only use the texture. */
@@ -866,7 +896,7 @@ bool PEffect::setCurrentTechnique(int technique)
 {
   cur_tech = -1;
   if (technique >= 0 && technique < (int)tech.size()) {
-    if (tech[technique].validated) {
+    if (tech[technique].validated || validateTechnique(technique)) {
       cur_tech = technique;
       return true;
     } else {

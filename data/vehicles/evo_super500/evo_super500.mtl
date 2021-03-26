@@ -8,5 +8,4 @@ Ks 0.8 0.8 0.8
 d 1
 illum 2
 map_Kd evo_super500.png
-
-
+map_Ke ../evo_kitcar/evo_kitcar-emission.png

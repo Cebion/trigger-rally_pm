@@ -8,5 +8,4 @@ Ks 0.8 0.8 0.8
 d 1
 illum 2
 map_Kd cordo_kitcar.png
-
-
+map_Ke cordo_kitcar_emission.png
