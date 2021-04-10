@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <event name="15. Rough Voyage" author="Onsemeliot" locked="yes">
 
-	<unlocks file="/vehicles/evo_super500/evo_super500.vehicle" />
+	<unlocks file="/events/16-infinite/infinite.event" />
 	
 	<level file="goodmorning.level" />
 	<level file="lakescape/lakescape.level" />
