@@ -853,9 +853,15 @@ void PVehicle::tick(const float& delta)
 
   // check for resetting to do
   if (reset_time > 0.0f) {
-	// move toward reset position and orientation
-    PULLTOWARD(body->getPosition(), reset_pos, delta * 2.0f);
-    PULLTOWARD(body->getOrientation(), reset_ori, delta * 2.0f);
+    // move toward reset position and orientation
+    vec3f pos = body->getPosition();
+    quatf ori = body->getOrientation();
+
+    PULLTOWARD(pos, reset_pos, delta * 2.0f);
+    PULLTOWARD(ori, reset_ori, delta * 2.0f);
+
+    body->setPosition(pos);
+    body->setOrientation(ori);
 
     // stop
     body->setLinearVel(vec3f::zero());
