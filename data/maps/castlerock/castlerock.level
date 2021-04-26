@@ -75,7 +75,7 @@
 			spritecount="2"
 			scale="14"
 			/>
-		<roadsign sprite="/maps/castlerock/castle.png" scale="65">
+		<roadsign sprite="/textures/structures/castle.png" scale="65">
 			<location coords="259, 269" oridegrees="60" />
 			<location coords="272, 269" oridegrees="120" />
 			<location coords="265, 279" oridegrees="0" />
@@ -86,7 +86,7 @@
 			<location coords="-240, -243" oridegrees="120" />
 			<location coords="-247, -233" oridegrees="0" />
 		</roadsign>
-		<roadsign sprite="/maps/castlerock/small.castle.png" scale="30">
+		<roadsign sprite="/textures/structures/small.castle.png" scale="30">
 			<location coords="107, 105" oridegrees="100" />
 			<location coords="-405, 105" oridegrees="70" />
 			<location coords="-405, 105" oridegrees="250" />
