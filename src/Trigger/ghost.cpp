@@ -198,13 +198,13 @@ void PGhost::recordSample(float delta, const PVehiclePart &part)
 
     lastsample = racetime;
     data.time = racetime;
-    data.pos = part.ref_world.pos;
-    data.ori = part.ref_world.ori;
+    data.pos = part.ref_world.getPosition();
+    data.ori = part.ref_world.getOrientation();
     for (unsigned int i = 0; i < part.wheel.size(); ++i) {
       GhostWheel wheel;
 
-      wheel.pos = part.wheel[i].ref_world.pos;
-      wheel.ori = part.wheel[i].ref_world.ori;
+      wheel.pos = part.wheel[i].ref_world.getPosition();
+      wheel.ori = part.wheel[i].ref_world.getOrientation();
       data.wheel.push_back(wheel);
     }
     recordeddata.push_back(data);

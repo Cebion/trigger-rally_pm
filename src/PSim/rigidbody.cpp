@@ -14,9 +14,9 @@
 ///
 /// @brief initialize PRigidBody
 ///
-PRigidBody::PRigidBody(PSim &sim_parent):
+PRigidBody::PRigidBody(const vec3f &gravity_parent):
 	PReferenceFrame(),
-	sim(sim_parent),
+	gravity(gravity_parent),
 	mass(1.0),
 	mass_inv(1.0),
 	angmass(vec3f(1.0,1.0,1.0)),
@@ -82,7 +82,7 @@ void PRigidBody::addForceAtPoint(const vec3f &frc, const vec3f &pt)
 {
   accum_force += frc;
 
-  vec3f wdiff = pt - pos;
+  vec3f wdiff = pt - getPosition();
 
   accum_torque += frc ^ wdiff;
   //accum_torque -= wdiff ^ frc;
@@ -143,7 +143,7 @@ void PRigidBody::addLocTorque(const vec3f &trq)
 ///
 vec3f PRigidBody::getLinearVelAtPoint(const vec3f &pt)
 {
-  vec3f usept = pt - pos;
+  vec3f usept = pt - getPosition();
   return (linvel + (usept ^ angvel));
 }
 
@@ -166,7 +166,7 @@ vec3f PRigidBody::getLinearVelAtLocPoint(const vec3f &pt)
 void PRigidBody::tick(float delta)
 {
   // update the linear velocity of the body
-  linvel += (accum_force * mass_inv + sim.gravity) * delta;
+  linvel += (accum_force * mass_inv + gravity) * delta;
 
 #ifdef CLAMPVEL
   // Keep linvel inside a range of values
@@ -176,7 +176,7 @@ void PRigidBody::tick(float delta)
 #endif
 
   // update the position of the body
-  pos += linvel * delta;
+  setPosition(getPosition() + linvel * delta);
 
 #if 0
   mat44f ori_mat2;
@@ -208,7 +208,7 @@ void PRigidBody::tick(float delta)
   // update the orientation
   quatf angdelta;
   angdelta.fromThreeAxisAngle(angvel * delta);
-  ori = ori * angdelta;
+  setOrientation(getOrientation() * angdelta);
   //ori = angdelta * ori;
 
   //PULLTOWARD(linvel, vec3f::zero(), delta * 0.1);
@@ -220,7 +220,3 @@ void PRigidBody::tick(float delta)
 
   PReferenceFrame::updateMatrices();
 }
-
-
-
-

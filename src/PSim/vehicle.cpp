@@ -743,7 +743,7 @@ void PVehicle::doReset()
   if (reset_time != 0.0f) return;
 
   // the reset position
-  reset_pos = body->pos + vec3f(0.0f, 0.0f, 2.0f);
+  reset_pos = body->getPosition() + vec3f(0.0f, 0.0f, 2.0f);
 
   // set the new orientation
   vec3f forw = makevec3f(body->getOrientationMatrix().row[0]);
@@ -752,7 +752,7 @@ void PVehicle::doReset()
   quatf temp;
   temp.fromZAngle(forwangle);
 
-  if (body->ori.dot(temp) < 0.0f) temp = temp * -1.0f;
+  if (body->getOrientation().dot(temp) < 0.0f) temp = temp * -1.0f;
 
   reset_ori = temp;
 
@@ -775,7 +775,7 @@ void PVehicle::doReset(const vec3f &pos, const quatf &ori)
   // set the new orientation
   quatf temp = ori; // FIXME: laziness and fear of breaking copy-pasted code
 
-  if (body->ori.dot(temp) < 0.0f) temp = temp * -1.0f;
+  if (body->getOrientation().dot(temp) < 0.0f) temp = temp * -1.0f;
 
   reset_ori = temp;
 
@@ -854,8 +854,8 @@ void PVehicle::tick(const float& delta)
   // check for resetting to do
   if (reset_time > 0.0f) {
 	// move toward reset position and orientation
-    PULLTOWARD(body->pos, reset_pos, delta * 2.0f);
-    PULLTOWARD(body->ori, reset_ori, delta * 2.0f);
+    PULLTOWARD(body->getPosition(), reset_pos, delta * 2.0f);
+    PULLTOWARD(body->getOrientation(), reset_ori, delta * 2.0f);
 
     // stop
     body->setLinearVel(vec3f::zero());
@@ -922,10 +922,10 @@ void PVehicle::tick(const float& delta)
       state.aim.y += ctrl.aim.y * delta * 0.5;
       CLAMP(state.aim.y, 0.0, 0.5);
 
-      part[1].ref_local.ori.fromThreeAxisAngle(
+      part[1].ref_local.getOrientation().fromThreeAxisAngle(
         vec3f(0.0,0.0,-state.aim.x));
 
-      part[2].ref_local.ori.fromThreeAxisAngle(
+      part[2].ref_local.getOrientation().fromThreeAxisAngle(
         vec3f(-state.aim.y,0.0,0.0));
 
       part[1].ref_local.updateMatrices();
@@ -953,9 +953,9 @@ void PVehicle::tick(const float& delta)
         state.aim.y += ctrl.aim.y * delta * 0.5;
         CLAMP(state.aim.y, 0.0, 0.5);
 
-        part[1].ref_local.ori.fromThreeAxisAngle(vec3f(0.0, blade_ang1, 0.0));
+        part[1].ref_local.getOrientation().fromThreeAxisAngle(vec3f(0.0, blade_ang1, 0.0));
 
-        part[2].ref_local.ori.fromThreeAxisAngle(vec3f(0.0, 0.0, state.turn.z * -0.5));
+        part[2].ref_local.getOrientation().fromThreeAxisAngle(vec3f(0.0, 0.0, state.turn.z * -0.5));
 
         part[1].ref_local.updateMatrices();
         part[2].ref_local.updateMatrices();
@@ -1336,19 +1336,19 @@ void PVehicle::tick(const float& delta)
 
     // Calculate collisions with world objects
     PCollision collision(type->part[i].clip, part[i].ref_world);
-    const std::vector<PTerrainFoliage> *foliage = sim.getTerrain()->getFoliageAtPos(body->pos);
+    const std::vector<PTerrainFoliage> *foliage = sim.getTerrain()->getFoliageAtPos(body->getPosition());
 
     if (foliage) {
       const std::vector<PTerrainFoliage> contact = collision.checkContact(foliage);
 
       for (unsigned int j = 0; j < contact.size(); ++j) {
         vec3f crashforce = vec3f::zero();
-        vec3f ptvel = body->getLinearVelAtPoint(body->pos);
+        vec3f ptvel = body->getLinearVelAtPoint(body->getPosition());
 
         // Prevent that vehicle gets stuck in an object
-        if (collision.towardsContact(body->pos, contact[j].pos, ptvel * delta)) {
+        if (collision.towardsContact(body->getPosition(), contact[j].pos, ptvel * delta)) {
           const float crashthreshold = 0.025f;
-          vec3f crashpoint = collision.getCrashPoint(body->pos, contact[j]);
+          vec3f crashpoint = collision.getCrashPoint(body->getPosition(), contact[j]);
 
           ptvel.x = -ptvel.x * contact[j].rigidity;
           ptvel.y = -ptvel.y * contact[j].rigidity;
@@ -1416,12 +1416,12 @@ void PVehicle::updateParts()
     else
       parent = body;
 
-    part[i].ref_world.ori = part[i].ref_local.ori * parent->ori;
+    part[i].ref_world.setOrientation(part[i].ref_local.getOrientation() * parent->getOrientation());
 
     part[i].ref_world.updateMatrices();
 
-    part[i].ref_world.pos = parent->pos +
-      parent->getOrientationMatrix().transform1(part[i].ref_local.pos);
+    part[i].ref_world.setPosition(parent->getPosition() +
+      parent->getOrientationMatrix().transform1(part[i].ref_local.getPosition()));
 
     for (unsigned int j=0; j<part[i].wheel.size(); j++) {
       vec3f locpos = type->part[i].wheel[j].pt +
@@ -1434,7 +1434,7 @@ void PVehicle::updateParts()
       turnang.fromZAngle(part[i].wheel[j].turn_pos);
       spinang.fromXAngle(part[i].wheel[j].spin_pos);
 
-      part[i].wheel[j].ref_world.ori = spinang * turnang * part[i].ref_world.ori;
+      part[i].wheel[j].ref_world.setOrientation(spinang * turnang * part[i].ref_world.getOrientation());
 
       part[i].wheel[j].ref_world.updateMatrices();
 	  part[i].wheel[j].ref_world_lowest_point.updateMatrices();

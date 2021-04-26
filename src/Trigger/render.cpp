@@ -589,10 +589,10 @@ glMatrixMode(GL_PROJECTION);
     {
 		glPushMatrix(); // 1
 
-		vec3f vpos = vtype->part[i].render_ref_local.pos;
+		vec3f vpos = vtype->part[i].render_ref_local.getPosition();
 		glTranslatef(vpos.x, vpos.y, vpos.z);
 
-		mat44f vorim = vtype->part[i].render_ref_local.ori_mat_inv;
+		mat44f vorim = vtype->part[i].render_ref_local.getInverseOrientationMatrix();
 		glMultMatrixf(vorim);
 		if (vtype->part[i].model)
 		{
@@ -862,7 +862,7 @@ void MainApp::renderStateGame(float eyetranslation)
 
         glColor4f(1.0f, 1.0f, 1.0f, 0.7f);
 
-        vec3f vpos = game->vehicle[0]->body->pos;
+        vec3f vpos = game->vehicle[0]->body->getPosition();
         vec3f forw = makevec3f(game->vehicle[0]->body->getOrientationMatrix().row[0]);
         float forwangle = atan2(forw.y, forw.x);
         game->terrain->drawSplat(vpos.x, vpos.y, 1.4f, forwangle + PI*0.5f);
@@ -894,16 +894,16 @@ void MainApp::renderStateGame(float eyetranslation)
     {
         PVehiclePart vehiclepart;
 
-        vehiclepart.ref_world.pos = ghostdata.pos;
-        vehiclepart.ref_world.ori = ghostdata.ori;
+        vehiclepart.ref_world.setPosition(ghostdata.pos);
+        vehiclepart.ref_world.setOrientation(ghostdata.ori);
         vehiclepart.ref_world.updateMatrices();
 
         for (unsigned int i = 0; i < ghostdata.wheel.size(); ++i)
         {
             PVehicleWheel wheel;
 
-            wheel.ref_world.pos = ghostdata.wheel[i].pos;
-            wheel.ref_world.ori = ghostdata.wheel[i].ori;
+            wheel.ref_world.setPosition(ghostdata.wheel[i].pos);
+            wheel.ref_world.setOrientation(ghostdata.wheel[i].ori);
             wheel.ref_world.updateMatrices();
             vehiclepart.wheel.push_back(wheel);
         }
@@ -1932,10 +1932,10 @@ void MainApp::renderVehiclePart(const PVehicleType &type, const PVehiclePart &pa
     {
         glPushMatrix();
 
-        vec3f vpos = part.ref_world.pos;
+        vec3f vpos = part.ref_world.getPosition();
         glTranslatef(vpos.x, vpos.y, vpos.z);
 
-        mat44f vorim = part.ref_world.ori_mat_inv;
+        mat44f vorim = part.ref_world.getInverseOrientationMatrix();
         glMultMatrixf(vorim);
 
         float scale = typepart.scale;
@@ -1955,7 +1955,7 @@ void MainApp::renderVehiclePart(const PVehicleType &type, const PVehiclePart &pa
             vec3f wpos = part.wheel[i].ref_world.getPosition();
             glTranslatef(wpos.x,wpos.y,wpos.z);
 
-            mat44f worim = part.wheel[i].ref_world.ori_mat_inv;
+            mat44f worim = part.wheel[i].ref_world.getInverseOrientationMatrix();
             glMultMatrixf(worim);
 
             float scale = type.wheelscale * typepart.wheel[i].radius;

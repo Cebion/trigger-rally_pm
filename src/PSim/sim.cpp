@@ -55,7 +55,7 @@ PVehicleType *PSim::loadVehicleType(const std::string &filename, PSSModel &ssMod
 ///
 PRigidBody *PSim::createRigidBody()
 {
-  PRigidBody *newbody = new PRigidBody(*this);
+  PRigidBody *newbody = new PRigidBody(gravity);
 
   body.push_back(newbody);
 
