@@ -378,22 +378,23 @@ int PApp::run(int argc, char *argv[])
     return 1;
   }
   
-  context = SDL_GL_CreateContext(screen);
-  
-    if (context == NULL)
-    {
-        PUtil::outLog() << "Failed to create OpenGL context for game window\n";
-        PUtil::outLog() << "SDL error: " << SDL_GetError() << std::endl;
-        SDL_DestroyWindow(screen);
-        SDL_Quit();
+	context = SDL_GL_CreateContext(screen);
 
-        if (PHYSFS_deinit() == 0)
+	if (context == NULL)
+	{
+		PUtil::outLog() << "Failed to create OpenGL context for game window\n";
+		PUtil::outLog() << "SDL error: " << SDL_GetError() << std::endl;
+		SDL_DestroyWindow(screen);
+		SDL_Quit();
+		if (PHYSFS_deinit() == 0)
 		{
-            PUtil::outLog() << "PhysFS: " << physfs_getErrorString() << std::endl;
+			PUtil::outLog() << "PhysFS: " << physfs_getErrorString() << std::endl;
 		}
-        return 1;
-    }
+		return 1;
+	}
   
+  const GLubyte* version = glGetString(GL_VERSION);
+  PUtil::outLog() << "OpenGL Version: " << (version ? (const char*)version : "Unknown") << std::endl;
   sdl_mousemap = 0;
   
   sdl_joy.resize(SDL_NumJoysticks());
@@ -447,20 +448,39 @@ int PApp::run(int argc, char *argv[])
   
   SDL_JoystickEventState(SDL_ENABLE);
   
-  int err = glewInit();
+	glewExperimental = GL_TRUE;
+	GLenum err = glewInit();
+	if (GLEW_OK != err)
+	{
+		PUtil::outLog() << "GLEW Error: " << glewGetErrorString(err) << std::endl;
+		
+		if (err == GLEW_ERROR_NO_GLX_DISPLAY)
+		{
+			PUtil::outLog() << "GLEW_ERROR_NO_GLX_DISPLAY detected. This may be normal with gl4es." << std::endl;
+			// We're going to continue anyway, as gl4es should provide what we need
+		}
+		else
+		{
+			// For other errors, we'll still exit
+			SDL_GL_DeleteContext(context);
+			SDL_DestroyWindow(screen);
+			SDL_Quit();
+			if (PHYSFS_deinit() == 0) {
+				PUtil::outLog() << "PhysFS: " << physfs_getErrorString() << std::endl;
+			}
+			return 1;
+		}
+	}
+	
+	GLenum glErr = glGetError();
+	if (glErr != GL_NO_ERROR)
+	{
+		PUtil::outLog() << "OpenGL error during or after GLEW init: " << gluErrorString(glErr) << std::endl;
+	}
+	
+	PUtil::outLog() << "GLEW initialized" << std::endl;
 
-  if (err != GLEW_OK) {
-    PUtil::outLog() << "GLEW failed to initialise: " << glewGetErrorString(err) << std::endl;
-    SDL_GL_DeleteContext(context);
-    SDL_DestroyWindow(screen);
-    SDL_Quit();
-    if (PHYSFS_deinit() == 0) {
-      PUtil::outLog() << "PhysFS: " << physfs_getErrorString() << std::endl;
-    }
-    return 1;
-  }
-
-  PUtil::outLog() << "GLEW initialized" << std::endl;
+  PUtil::outLog() << "GLEW Version: " << glewGetString(GLEW_VERSION) << std::endl;
   
   PUtil::outLog() << "Graphics: " <<
     glGetString(GL_VENDOR) << " " << glGetString(GL_RENDERER) << std::endl;
